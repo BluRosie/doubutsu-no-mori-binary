@@ -1,0 +1,207 @@
++-+-+-+
+C-724950		Gyroid storage thingy
+//803C91B0:	+160	uses text at 803C9E70
+LUI	A1,803D
+ADDIU	A1,A1,9E70
+SLTI	AT,T0,0008
+BNEZ	AT,803C91F0
+LW	A0,0018 (SP)
+JAL	800998C0
+ADDIU	A2,R0,0003	;strlen
+
+0xE20	803C9E70	3	0E7E19
+0xE24	803C9E74	9	default message
+0xE30	803C9E80	11	item selected
+0xE3C	803C9E8C	11	0401077B6F20776861743F
+0xE48	803C9E98	8	050B091E7C1EAB0F
+0xE50	803C9EA0	8	F57EC2EB7BC31514
+0xE58	803C9EA8	4	7C1EAB3F
+0xE5C	803C9EAC	8	5B025B121401F4AB
+0xE64	803C9EB4	10	040517E70F7C1401F4AB
+0xE70	803C9EC0	7	1E01F5007CF4AB
+0xE78	803C9EC8	4	A0D8F4AB
+0xE7C	803C9ECC	9	A0D8F40A0B00EA1EAB
+0xE88	803C9ED8	7	2D2D2D2D2DF4AB
+0xE90	803C9EE0	4	E0B9F4AB
+
+0xF08	803C9F58	resources	00A82000 00A89210
+
+fun stuff:
+//803C9458:	+408	part of incrementation routine
+//this makes the text appear one character at a time
+LW	V1,0014 (A2)
+ADDIU	V1,V1,0001
+SLTI	AT,V1,0011
+BNEL	AT,R0,803C9474
+SW	V1,0014 (A2)
+ADDIU	V1,R0,0010
+this does assume everything is the same size however
+easy method will be to initialize buffer for four more spaces
+//803C9D50:	+D00
+BEQ	R0,R0,803C9D74
+ADDIU	A1,R0,000C
+//803C9D70:	+D20
+ADDIU	A1,R0,000C
+JAL	8009992C
+SW	A3,001C (SP)
+and here too
+//803C918C:	+13C
+ADDIU	A1,R0,000C
+
+what... the... heck...
+somehow there's a bad float command that threw an exception and broke the exception handler
+So, something wrong with "Show"
+oddly, doesn't appear to be anything in this binary
+must be something with the inventory handler...
+
+non-textual differences:
+8A8	803BCE38	004E	->	004C
+8880	803C4E10	0006	->	0008
+8A10	803C4FA0	004E	->	004C
+8A20	803C4FB0	0006	->	0008
+9D58	803C62E8	0C127D18	->	0C122018
+
+sale price:
+803C9F7C
+selected option:
+803C68A8
+
+803C5144	writes options into menu on screen
+//803C4A30	draws arrow next to selected option
+
+803BF034	+2AA4	copy item to player's gyroid slot
+ADDIU	SP,SP,FFE0
+SW	A3,002C (SP)
+LUI	V1,8012
+ADDIU	V1,V1,6EA0	;V1=80126EA0: copy of save file
+ANDI	A3,A3,FFFF
+SW	RA,0014 (SP)
+SW	A1,0024 (SP)
+SW	A2,0028 (SP)
+ADDIU	T0,R0,0006	;T0=6 - offset b/w items
+LW	T6,002C (A0)
+LUI	V0,0001
+LW	T8,0024 (SP)
+ADDU	V0,V0,T6
+LW	V0,06D0 (V0)	;V0=803C6810
+LW	T9,003C (T8)	;selected menu option
+LW	T7,0028 (SP)	;T7=[0]
+LW	T3,0040 (V0)	;T3=gyroid slot #
+//803BF078:
+SLL	T1,T9,0x2
+SUBU	T1,T1,T9
+MULTU	T3,T0	;T3*6
+SLL	T1,T1,0x2
+SUBU	T1,T1,T9
+SLL	T1,T1,0x2
+ADDU	T1,T1,T9
+SLL	T1,T1,0x3
+ADDU	T1,T1,T9
+SLL	T1,T1,0x3	;T1=option * 0xB48 (2888): offset b/w saves
+ADDU	T2,V1,T1	;T2=80126EA0+offset
+ADDIU	V0,V0,0008
+MFLO	T4
+ADDU	T5,T2,T4
+SH	T7,406A (T5)	;save T7 to 8012AF08+offset+slot - HALFWORD 2: gyroid data
+//803BF0B4:
+LW	T6,0024 (SP)
+LW	T3,0038 (V0)
+OR	A1,R0,R0
+LW	T8,003C (T6)
+MULTU	T3,T0
+OR	A2,R0,R0
+SLL	T9,T8,0x2
+SUBU	T9,T9,T8
+SLL	T9,T9,0x2
+ADDU	T9,T9,T8
+SLL	T9,T9,0x3
+ADDU	T9,T9,T8
+SLL	T9,T9,0x3	;T9=option * 0xB48 (2888)
+ADDU	T1,V1,T9	;T2=80126EA0+offset
+MFLO	T2
+ADDU	T4,T1,T2
+SH	A3,406C (T4)	;save halfword 3: 
+//803BF100
+SW	A0,0020 (SP)
+JAL	803BC72C
+SW	V0,001C (SP)
+JAL	800D1A9C
+ADDIU	A0,R0,0033
+//803BF114
+LW	A0,0020 (SP)	;A0=[8022AD0C]
+LUI	T5,0001
+LW	A1,001C (SP)	;A1=[803C6818], from earlier
+LW	T7,002C (A0)	;T7=[803A7680]
+ADDIU	A2,R0,0003	;A2=3
+ADDU	T5,T5,T7	;T5=[803B7680]
+LW	T5,06F0 (T5)	;T5=803C9F60,where they stow variables for C-724950
+LW	T9,002C (T5)	;just after extended text!  Oh crap!  I copied over something!
+JALR	RA,T9
+NOP
+
+That's initially written by this:
+//803C9E08
+LW	T1,002C (A0)
+LUI	T2,0001
+LUI	T0,803D
+ADDU	T2,T2,T1
+LW	T2,06F0 (T2)
+ADDIU	T0,T0,9050
+ADDIU	T3,R0,FFFF
+SW	T0,002C (T2)	;803C9050->803C9F8C
+//803C9E28:
+SW	T3,0000 (V0)	;-1->803C9F60
+SW	R0,0008 (V0)	;0->803C9F68
+SW	R0,000C (V0)	;0->803C9F6C
+
+Stupidly display a copy of price from here:
+//803C9524
+LW	T1,0018 (A2)
+BEQL	T1,T9,803C9550
+LW	RA,0014 (SP)
+
+0x0	taken
+0x4	-1	filled by 803C9050
+0x8	filled by 803C9050
+0xC	filled by 803C9050
+0x10	filled by 803C9050
+0x14	0x10
+0x18	copy of sale price - but not for much longer!  HaHaHa!!!
+0x1C	sale price
+
+patchwork pig:
+C-710680+2BA0	8DB9002C	->	8DB90018
+C-724950+DD4	AD48002C	->	AD480018
+C-724950+4D4	8CC90018	->	8CC9001C
+C-724950+BC	AD850018	->	00000000
+
+Gyroid items...
+
++9bc4	missing three samples:	80 87 8B 70 80 87 8B 94 80 87 8B AC 
++9d28	this set to 80878ec4 from D4, probably pointing to above
++87fc	I might have botched this one.  Need to check if the thing is expanded...
+
+should display price in text bubble for items for sale
+@803BF540, T2 should be 803B7D70
+	That's 803C9F60, pulling +d9d0: 803C9050
+	803C9E24 sets the pointer
+Duh...  It's because the gyroid's line of text can't be over 0xC.
+	Wait, that's relocated to +0x18...  When the heck did that ever happen?
+so...	803BF544 (+2FB4) set to 0018, not 002C...
+also at +30D0, +2BA0 from before...  Plus, maybe in other binaries...
+	agan, presuming the pointer is never passed as an argument...
+
+Also in the realm of fantastic assumptions...
+	Apparently had redirected 0x18 to 0x1C.
+	C-724950 + BC should read AD05001C, not 0018 or for the love of salt not NOP
+
+Maybe would be a good idea to do soemthing about the gyroid script...
+First 3-char line is used on all hover-overs, as far as I can tell.  Preceeds price, normal
+If it changes size will need to peek in binary to set correct offsets.
+
+
+D9F0 is actual offset for first word.  Need to change to strlen 4
+	+178	copy strlen
+	+188	offset for next
+	
+	

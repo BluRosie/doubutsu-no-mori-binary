@@ -1,0 +1,305 @@
+800ACCAC	0x	actor name request
+ADDIU	SP,SP,FFD0
+SW	A1,0034 (SP)
+ANDI	A1,A1,FFFF
+SW	RA,0014 (SP)
+OR	A3,A0,R0
+LUI	A2,8011
+BEQ	A3,R0,800ACCFC
+ADDIU	A2,A2,B810	;A2=8010B810: D48EA6908542
+ANDI	T6,A1,F000
+SRA	T7,T6,0xC
+ADDIU	AT,R0,000E
+BNE	T7,AT,800ACCFC
+ANDI	A1,A1,00FF
+SLTI	AT,A1,00FF
+BEQ	AT,R0,800ACCFC
+ADDIU	A0,SP,0024
+JAL	800ACC38		;retrieve string
+SW	A3,0030 (SP)
+LW	A3,0030 (SP)
+ADDIU	A2,SP,0024
+//800ACCFC:
+OR	A0,A3,R0
+JAL	800B77A4
+OR	A1,A2,R0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0030
+JR	RA
+NOP
+
++-+
+
+800ACC38	0x	pull NPC# name from ROM
+	accepts: A0=p->target, A1=actor#
+ADDIU	SP,SP,FFD0
+SW	A1,0034 (SP)	;SP+34=A1: actor#
+ANDI	A1,A1,00FF	;A1->byte
+SW	RA,001C (SP)
+SW	A0,0030 (SP)	;SP+30=A0: 
+SLTI	AT,A1,00FF
+BEQ	AT,R0,800ACC9C
+ADDIU	A0,SP,0028	;A0=target
+//800ACC58:	offset and base codeword
+SLL	T6,A1,0x2
+SUBU	T6,T6,A1
+SLL	T6,T6,0x1	;T6=actor#*6
+LUI	T8,00E0
+ADDIU	T8,T8,4000	;T8=base codeword
+ADDIU	T7,T6,0008	;offset: entries start at 0x8
+LUI	A3,8011
+ADDIU	T9,R0,1916
+SW	T9,0010 (SP)	;SP+10=1916
+ADDIU	A3,A3,72EC	;A3=801172EC: "../m_npc.c"
+ADDU	A1,T7,T8		;A1=codeword
+JAL	80026E10
+ADDIU	A2,R0,0008	;A2=strlen, right now of 8
+//800ACC8C:	copy to final
+LW	A0,0030 (SP)	;A0=SP+30: p->target
+ADDIU	A1,SP,0028	;A1=SP+28: p->source
+JAL	800998C0	;copy A2 bytes from string A1 to A0
+ADDIU	A2,R0,0006	;A2=6: strlen
+//800ACC9C:	return
+LW	RA,001C (SP)
+ADDIU	SP,SP,0030
+JR	RA
+NOP
+
++-+
+
+800998C0	0x	copy routine, also reducing to 6-bytes each
+	accepts: A0=p->target, A1=p->source, A2=strlen
+BEQ	A2,R0,80099924
+ANDI	V1,A2,0003
+SUBU	V1,R0,V1
+BEQ	V1,R0,800998F4
+ADDU	V0,V1,A2
+//800998D4:
+LBU	T6,0000 (A1)
+ADDIU	A2,A2,FFFF
+ADDIU	A1,A1,0001
+ADDIU	A0,A0,0001
+BNE	V0,A2,800998D4
+SB	T6,FFFF (A0)
+BEQ	A2,R0,80099924
+NOP
+//800998F4:
+LBU	T7,0000 (A1)
+ADDIU	A2,A2,FFFC
+ADDIU	A1,A1,0004
+SB	T7,0000 (A0)
+LBU	T8,FFFD (A1)
+ADDIU	A0,A0,0004
+SB	T8,FFFD (A0)
+LBU	T9,FFFE (A1)
+SB	T9,FFFE (A0)
+LBU	T0,FFFF (A1)
+BNEZ	A2,800998F4
+SB	T0,FFFF (A0)
+//80099924:
+JR	RA
+NOP
+
++-+
+
+800B77A4	0x	redirect to npc copy routine
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800998C0
+ADDIU	A2,R0,0006
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+could just set this to 8, but how often is it used?
+
+++++++
+ + +
+++++++
+
+To hack this up, try this:
+800ACC58:	0x5B1D8	offset and base codeword
+SLL	T6,A1,0x2	->	0x3
+*NOP
+*NOP
+LUI	T8,00E0		->	01BE
+ADDIU	T8,T8,4000	->	6000
+
+800ACC98:	0x5B218
+ADDIU	A2,R0,0006	->	0008
+
+800ACCFC:	0x5B27C
+OR	A0,A3,R0
++OR	A1,A2,R0
+*JAL	800998C0
+*ADDIU	A2,R0,0008	24060008
+-LW	RA,0014 (SP)
+JR	RA
+--ADDIU	SP,SP,0030
+
+800ACD54:	0x5B2D4
+ADDIU	A2,SP,001C	->	27A5001C	ADDIU	A1,SP,001C
+LW	A0,0028 (SP)
+JAL	800B77A4		->	0C026630	JAL	800998C0
+OR	A1,A2,R0		->	24060008	ADDIU	A2,R0,0008
+
+=_=
+As a note, more names occur in the string_txt file, such as K.K., Resetti, Gulliver, Tom Nook, etc
+
+Tom Nook's name, at least in store	called via 800ACDF8
+800ACD74	0x	
+ADDIU	SP,SP,FFE8
+SW	A1,001C (SP)
+ANDI	A1,A1,FFFF
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)
+LUI	V0,8011
+LUI	A3,8011
+ADDIU	V0,V0,B510	;V0=8010B510
+ADDIU	A3,A3,B810	;A3=8010B810
+OR	V1,R0,R0
+OR	A2,A1,R0
+ADDIU	A0,R0,0040
+//800ACDA4:
+LHU	T6,0000 (V0)
+ADDIU	V1,V1,0001
+BNE	T6,A2,800ACDD4
+NOP
+LUI	A0,8014
+ADDIU	A0,A0,2F68	;A0=80142F68
+ADDIU	A1,R0,0006	;A1=max strlen
+JAL	800C3F70		;grab string from string_txt
+LW	A2,0004 (V0)	;str# to retrieve
+LUI	A3,8014
+BEQ	R0,R0,800ACDDC
+ADDIU	A3,A3,2F68	;A3=80142F68: name in buffer
+//800ACDD4:
+BNE	V1,A0,800ACDA4
+ADDIU	V0,V0,000C
+//800ACDDC:
+LW	A0,0018 (SP)
+JAL	800B77A4
+OR	A1,A3,R0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+slight rewrite or two:
+//800ACDBC:	5B33C
+ADDIU	A1,R0,0006	->	0008
+
+//800ACDDC:	5B35C
+	LW	A0,0018 (SP)
+24060008	*ADDIU	A2,R0,0008
+0C026630	-JAL	800998C0
+	-OR	A1,A3,R0
+	-LW	RA,0014 (SP)
+	-JR	RA
+	-ADDIU	SP,SP,0018
+
+//800ACE74:	5B3F4
+	LW	A0,0028 (SP)
+24060008	*ADDIU	A2,R0,0008
+0C026630	-JAL	800998C0
+	-OR	A1,A3,R0
+	-LW	RA,0014 (SP)
+	-JR	RA
+	-ADDIU	SP,SP,0028
+
+//8009D330:	4B8B0
+JAL	8009E8D0		;right-aligns text - A1=strlen
+ADDIU	A1,R0,0006	->	0008	
+	
+Oy!  Apparently signs and the map use a different routine.  Need to hack them next...
+copy routine for signposts is embedded-008D8000+150
+//8009D758	expects A3=maxsize
+change value at 80293CC8	->	0008
+c-7EA820+0x150
+
+copy routine for nameplates on homes is triggered at 802ED58C
+C-84D9B0	cw 00956630
+0x20	802ED540	copy NPC name onto nameplate
+0xCC	802ED5EC
+
+=_=
+
+Item screen - packages
+C-710680	0x87FC	803C4D8C	tacks the sender/reciever bit onto packages in inverntory
+	803C4E10	+8880	24060008	write npc name length
+	803C4E48	+88C8	24050006	spacing before displaying the text following name
+803C4EE0	+
+LUI	S0,803C
+ADDIU	S0,S0,5D4C	;S0=0413F5085B180000	second line
+BEQ	R0,R0,803C4F10
+ADDIU	S1,R0,0006	;S1=strlen of S0
+803C4EF0	+
+ADDIU	AT,R0,0008	;S1=strlen of 04577269	0AC31C18
+BNE	V1,AT,803C4F08
+ADDIU	S1,R0,0004	;S1=strlen
+LUI	S0,803C
+BEQ	R0,R0,803C4F10
+ADDIU	S0,S0,5D40
+803C4F08	+
+LUI	S0,803C
+ADDIU	S0,S0,5D54	;S0=045772690AC31C18
+
+803C4FB0	+8A20	24110006	WIDTH OF OTHER NAME	24110008
+803C506C	+8ADC	24050006	spacing for text on third line
+
+hah!  breaks second name when you bring up the menu!
+simple solution (which hopefully won't break stuff)
+803BCE38	+8A8	24E5004E	->	24E5004C
+803C4FA0	+8A10	2510004E	->	2510004C
+
+803BDAD4:	writes it!
+SB	T0,0008 (A3)	;saves to 803C6866
+LW	T,003C (SP)
+ADDIU	A3,A3,0008
+
+803BD994:	store at +1 slot
+SB	R0,0001 (S0)
+LW	RA,001C (SP)
+LW	S0,0014 (SP)
+LW	S1,0018 (SP)
+JR	RA
+ADDIU	SP,SP,0038
+
+803BCDC0:	read it in!
+LBU	V1,0000 (T6)	;read in first byte stored there
+BNEL	V1,AT,803BCDE8
+ADDIU	AT,R0,0019
+
+803C57A8:	read it in
+LBU	T6,0000 (S0)
+OR	A0,S1,R0
+OR	A2,R0,R0
+BNEZ	T6,803C586C
+LW	A3,0044 (SP)
+LBU	T7,0001 (S0)
+BEQL	T7,R0,803C58B8
+LW	RA,002C (SP)
+LBU	T8,0002 (S0)
+
+temporary solution
+Will need to do something either about window width or depending on text omit that trailing bit entirely
+
+=_=
+
+The map is an issue...
+Post Office Fix:
+0x1540	803B9310	displays string "P.O." on rollover
+//803B943C:	0x166C
+ADDIU	A1,A1,A10C	->	NEW POSITION
+SWC1	F8,0010 (SP)
+OR	A0,S2,R0
+ADDIU	A2,R0,0003	->	NEW SIZE
+
+it constructs a list of places at certain locations, usually at 803BDF34, of all characters and their locations on the map
+location is x 0-4,y 0-4	0x9 each entry
+0x0	6	name
+0x6	1	
+0x7	1
+0x8	1
+

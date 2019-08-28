@@ -1,0 +1,38 @@
+  There are still certain limitations on the length of some text entries.  This is due either to buffer size, or because it would need to fry parts of save data.
+  Until workarounds can be made for them all, here are the current maximum string lengths for entries in text banks that sort of thing applies to.
+
+Maximum entry sizes for certain text banks:
+message_txt	0x400	total size, including inserted strings (ie. player's name)
+	workaround: copy half of the text to another entry.  Place a [jump] command in the original text entry and link it to the new one.  
+mail_txt	0x68
+maila_txt	0x68
+mailb_txt	0x68
+mailc_txt	0x68
+psz_txt	0x12
+superz_txt	0x14
+npc_names	0x8
+
+select_txt	0x2C for select menu entries.  This ensures they aren't clipped if you pull them after selection.  Those not appearing on a select menu can probably be any size.
+
+  For the record, other routines do limit the size of entries from time to time in specific cases.  In particular, some of the 7F commands.
+  As I go back through the notes and find them all they'll get entered in here.
+
++-+-+-+-+
+  The hacked text banks do have a limit on the number of entries, although this can be raised and lowered.  As per the current patch, these are the most possible entries within each text bank.
+
+Maximum number of entries in the hacked text banks:
+block name	#tbl	size of text block
+message_txt	0x3F94	0x290000
+select_txt	0x25F	0x1900
+mail_txt	0x3D6	0x1F000
+super_txt	0x3D6	0x2900
+ps_txt	0x3D6	0x3800
+string_txt	0x7FF	0x4300
+maila_txt	0x184	0x5000
+mailb_txt	0x184	0x7000
+mailc_txt	0x184	0x3000
+psz_txt	0x184	0x1000
+superz_txt	0x184	0x1000
+npc_names	0xEE	0x770
+
+-Zoinkity

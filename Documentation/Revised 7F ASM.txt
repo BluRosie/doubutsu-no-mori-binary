@@ -1,0 +1,1825 @@
+opens up	4D668-4D7B0
+	7266C-72938
+
+redirect 7F00->800A0614
+
+processor for 7F76 command
+7F1D	4D3F8	8009EE78	years
+7F1E	4D440	8009EEC0	months
+7F1F	4D474	8009EEF4	day of week
+7F20	4D4A8	8009EF28	day of month
+7F21	4D4DC	8009EF5C	hours
+7F22	4D51C	8009EF9C	min/sec
+7F23	""	""
+7F76	4D580	8009F004	am/pm
+7F74		8009F098	capital/lower
+7F75	""	""
+
+new command positions:
+7F1D	4F6F0	800A1170
+7F1E	4F72C	800A11AC
+7F1F	4F768	800A11E8
+7F20	4F7A4	800A1224
+7F21	4F7E0	800A1260
+7F22	4F81C	800A129C
+7F23	""	""
+7F76	4F858	800A12D8
+	4F8CC	800A134C
+
+
+
+must repair all 7F time commands so they DON'T use V0
+Retaining it so you have the command #
+800A11F8	0x14	7F1F day of week
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+	SW	A0,0018 (SP)	;save controller for text bank
+000E2825	*OR	A1,T6,R0	;A1=current position in bank
+8C87000C	`LW	A3,000C (A0)	;V0=p->text bank data
+24E40010	`ADDIU	A0,A3,0010	;A0=p->text bank
+0C027B9E	JAL	8009EE78	;retrieve day and its string; ret V0=new text bank size
+8CE60008	`LW	A2,0008 (A3)	;A2=size of bank
+	LW	T7,0018 (SP)	;T7=controller for text bank
+	LW	T8,000C (T7)	;T8=p->text bank data
+AF020008	SW	V0,0008 (T8)	;save new max size
+8FBF0014	LW	RA,0014 (SP)
+00001025	OR	V0,R0,R0
+03E00008	JR	RA
+27BD0018	ADDIU	SP,SP,0018
+
+needs to pass:
+A0=msg_txt text bank
+A1=current position in msg_txt (A0)
+A2=size of msg_txt
+
+default from caller:
+V0=command type
+A0=p->text bank controller
+A2=p->current position in text bank
+T6=current position in bank (offset)
+
+string_txt 1 is "a.m.", 2 is "p.m."
+string_txt+9 starts days of week
+string_txt+64E starts days of month
+string_txt+66D starts months
+longest month and longest day are 9 chars long
+
+QUICK NOTE: since there's four of these, could tack the JAL,etc to the beginning of to_generic
+//time of day	a.m. or p.m.
+3C058013	LUI	A1,8013
+90A56FBE	LBU	A1,6FBE (A1)	;A1=80136FBE - hours
+2CA1000C	SLTIU	AT,A1,000C	;within 12 hours
+14200002	BNE	AT,R0,+2
+24060002	ADDIU	A2,R0,0002
+24060001	ADDIU	A2,R0,0001
+0C03102F	JAL	800C40BC	;construct string to appear on-screen
+27A4002C	ADDIU	A0,SP,002C	;A0=target location for new string
+1000	BEQ	R0,R0,to_generic
+AFA20028	SW	V0,0028 (SP)	;save strlen for new, happy string
+//
+//days of month snippet
+3C058013	LUI	A1,8013
+90A56FBF	LBU	A1,6FBF (A1)	;A1=80136FBF - day of month
+2CA10020	SLTIU	AT,A1,0020	;should be <32
+14200002	BNE	AT,R0,+2
+00A03025	OR	A2,A1,R0
+24060001	ADDIU	A2,R0,0001
+24C6064D	ADDIU	A2,A2,064D	;base for days is string+64E
+0C03102F	JAL	800C40BC	;construct string to appear on-screen
+27A4002C	ADDIU	A0,SP,002C	;A0=target location for new string
+1000	BEQ	R0,R0,to_generic
+AFA20028	SW	V0,0028 (SP)	;save strlen for new, happy string
+//
+//days of week snippet
+3C058013	LUI	A1,8013
+90A56FC0	LBU	A1,6FC0 (A1)	;A1=80136FC0 - day of week
+2CA10007	SLTIU	AT,A1,0007	;day Sunday-Saturday: this test should catch -values
+14200002	BNE	AT,R0,+2
+00A03025	OR	A2,A1,R0
+00003025	OR	A2,R0,R0
+24C60009	ADDIU	A2,A2,0009	;base for days is string+9
+0C03102F	JAL	800C40BC	;construct string to appear on-screen
+27A4002C	ADDIU	A0,SP,002C	;A0=target location for new string
+1000	BEQ	R0,R0,to_generic
+AFA20028	SW	V0,0028 (SP)	;save strlen for new, happy string
+//
+//months snippet	8009EEBC	4D43C
+3C058013	LUI	A1,8013
+90A56FC1	LBU	A1,6FC1 (A1)	;A1=80136FC1 - month
+2CA1000D	SLTIU	AT,A1,000D	;should be <32
+14200002	BNE	AT,R0,+2
+00A03025	OR	A2,A1,R0
+24060001	ADDIU	A2,R0,0001
+24C6066C	ADDIU	A2,A2,066C	;base for days is string+66D
+0C03102F	JAL	800C40BC	;construct string to appear on-screen
+27A4002C	ADDIU	A0,SP,002C	;A0=target location for new string
+1000	BEQ	R0,R0,to_generic
+AFA20028	SW	V0,0028 (SP)	;save strlen for new, happy string
+
+
+8009EF88	0x	day of week string gen
+	push the stack pointer back 8, 
+	then dec all things set to stack +0x2C by 8
+//this bit is copied to each snippet (can't help that)
+27BDFFC0	*ADDIU	SP,SP,FFC0
+AFBF001C	SW	RA,001C (SP)
+AFA40040	*SW	A0,0040 (SP)	;A0=msg_txt text bank
+AFA50044	*SW	A1,0044 (SP)	;A1=current position in msg_txt (A0)
+AFA60048	*SW	A2,0048 (SP)	;A2=size of msg_txt
+//
+//8009EFA8:	get day of week, then send to convert to string
+	LUI	A1,8013
+	LBU	A1,6FC0 (A1)	;A1=80136FC0 - day of week
+	*SLTIU	AT,A1,0007	;day Sunday-Saturday: this test should catch -values
+	*BLEZ	AT,+2
+	*OR	A2,A1,R0
+	*OR	A2,R0,R0
+	*ADDIU	A2,A2,0009	;base for days is string+9
+	JAL	800C4168	;construct string to appear on-screen
+	ADDIU	A0,SP,002C	;A0=target location for new string
+	BEQ	R0,R0,to_generic
+	SW	V0,0028 (SP)	;save strlen for new, happy string
+//
+
+8009F00C	0x	string retrieval service
+JAL	800C40BC
+ADDIU	A0,SP,002C
+SW	V0,0028 (SP)
+
+8009F018	0x	to_generic
+//all the snippets redirect here
+8FA40040	*LW	A0,0040 (SP)
+0C0240EA	JAL	800903A8	;advance position to next 'character'
+8FA50044	*LW	A1,0044 (SP)
+AFA2003C	*SW	V0,003C (SP)	;save increment to new position in text bank
+//
+8FA30044	*LW	V1,0044 (SP)	;V1=current position in msg_txt (A0)
+8FAE0028	*LW	T6,0028 (SP)	;T6=strlen for newbie
+8FA40040	*LW	A0,0040 (SP)	;A0=msg_txt text bank
+8FA70048	*LW	A3,0048 (SP)	;A3=size of msg_txt
+AFA00010	SW	R0,0010 (SP)
+006E2821	*ADDU	A1,V1,T6	;A1=strlen+msg_txt position (part1)
+0C027A8B	JAL	8009EA2C	;extend bank for new string: ret V0=new size
+00623021	*ADDU	A2,V1,V0	;A2=old msg_txt position + increment over command (part2)
+//8009EFE0:
+8FAF0040	*LW	T7,0040 (SP)	;p->text bank
+8FB80044	*LW	T8,0044 (SP)	;T8=cur. pos in msg_txt
+AFA20024	SW	V0,0024 (SP)	;save new bank size
+27A5002C	ADDIU	A1,SP,002C	;p->new string
+8FA60028	LW	A2,0028 (SP)	;A2=strlen for new string
+0C027AD1	JAL	8009EB44	;copy string to destination
+01F82021	ADDU	A0,T7,T8	;A0=p->cur pos in text bank
+//8009EFFC:
+8FA20024	LW	V0,0024 (SP)	;V0=new size of text bank
+8FBF001C	LW	RA,001C (SP)
+03E00008	JR	RA
+27BD0040	*ADDIU	SP,SP,0040
+
+
+800C40F8	0x72678	new construct string
+800C40BC	0x7263C-6C	move to this new position...
+	*use* for 7F1E,1F,20,76
+	accepts: A0=target location, A2=string#
+27BDFFE8	ADDIU	SP,SP,FFE8
+AFA5001C	;necessary?	SW	A1,001C (SP)
+AFBF0014	SW	RA,0014 (SP)	
+AFA40018	SW	A0,0018 (SP)	;save target location; gets used in retrieval as well
+//800C418C:
+0C030FDC	JAL	800C3F70	;retrieve string from select_data:A2=index#
+24050009	*ADDIU	A1,R0,0009	;A1=max strlen
+8FA40018	LW	A0,0018 (SP)	;T6=buffer
+0C027A34	JAL	8009E8D0	;kill trailing whitespace
+24050009	*ADDIU	A1,R0,0009	;max characters
+8FBF0014	LW	RA,0014 (SP)
+03E00008	+JR	RA
+27BD0018	-ADDIU	SP,SP,0018
+
+=_=
+
+numerical types:
+800C4084	0x72604	new construct numerical string
+	hopefully generic this up a little bit
+	accepts A0=target, A1=value
+	possibly add in a 'handle' to routine, setting basic values so you can twink otherwise
+handle1:	normal mode - accepts short value
+24060002	ADDIU	A2,R0,0002	;A2=strlen (2)
+AFA0FFF0	SW	R0,FFF0 (SP)	;normal mode
+24070001	ADDIU	A3,R0,0001	;display without spacing if normal mode used
+routine:
+27BDFFE0	ADDIU	SP,SP,FFE0
+AFBF001C	SW	RA,001C (SP)
+0C024993	JAL	8009264C		;constructs the "X" minutes string
+AFA40020	SW	A0,0020 (SP)	;save target location
+	#does it need to do this?	AFA50024	SW	A1,0024 (SP)	;save minutes
+//800C430C:
+//800C4334:
+8FA40020	LW	A0,0020 (SP)	;A0=string
+0C027A34	JAL	8009E8D0	;returns V0=true strlen
+#use return instead	24050004	ADDIU	A1,R0,0004	;A1=strlen
+00022825	OR	A1,R0,V0
+8FBF001C	LW	RA,001C (SP)
+03E00008	JR	RA
+27BD0020	ADDIU	SP,SP,0020
+
+
+8009EE78	0x	code to retrieve hours (from 7F command jump)
+	string winds up on stack for a time.  that limits size to 0x8...
+27BDFFC0	*ADDIU	SP,SP,FFC0
+AFBF001C	SW	RA,001C (SP)
+AFA40040	*SW	A0,0040 (SP)	;A0=msg_txt text bank
+AFA50044	*SW	A1,0044 (SP)	;A1=current position in msg_txt (A0)
+AFA60048	*SW	A2,0048 (SP)	;A2=size of msg_txt
+//
+//years snippet: for the record, there's no reason to test if <1901...
+3C058013	LUI	A1,8013
+94A56FC2	LHU	A1,6FC2 (A1)	;A1=80136FC2 - year
+28A107D0	SLTI	AT,A1,07D0	;should be 2000 or more
+54200001	BNEL	AT,R0,+1
+240507D0	ADDIU	A1,R0,07D0	;date= 2000
+2CA10834	SLTIU	AT,A1,0834	;TRUE if < 2100
+50200001	BEQL	AT,R0,+1
+240507D0	ADDIU	A1,R0,07D0	;date= 2000
+24060004	ADDIU	A2,R0,0004	;set width of string here - advance jump
+0C031022	JAL	800C4088	;construct string to appear on-screen
+27A4002C	ADDIU	A0,SP,002C	;A0=target location for new string
+1000	BEQ	R0,R0,to_generic
+AFA20028	SW	V0,0028 (SP)	;save strlen for new, happy string
+//
+//hours snippet:	goofy: bad rig to show 12 instead of 0
+3C058013	LUI	A1,8013
+90A56FBE	LBU	A1,6FBE (A1)	;A1=80136FBE - hours
+//28A10018	SLTIU	AT,A1,0018	;should be <24
+2401000C	ADDIU	AT,R0,000C
+00A1001A	DIV	A1,AT
+00002810	MFHI	A1
+50A00001	BEQL	A1,R0,+1
+2405000C	ADDIU	A1,R0,000C
+0C031021	JAL	800C4084	;construct string to appear on-screen
+27A4002C	ADDIU	A0,SP,002C	;A0=target location for new string
+1000	BEQ	R0,R0,to_generic
+AFA20028	SW	V0,0028 (SP)	;save strlen for new, happy string
+//
+//OR ALTERNATELY, A COMBO-BLOCK! MINS AND SECS	-assumes V0=command#
+//we're going to use A1+(A0) to determine if preceeded by colon
+//if there's a colon, we can assume that the min/sec should be 2byte zero-extended, not values
+//detect mode
+00852821	ADDU	A1,A0,A1
+90A5FFFF	LBU	A1,FFFF (A1)
+24070001	ADDIU	A3,R0,0001	;normal mode no spacing
+AFA7FFF0	SW	A3,FFF0 (SP)	;by default set it to 0-ext.
+2401003A	ADDIU	AT,R0,003A	;AT=':'
+54250002	BNEL	A1,AT,+2	;if A1!=':'...
+AFA0FFF0	SW	R0,FFF0 (SP)	;switch mode back to normal
+24070000	ADDIU	A3,R0,0000	;0-ext requires A3=0
+//guess min/sec
+24010023	ADDIU	AT,R0,0023
+3C058013	LUI	A1,8013
+50220002	BEQL	AT,V0,+2
+90A56FBC	LBU	A1,6FBC (A1)	;A1=80136FBC - seconds
+90A56FBD	LBU	A1,6FBD (A1)	;A1=80136FBD - minutes
+//minutes snippet:
+2CA1003C	SLTIU	AT,A1,003C	;should be <60
+50200001	BEQL	AT,R0,+1
+00002825	OR	A1,R0,R0
+24060002	ADDIU	A2,R0,0002	;set max width of characters
+0C031024	JAL	800C4090	;construct string to appear on-screen; skip defaults
+27A4002C	ADDIU	A0,SP,002C	;A0=target location for new string
+1000	BEQ	R0,R0,to_generic
+AFA20028	SW	V0,0028 (SP)	;save strlen for new, happy string
+
+=_=
+
+Must revise the handle to accepts commands 7F74-7F76 - minimum...
+going to use 0xC62C4 80117D44 as base for 7F command table extension
+	80117BC4 is base address, which is table-0x60 of entries
+	assumes first entry is '0x60', though this is just as a base number
+800A21C0	0x50740	handle 7FXX command requests
+	returns V0=0,1,2
+	0 is normal -keep reading, 1 unknown, 2=break reading loop
+27BDFFE8	ADDIU	SP,SP,FFE8
+AFBF0014	SW	RA,0014 (SP)
+8C82000C	LW	V0,000C (A0)	;V0=start of text bank data
+8CAE0000	LW	T6,0000 (A1)	;T6=current position in bank
+2401007F	ADDIU	AT,R0,007F
+24420010	ADDIU	V0,V0,0010	;V0=p->text bank itself
+01C23021	ADDU	A2,T6,V0		;A2=p->current place in bank	(bank+curpos)
+90C30000	LBU	V1,0000 (A2)	;retrieve char
+10610003	+BEQ	V1,AT,+3	;quit if not a 7F command
+90C20001	LBU	V0,0001 (A2)	;V0=command type
+//800A2214:
+1000000E	BEQ	R0,R0,end	;skip if invalid
+00001025	OR	V0,R0,R0
+//
+0440FFFD	BLTZ	V0,FFFD	;KILLS 7F80-7FFF
+28410061	SLTI	AT,V0,0061
+10200004	BEQ	AT,R0,newtable	;largest allowed is 7F60
+00027880	SLL	T7,V0,0x2	;T7=command->offset
+3C038010	LUI	V1,8010
+10000003	*BEQ	R0,R0,+3
+24637CB8	*ADDIU	V1,V1,7CB8	;get p->command processing from table at 80107CB8
+//other, new table
+3C038011	*LUI	V1,8011
+24637BA0	*ADDIU	V1,V1,7BC4
+//800A221C:	jump to process command
+006F1821	ADDU	V1,V1,T7
+8C630000	LW	V1,0000 (V1)
+0060F809	JALR	RA,V1
+00000000	NOP
+//800A222C:	END
+8FBF0014	LW	RA,0014 (SP)
+03E00008	JR	RA
+27BD0018	ADDIU	SP,SP,0018
+*NOP
+NOP
+NOP
+
+=_=
+
+new 7F command sizes
+C6288 corresponds to '7F60'	80117D08
+base address then for lookup (ID#*2) is 80117C48
+LBU	V0,0000 (A0)	;V0=character
+ADDIU	AT,R0,007F
+ADDIU	V1,R0,0001
+BNEL	V0,AT,80090390	;branch if not a 7F command
+ADDIU	AT,R0,0080
+LBU	V0,0001 (A0)	;V0=command#
+BLTZ	V0,80090384	;between 00 & 7F
+SLTI	AT,V0,0061
+BEQ	AT,R0,80090384	;catch those > 61
+SLL	T6,V0,0x1	;T6=command->offset
+LUI	V1,8010
+ADDU	V1,V1,T6
+BEQ	R0,R0,8009039C
+LB	V1,6BF4 (V1)	;V1=80106BF4+offset: size of command
+//80090384:	the invalid AC commands go here
+BEQ	R0,R0,8009039C	;set default size of 2
+ADDIU	V1,R0,0002
+ADDIU	AT,R0,0080
+//80090390:
+BNEL	V0,AT,800903A0	;branch if not an 80 command
+OR	V0,V1,R0
+ADDIU	V1,R0,0002
+OR	V0,V1,R0
+JR	RA
+NOP
+
+REWRITE:
+3E8CC	8009034C	determine size of character in string A0
+90820000	LBU	V0,0000 (A0)	;V0=character
+//first catch 80 commands
+24010080	ADDIU	AT,R0,0080
+50410011	BEQL	V0,AT,end	;branch if not a 7F command
+24030002	ADDIU	V1,R0,0002
+//normal guys get set to 1
+2401007F	ADDIU	AT,R0,007F
+5441000E	BNEL	V0,AT,end	;branch if not an 80 command
+24030001	ADDIU	V1,R0,0001
+//figure size of 7F commands
+80820001	LB	V0,0001 (A0)	;V0=command#
+0442000B	BLTZL	V0,end	;7F80-7FFF get set to 2
+24030002	ADDIU	V1,R0,0002
+28410061	SLTI	AT,V0,0061
+10200004	BEQ	AT,R0,+4	;catch those > 61
+00027040	SLL	T6,V0,0x1	;T6=command->offset
+3C038010	LUI	V1,8010
+10000003	BEQ	R0,R0,+3
+24636BF4	ADDIU	V1,V1,6BF4
+//new table for 7F61-7F7F (technical cap of 7F7A)
+3C038011	LUI	V1,8011
+24637C48	ADDIU	V1,V1,7C48
+006E1821	ADDU	V1,V1,T6
+80630000	LB	V1,0000 (V1)	;V1=80106BF4+offset: size of command
+//end:
+03E00008	JR	RA
+00601025	OR	V0,V1,R0
+	NOP
+
+fix second byte pull as well, which means redirecting 800903CC's caller
+SLL	T6,A0,0x1
+LUI	V0,8010
+ADDU	V0,V0,T6
+LB	V0,6BF5 (V0)
+JR	RA
+NOP
+
+40270	80091CF0	0C01684A	JAL 8005A128
+move to ->	86A8	8005A128
+288E0061	SLTI	T6,A0,0061
+100E0004	BEQ	T6,R0,+4
+00047040	SLL	T6,A0,0x1
+3C028010	LUI	V0,8010
+10000003	BEQ	R0,R0,+3
+24426BF5	ADDIU	V0,V0,6BF5
+3C028011	LUI	V0,8011
+24427C49	ADDIU	V0,V0,7C49
+004E1021	ADDU	V0,V0,T6
+03E00008	JR	RA
+80420000	LB	V0,0000 (V0)
+
+	
+
+=_=
+
+Controllers for 7F74/7F75
+essentially, set the controller+28C's upper bits
+20	Capitalize first letter (sentence case)
+40	CAPITALIZE ALL
+80	force lowercase
+in copy routine, will read these and force the behaviour
+order is important! capitalize must be first, lowercase next
+
+magic values:
+70=	 2<<5=  40	upper-case
+	74<<5= e80	lower-case
+	75<<5= eA0	sentence-case
+
+default from caller:
+V0=command type
+A0=p->text bank controller
+A2=p->current position in text bank
+T6=current position in bank (offset)
+
+8009F098	0x4D618	PROSPECTIVELY
+#save controller and stuff
+27BDFFE8	ADDIU	SP,SP,FFE8
+AFBF0014	SW	RA,0014 (SP)
+28410074	SLTI	AT,V0,0074
+54200001	BNEZL	AT,+1
+24020002	ADDIU	V0,R0,0002
+#controller sets bits, then unwrites itself
+00021140	SLL	V0,V0,0005	;command shifted left 5bits
+9081028C	LBU	AT,028C (A0)
+00220825	OR	AT,AT,V0
+A081028C	SB	AT,028C (A0)
+#That's the same as passing the current position as part 1 in resizer, part 2 cur+2
+8C87000C	LW	A3,000C (A0)
+AFA70018	SW	A3,0018 (SP)	;save controller for text bank
+24E40010	ADDIU	A0,A3,0010	;A0=p->text bank
+000E2825	OR	A1,T6,R0	;A1=current position in msg_txt (A0)
+24A60002	ADDIU	A2,A1,0002	;A2=old msg_txt position + increment over command (part2)
+AFA00010	SW	R0,0010 (SP)
+0C027A8B	JAL	8009EA2C	;extend bank for new string: ret V0=new size
+8CE70008	LW	A3,0008 (A3)	;A3=size of bank
+#save new max size (V0) afterward
+8FB80018	LW	T8,0018 (SP)	;T7=controller for text bank
+AF020008	SW	V0,0008 (T8)	;save new max size
+8FBF0014	LW	RA,0014 (SP)
+00001025	OR	V0,R0,R0
+03E00008	JR	RA
+27BD0018	ADDIU	SP,SP,0018
+
+filled the rest of the 'new' command table with a default value to avoid blue meanies
+
+=_=
+
+Copy routine being hacked will be 8009EB44
+Its used by the stuff that typically gets preceeded by the commands
+unfortunately, will need to use a literal offset to value, not through pointer
+
+rewrite for copy routine 8009EB44:
+	accepts: A0=p->copy location,A1=source location, A2=strlen
+	returns: V0=count
+//get the control byte
+3C0F8014	LUI	T7,8014
+81E3269C	LB	V1,269C (T7)	;control byte
+30780060	ANDI	T8,V1,0060	;T8 gets either capitalize bit
+//test if a null string
+18C00012	BLEZ	A2,end	+12
+00001025	OR	V0,R0,R0
+//8009EB58:	copy source (A1) to A0
+90AE0000	LBU	T6,0000 (A1)
+24420001	ADDIU	V0,V0,0001	;count++
+
+04610005	BGEZ	V1,+5		;80 is lowercase, so true value would be negative ;*)
+24840001	ADDIU	A0,A0,0001	;TARGET++
+25C8FFBF	ADDIU	T0,T6,FFBF	;omit first 0x40 entries
+2D08001A	SLTIU	T0,T0,001A
+55000001	BNEL	T0,R0,+1
+25CE0020	ADDIU	T6,T6,0020	;drops case
+
+13000006	BEQ	T8,R0,+6	;capitalize bit
+24A50001	ADDIU	A1,A1,0001	;SOURCE++
+25C8FF9F	ADDIU	T0,T6,FF9F
+2D08001A	SLTIU	T0,T0,001A
+55000001	BNEL	T0,R0,+1
+25CEFFE0	ADDIU	T6,T6,FFE0	;capitalizes
+33180040	ANDI	T8,T8,0040	;eliminate 1st letter capitalize flag
+
+14C2FFF0	BNE	A2,V0,
+A08EFFFF	SB	T6,FFFF (A0)	;save to target
+//kill the special flags and QUIT
+3063001F	ANDI	V1,V1,001F
+03E00008	JR	RA
+A1E3269C	SB	V1,269C (T7)	;control byte
+
+NOP
+NOP
+
+Now to rewrite AGAIN, to account for embedded 7F commands...
+8009EB44	4D0C4	
+//	get the control byte
+3C0F8014	LUI	T7,8014
+81E3269C	LB	V1,269C (T7)	;control byte
+30780060	ANDI	T8,V1,0060	;T8 gets either capitalize bit
+2419001F	*ADDIU	T9,R0,001F	;T9=mask for cancelling flags later
+//	test if a null string
+18C00013	BLEZ	A2,end	+12
+00001025	OR	V0,R0,R0
+//8009EB58:	copy source (A1) to A0
+90AE0000	LBU	T6,0000 (A1)
+24420001	ADDIU	V0,V0,0001	;count++
+//	detect 7F commands
+2408007F	*ADDIU	T0,R0,007F
+510E0001	*BEQL	T0,T6,+1
+241900DF	*ADDIU	T9,R0,00DF	;T9=retains all but initial capitalize flag
+//	upper->lower case
+2408FFFF	*ADDIU	T0,R0,FFFF	;T0=-1 by default
+04620001	BLTZL	V1,+1		;80 is lowercase, so true value would be negative ;*)
+25C8FFBF	ADDIU	T0,T6,FFBF
+//	lower->upper case
+57000001	BNEL	T8,R0,+1	;capitalize bit
+25C8FF9F	ADDIU	T0,T6,FF9F
+//	alter case
+2D08001A	SLTIU	T0,T0,001A
+11000002	*BEQ	T0,R0,+2
+24840001	ADDIU	A0,A0,0001	;TARGET++
+39CE0020	*XORI	T6,T6,0020	;invert case
+//	save byte and loop
+33180040	ANDI	T8,T8,0040	;eliminate 1st letter capitalize flag
+24A50001	ADDIU	A1,A1,0001	;SOURCE++
+14C2FFEF	*BNE	A2,V0,8009EB58
+A08EFFFF	SB	T6,FFFF (A0)	;save to target
+//kill the special flags and QUIT
+00791824	*AND	V1,V1,T9
+03E00008	JR	RA
+A1E3269C	SB	V1,269C (T7)	;control byte
+
+
+okay, to fix the coloration bug,
+just need to hack the colouration routine so it uses the other copy type!
+8009F380:
+JAL	800998C0	;A0=p->target, A1=p->source, A2=size
+0C026630
+
+=_=
+
+This broke something:	the only other routine to use any of these routines
+800A639C	0x5491C	0C031021	JAL	800C4084
+800A63BC	0x5493C	0C031021	JAL	800C4084
+
+ADDIU	SP,SP,FFD8
+SW	RA,0014 (SP)
+SW	A0,0028 (SP)	;save target
+SW	A2,0030 (SP)	;save day of month
+OR	A3,A1,R0	;A3=month of year
+//800A6398:
+ADDIU	A0,SP,0024	;A0=target
+JAL	800C4084	;generic ltostr
+ANDI	A1,A3,00FF	;A1=month, assuredly one byte long
+SW	V0,0020 (SP)	;save new strlen
+LW	A0,0028 (SP)	;copy target
+ADDIU	A1,SP,0024	;copy source
+JAL	800998C0	;copy string
+OR	A2,V0,R0	;copy strlen
+//800A63B8:
+ADDIU	A0,SP,0024	;A0=target
+JAL	800C4084	;generic ltoa
+LBU	A1,0033 (SP)	;A1=day of month
+LW	T6,0028 (SP)	;original copy target
+LW	T7,0020 (SP)	;original strlen
+SW	V0,001C (SP)	;save strlen
+ADDIU	A1,SP,0024	;copy source
+OR	A2,V0,R0	;strlen
+JAL	800998C0	;copy string
+ADDU	A0,T6,T7	;copy target: original target+strlen
+//800A63E0:
+LW	T8,0020 (SP)	;original strlen
+LW	T9,001C (SP)	;second strlen
+LW	RA,0014 (SP)
+ADDU	V0,T8,T9	;total strlen
+JR	RA
+ADDIU	SP,SP,0028
+
+=_=
+
+7F2E patch!
+8009F410:	0x4D990
+24A501E4	ADDIU	A1,A1,01E4	;A1=801425F4: new buffer for selected text
+
+@_@
+
+Preliminary interject command hack
+For now, will simply call the standard string.txt retrieval service...
+
+Note this only works if the buffer can accept the blasted command.
+That makes it valid only for things using the msg_txt buffer or similiar.
+Hovering over items only allows types 4-5.  Insert is type 2
+	type 4:
+		52	V0=80091900	SE?
+		53	V0=8009193C	SE?
+		5A	V0=80091980	whisper?
+		otherwise	V0=80090000, though probably shouldn't work
+	type 5:
+		50	V0=800914FC	font colour
+		54	V0=80091554	font size
+		default	V0=0
+
+800A1CA4	0x50224	7F6F.bttt	interject string.txt entry at location
+	accepts: A0=p->text controller, A1=p->curpos in msg_txt
+27BDFFD0	ADDIU	SP,SP,FFD0
+AFBF001C	SW	RA,001C (SP)
+AFB00020	SW	S0,0020 (SP)
+AFB10024	SW	S1,0024 (SP)	;SP+24= curpos in msg_txt [801478F8]
+8C90000C	LW	S0,000C (A0)	;A0=A0+C: p->msg_txt bank
+//	will need to grab the text ID f/ command
+8CA50000	LW	A1,0000 (A1)	;A1=A3+0: curpos in msg_txt
+0C027701	JAL	8009DC04	;get command size
+00058825	OR	S1,A1,R0	;S1=V1: curpos
+AFA20028	SW	V0,0028 (SP)	;SP+28=V0: command size
+//	will need to know the actual strlen in order to make room for it
+26040010	ADDIU	A0,S0,0010	;A0=p->msg_txt
+00912021	ADDU	A0,A0,S1	;A0=p->command
+90870003	LBU	A3,0003 (A0)
+90840002	LBU	A0,0002 (A0)	
+00042200	SLL	A0,A0,0x8
+00872025	OR	A0,A0,A3	;A0=string#
+AFA4002C	SW	A0,002C (SP)	;SP+2C=A0: string#
+27A50018	ADDIU	A1,SP,0018	;A1=target for codeword
+0C030F8C	JAL	800C3E30	;converts string# to codeword and size
+27A60014	ADDIU	A2,SP,0014	;A2=target for size
+//	offset existing text in msg_txt
+8FA90028	LW	T1,0028 (SP)	;T1=SP+28: command size
+8FA80014	LW	T0,0014 (SP)	;T0=SP+14: strlen
+26040010	ADDIU	A0,S0,0010	;A0=p->msg_txt
+8E070008	LW	A3,0008 (S0)	;A3=sizeof msg_txt
+AFA00010	SW	R0,0010 (SP)
+02293021	ADDU	A2,S1,T1	;A2=S1+T1: msg_txt curpos+command size: 
+0C027A8B	JAL	8009EA2C	;extend text bank for entry; V0=new msg_txt size
+02282821	ADDU	A1,S1,T0	;A1=S1+T0: msg_txt curpos+strlen
+//	update msg_txt size
+AE020008	SW	V0,0008 (S0)	;V0->sizeof msg_txt
+//	copy string to msg_txt
+26040010	ADDIU	A0,S0,0010	;A0=p->msg_txt
+8FA50014	LW	A1,0014 (SP)	;A1=max strlen
+8FA6002C	LW	A2,002C (SP)	;A2=string#
+0C030FDC	JAL	800C3F70	;copy string.txt entry
+00912021	ADDU	A0,A0,S1	;A0+=S1: curpos+msg_txt: p->target
+//	return
+8FB10024	LW	S1,0024 (SP)
+8FB00020	LW	S0,0020 (SP)
+8FBF001C	LW	RA,001C (SP)
+27BD0030	ADDIU	SP,SP,0030
+00001025	OR	V0,R0,R0
+03E00008	JR	RA
+00000000	NOP
+
++_+
+
+This is a variation of above, omitting the strlen pull
+Thankfully, works well.
+800A0610	4EB90	
+	accepts: A0=p->text controller, A1=p->curpos in msg_txt
+27BDFBD0	ADDIU	SP,SP,FBD0
+AFBF001C	SW	RA,001C (SP)
+AFB00020	SW	S0,0020 (SP)
+AFB10024	SW	S1,0024 (SP)
+8C90000C	LW	S0,000C (A0)	;A0=A0+C: p->msg_txt bank
+//	will need to grab the text ID f/ command
+8CA50000	LW	A1,0000 (A1)	;A1=A3+0: curpos in msg_txt
+0C027701	JAL	8009DC04	;get command size
+00058825	OR	S1,A1,R0	;S1=V1: curpos
+AFA20028	SW	V0,0028 (SP)	;SP+28=V0: command size
+//	initialize the text buffer
+27A40030	ADDIU	A0,SP,0030	;A0=p->buffer
+34050400	ORI	A1,R0,0400	;A1=max strlen
+0C02664B	JAL	8009992C
+34060020	ORI	A2,R0,0020	;fill with spaces
+//	grab the item#
+26040010	ADDIU	A0,S0,0010	;A0=p->msg_txt
+00912021	ADDU	A0,A0,S1	;A0=p->command
+90870003	LBU	A3,0003 (A0)
+90840002	LBU	A0,0002 (A0)
+00042200	SLL	A0,A0,0x8
+00873025	OR	A2,A0,A3	;A2=string#
+//	pull string
+27A40030	ADDIU	A0,SP,0030	;A0=p->buffer
+0C030FDC	JAL	800C3F70	;copy string.txt entry
+34050400	ORI	A1,R0,0400	;A1=max strlen
+27A40030	ADDIU	A0,SP,0030	;A0=p->buffer
+0C027A34	JAL	8009E8D0	;V0=strlen, right-aligned no whitespace
+34050400	ORI	A1,R0,0400	;A1=max strlen
+//00022825	OR	A1,V0,R0	;alternate solution, just unsure of returns...
+AFA20014	SW	V0,0014 (SP)	;SP+14= strlen
+//	offset existing text in msg_txt
+8FA90028	LW	T1,0028 (SP)	;T1=SP+28: command size
+26040010	ADDIU	A0,S0,0010	;A0=p->msg_txt
+8E070008	LW	A3,0008 (S0)	;A3=sizeof msg_txt
+AFA00010	SW	R0,0010 (SP)
+02293021	ADDU	A2,S1,T1	;A2=S1+T1: msg_txt curpos+command size: 
+0C027A8B	JAL	8009EA2C	;extend text bank for entry; V0=new msg_txt size
+02222821	ADDU	A1,S1,V0	;A1=S1+V0: msg_txt curpos+strlen
+//	update msg_txt size
+AE020008	SW	V0,0008 (S0)	;V0->sizeof msg_txt
+//	copy string to msg_txt
+26040010	ADDIU	A0,S0,0010	;A0=p->msg_txt
+8FA60014	LW	A2,0014 (SP)	;A2=strlen
+27A50030	ADDIU	A1,SP,0030	;A1=p->buffer
+0C027AD1	JAL	8009EB44	;formatted copy A2 bytes from string A1 to A0
+//0C026630	JAL	800998C0	;copy A2 bytes from string A1 to A0
+00912021	ADDU	A0,A0,S1	;A0+=S1: curpos+msg_txt: p->target
+//	return
+8FB10024	LW	S1,0024 (SP)
+8FB00020	LW	S0,0020 (SP)
+8FBF001C	LW	RA,001C (SP)
+27BD0430	ADDIU	SP,SP,0430
+00001025	OR	V0,R0,R0
+03E00008	JR	RA
+00000000	NOP
+
+
+revision of above, to allow looking into an index table!
+//	pull string
+00062302	SRL	A0,A2,0xC
+00042080	SLL	A0,A0,0x2
+3C02800A	LUI	V0,800A
+00441021	ADDU	V0,V0,A0
+8C4205D0	LW	V0,05D0 (V0)
+27A40030	ADDIU	A0,SP,0030	;A0=p->buffer
+0040F809	*JALR	RA,V0		;copy string from ROM to buffer
+34050400	ORI	A1,R0,0400	;A1=max strlen
+27A40030	ADDIU	A0,SP,0030	;A0=p->buffer
+0C027A34	JAL	8009E8D0	;V0=strlen, right-aligned no whitespace
+34050400	ORI	A1,R0,0400	;A1=max strlen
+//00022825	OR	A1,V0,R0	;alternate solution, just unsure of returns...
+AFA20014	SW	V0,0014 (SP)	;SP+14= strlen
+
+Keep in mind this will accept A2=ID passed from the command, which will be extended to bank#.
+Some types will need to mask this off in various ways.
+
+those marked with '`' are not stock
+0xxx	'select_txt
+1xxx	furniture--really anything that can be placed in your house
+20xx	stationary
+21xx	bags of bells
+22xx	handheld items (tools, parasols, etc)
+23xx	fish
+24xx	clothes
+25xx	shells, and other assorted small items
+26xx	carpets
+27xx	wallpaper
+28xx	fruit
+29xx	plants
+2Axx	music
+2Bxx	garbage
+2Cxx	raffle tickets
+2Dxx	insects
+2Exx	gift bags
+2Fxx	turnips
+3xxx	'mail_txt
+4xxx	'(reserved for msg_txt)
+5xxx	'(reserved for msg_txt)
+6xxx	'(reserved for msg_txt)
+7xxx	'super_txt
+8xxx	'superz_txt
+9xxx	'maila_txt
+Axxx	'mailb_txt
+Bxxx	'mailc_txt
+Cxxx	'psz_txt
+Dxxx	string_txt
+Exxx	npc
+Fxxx	'ps_txt
+
+tested and working:
+	select, items, mail, super, multi, string, npc, ps
+
+tested and need debug:
+	none!
+	
+requires major overhaul:
+	msg	need to rewrite extraction routine
+
+retrieval service redirects
+all accept A0=p->target, A1=max strlen, A2=index ID#
+
+select.txt correction
+00003825	OR	A3,R0,R0
+00042825	OR	A1,A0,R0
+08019764	J	80065D90
+30C60FFF	ANDI	A2,A2,0FFF
+
+item correction
+	no correction necessary; use alt entry at 80096748
+
+mail.txt correction
+08024F6A	J	80093DA8
+30C50FFF	ANDI	A1,A2,0FFF
+
+//leave msg.txt out for now
+//	requires 1) p->msg_txt bank, not target
+//		2) rewrite to avoid replacement of msg_txt bank settings
+
+//need to see what other super.txt value is
+30C70FFF	ANDI	A3,A2,0FFF
+08024ECA	J	80093B28
+00053025	OR	A2,A1,R0
+
+multi-bank correction
+27BDFFD0	ADDIU	SP,SP,FFD0
+AFBF0014	SW	RA,0014 (SP)
+//	build struct at SP+18
+AFA40020	SW	A0,0020 (SP)	;p->target -> struct+8
+AFA50024	SW	A1,0024 (SP)	;max strlen-> struct+C
+00062302	SRL	A0,A2,0xC
+2484FFF8	ADDIU	A0,A0,FFF8	;8,9,A,B,C -> 0,1,2,3,4
+AFA40018	SW	A0,0018 (SP)
+30C60FFF	ANDI	A2,A2,0FFF
+AFA4001C	SW	A0,001C (SP)
+0C02502A	JAL	800940A8	;grab text from multibank index#
+27A40018	ADDIU	A0,SP,0018	;A0=p->struct
+//	return
+8FBF0014	LW	RA,0014 (SP)
+27BD0030	ADDIU	SP,SP,0030
+03E00008	JR	RA
+00000000	NOP
+	
+
+string.txt correction
+08030FDC	J	800C3F70
+30C60FFF	ANDI	A2,A2,0FFF
+
+npc.txt correction
+0802B32B	J	800ACCAC
+00062825	OR	A1,A2,R0
+
+ps.txt correction
+08024F26	J	80093C98
+30C60FFF	ANDI	A2,A2,0FFF
+
+unless want to push everything will need to fit within c+77FA0
+simplify stuff.
+
+80096710	44C90	slight rewrite to allow custom string size
+	*ADDIU	A2,R0,000A
+	ADDIU	SP,SP,FFE0
+	SW	RA,001C (SP)
+	LUI	A3,8011
+	ADDIU	T6,R0,0055
+	SW	T6,0010 (SP)
+	JAL	80026E10
+	*ADDIU	A3,A3,70B0
+	LW	RA,001C (SP)
+	ADDIU	SP,SP,0020
+	JR	RA
+	NOP
+
+Can use 800A1BEC as a basic "advance to next command" routine.  Rewrite to diminish
+800A1BEC, 800A1CA4, 800A1CDC, 800A1D14, 800A1F7C
+7F50,7F52,7F53,7F54,7F5A identical
+800A1BF0	50170	basic advance command
+	accepts: A0=p->text controller, A1=p->text offset
+27BDFFE8	ADDIU	SP,SP,FFE8
+AFBF0014	SW	RA,0014 (SP)
+AFA50018	SW	A1,0018 (SP)	;SP+1C=A2: p->text offset
+0C027701	JAL	8009DC04	;returns V0=size of command
+8CA50000	LW	A1,0000 (A1)	;A1=A2+0: text offset
+8FA50018	LW	A1,0018 (SP)	;A2=p->text offset
+8CA40000	LW	A0,0000 (A1)	;T6=A2+0: text offset
+00442021	ADDU	A0,A0,V0	;T7=T6+V0: offset + command size
+ACA40000	SW	A0,0000 (A1)	;update text offset
+00001025	OR	V0,R0,R0
+8FBF0014	LW	RA,0014 (SP)
+03E00008	JR	RA
+27BD0018	ADDIU	SP,SP,0018
+
+link others into this routine!
+0C0286FA	*JAL	800A1BF0
+
+800A108C	0x4F60C	7F00	close window
+8C83028C	LW	V1,028C (A0)	;V1=controller+28C: flags
+8CAE0000	LW	T6,0000 (A1)	;T6=A1+0: text offset
+AC8E02A0	SW	T6,02A0 (A0)	;T6->controller+2A0: text offset->cur.position
+306F0008	ANDI	T7,V1,0008
+51E00002	BEQL	T7,R0,+2	;branch if pause flag unset
+24020002	ADDIU	V0,R0,0002
+24020001	ADDIU	V0,R0,0001	;V0=1
+//800A0604:	toggle pause flag
+38790008	*XORI	T9,V1,0008
+AC99028C	SW	T9,028C (A0)	;set pause flag
+03E00008	JR	RA
+00000000	NOP	
+
+
+800A0650	0x4EBD0	7F02	clear dialog box
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+AFA5001C	*SW	A1,001C (SP)
+8CA50000	*LW	A1,0000 (A1)	;A1=A2+0: text offset
+0C0286FA	*JAL	800A1BF0
+	SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+	-SW	A1,001C (SP)
+	-LW	A0,0018 (SP)	;A0=p->text controller
+	LW	A2,001C (SP)
+	LW	A0,0018 (SP)	;A0=p->text controller
+8CCF0000	*LW	T7,0000 (A2)
+	-ADDU	T7,T6,V0
+	-SW	T7,0000 (A2)	;update text offset
+	JAL	8009E344
+	SW	T7,02A0 (A0)	;T7->controller+2A0: text offset->cur.position
+	...
+
+800A0770	0x4ECF0	7F04	pause (blue arrow)
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+	-OR	A2,A1,R0	;A2=A1: p->text offset
+	LW	V1,028C (A0)	;V1=control switch
+	-ADDIU	AT,R0,FFF7
+	ANDI	T6,V1,0008
+11C0000A	*BEQ	T6,R0,800A07C8	;if not set, set it
+38690008	*XORI	T1,V1,0008	;T1=pause bit set
+	-AND	T7,V1,AT		;T7=switch unset
+AC89028C	*SW	T1,028C (A0)	;save switch
+//800A0798:	advance and quit
+AFA5001C	*SW	A1,001C (SP)
+8CA50000	*LW	A1,0000 (A1)	;A1=A2+0: text offset
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+	SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+	LW	A0,0018 (SP)	;A0=p->text controller
+	-LW	T8,0000 (A2)
+	-ADDU	T9,T8,V0
+	-SW	T9,0000 (A2)	;update text offset
+	-SW	T9,02A0 (A0)	;save current position
+8FA5001C	*LW	A1,001C (SP)
+10000003	*BEQ	R0,R0,800A07D0
+	ADDIU	V0,R0,0001	;returns V0=1, which I'm not certain about
+//800A07C8:	set switch without advancing (paused)
+	SW	T1,028C (A0)	;save control switch
+24020002	*ADDIU	V0,R0,0002	;V0=2 (break text reading)
+8CAA0000	*LW	T2,0000 (A1)
+	SW	T2,02A0 (A0)	;T2->controller+2A0: text offset->cur.position
+//800A07D8:	return
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0018
+	JR	RA
+	NOP
+	
+800A083C	0x4EDBC
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+	LW	A1,0000 (T9)
+	-LW	V1,0024 (SP)
+	-LW	T0,0000 (V1)
+	-ADDU	T1,T0,V0
+	-SW	T1,0000 (V1)	;update text offset
+
+800A0864	0x4EDE4	7F06
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+24020001	*ADDIU	V0,R0,0001	;T8=1
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+AC8202C0	*SW	V0,02C0 (A0)	;1->controller+0x2C0
+	-OR	A2,A1,R0	;A2=A1: p->text offset
+	-LW	A1,0000 (A2)	;A1=A2+0: text offset
+	-SW	A2,001C (SP)	;SP+1C=A2: p->text offset
+	-JAL	8009DC04	;returns V0=size of command
+	-LW	A0,0018 (SP)	;A0=p->text controller
+	-LW	A2,001C (SP)	;A2=p->text offset
+	-LW	T6,0000 (A2)	;T6=A2+0: text offset
+	-ADDU	T7,T6,V0	;T7=T6+V0: offset + command size
+	-SW	T7,0000 (A2)	;update text offset
+	-LW	T9,0018 (SP)	;T9=p->text controller
+	-OR	V0,R0,R0	;V0=0
+	LW	RA,0014 (SP)
+	JR	RA
+	ADDIU	SP,SP,0018
+
+800A08B0	0x4EE30	7F07
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+AC8002BC	*SW	R0,02BC (A0)	;0->controller+0x2BC
+AC8002C0	*SW	R0,02C0 (A0)	;0->controller+0x2C0
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+ACA50000	*LW	A1,0000 (A1)	;A1=A2+0: text offset
+	-SW	A2,001C (SP)	;SP+1C=A2: p->text offset
+	-JAL	8009DC04	;returns V0=size of command
+	-SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+	-LW	A2,001C (SP)	;A2=p->text offset
+	-LW	A0,0018 (SP)	;A0=p->text controller
+	-LW	T6,0000 (A2)	;T6=A2+0: text offset
+	-ADDU	T7,T6,V0	;T7=T6+V0: offset + command size
+	-SW	T7,0000 (A2)	;update text offset
+	LW	RA,0014 (SP)
+	-OR	V0,R0,R0	;V0=0
+	JR	RA
+	ADDIU	SP,SP,0018
+
+800A0A04	0x4EF84	7F0D
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+	-OR	A3,A0,R0	;A3=A0: p->text handler
+	-OR	A2,A1,R0	;A2=A1: p->text offset
+AFA5001C	*SW	A1,001C (SP)	;SP+1C=A2: p->text offset
+	-LW	A1,0000 (A1)	;A1=A2+0: text offset
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+AFA40018	*SW	A0,0018 (SP)	;SP+18=A3: p->text handler
+	-OR	A0,A3,R0	;A0=A3: p->text handler
+	LW	A2,001C (SP)	;A2=p->text offset
+	LW	A3,0018 (SP)	;A3=p->text handler
+	ADDIU	A1,R0,0001	;A1=1
+8CCF0000	*LW	T7,0000 (A2)	;T6=A2+0: text offset
+	ADDIU	A0,A3,01B0	;A0=handler+1B0: 
+	-ADDU	T7,T6,V0	;T7=T6+V0: offset+command
+	-SW	T7,0000 (A2)	;update text offset
+	JAL	80065158	;SW A1,00A0 (A0)
+	SW	T7,02A0 (A3)	;text offset->handler+2A0: cur.position
+	ADDIU	V0,R0,0002	;V0=2
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0018
+	JR	RA
+	NOP
+
+800A102C	0x4F5AC	7F19
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+0C027A70	JAL	8009E9C0	;1->A0+2CC
+	-SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+0C028786	*JAL	800A1E18	;sets text offset to end of command
+	-OR	A2,A1,R0	;A2=A1: p->text offset
+	-LW	A1,0000 (A2)	;A1=A2+0: text offset
+	-SW	A2,001C (SP)	;SP+1C=A2: p->text offset
+	-LW	A0,0018 (SP)	;A0=p->text controller
+	-LW	A2,001C (SP)	;A2=p->text offset
+	-LW	T6,0000 (A2)	;T6=A2+0: text offset
+	-ADDU	T7,T6,V0
+	-SW	T7,0000 (A2)	;update text position
+	-LW	A0,0018 (SP)	;A0=p->text controller
+	-OR	V0,R0,R0	;V0=0
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0018
+	JR	RA
+	NOP
+
+//800A0AEC:	4F06C	set new position
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+	LW	A0,0028 (SP)
+	-LW	T2,0000 (S0)
+	-ADDU	T3,T2,V0
+	-SW	T3,0000 (S0)	;update text offset
+//800A0B00:	return
+	LW	S0,0018 (SP)
+	LW	RA,001C (SP)
+	-OR	V0,R0,R0	;V0=0
+	ADDIU	SP,SP,0028
+	JR	RA
+
+800A1C24	0x501A4	7F51
+27BDFFE8	ADDIU	SP,SP,FFE8
+AFBF0014	SW	RA,0014 (SP)
+AFA5001C	*SW	A1,001C (SP)
+8CA50000	*LW	A1,0000 (A1)	;A1=A2+0: text offset
+0C0277FD	JAL	8009DFF4	;should always return V0=2...
+AFA40018	SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+8FA40018	LW	A0,0018 (SP)	;A0=txt controller
+2401FFFE	ADDIU	AT,R0,FFFE
+8C8E028C	LW	T6,028C (A0)	;T6=some optionswitch
+50400002	*BEQL	V0,R0,800A1C60
+35CF0001	ORI	T7,T6,0001	;set switch 0x1
+01C17824	AND	T7,T6,AT		;kill switch 0x1
+//800A1C60:
+//800A1C6C:
+8FA5001C	*LW	A1,001C (SP)	;A2=curpos
+8CA50000	*LW	A1,0000 (A1)	;A1=A2+0: text offset
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+AC8F028C	SW	T7,028C (A0)	;save it back
+8FA6001C	LW	A2,001C (SP)
+8FA40018	LW	A0,0018 (SP)
+8CC90000	*LW	T1,0000 (A2)
+AC8902A0	SW	T1,02A0 (A0)	;save curpos to controller+0x2A0?
+8FBF0014	LW	RA,0014 (SP)
+27BD0018	ADDIU	SP,SP,0018
+03E00008	JR	RA
+00000000	*NOP
+00A03025	-OR	A2,A1,R0	;A2=A1: p->text offset
+8C98028C	-LW	T8,028C (A0)
+AC99028C	-SW	T9,028C (A0)
+AFA6001C	-SW	A2,001C (SP)
+AFA40018	-SW	A0,0018 (SP)
+01024821	-ADDU	T1,T0,V0
+ACC90000	-SW	T1,0000 (A2)	;update text offset
+00001025	-OR	V0,R0,R0
+
+800A1D4C	0x502CC	7F55
+27BDFFE8	ADDIU	SP,SP,FFE8
+AFBF0014	SW	RA,0014 (SP)
+8C83028C	LW	V1,028C (A0)	;V1=controller+28C: flags
+306E0008	*ANDI	T6,V1,0008
+11C0000B	*BEQ	T6,R0,800A1DB0	;branch if 0x8 flag not set
+386B0008	*XORI	T3,V1,0008
+356B0002	*ORI	T3,T3,0002
+AC8B028C	*SW	T3,028C (A0)	;update flags
+AFA5001C	*SW	A1,001C (SP)
+8CA50000	*LW	A1,0000 (A1)	;A1=A2+0: text offset
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+AFA40018	SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+8FA5001C	*LW	A1,001C (SP)
+8FA40018	LW	A0,0018 (SP)
+10000003	*BEQ	R0,R0,800A1DB8
+24020001	ADDIU	V0,R0,0001	;V0=1
+//800A1DB0:	troggle
+AC8B028C	SW	T3,028C (A0)
+24020002	ADDIU	V0,R0,0002	;V0=2
+//800A1DB8:	update position
+8CAC0000	*LW	T4,0000 (A1)	;T4=A2+0: text offset
+AC8C02A0	SW	T4,02A0 (A0)	;T4->controller+2A0: text offset->cur.position
+//800A1DC0:	return
+8FBF0014	LW	RA,0014 (SP)
+27BD0018	ADDIU	SP,SP,0018
+03E00008	JR	RA
+	NOP
+	-OR	A2,A1,R0	;A2=A1: p->text offset
+	-ADDIU	AT,R0,FFF7
+	-LW	T8,0000 (A2)
+	-ADDU	T9,T8,V0
+	-LW	T9,0000 (A2)	;update text offset
+	-LW	T1,028C (A0)	;T1=controller+28C: flags
+	-SW	T9,02A0 (A0)
+	-ORI	T2,T1,0002	;T2=flags|2
+	-SW	T2,028C (A0)	;set 0x2 flag
+
+
+//800A1E04	0x50384
+	LW	A0,0030 (SP)
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+	LW	A1,0000 (S0)
+	-LW	T6,0000 (S0)
+	-ADDU	T7,T6,V0
+8E0F0000	*LW	T7,0000 (S0)	;update text offset
+	LW	T9,0030 (SP)
+	-OR	V0,R0,R0
+	SW	T7,02A0 (T9)
+	LW	RA,001C (SP)
+	LW	S0,0018 (SP)
+	ADDIU	SP,SP,0030
+	JR	RA
+
+//800A1E6C	0x503EC
+	LW	A0,0030 (SP)	;A0=p->text controller
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+	LW	A1,0000 (S0)	;A1=S0+0: text offset
+	-LW	T6,0000 (S0)	;T6=S0+0: text offset
+	-ADDU	T7,T6,V0	;T7=offset+command
+8E0F0000	*LW	T7,0000 (S0)	;update text offset
+	LW	T9,0030 (SP)	;T9=p->text controller
+	-OR	V0,R0,R0	;V0=0
+	SW	T7,02A0 (T9)	;T7->controller+2A0: text offset->cur.position
+	LW	RA,001C (SP)
+	LW	S0,0018 (SP)
+	JR	RA
+	ADDIU	SP,SP,0030
+
+//800A1F48:	0x504C8
+	LW	A0,0028 (SP)
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+	LW	A1,0000 (S0)
+	-LW	T6,0000 (S0)
+	-ADDU	T7,T6,V0
+8E0F0000	*LW	T7,0000 (S0)	;update text offset
+	LW	T9,0028 (SP)
+	-OR	V0,R0,R0	;V0=0
+	SW	T7,02A0 (T9)	;T7->controller+2A0: text offset->cur.position
+	LW	RA,001C (SP)
+	LW	S0,0018 (SP)
+	ADDIU	SP,SP,0028
+	JR	RA
+
+800A1FB4	0x50534	7F5B	open most recent letter to character
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+8C82028C	*LW	V0,028C (A0)	;T8=controller+28C: flags
+24420002	*ORI	V0,V0,0002
+8CA50000	*LW	A1,0000 (A1)	;A1=A2+0: text offset
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+AC82028C	*SW	V0,028C (A0)	;set text control switch 0x2
+	-OR	A2,A1,R0	;A2=A1: p->text offset
+	-SW	A2,001C (SP)
+	-SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+	-LW	A2,001C (SP)
+	-LW	A0,0018 (SP)
+	-LW	T6,0000 (A2)
+	-ADDU	T7,T6,V0
+	-SW	T7,0000 (A2)	;update text offset
+	-OR	V0,R0,R0	;V0=0
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0018
+	JR	RA
+
+800A2000	0x50580	7F5C
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+	SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+	-OR	A2,A1,R0	;A2=A1: p->text offset
+	-SW	A2,001C (SP)
+8CA50000	*LW	A1,0000 (A1)	;A1=A2+0: text offset
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+	LW	A0,0018 (SP)	;A0=p->text controller
+	-LW	A2,001C (SP)
+	-LW	T6,0000 (A2)
+	-ADDU	T7,T6,V0
+	-SW	T7,0000 (A2)	;update text offset
+	JAL	8009FDA0
+	LW	A0,0018 (SP)	;A0=p->text controller
+	OR	V0,R0,R0	;V0=0
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0018
+	JR	RA
+	NOP
+
+800A204C	0x505CC	7F5D
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+	SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+	-OR	A2,A1,R0	;A2=A1: p->text offset
+AFA5001C	*SW	A1,001C (SP)
+8CA50000	*LW	A1,0000 (A1)	;A1=A2+0: text offset
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+	LW	A0,0018 (SP)	;A0=p->text controller
+	-LW	A2,001C (SP)
+	-LW	T6,0000 (A2)
+	-ADDU	T7,T6,V0
+	-SW	T7,0000 (A2)	;update text offset
+	JAL	8009FDF8
+	LW	A0,0018 (SP)	;A0=p->text controller
+	OR	V0,R0,R0	;V0=0
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0018
+	JR	RA
+	NOP
+
+800A2098	0x50618	7F5E
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+	-OR	A2,A1,R0	;A2=A1: p->text offset
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+8CA50000	*LW	A1,0000 (A1)	;A1=A2+0: text offset
+	-SW	A2,001C (SP)
+	-LW	A2,001C (SP)
+	-LW	T6,0000 (A2)
+	-ADDU	T7,T6,V0
+	JAL	80065040	;returns V0=801425C0, base of selectmenu data
+	*NOP
+	JAL	80065EE8	;stores 1->80142678
+	OR	A0,V0,R0	;A0=V0: p->selectmenu
+	OR	V0,R0,R0	;V0=0
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0018
+	JR	RA
+	NOP
+
+800A20E0	0x50660	7F5F
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+	SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+	-OR	A2,A1,R0	;A2=A1: p->text offset
+0C0276F8	JAL	8009DBE0	;V0=1 if value at 80136F34 > 0
+AFA5001C	*SW	A1,001C (SP)
+104000	BEQ	V0,R0,800A2130
+8FA5001C	*LW	A1,001C (SP)
+8CA50000	*LW	A1,0000 (A1)	;A1=A2+0: text offset
+	-SW	A2,001C (SP)
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+8FA40018	LW	A0,0018 (SP)	;A0=p->text controller
+	-LW	T6,0000 (A2)
+	-ADDU	T7,T6,V0
+	-LW	T7,0000 (A2)	;update text offset
+	-LW	T9,0018 (SP)	;T9=p->text controller
+	-SW	T7,02A0 (T9)
+	-OR	V0,R0,R0	;V0=0
+10000002	*BEQ	R0,R0,800A2134
+8FA5001C	*LW	A1,001C (SP)
+//800A2130:
+24020002	ADDIU	V0,R0,0002	;V0=2
+8CA80000	*LW	T0,0000 (A1)
+8FA90018	LW	T1,0018 (SP)	;T1=p->text controller
+AD2802A0	SW	T0,02A0 (T1)
+//800A2140:	return
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0018
+	JR	RA
+	NOP
+
+800A2150	0x506D0	7F60 same as 7F5F
+
+move binary positions:
+7F00	800A05D8	4EB58	->	800A108C	4F60C
+7F01	800A0614	4EB94	merged w/ 800A108C
+7F02	800A0650	4EBD0	->	800A10C4	4F644
+7F03	800A06AC	4EC2C	->	800A1110	4F690
+7F04	800A0770	4ECF0	->	800A11D4	4F754
+7F05	800A07E8	4ED68	->	800A1234	4F7B4
+7F06	800A0864	4EDE4	->	800A12A4	4F824
+7F07	800A08B0	4EE30	->	800A12C8	4F848
+	800A08F8	4EE78	->	800A1314	4F894
+7F08	800A0964	4EEE4	->	800A12F0	4F870
+7F09	800A0984	4EF04	->	800A12F8	4F878
+7F0A	800A09A4	4EF24	->	800A1300	4F880
+7F0B	800A09C4	4EF44	->	800A1308	4F888
+7F0C	800A09E4	4EF64	->	800A1310	4F890
+7F0D	800A0A04	4EF84	->	800A1370	2F8F0
+	800A0A60	4EFE0	->	800A13B8	4F938
+7F0E	800A0B14	4F094	merged w/ 800A13B8
+7F0F	800A0B34	4F0B4	merged w/ 800A13B8
+7F10	800A0B54	4F0D4	merged w/ 800A13B8
+7F11	800A0B74	4F0F4	merged w/ 800A13B8
+7F12	800A0B94	4F114	merged w/ 800A13B8
+	800A0BB4	4F134	->	800A1460	4F9E0
+7F13	800A0D94	4F314	merged w/ 800A1460
+7F14	800A0DB4	4F334	merged w/ 800A1460
+7F15	800A0DD4	4F354	merged w/ 800A1460
+	800A0DF4	4F374	->	800A1640	4FBC0
+	800A0FA4	4F524	->	800A17F0	4FD70
+7F16	800A0FCC	4F54C	merged w/ 800A1640
+7F17	800A0FEC	4F56C	merged w/ 800A1640
+7F18	800A100C	4F58C	merged w/ 800A1640
+7F19	800A102C	4F5AC	->	800A1818	4FD98
+7F1A	800A1078	4F5F8	->	800A1864	4FDE4
+7F1B	800A10D8	4F658	->	800A18C4	4FE44
+7F1C	800A1124	4F6A4	->	800A1910	4FE90
+7F1D	800A1170	4F6F0	->	800A195C	4FEDC
+7F1E	800A11B4	4F734	->	800A1998	4FF18
+7F1F	800A11F8	4F778	->	800A19D4	4FF54
+7F20	800A123C	4F7BC	->	800A1A10	4FF90
+7F21	800A1280	4F800	->	800A1A4C	4FFCC
+7F22	800A12C4	4F844	->	800A1A88	50008
+7F23	800A1308	4F888	merged w/ 800A1A88
+	800A134C	4F8CC	->	800A1AC4	50044
+	800A1394	4F914	->	800A1B0C	5008C
+7F24	800A141C	4F99C	merged w/ 800A1C04
+7F25	800A1444	4F9C4	->	800A1B94	50114
+7F26	800A1468	4F9E8	->	800A1BB8	50138
+7F27	800A148C	4FA0C	merged w/ 800A1C04
+7F28	800A14B4	4FA34	merged w/ 800A1C04
+7F29	800A14DC	4FA5C	->	800A1BDC	5015C
+7F2A	800A1500	4FA80	merged w/ 800A1C04
+7F2B	800A1528	4FAA8	merged w/ 800A1C04
+7F2C	800A1550	4FAD0	merged w/ 800A1C04
+7F2D	800A1578	4FAF8	merged w/ 800A1C04
+7F2E	800A1730	4FCB0	->	800A1C28	501A8
+7F2F	800A1774	4FCF4	->	800A1C6C	501EC
+7F30	800A17B8	4FD38	->	800A1CB0	50230
+	800A17FC	4FD7C	->	800A1CF4	50274
+7F31	800A1844	4FDC4	->	800A1D3C	502BC
+7F32	800A186C	4FDEC	merged w/ 800A1D3C
+7F33	800A1894	4FE14	merged w/ 800A1D3C
+7F34	800A18BC	4FE3C	merged w/ 800A1D3C
+7F35	800A18E4	4FE64	merged w/ 800A1D3C
+7F36	800A15A0	4FB20	merged w/ 800A1C00
+7F37	800A15C8	4FB48	merged w/ 800A1C00
+7F38	800A15F0	4FB70	merged w/ 800A1C00
+7F39	800A1618	4FB98	merged w/ 800A1C00
+7F3A	800A1640	4FBC0	merged w/ 800A1C00
+7F3B	800A1668	4FBE8	merged w/ 800A1C00
+7F3C	800A1690	4FC10	merged w/ 800A1C00
+7F3D	800A16B8	4FC38	merged w/ 800A1C00
+7F3E	800A16E0	4FC60	merged w/ 800A1C00
+7F3F	800A1708	4FC88	->	800A1C00	50180
+	800A190C	4FE8C	->	800A1D70	502F0	
+7F40	800A1954	4FED4	->	800A1D64	502E4
+	800A197C	4FEFC	->	800A1DB8	50338
+7F41	800A19C4	4FF44	merged w/ 800A1DB8
+7F42	800A19E4	4FF64	merged w/ 800A1DB8
+7F43	800A1A04	4FF84	merged w/ 800A1DB8
+7F44	800A1A24	4FFA4	merged w/ 800A1DB8
+7F45	800A1A44	4FFC4	merged w/ 800A1DB8
+7F46	800A1A64	4FFE4	merged w/ 800A1DB8
+7F47	800A1A84	50004	merged w/ 800A1DB8
+7F48	800A1AA4	50024	merged w/ 800A1DB8
+7F49	800A1AC4	50044	merged w/ 800A1DB8
+7F4A	800A1AE4	50064	merged w/ 800A1DB8
+	800A1B04	50084	->	800A1DE8	50368
+7F4B	800A1B4C	500CC	merged w/ 800A1DE8
+7F4C	800A1B6C	500EC	merged w/ 800A1DE8
+7F4D	800A1B8C	5010C	merged w/ 800A1DE8
+7F4E	800A1BAC	5012C	merged w/ 800A1DE8
+7F4F	800A1BCC	5014C	merged w/ 800A1DE8
+7F50	800A1BEC	5016C	->	800A1E18	50398
+7F51	800A1C24	501A4	->	800A1E50	503D0
+7F52	800A1CA4	50224	merged w/ 800A1E18
+7F53	800A1CDC	5025C	merged w/ 800A1E18
+7F54	800A1D14	50294	merged w/ 800A1E18
+7F55	800A1D4C	502CC	->	800A1EB0	50430
+7F56	800A1DD0	50350	->	800A1F10	50490
+7F57	800A1E38	503B8	->	800A1F70	504F0
+7F58	800A1EA0	50420	->	800A1FD0	50550
+7F59	800A1F1C	5049C	->	800A204C	505CC
+7F5A	800A1F7C	504FC	merged w/ 800A1E18
+7F5B	800A1FB4	50534	->	800A20A4	50624
+7F5C	800A2000	50580	->	800A20D0	50650
+7F5D	800A204C	505CC	->	800A2104	50684
+7F5E	800A2098	50618	->	800A213C	506BC
+7F5F	800A20E0	50660	->	800A2170	506F0
+7F60	800A2150	506D0	merged w/ 800A2170
+
+7F6F	800A1CA4	50224	->	800A05D0	4EB50
+7F76	800A12D8	4F858	->	800A1050	4F5D0
+
+
+Yes, this doesn't follow the usual rules, but by passing V0 as command type can simplify certain routines
+
+alternate entry points to function 800A08F8.  Push it up a little...
+800A08F8	7F08	A2=0
+800A0900	7F09	A2=4
+800A0908	7F0A	A2=5
+800A0910	7F0B	A2=6
+800A0918	7F0C	A2=9
+800A091C	function...
+
+//800A0934:	advance past command
+	LW	T7,002C (SP)	;T7=SP+2C: p->text offset
+	LW	A0,0028 (SP)	;A0=p->text handler
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+	LW	A1,0000 (T7)	;A1=text offset
+	-LW	T8,002C (SP)	;T8=SP+2C: p->text offset
+	-LW	T9,0000 (T8)	;T9=text offset
+	-ADDU	T0,T9,V0	;T0=T9+V0: new text offset
+	-SW	T0,0000 (T8)	;update text offset
+//800A0954:	return
+	LW	RA,0014 (SP)
+	-OR	V0,R0,R0	;V0=0
+	JR	RA
+	ADDIU	SP,SP,0028
+
+Broke this.  Crap...
+This is a tad bit more complicated...
+redirect all commands here!
+800A0A60	4EFE0	used by 7F0E-7F12
+2446FFF1	+ADDIU	A2,V0,FFF1	;0E-12 is -1-3
+	ADDIU	SP,SP,FFD8
+	SW	S0,0018 (SP)
+	OR	S0,A1,R0
+	SW	RA,001C (SP)
+	SW	A0,0028 (SP)
+	SW	A2,0030 (SP)	;unique value passed by each command
+	-LW	T6,0028 (SP)
+	*LW	T7,000C (A0)
+	ADDIU	T8,T7,0010
+	JAL	80065040	;V0=801425C0, base of selectmenu data
+	SW	T8,0020 (SP)
+	JAL	800654FC	;V0=selected menu option#
+	OR	A0,V0,R0	;A0=V0: p->selectmenu data
+//800A0A94:	4F014
+	LW	A1,0000 (S0)
+	LW	T9,0020 (SP)
+	LW	A2,0030 (SP)	;A2=00FF-0003
+	-NOP
+	ADDU	V1,A1,T9
+	LBU	A0,0002 (V1)
+	LBU	T1,0003 (V1)
+	SLL	A0,A0,0x8
+	OR	A0,T1,A0	;A0=command's text#
+04C00002	+BLTZ	A2,800A0AC4	
+3085FFFF	*ANDI	A1,A0,FFFF	;A0=just the number, no extra goodies
+14C20009	*BNE	A2,V0,800A0AE8	;don't set it if mismatch
+//800A0AC4:
+	ORI	AT,R0,FFFF	;AT=-1
+10A10005	*BEQ	A1,AT,800A0AE0
+93A60033	*LBU	A2,0033 (SP)	;1 byte only; possibly not necessary
+	JAL	8009DBA4	;set text ID A1 as next jump for text controller A0
+	LW	A0,0028 (SP)
+10000003	*BEQ	R0,R0,800A0AE8
+00000000	*NOP
+
+one liner!  awesome!	13-15 -> 2-4
+800A0BB4	0x4F134	process response command types 7F13-7F15
+	ADDIU	SP,SP,FFB8
+	SW	S1,0018 (SP)
+	SW	S0,0014 (SP)
+	OR	S0,A1,R0
+2451FFEF	*ADDIU	S1,V0,FFEF
+
+And Again!	16-18 -> 2-4
+800A0DF4	0x4F374	process menu types 7F16-7F18
+	ADDIU	SP,SP,FF78
+	SW	S5,0040 (SP)
+	SW	S4,003C (SP)
+2454FFEC	+ADDIU	S4,V0,FFEC
+
+
+Subtract 24 (FFDC) for value passed
+7F24,27,28,2A,2B,2C,2D
+correction for 7F36,37,38,39,3A,3B,3C,3D,3E,3F	(-12 (FFEE), then above	ie.A,+,+,+)
+800A1708	0x4FC88	corection for later entries
+2442FFEE	+ADDIU	V0,V0,FFEE
+//800A170C	0x4FC8C	primary entry point
+27BDFFE8	ADDIU	SP,SP,FFE8
+AFBF0014	SW	RA,0014 (SP)
+00A03825	OR	A3,A1,R0
+8CE50000	LW	A1,0000 (A3)
+0C0284D3	JAL	800A134C
+2446FFDC	*ADDIU	A2,V0,FFDC
+8FBF0014	LW	RA,0014 (SP)
+03E00008	JR	RA
+27BD0018	ADDIU	SP,SP,0018
+
+GENERIC FOR 7F31-35	-31 (FFCF)
+800A1844	0x4FDC4	7F31	string variable slot 21 [text controller +100]
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+	OR	A3,A1,R0	;A3=A1: 
+	LW	A1,0000 (A3)	;A1=A3+0: cur.msg_txt position
+	JAL	800A17FC
+2446FFCF	*ADDIU	A2,V0,FFCF	;A2=entry 0
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0018
+	JR	RA
+	NOP
+
+redirect 800A1954 to start of it's call...
+800A1900	4FE80
+00A03825	OR	A3,A1,R0
+8CE50000	LW	A1,0000 (A3)
+00003025	OR	A2,R0,R0
+
+redirect 41-4A here
+800A1978	0x4FEF8	special entry point for 41-4A
+2446FFBF	+ADDIU	A2,V0,FFBF
+//800A197C	0x4FEFC	???; used by 41-4A
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+8CA50000	*LW	A1,0000 (A1)	;A1=A2+0: text offset
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+AFA60018	*SW	A2,0018 (SP)	;store passed value
+	-LW	A1,0000 (A3)
+	-SW	A3,001C (SP)
+	-LW	A3,001C (SP)
+	-LW	T6,0000 (A3)
+	-ADDU	T7,T6,V0
+	-SW	T7,0000 (A3)	;update text offset
+	JAL	8007B650	;stores A0->address @ 80104A70
+83A4001B	*LB	A0,001B (SP)	;A0=1st byte of passed value
+	-OR	V0,R0,R0	;V0=0
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0018
+	JR	RA
+	NOP
+
+alternate entry point for 4B-4F
+800A1B00	0x50080
+2446FFB5	+ADDIU	A2,V0,FFB5
+//800A1B04	0x50084	???; used by 4B-4F
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+8CA50000	*LW	A1,0000 (A1)	;A1=A2+0: text offset
+0C0286FA	*JAL	800A1BF0	;sets text offset to end of command
+AFA60018	*SW	A2,0018 (SP)	;store passed value
+	-LW	A1,0000 (A3)
+	-SW	A3,001C (SP)
+	-LW	A3,001C (SP)
+	-LW	T6,0000 (A3)
+	-ADDU	T7,T6,V0
+	-SW	T7,0000 (A3)	;update text offset
+	JAL	8009FB2C	;stores A0->80113898, and 0 to 801138A0 and 801138A4
+93A4001B	*LBU	A0,001B (SP)	;A0=1st byte of passed value
+	-OR	V0,R0,R0	;V0=0
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0018
+	JR	RA
+	NOP
+
++_+
+
+Only real difficulty is using this ;*)
+Possibility 1: make it a generic string-pull function
+	Quests use 800BB6F0 to copy string names to 2x item slot.
+	This can be hijacked to write one of these commands for given string #, assuming it can recall any string...
+	
+Only problem is some requests are hard-coded into other memory areas:
+802C4EB4	f/ 76F8D0+1774
+
++_+
+
+The very very hacked method of correcting colourized text wraps.
+
+800A1B0C	5008C	display one of the variable strings; also has option for disable
+	accepts: A0=p->text controller, A1=p->cur.pos, A2=slot#, A3=colour ID
+27BDFFD8	ADDIU	SP,SP,FFD8
+AFBF001C	SW	RA,001C (SP)
+AFA40028	SW	A0,0028 (SP)	;A0=80142410: text controller
+AFA5002C	SW	A1,002C (SP)	;A1=[801478F8]: p->curpos in msg_txt
+AFA60030	SW	A2,0030 (SP)	;SP+30=A2: save slot # of preloaded text
+//	*SW	A3,0010 (SP)	;SP+34=A3: colour
+50E0000C	*BEQL	A3,R0,800A13F4	;colour==0 is already black
+8CA50000	*LW	A1,0000 (A1)	;A1=curpos
+8C83000C	*LW	V1,000C (A0)	;V1=p->msg_txt bank
+AFA30024	SW	V1,0024 (SP)	;SP+24=V1: p->msg_txt bank
+//	concoct p->text
+//	SLL	T9,A2,0x2
+//	ADDU	T9,T9,A2
+//	SLL	T9,T9,0x1	;T9=slot#*A: offset to slot data
+//	*ADDU	A3,A0,T9	;A3=text controller + offset
+//	ADDIU	A3,A3,0038	;base for texty pre-loaded stuff is controller + 38 (80142448)
+//
+8C660008	LW	A2,0008 (V1)	;sizeof msg_txt
+0C027CBB	JAL	8009F2EC	;insert 7F50 colour command of colour #SP+10 to colourize text A3 at A0+A1
+24640010	ADDIU	A0,V1,0010	;A0=p->msg_txt
+8FA30024	LW	V1,0024 (SP)	;V1=p->msg_txt bank
+AC620008	SW	V0,0008 (V1)	;V0->V1+8: update size of bank
+//	update cur.pos
+8FA8002C	*LW	T0,002C (SP)	;T0=p->curpos
+8D050000	*LW	A1,0000 (T0)	;A1=curpos
+24A50006	*ADDIU	A1,A1,0006	;A1+=6: account for colour command
+AD050000	*SW	A1,0000 (T0)	;update curpos
+//800A13F4:	COPY STRING
+8FA40028	LW	A0,0028 (SP)	;A0=p->text controller
+0C0286B1	JAL	800A1AC4	;copy string from slot A2 to A0+A1
+8FA60030	LW	A2,0030 (SP)	;A2=slot#
+//800A1408:	return
+00001025	OR	V0,R0,R0	;V0=0
+8FBF001C	LW	RA,001C (SP)
+27BD0028	ADDIU	SP,SP,0028
+03E00008	JR	RA
+	*NOP
+//
+	*NOP
+
+	//would need something like...
+	JAL	8009EA2C	;extend text bank for entry; V0=new msg_txt size
+
+Could solve all the problems by making a simple buffer.
+Copy colour command, then command at location, then next colour command.
+Offset only six, to allow command to be extended.
+Note this exploits an interesting feature of the colourize command, doing the entire line if set to 0
+8009F2EC	4D86C	*wrap 7F command at A0+A1 in colour# A3
+	accepts: A0=p->target, A1=p->cur.position, A2=max size. *A3=colour#
+27BDFFA0	ADDIU	SP,SP,FFA0
+AFBF001C	SW	RA,001C (SP)
+AFA40030	SW	A0,0030 (SP)	;SP+30=A0: p->target
+AFA50034	SW	A1,0034 (SP)	;SP+34=A1: p->cur.pos
+AFA70038	*SW	A3,0038 (SP)	;SP+3C=A3: colour#->offset
+//	create room for command
+AFA00010	SW	R0,0010 (SP)	;SP+10=0: 
+00063825	*OR	A3,A2,R0	;A3=max.size
+8CA60000	*LW	A2,0000 (A1)	;A2=cur.pos
+00861021	*ADDU	V0,A0,A2	;V0=p->text pos.
+AFA20024	*SW	V0,0024 (SP)	;SP+24=V0: p->text.pos
+24C60002	*ADDIU	A2,A2,0002	;A2=cur.pos+2: replaces out command
+0C027A8B	JAL	8009EA2C	;extend text bank for entry; V0=new msg_txt size
+24C5000C	*ADDIU	A1,A2,000C	;A1=cur.pos+E: p->after inserted colour command
+AFA20028	SW	V0,0028 (SP)	;SP+28=V0: new msg_txt bank size
+//	get command size--on second thought, only this routine uses this...
+8FA50024	*LW	A1,0024 (SP)	;A1=p->text pos.
+27A40046	*ADDIU	A0,SP,0046
+0C026630	*JAL	800998C0	;copy A2 bytes from string A1 to A0
+24060002	*ADDIU	A2,R0,0002
+//	copy colour blank 2
+3C058010	LUI	A1,8010
+24A57B88	ADDIU	A1,A1,7B88	;A1=80107B88: p->colour cmd.
+0C0253C1	*JAL	80094F04	;copy 6 bytes from string A1 to A0
+27A40048	*ADDIU	A0,SP,0048
+//	copy string
+27A50048	*ADDIU	A1,SP,0048
+0C0253C1	*JAL	80094F04	;copy 6 bytes from string A1 to A0
+27A40040	*ADDIU	A0,SP,0040
+//8009F30C:	fill command with colour data
+3C038010	LUI	V1,8010
+8FA20038	*LW	V0,0038 (SP)	;T7=[SP+10]: colour offset
+00022080	*SLL	A0,V0,0x2
+00822023	*SUBU	A0,A0,V0	;T8=colour*3
+00831821	ADDU	V1,A0,V1	;V1=80107B78+offset: p->colour in table
+90697B78	*LBU	T1,7B78 (V1)	;T1=c.table+0: red
+906A7B79	*LBU	T2,7B79 (V1)	;T2=c.table+1: green
+906B7B7A	*LBU	T3,7B7A (V1)	;T3=c.table+2: blue
+//2402FFFF	*ADDIU	V0,R0,FFFF
+A3A90042	*SB	T1,0042 (SP)	;T1->cmd+2: red
+A3AA0043	*SB	T2,0043 (SP)	;T2->cmd+3: green
+A3AB0044	*SB	T3,0044 (SP)	;T3->cmd+4: green
+//A3A20045	*SB	V0,0045 (SP)	;#bytes=FF
+//8009F368:	copy command to text
+8FA40024	*LW	A0,0024 (SP)	;A0=p->text pos.
+27A50040	*ADDIU	A1,SP,0040
+0C026630	*JAL	800998C0	;copy A2 bytes from string A1 to A0
+2406000E	*ADDIU	A2,R0,000E
+//8009F398:	return
+8FA20028	LW	V0,0028 (SP)
+8FBF001C	LW	RA,001C (SP)
+27BD0060	ADDIU	SP,SP,0060
+03E00008	JR	RA
+00000000	NOP
+
+
+//	create room for command
+AFA00010	SW	R0,0010 (SP)	;SP+10=0: 
+00063825	*OR	A3,A2,R0	;A3=max.size
+8CA60000	*LW	A2,0000 (A1)	;A2=cur.pos
+00861021	*ADDU	V0,A0,A2	;V0=p->text pos.
+AFA20024	*SW	V0,0024 (SP)	;SP+24=V0: p->text.pos
+90450000	+LBU	A1,0000 (V0)	;A1=command.u
+A3A50046	+SB	A1,0046 (SP)	;save to stack
+90450001	+LBU	A1,0001 (V0)	;A1=command.l
+A3A50047	+SB	A1,0047 (SP)	;save to stack
+24C60002	*ADDIU	A2,A2,0002	;A2=cur.pos+2: replaces out command
+0C027A8B	JAL	8009EA2C	;extend text bank for entry; V0=new msg_txt size
+24C5000C	*ADDIU	A1,A2,000C	;A1=cur.pos+E: p->after inserted colour command
+AFA20028	SW	V0,0028 (SP)	;SP+28=V0: new msg_txt bank size
+
+Note there is a limitation.  Can't colourize beyond newline.
+
+800913D4	manages the countdown for the 7F50 colour override command
+	accepts: A0=, A1=, A2=p->display list
+	ADDIU	SP,SP,FFE0
+	SW	RA,0014 (SP)
+	SW	A1,0024 (SP)
+	SW	A2,0028 (SP)	;SP+28=A2: p->display list
+	OR	A3,A0,R0
+	LBU	V0,0038 (A3)	;V0=A3+38: count
+	BLEZ	V0,8009142C	;branch if no count (normal operation)
+	ADDIU	T6,V0,FFFF	;T6=count-1
+	ANDI	T7,T6,00FF	;T7=count->byte
+	BNEZ	T7,8009142C	;branch if count remains
+	SB	T6,0038 (A3)	;update count
+//80091400:
+	LW	A1,0024 (SP)	;A1=A1	extroneous
+	ADDIU	A2,A3,0034	;A2=A3+34: p->colour
+	OR	A0,A2,R0	;A0=A2: p->colour
+	SW	A2,001C (SP)	;SP+1C=p->colour
+	SW	A3,0020 (SP)
+	JAL	8009AC4C	;copy 4 bytes from A1 to A0
+	ADDIU	A1,A1,0018	;A1+=18: 
+	LW	A1,001C (SP)	;A1=SP+1C: p->colour
+	JAL	800904B8	;insert "set foreground color" microcode op
+	LW	A0,0028 (SP)	;A0=p->display list
+	LW	A3,0020 (SP)
+//8009142C:
+	LBU	V0,0005 (A3)
+	LUI	AT,3F80
+	ANDI	T8,V0,0004
+	BEQ	T8,R0,80091460
+	ANDI	T0,V0,FFFB
+	MTC1	AT,F0
+	SB	T0,0005 (A3)
+	ORI	T1,T0,0008
+	SB	T1,0005 (A3)
+	SWC1	F0,0010 (A3)
+	SWC1	F0,0014 (A3)
+	SWC1	F0,0018 (A3)
+	SWC1	F0,001C (A3)
+	LW	RA,0014 (SP)
+//80091460:	return
+	ADDIU	SP,SP,0020
+	JR	RA
+	NOP
+
+hack this to stop at negative.  After all, you can't have a line that would even be as long as 0x80
+800913D4	3F954	*manages the countdown for the 7F50 colour override command
+	accepts: A0=, A1=, A2=p->display list
+	ADDIU	SP,SP,FFE0
+	SW	RA,0014 (SP)
+	SW	A1,0024 (SP)
+	SW	A2,0028 (SP)	;SP+28=A2: p->display list
+	OR	A3,A0,R0
+80E20038	*LB	V0,0038 (A3)	;V0=A3+38: count
+0440000+	*BLTZ	V0,8009142C	;branch if no count (normal operation)
+244EFFFF	ADDIU	T6,V0,FFFF	;T6=count-1
+1DC0000+	*BGTZ	T6,8009142C	;branch if count remains
+	SB	T6,0038 (A3)	;update count
+//80091400:
+	*ADDIU	A0,A3,0034	;A2=A3+34: p->colour
+	*SW	A0,001C (SP)	;SP+1C=p->colour
+	SW	A3,0020 (SP)
+	JAL	8009AC4C	;copy 4 bytes from A1 to A0
+	ADDIU	A1,A1,0018	;A1+=18: 
+	LW	A1,001C (SP)	;A1=SP+1C: p->colour
+	JAL	800904B8	;insert "set foreground color" microcode op
+	LW	A0,0028 (SP)	;A0=p->display list
+	LW	A3,0020 (SP)
+	*NOP
+	*NOP
+	*NOP
+
+Only problem is that it is called at 80091DD4, just after writing the first colourized character to the screen.
+Really, the answer lies here.  If the length is zero, default to the original block
+Technically this is not ideal, as it means the colour shift is processed twice--and the display list is added twice as well.
+However, it does work.  Really, should un-revise above to avoid this.
+800914FC	3FA7C	interpret 7F50 command for display
+	accepts: A0=p->print controller, A1=p->display list
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+00803025	OR	A2,A0,R0	;A2=A0: p->print controller
+00A02025	*OR	A0,A1,R0	;A3=A1: p->display list
+8CC20000	*LW	V0,0000 (A2)	;V0=print+0: p->text
+241900FF	ADDIU	T9,R0,00FF
+90480005	-LBU	T0,0005 (V0)	;T0=cmd+5: #bytes
+51000001	*BEQL	T0,R0,+1	;if len=0, use original values instead
+24C2FFCE	*ADDIU	V0,A2,FFCE	;V0= p->print-30, -2 for cmd.discrepancy
+904E0002	LBU	T6,0002 (V0)	;T6=cmd+2: red
+24C50034	ADDIU	A1,A2,0034	;A1=print+34: p->colour
+A0AE0000	*SB	T6,0000 (A1)	;T6->print+34: red
+904F0003	LBU	T7,0003 (V0)	;T7=cmd=3: green
+A0AF0001	*SB	T7,0001 (A1)	;T7->print+35
+90580004	LBU	T8,0004 (V0)	;T8=cmd+4: blue
+A0B90003	*SB	T9,0003 (A1)	;FF->print+37: alpha
+A0B80002	*SB	T8,0002 (A1)	;T8->print+36: blue
+	JAL	800904B8	;insert "set foreground color" microcode op
+A0A80004	*SB	T0,0004 (A1)	;T0->print+38: #bytes
+//80091544:
+	LW	RA,0014 (SP)
+	JR	RA
+27BD0018	-ADDIU	SP,SP,0018

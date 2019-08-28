@@ -1,0 +1,400 @@
+800A1170	0x	7F1D year
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;save controller for text bank
+OR	A3,A1,R0		;A3=A1=p->current position in bank
+LW	T6,0018 (SP)	;T6=controller for text bank
+LW	A1,0000 (A3)	;A1=current position in bank
+LW	V0,000C (T6)	;V0=p->text bank data
+ADDIU	A0,V0,0010	;A0=p->text bank
+JAL	8009EE78	;retrieve year and convert to string; ret V0=new text bank size
+LW	A2,0008 (V0)	;A2=size of bank
+LW	T7,0018 (SP)	;T7=controller for text bank
+LW	T8,000C (T7)	;T8=p->text bank data
+SW	V0,0008 (T8)	;save new max size
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+8009EE78	0x	generate string and insert into text
+ADDIU	SP,SP,FFC8
+SW	RA,001C (SP)
+SW	A0,0038 (SP)	;A0=msg_txt text bank
+SW	A1,003C (SP)	;A1=current position in msg_txt (A0)
+SW	A2,0040 (SP)	;A2=size of msg_txt
+LW	A0,0038 (SP)
+JAL	800903A8		;advance position to next 'character'
+LW	A1,003C (SP)
+//8009EE98:
+LUI	A1,8013
+SW	V0,0034 (SP)	;save increment to new position in text bank
+LHU	A1,6FC2 (A1)	;A1=80136FC2 - year
+JAL	800C4084		;construct string to appear on-screen
+ADDIU	A0,SP,002C	;A0=target location for new string
+//8009EEAC:
+LW	V1,003C (SP)	;V1=current position in msg_txt (A0)
+LW	T6,0034 (SP)	;T6=new position in text bank
+SW	V0,0028 (SP)	;save strlen for new, happy string
+LW	A0,0038 (SP)	;A0=msg_txt text bank
+LW	A3,0040 (SP)	;A3=size of msg_txt
+SW	R0,0010 (SP)
+ADDU	A1,V1,V0		;A1=strlen+msg_txt position
+JAL	8009EA2C		;extend bank for new string: ret V0=new size
+ADDU	A2,V1,T6		;A2=old msg_txt position + increment over command
+//8009EED0:
+LW	T7,0038 (SP)	;p->text bank
+LW	T8,003C (SP)	;T8=cur. pos in msg_txt
+SW	V0,0024 (SP)	;save new bank size
+ADDIU	A1,SP,002C	;p->new string
+LW	A2,0028 (SP)	;A2=strlen for new string
+JAL	8009EB44		;copy string to destination
+ADDU	A0,T7,T8		;A0=p->cur pos in text bank
+//8009EEEC:
+LW	V0,0024 (SP)	;V0=new size of text bank
+LW	RA,001C (SP)
+ADDIU	SP,SP,0038
+JR	RA
+NOP
+
+800C4084	0x	construct string
+ADDIU	SP,SP,FFE0
+SW	A1,0024 (SP)	;save year
+ANDI	A1,A1,FFFF	;mask for 2-byte year value
+SW	RA,001C (SP)
+SW	A0,0020 (SP)	;save target location
+SLTI	AT,A1,076D	;TRUE if < 1901
+BNEZ	AT,800C40B0
+LW	A0,0020 (SP)	;A0=target loc for string
+SLTI	AT,A1,0834	;TRUE if < 2100
+BNEL	AT,R0,800C40B8
+ADDIU	A2,R0,0006
+//800C40B0:
+ADDIU	A1,R0,07D0	;date= 2000
+ADDIU	A2,R0,0006	;A2=strlen
+//800C40B8:
+ADDIU	A3,R0,0001
+JAL	8009264C		;ltostr - spits out year string
+SW	R0,0010 (SP)
+LW	T6,0020 (SP)	;T6=buffer
+ADDIU	T7,R0,0006
+SUBU	A1,T7,V0		;A1=how many characters are still available
+ADDIU	A2,R0,0003	;"Year" string from select_data
+JAL	800C3F70		;recall string_data string
+ADDU	A0,T6,V0		;next available byte
+LW	A0,0020 (SP)
+JAL	8009E8D0		;kill trailing whitespace
+ADDIU	A1,R0,0006	;max characters
+LW	RA,001C (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
++-+-+
+
+800A11B4	0x	7F1E month
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;save controller for text bank
+OR	A3,A1,R0	;A3=A1=p->current position in bank
+LW	T6,0018 (SP)	;T6=controller for text bank
+LW	A1,0000 (A3)	;A1=current position in bank
+LW	V0,000C (T6)	;V0=p->text bank data
+ADDIU	A0,V0,0010	;A0=p->text bank
+JAL	8009EF00	;retrieve month and convert to string; ret V0=new text bank size
+LW	A2,0008 (V0)	;A2=size of bank
+LW	T7,0018 (SP)	;T7=controller for text bank
+LW	T8,000C (T7)	;T8=p->text bank data
+SW	V0,0008 (T8)	;save new max size
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+8009EF00	0x	generate string and insert into text
+ADDIU	SP,SP,FFC8
+SW	RA,001C (SP)
+SW	A0,0038 (SP)	;A0=msg_txt text bank
+SW	A1,003C (SP)	;A1=current position in msg_txt (A0)
+SW	A2,0040 (SP)	;A2=size of msg_txt
+LW	A0,0038 (SP)
+JAL	800903A8	;advance position to next 'character'
+LW	A1,003C (SP)
+//8009EFA8:
+LUI	A1,8013
+SW	V0,0034 (SP)	;save increment to new position in text bank
+LBU	A1,6FC1 (A1)	;A1=80136FC1 - month
+JAL	800C40F8	;construct string to appear on-screen
+ADDIU	A0,SP,002C	;A0=target location for new string
+//8009EF34:
+LW	V1,003C (SP)	;V1=current position in msg_txt (A0)
+LW	T6,0034 (SP)	;T6=new position in text bank
+SW	V0,0028 (SP)	;save strlen for new, happy string
+LW	A0,0038 (SP)	;A0=msg_txt text bank
+LW	A3,0040 (SP)	;A3=size of msg_txt
+SW	R0,0010 (SP)
+ADDU	A1,V1,V0	;A1=strlen+msg_txt position
+JAL	8009EA2C	;extend bank for new string: ret V0=new size
+ADDU	A2,V1,T6	;A2=old msg_txt position + increment over command
+//8009EF58:
+LW	T7,0038 (SP)	;p->text bank
+LW	T8,003C (SP)	;T8=cur. pos in msg_txt
+SW	V0,0024 (SP)	;save new bank size
+ADDIU	A1,SP,002C	;p->new string
+LW	A2,0028 (SP)	;A2=strlen for new string
+JAL	8009EB44	;copy string to destination
+ADDU	A0,T7,T8	;A0=p->cur pos in text bank
+//8009EF74:
+LW	V0,0024 (SP)	;V0=new size of text bank
+LW	RA,001C (SP)
+ADDIU	SP,SP,0038
+JR	RA
+NOP
+
+800C40F8	0x	construct string
+ADDIU	SP,SP,FFE0
+SW	A1,0024 (SP)	;save month
+ANDI	A1,A1,00FF	;mask for value
+SW	RA,001C (SP)
+SW	A0,0020 (SP)	;save target location
+BLEZ	A1,800C4120
+LW	A0,0020 (SP)
+SLTI	AT,A1,000D
+BNEL	AT,R0,800C4128
+ADDIU	A2,R0,0004
+//800C4120:
+ADDIU	A1,R0,0001
+ADDIU	A2,R0,0004
+//800C4128:
+ADDIU	A3,R0,0001
+JAL	8009264C	;ltostr
+SW	R0,0010 (SP)
+LW	T6,0020 (SP)	;T6=buffer
+ADDIU	T7,R0,0004
+SUBU	A1,T7,V0	;A1=how many characters are still available
+ADDIU	A2,R0,0004	;"Month" string from select_data
+JAL	800C3F70	;recall string_data string
+ADDU	A0,T6,V0	;next available byte
+LW	A0,0020 (SP)
+JAL	8009E8D0	;kill trailing whitespace
+ADDIU	A1,R0,0004	;max characters
+LW	RA,001C (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
++-+-+
+
+800A11F8	0x	7F1F day of week
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;save controller for text bank
+OR	A3,A1,R0		;A3=A1=p->current position in bank
+LW	T6,0018 (SP)	;T6=controller for text bank
+LW	A1,0000 (A3)	;A1=current position in bank
+LW	V0,000C (T6)	;V0=p->text bank data
+ADDIU	A0,V0,0010	;A0=p->text bank
+JAL	8009EF88		;retrieve day and its string; ret V0=new text bank size
+LW	A2,0008 (V0)	;A2=size of bank
+LW	T7,0018 (SP)	;T7=controller for text bank
+LW	T8,000C (T7)	;T8=p->text bank data
+SW	V0,0008 (T8)	;save new max size
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+8009EF88	0x	generate string and insert into text
+ADDIU	SP,SP,FFC8
+SW	RA,001C (SP)
+SW	A0,0038 (SP)	;A0=msg_txt text bank
+SW	A1,003C (SP)	;A1=current position in msg_txt (A0)
+SW	A2,0040 (SP)	;A2=size of msg_txt
+LW	A0,0038 (SP)
+JAL	800903A8		;advance position to next 'character'
+LW	A1,003C (SP)
+//8009EFA8:
+LUI	A1,8013
+SW	V0,0034 (SP)	;save increment to new position in text bank
+LBU	A1,6FC0 (A1)	;A1=80136FC0 - day of week
+JAL	800C4168		;construct string to appear on-screen
+ADDIU	A0,SP,002C	;A0=target location for new string
+//8009EFBC:
+LW	V1,003C (SP)	;V1=current position in msg_txt (A0)
+LW	T6,0034 (SP)	;T6=new position in text bank
+SW	V0,0028 (SP)	;save strlen for new, happy string
+LW	A0,0038 (SP)	;A0=msg_txt text bank
+LW	A3,0040 (SP)	;A3=size of msg_txt
+SW	R0,0010 (SP)
+ADDU	A1,V1,V0		;A1=strlen+msg_txt position
+JAL	8009EA2C		;extend bank for new string: ret V0=new size
+ADDU	A2,V1,T6		;A2=old msg_txt position + increment over command
+//8009EFE0:
+LW	T7,0038 (SP)	;p->text bank
+LW	T8,003C (SP)	;T8=cur. pos in msg_txt
+SW	V0,0024 (SP)	;save new bank size
+ADDIU	A1,SP,002C	;p->new string
+LW	A2,0028 (SP)	;A2=strlen for new string
+JAL	8009EB44		;copy string to destination
+ADDU	A0,T7,T8		;A0=p->cur pos in text bank
+//8009EFFC:
+LW	V0,0024 (SP)	;V0=new size of text bank
+LW	RA,001C (SP)
+ADDIU	SP,SP,0038
+JR	RA
+NOP
+
+800C4168	0x	construct string
+ADDIU	SP,SP,FFE8
+SW	A1,001C (SP)
+ANDI	A1,A1,00FF
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;save target location
+SLTI	AT,A1,0007	;day Sunday-Saturday
+BLEZ	A1,800C418C
+OR	V0,A1,R0
+OR	V0,R0,R0
+//800C418C:
+LW	A0,0018 (SP)	;A0=target location
+ADDIU	A1,R0,0005	;strlen
+JAL	800C3F70		;retrieve string from select_data
+ADDIU	A2,V0,0009	;#day + base string in select_data
+LW	A0,0018 (SP)	;T6=buffer
+JAL	8009E8D0		;kill trailing whitespace
+ADDIU	A1,R0,0004	;max characters
+LW	RA,001C (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+need a 9-character buffer for string
+
++-+-+
+
+800A123C	0x	7F20 day of month
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;save controller for text bank
+OR	A3,A1,R0		;A3=A1=p->current position in bank
+LW	T6,0018 (SP)	;T6=controller for text bank
+LW	A1,0000 (A3)	;A1=current position in bank
+LW	V0,000C (T6)	;V0=p->text bank data
+ADDIU	A0,V0,0010	;A0=p->text bank
+JAL	8009F010		;retrieve day and convert to string; ret V0=new text bank size
+LW	A2,0008 (V0)	;A2=size of bank
+LW	T7,0018 (SP)	;T7=controller for text bank
+LW	T8,000C (T7)	;T8=p->text bank data
+SW	V0,0008 (T8)	;save new max size
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+8009F010	0x	generate string and insert into text
+ADDIU	SP,SP,FFC8
+SW	RA,001C (SP)
+SW	A0,0038 (SP)	;A0=msg_txt text bank
+SW	A1,003C (SP)	;A1=current position in msg_txt (A0)
+SW	A2,0040 (SP)	;A2=size of msg_txt
+LW	A0,0038 (SP)
+JAL	800903A8		;advance position to next 'character'
+LW	A1,003C (SP)
+//8009F030:
+LUI	A1,8013
+SW	V0,0034 (SP)	;save increment to new position in text bank
+LBU	A1,6FBF (A1)	;A1=80136FBF - day of month
+JAL	800C41B8		;construct string to appear on-screen
+ADDIU	A0,SP,002C	;A0=target location for new string
+//8009F044:
+LW	V1,003C (SP)	;V1=current position in msg_txt (A0)
+LW	T6,0034 (SP)	;T6=new position in text bank
+SW	V0,0028 (SP)	;save strlen for new, happy string
+LW	A0,0038 (SP)	;A0=msg_txt text bank
+LW	A3,0040 (SP)	;A3=size of msg_txt
+SW	R0,0010 (SP)
+ADDU	A1,V1,V0		;A1=strlen+msg_txt position
+JAL	8009EA2C		;extend bank for new string: ret V0=new size
+ADDU	A2,V1,T6		;A2=old msg_txt position + increment over command
+//8009F068:
+LW	T7,0038 (SP)	;p->text bank
+LW	T8,003C (SP)	;T8=cur. pos in msg_txt
+SW	V0,0024 (SP)	;save new bank size
+ADDIU	A1,SP,002C	;p->new string
+LW	A2,0028 (SP)	;A2=strlen for new string
+JAL	8009EB44		;copy string to destination
+ADDU	A0,T7,T8		;A0=p->cur pos in text bank
+//8009F084:
+LW	V0,0024 (SP)	;V0=new size of text bank
+LW	RA,001C (SP)
+ADDIU	SP,SP,0038
+JR	RA
+NOP
+
+800C41B8	0x	construct string
+ADDIU	SP,SP,FFE0
+SW	A1,0024 (SP)	;save day
+ANDI	A1,A1,00FF	;mask for value
+SW	RA,001C (SP)
+SW	A0,0020 (SP)	;save target location
+BLEZ	A1,800C41E0	;test if <0
+LW	A0,0020 (SP)
+SLTI	AT,A1,0020	;should also be <32
+BNEL	AT,R0,800C41E8
+ADDIU	A2,R0,0004
+//800C41E0:
+ADDIU	A1,R0,0001	;force it to the 1st of the month
+ADDIU	A2,R0,0004	;strlen=4
+//800C41E8:
+ADDIU	A3,R0,0001
+JAL	8009264C	;ltostr
+SW	R0,0010 (SP)
+LW	T6,0020 (SP)	;T6=buffer
+ADDIU	T7,R0,0004
+SUBU	A1,T7,V0	;A1=how many characters are still available
+ADDIU	A2,R0,0005	;"Day" string from select_data
+JAL	800C3F70	;recall string_data string
+ADDU	A0,T6,V0	;next available byte
+LW	A0,0020 (SP)
+JAL	8009E8D0	;kill trailing whitespace
+ADDIU	A1,R0,0004	;max characters
+LW	RA,001C (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+=_=
+
+800A6384:	0x	grabs months and day of month: called by 800A64C4...
+	probably creates the date in the corner or something like that
+ADDIU	SP,SP,FFD8
+SW	RA,0014 (SP)
+SW	A0,0028 (SP)	;save target
+SW	A2,0030 (SP)	;save day of month
+OR	A3,A1,R0	;A3=month of year
+//800A6398:
+ADDIU	A0,SP,0024	;A0=target
+JAL	800C40F8	;original 7F1E month string constructor
+ANDI	A1,A3,00FF	;A1=month, assuredly one byte long
+SW	V0,0020 (SP)	;save new strlen
+LW	A0,0028 (SP)	;copy target
+ADDIU	A1,SP,0024	;copy source
+JAL	800998C0	;copy string
+OR	A2,V0,R0	;copy strlen
+//800A63B8:
+ADDIU	A0,SP,0024	;A0=target
+JAL	800C41B8	;original 7F20 day of month string constructor
+LBU	A1,0033 (SP)	;A1=day of month
+LW	T6,0028 (SP)	;original copy target
+LW	T7,0020 (SP)	;original strlen
+SW	V0,001C (SP)	;save strlen
+ADDIU	A1,SP,0024	;copy source
+OR	A2,V0,R0	;strlen
+JAL	800998C0	;copy string
+ADDU	A0,T6,T7	;copy target: original target+strlen
+//800A63E0:
+LW	T8,0020 (SP)	;original strlen
+LW	T9,001C (SP)	;second strlen
+LW	RA,0014 (SP)
+ADDU	V0,T8,T9	;total strlen
+JR	RA
+ADDIU	SP,SP,0028

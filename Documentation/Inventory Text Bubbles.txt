@@ -1,0 +1,1034 @@
+
+C-710680
++A0F4	803C6684	FFF58CFF	mustard yellow used for BG of item bubbles
++A100	803C6690	FFF58CFF	
++A118	803C66A8	D7A53CFF	border of item bubbles
++A124	803C66B4	D7A53CFF	arrow tab for item bubbles
+
+annoyingly, text appears at 803C6840
+
+used at DL construction: 
+//803C48C8:
+LUI	T7,E700
+SW	T7,0000 (V1)
+SW	R0,0004 (V1)
+ADDIU	A1,A1,0008
+SLL	T3,A3,0x2
+SUBU	T3,T3,A3
+SLL	T3,T3,0x2
+LUI	T9,FA00
+LUI	T2,803C
+ADDIU	T2,T2,6684	;T2=803C6684
+ORI	T9,T9,0080	;T9=FA000080:	RDP-set foreground color
+ADDU	T4,T3,A2
+OR	A0,A1,R0
+SW	T9,0000 (A0)
+ADDU	V1,T4,T2
+LBU	T5,0000 (V1)	;T5=red	V1=803C6684
+LBU	T1,0001 (V1)	;T1=green
+LBU	T4,0002 (V1)	;T4=blue
+//803C4910:	completely extroneous bit that pieces the word back together
+SLL	T8,T5,0x18
+SLL	T7,T1,0x10
+OR	T9,T8,T7
+SLL	T2,T4,0x8
+OR	T6,T9,T2
+ORI	T5,T6,00FF	;set alpha to 255
+SW	T5,0004 (A0)
+//803C492C:	secondary color
+ADDIU	A1,A1,0008
+OR	V1,A1,R0
+LUI	T0,FB00
+SW	T0,0000 (V1)	;T0=FB000000: RDP-set background color
+LBU	T4,0001 (V0)	;V0=803C66A8: color of outer rim
+LBU	T8,0000 (V0)
+LBU	T5,0002 (V0)
+SLL	T9,T4,0x10	;stupid and messy method of turning back into a word
+SLL	T7,T8,0x18
+OR	T2,T7,T9
+SLL	T0,T5,0x8
+OR	T1,T2,T0
+ORI	T8,T1,0096
+SW	T8,0004 (V1)
+//803C4964:	must be grabbing values for the matrix command coming up
+ADDIU	A1,A1,0008
+JAL	800E020C	;copy current matrix to next slot as set A0=p->new
+SW	A1,006C (SP)	;A1=p->next command
+LWC1	F12,0024 (S0)	;F12=x screen position	S0=803C6818
+LWC1	F14,0028 (S0)	;F14=y screen position
+ADDIU	A2,R0,0000
+JAL	800E0314	;does some kind of matrix conversion
+ADDIU	A3,R0,0001
+//803C4984:
+LWC1	F12,0014 (S0)	;F12=3F2BA2E8 (0.670455)	width multiplier
+LWC1	F14,0018 (S0)	;F14=3F680000 (0.906250)	height multiplier (1.0 does fine too)
+LUI	A2,3F80	;A2=1.0
+JAL	800E041C	;multiply matrix by ...stuff
+ADDIU	A3,R0,0001	;A3=1
+//803C4998:
+LW	A1,006C (SP)	;A1=p->next RDP command
+LUI	T3,DA38
+OR	T3,T3,0003	;T3=DA380003: RDP-matrix command
+OR	V1,A1,R0
+SW	T3,0000 (V1)
+ADDIU	A1,A1,0008
+SW	A1,006C (SP)
+SW	V1,002C (SP)
+JAL	800E13C4
+LW	A0,0088 (SP)	;A0=[80145080]
+//803C49C0:
+
+803C6818	inventory bubble struct
+0x0	2	1 when displaying
+0x2	1	type
+		0	item
+		1	delivery
+		2	outgoing letter
+		3	letter f/ Farway
+		4	letter to Farway
+		5	letter f/ Jingle
+		6	letter f/ store
+		7	letter f/ Mom
+		8	fortune
+		9	letter f/ Happy Room Academy
+0x3	1	reserved
+0x4	4	[float] string 1 width percentage; 6char=.5; 8char=.75; 10char=1.0
+0x8	4	[float] string 2 width percentage; 6char=.5; 8char=.75; 10char=1.0
+0xC	4	[float] 6char=-53.0; 8char=-53.0; 10char=-77.0
+0x10	4	[float] 6char=-34.0; 8char=-10.0; 10char=-10.0
+0x14	4	[float] width
+0x18	4	[float] height
+0x1C	4	[float] 6char=1.0625; 8char=1.031250; 10char=1.0
+0x20	4	[float] 6char=1.0625; 8char=1.031250; 10char=1.0
+0x24	4	[float] x pos
+0x28	4	[float] y pos
+0x2C	4	[float] 6char=-35.999996; 8char=-48.0; 10char=-60.0
+0x30	4	[float] 6char=8.0; 8char=8.0; 10char=8.0
+0x34	4	0
+0x38	4	0
+0x3C	4	0
+0x40	4	[float] 1.0
+0x44	A	string space 1
+0x4E	A	string space 2
+0x54	
+
+
+
+803A49A8:
+LW	V0,0298 (A0)	;V0=p->DL under construction
+OR	V1,V0,R0	;V1=V0
+LUI	T6,DA38
+LUI	T7,8011
+ADDIU	T7,T7,FCD0	;T7=8010FCD0
+ORI	T6,T6,0003	;T6=DA380003	this is a matrix RDP command
+SW	T6,0000 (V1)	;save upper half of matrix command
+SW	T7,0004 (V1)	;save pointer as matrix's data (yes, that is proper grammar)
+ADDIU	V0,V0,0008
+SW	V0,0298 (A0)	;set position to next command
+JR	RA
+NOP
+
+This should be singular item, not the quest item display!  That means it might be safe to hack...
+803C5604	+9074	sends the string off for writing; return after JALR
+LWC1	F18,004C (SP)	;F18=[146.25]
+LW	V0,0048 (SP)	;V0=803C6758: p->rgba value
+LWC1	F2,0054 (SP)	;F2=[1.0]
+SWC1	F18,0010 (SP)	;save [146.25]
+LBU	T0,0000 (V0)	;T0=red
+ADDIU	T3,R0,00FF	;T3=FF: force no alpha
+LW	A0,005C (SP)	;A0=[80229050]
+SW	T0,0014 (SP)	;red->SP+14
+LBU	T1,0001 (V0)	;T1=green
+ADDIU	A1,S0,0044	;A1=p->string	(S0=803C6818)
+ADDIU	A2,R0,000A	;A2=max strlen	***hack this to read a longer string***
+SW	T1,0018 (SP)	;green->SP+18
+LBU	T2,0002 (V0)	;T2=blue
+SW	R0,0034 (SP)
+SW	R0,0028 (SP)
+SW	R0,0024 (SP)
+SW	T3,0020 (SP)	;alpha->SP+20
+LW	A3,0050 (SP)	;A3=42C60000: 99.0, most likely position
+SWC1	F2,0030 (SP)	;1.0->SP+30
+SWC1	F2,002C (SP)	;1.0->SP+2C
+JAL	80090E98	;print text to screen
+SW	T2,001C (SP)	;blue->SP+1C
+//803C565C:
+LW	RA,0044 (SP)
+LW	S0,0040 (SP)
+ADDIU	SP,SP,0058
+JR	RA
+NOP
+	
+linked off 803C5788
+	803C57DC	item: from blah to blah
+	803C582C	normal item
+	803C586C	select window
+
+pulling this item name is done at 803BD460
+//803BD46C:	+EDC
+JAL	80096740
+LHU	A1,004A (SP)
+LW	A0,002C (SP)
+ADDIU	A1,R0,000A
+JAL	8009C1C0
+ADDIU	A2,R0,0020
+
+this hack allows strings up to 0x10 in length
+//803BD46C:	+EDC
+24050010	*ADDIU	A1,R0,0010	;A1=strlen 10
+0C0259D2	*JAL	80096748	;load item name from ROM::alternate entrypoint; V0=strlen
+97A6004A	*LHU	A2,004A (SP)	;A2=SP+4A: item ID#
+//	what does following routine expect V0 equals?
+24050010	*ADDIU	A1,R0,0010
+0C027A34	*JAL	8009E8D0	;V0=strlen of A0, size A1 minus trailing whitespace
+8FA4002C	*LW	A0,002C (SP)
+
+to display, set 803C562C (+909C) to strlen 10
+24060010	*ADDIU	A2,R0,0010
+
+this is called at:
+	803BD3E8	+E58	
+	803BD490	+F00
+	803BD540	+FB0
+	803BD5E0	+1050
+	803BD738	+11A8
+	803BD9D8	+1448
+
+803BC9E4	+454	computes width of item text bubbles
+	accepts: A0=p->bubble, A1=row, A2=strlen.u, A3=lines
+LUI	T7,803C
+ADDIU	T7,T7,62FC	;T7=803C62FC: position offset table
+SLL	T6,A1,0x6	;T6=A1*40: vertical (row) selection->offset
+ADDU	V0,T6,T7	;V0=803C62FC+offset: p->row's position data
+LW	T8,0014 (V0)	;T8=table+14: min.correction value
+LW	T0,0018 (V0)	;T0=table+18: divisor
+ADDIU	T1,A3,FFFE	;T1=#lines-2: box by default sized for two entries
+SUBU	T9,A2,T8	;T9=strlen.u-correction
+MTC1	T9,F4
+MTC1	T0,F8
+OR	A2,V0,R0	;A2=V0: p->row data table
+CVT.S.W	F6,F4	;F6=(float) difference
+OR	A1,A0,R0	;A1=A0: p->bubble
+OR	V1,R0,R0	;V1=0	init.count
+CVT.S.W	F10,F8	;F10=(float) divisor
+DIV.S	F18,F6,F10	;F18=difference.u/divisor: width%
+BEQ	A3,R0,803BCA48	;branch if no extra lines
+SWC1	F18,0004 (A0)	;F18->bubble+4: set width.u%
+//803BCA2C:	compute height of box from #lines
+MTC1	T1,F4
+LUI	AT,4040
+MTC1	AT,F6		;F6=3.0	[40400000]
+CVT.S.W	F8,F4	;F8=(float) difference.l
+DIV.S	F10,F8,F6	;F10=difference.l / 3.0: up to three additional entries standard
+BEQ	R0,R0,803BCA50
+SWC1	F10,0008 (A0)	;F10->target+8: height.l%
+//803BCA48:
+LWC1	F18,0004 (A0)	;F18=width.u%
+SWC1	F18,0008 (A0)	;F18->target+8: height.l%
+//803BCA50:
+LUI	AT,3F80
+MTC1	AT,F16		;F16=1.0	[3F800000]
+ADDIU	A3,R0,0002	;A3=2
+LWC1	F12,0000 (A2)	;F12=table+0: 
+LWC1	F18,0004 (A1)	;F18=target+4: width.u%
+ADDIU	V1,V1,0001	;V1++	count++
+SUB.S	F4,F16,F12	;F4=1.0 - F12
+MUL.S	F14,F18,F4	;F14=width.l% * (1.0 - F12)
+BEQL	V1,A3,803BCB00	;execute twice
+ADD.S	F10,F14,F12
+//803BCA78:
+ADD.S	F10,F14,F12	;F10=width.l% * (1.0 - F12) + F12
+ADDIU	V1,V1,0001	;V1++	count++
+ADDIU	A1,A1,0004	;A1+=4	target+=4: p->cur.line's settings
+ADDIU	A2,A2,0004	;A2+=4	table+=4: p->cur.line's table values
+SWC1	F10,0010 (A1)
+LWC1	F10,0010 (V0)
+LWC1	F8,0010 (A1)
+SUB.S	F6,F16,F10
+MUL.S	F6,F18,F6
+ADD.S	F10,F6,F10
+SWC1	F10,0018 (A1)
+LWC1	F10,0020 (A2)
+LWC1	F6,0018 (A2)
+LWC1	F4,0004 (A2)
+MUL.S	F10,F10,F18
+ADD.S	F10,F6,F10
+MUL.S	F4,F8,F4
+ADD.S	F10,F4,F10
+SWC1	F10,0028 (A1)
+LWC1	F10,0028 (A2)
+LWC1	F4,0004 (A2)
+LWC1	F6,0030 (A2)
+MUL.S	F10,F10,F18
+LWC1	F18,0004 (A1)
+MUL.S	F4,F8,F4
+ADD.S	F10,F6,F10
+SUB.S	F4,F10,F4
+SWC1	F4,0020 (A1)
+LWC1	F12,0000 (A2)
+SUB.S	F4,F16,F12
+MUL.S	F14,F18,F4
+BNEL	V1,A3,803BCA7C
+ADD.S	F10,F14,F12
+//803BCAFC:
+ADD.S	F10,F14,F12
+ADDIU	A2,A2,0004
+ADDIU	A1,A1,0004
+SWC1	F10,0010 (A1)
+LWC1	F10,0010 (V0)
+LWC1	F8,0010 (A1)
+SUB.S	F6,F16,F10
+MUL.S	F6,F18,F6
+ADD.S	F10,F6,F10
+SWC1	F10,0018 (A1)
+LWC1	F10,0020 (A2)
+LWC1	F4,0004 (A2)
+LWC1	F6,0018 (A2)
+MUL.S	F10,F10,F18
+ADD.S	F10,F6,F10
+MUL.S	F4,F8,F4
+ADD.S	F10,F4,F10
+SWC1	F10,0028 (A1)
+LWC1	F10,0028 (A2)
+LWC1	F4,0004 (A2)
+LWC1	F6,0030 (A2)
+MUL.S	F10,F10,F18
+ADD.S	F10,F6,F10
+MUL.S	F4,F8,F4
+SUB.S	F4,F10,F4
+SWC1	F4,0020 (A1)
+LUI	AT,3F00
+MTC1	AT,F8
+LWC1	F4,003C (V0)
+MUL.S	F18,F6,F8
+LWC1	F6,0028 (A0)
+MUL.S	F10,F18,F4
+ADD.S	F8,F6,F10
+SWC1	F8,0028 (A0)
+//803BCB88:	return
+JR	RA
+NOP
+
+
+Hacked!  Let's try to do the same sort of sample muddling...
+803BC9E4	+454	computes width of item text bubbles
+	accepts: A0=p->bubble, A1=row, A2=strlen.u, A3=lines
+Used at these locations:	0x710680
+	803BD3E8	 +E58	letters, gifts
+	803BD490	 +F00	normal items
+	803BD540	 +FB0
+	803BD5E0	+1050
+	803BD738	+11A8	select menu
+	803BD9D8	+1448
+
+//803BD320:	compute width of first string; A0=@SP+2C
+	ADDIU	A1,R0,0006
+	JAL	8009C1C0
+	ADDIU	A2,R0,0020
+	ADDIU	T7,V0,0004	;T7=strlen.a+4: offset for "from "
+	SW	T7,0038 (SP)	;SP+38=T7: strlen.a
+//803BD334:	compute width of second string
+	LW	A0,0028 (SP)
+	ADDIU	A1,R0,0006
+	JAL	8009C1C0
+	ADDIU	A2,R0,0020
+//803BD344:	type 4		"to " string.a
+	LBU	V1,0002 (S0)	;V1=S0+2: type
+	ADDIU	A1,V0,0004	;A1=strlen.b+4: offset for "from "
+	ADDIU	AT,R0,0004
+	OR	A0,A1,R0	;A0=A1: strlen.b+4
+	BNE	V1,AT,803BD364	;branch if not type 4: letter to Farway
+	LW	A2,0038 (SP)	;A2=SP+38: strlen.a
+	BEQ	R0,R0,803BD3A4	;strlen.a-=2	account for "to " Farway
+	ADDIU	A2,A2,FFFE
+//803BD364:
+	ADDIU	AT,R0,0003
+	BEQ	V1,AT,803BD378	;branch if type 3: letter f/ Farway
+	ADDIU	AT,R0,0007
+	BNEL	V1,AT,803BD384	;branch if not type 7: letter f/ Mom
+	ADDIU	AT,R0,0008
+//803BD378:	type 3,7	"to " string.b
+	BEQ	R0,R0,803BD3A4	;A0=A1-2: strlen.b+2	account for "to " player
+	ADDIU	A0,A1,FFFE
+//803BD380:	type 8		string.b
+	ADDIU	AT,R0,0008
+	BNEL	V1,AT,803BD398	;branch if not type 8: ???
+	ADDIU	AT,R0,0009
+	BEQ	R0,R0,803BD3A4	;A0=A1-4: strlen.b	account for no bottom line
+	ADDIU	A0,A1,FFFC
+//803BD394:	type 7		string.b -> 7char
+	ADDIU	AT,R0,0009
+	BNEL	V1,AT,803BD3A8	;branch if type not 9: letter f/ happy room academy
+	SLT	AT,A2,A0
+	ADDIU	A0,R0,0007	;A0=7: force strlen.b to 7
+//803BD3A4:	only use the longest strlen
+	SLT	AT,A2,A0
+	BEQ	AT,R0,803BD3B4	;branch if strlen.a < strlen.b
+	ADDIU	A1,R0,0001	;A1=1
+	OR	A2,A0,R0	;A2=A0: strlen.b
+//803BD3B4:	set to minimum strlen if smaller than title
+	ADDIU	AT,R0,0001
+	BNE	V1,AT,803BD3D4	;branch if not type 1: delivery
+	OR	A0,S0,R0	;A0=S0: p->bubble
+	SLTI	AT,A2,0006
+	BEQL	AT,R0,803BD3E8	;branch if strlen > 5
+	OR	A3,R0,R0	;A3=0	no options
+	BEQ	R0,R0,803BD3E4	;minimum strlen is 6: "delivery"
+	ADDIU	A2,R0,0006
+//803BD3D4:	set to minimum strlen if smaller than title
+	SLTI	AT,A2,0004
+	BEQL	AT,R0,803BD3E8	;branch if strlen > 3
+	OR	A3,R0,R0
+	ADDIU	A2,R0,0004	;minimum strlen is 4: "letter" (in japanese)
+//803BD3E4:	call the thing finally
+	OR	A3,R0,R0	;A3=0	no options
+	JAL	803BC9E4
+	SW	A2,0038 (SP)	;A2->SP+38: strlen.all, which sadly is used after this...
+//803BD3F0:
+	JAL	803BCF74
+	OR	A0,S0,R0
+	BEQ	V0,R0,803BD498
+	LW	A2,0038 (SP)	;A2=SP+38: strlen
+//803BD400:
+	LUI	AT,40E0
+	MTC1	AT,F6		;F6=7.0	[40E00000]
+	LWC1	F4,0028 (S0)
+	ADDIU	T8,A2,FFFC	;T8=strlen-4: bubble offset, accounting for right-hand arrow
+	MTC1	T8,F10
+	ADD.S	F8,F4,F6
+	LUI	AT,803C
+	CVT.S.W	F16,F10	;F16=(float) strlen-4
+	SWC1	F8,0028 (S0)	;S0+28 += 7.0
+	LWC1	F18,6798 (AT)	;F18=803C6798: 0.3	[3E99999A]
+	LUI	AT,803C
+	LWC1	F6,679C (AT)	;F6=803C679C: 0.6	[3F19999A]
+	LWC1	F10,0024 (S0)
+	MUL.S	F4,F16,F18	;F4=0.3 (strlen-4)
+	ADD.S	F8,F6,F4	;F8=0.3 (strlen-4) + 0.6
+	SUB.S	F16,F10,F8
+	BEQ	R0,R0,803BD498
+	SWC1	F16,0024 (S0)	;SO+24 -= 0.3 (strlen-4) + 0.6
+//803BD448:
+
+
+//803BD478:
+	ADDIU	A1,R0,0010
+	JAL	8009E8D0
+	LW	A0,002C (SP)
+	OR	A0,S0,R0
+	OR	A1,R0,R0
+	OR	A2,V0,R0
+	JAL	803BC9E4
+	OR	A3,R0,R0
+	etc...
+
+
+//803BD524:
+	LW	A0,002C (SP)
+	ADDIU	A1,R0,000A
+	JAL	8009C1C0
+	ADDIU	A2,R0,0020
+	OR	A0,S0,R0
+	OR	A1,R0,R0
+	OR	A2,V0,R0
+	JAL	803BC9E4
+	OR	A3,R0,R0
+	etc...
+
+803BD5B4	needs something more involved; falsify w/ *0xC for now
+	ADDIU	SP,SP,FFB8
+	SW	S0,0018 (SP)
+	OR	S0,A0,R0
+	SW	RA,001C (SP)
+	OR	A0,S0,R0
+	ADDIU	A2,SP,0044
+	JAL	803BCD84
+	ADDIU	A3,SP,0040
+	OR	A0,S0,R0
+	ADDIU	A1,R0,0002
+	LW	A2,0044 (SP)
+	JAL	803BC9E4
+	LW	A3,0040 (SP)
+//803BD5E8:
+
+803BD6FC	needs something more involved; falsify w/ *0xC for now
+	ADDIU	SP,SP,FFC8
+	SW	S1,0018 (SP)
+	SW	S0,0014 (SP)
+	OR	S0,A0,R0
+	OR	S1,A1,R0
+	SW	RA,001C (SP)
+	SW	A2,0040 (SP)
+	OR	A0,S0,R0
+	LW	A1,0040 (SP)
+	ADDIU	A2,SP,0030
+	JAL	803BCD84
+	ADDIU	A3,SP,002C
+	OR	A0,S0,R0
+	ADDIU	A1,R0,0002
+	LW	A2,0030 (SP)
+	JAL	803BC9E4
+	LW	A3,002C (SP)
+//803BD740:
+	
+
+803BD9AC	needs something more involved; falsify w/ *0xC for now
+	ADDIU	SP,SP,FFD0
+	SW	S0,0018 (SP)
+	OR	S0,A0,R0
+	SW	RA,001C (SP)
+	OR	A0,S0,R0
+	ADDIU	A2,SP,002C
+	JAL	803BCD84
+	ADDIU	A3,SP,0028
+	OR	A0,S0,R0
+	ADDIU	A1,R0,0002
+	LW	A2,002C (SP)
+	JAL	803BC9E4
+	LW	A3,0028 (SP)
+//803BD9E0:
+	
+Looks like 803BCD84 is only used by these three routines, so could alter the return to width instead of strlen
+
+
+Only two changes needed.  Alter callers' A2 values to be physical width, then hack the table with multiples of 12 (0xC).
+800902C8	;V0=width of string A0, size A1::variable width
+800902CC	;V0=width of string A0, size A1, width type A2
+
+
+
+Which, after the fact, is a whole lot more difficult than just altering the original routine.
+Instead, hook the bugger with some stack storage and compute the real strlen using below function.
++++Use decimal *C value for correction in binary+++Use float divisor in binary+++
+803BC9E4	+454	computes width of item text bubbles
+	accepts: A0=p->bubble, A1=row, A2=strlen.u, A3=lines
+00061040	SLL	V0,A2,0x1
+00461021	ADDU	V0,V0,A2
+00023080	SLL	A2,V0,0x2	;A2*=0xC, to ensure non-hacked routines don't lock the bugger!
+//803BC9F0:	alternate entry point
+//	accepts: A0=p->bubble, A1=row, A2=width, A3=lines
+3C0F8088	LUI	T7,803C
+25EF907C	ADDIU	T7,T7,62FC	;T7=803C62FC: position offset table
+00057180	SLL	T6,A1,0x6	;T6=A1*40: vertical (row) selection->offset
+01CF1021	ADDU	V0,T6,T7	;V0=803C62FC+offset: p->row's position data
+8C580014	LW	T8,0014 (V0)	;T8=table+14: min.correction value, already *C
+00D8C823	SUBU	T9,A2,T8	;T9=strlen.u-correction
+44992000	MTC1	T9,F4
+00403025	OR	A2,V0,R0	;A2=V0: p->row data table
+C4CA0018	*LWC1	F10,0018 (A2)	;F10=table+18: (float) divisor, also *C
+24E9FFFE	ADDIU	T1,A3,FFFE	;T1=#lines-2: box by default sized for two entries
+468021A0	CVT.S.W	F6,F4	;F6=(float) difference
+00042825	OR	A1,A0,R0	;A1=A0: p->bubble
+00001825	OR	V1,R0,R0	;V1=0	init.count
+460A3483	DIV.S	F18,F6,F10	;F18=difference.u/divisor: width%
+10E00006	*BEQ	A3,R0,803BCA4C	;branch if no extra lines
+E4920004	SWC1	F18,0004 (A0)	;F18->bubble+4: set width.u%
+//803BCA38:	compute height of box from #lines
+44892000	MTC1	T1,F4
+3C014040	LUI	AT,4040
+44813000	MTC1	AT,F6		;F6=3.0	[40400000]
+46802220	CVT.S.W	F8,F4	;F8=(float) difference.l
+46064483	*DIV.S	F18,F8,F6	;F10=difference.l / 3.0: up to three additional entries standard
+//803BCA4C:
+E4920008	SWC1	F18,0008 (A0)	;F18->target+8: height.l%
+
+00000018	42C00000
+00000030	42900000
+00000024	42400000
+
+Generate a really helpful routine:
+80093620	41BA0	*V0=width, V1=strlen of variable-width string A0 of max strlen A1
+	accepts: A0=p->string, A1=max strlen
+00003025	OR	A2,R0,R0
+//80093624	41BA4	*V0=width of string A0 of max strlen A1, mode A2
+//	accepts: A0=p->string, A1=max strlen, A2=width mode (0-variable; 1-fixed)
+27BDFFD8	ADDIU	SP,SP,FFD8
+AFBF001C	SW	RA,001C (SP)
+AFA40020	SW	A0,0020 (SP)
+0C027A34	JAL	8009E8D0	;V0=actual strlen of A0, of size A1
+AFA60024	SW	A2,0024 (SP)
+8FA40020	LW	A0,0020 (SP)
+8FA60024	LW	A2,0024 (SP)
+AFA20018	SW	V0,0018 (SP)
+0C0240B3	JAL	800902CC	;V0=width of string A0, size A1::variable width
+00402825	OR	A1,V0,R0
+8FBF001C	LW	RA,001C (SP)
+8FA30018	LW	V1,0018 (SP)
+27BD0028	ADDIU	SP,SP,0028
+03E00008	JR	RA
+00000000	NOP
+
+Sorry, this bothers me:
+803BC8C4	+334	V0=strlen?
+	accepts: A0=p->bubble(?)
+8C8E0034	LW	T6,0034 (A0)
+2401000F	-ADDIU	AT,R0,000F
+55C10002	*BNEL	T6,AT,803BC8E0
+2402000A	-ADDIU	V0,R0,000A
+24020008	-ADDIU	V0,R0,0008
+03E00008	-JR	RA
+AFA00040	*SW	R0,0040 (A0)
+00000000	*NOP
+00000000	*NOP
+00000000	NOP
+
+803BCB90	+600	0C21BE44
+	accepts: A0=p->bubble(?)
+	LW	T6,0034 (A0)
+	LUI	T8,803C
+	LW	T9,003C (A0)
+	SLL	T7,T6,0x2
+	SUBU	T7,T7,T6
+	SLL	T7,T7,0x2
+	ADDU	T8,T8,T7
+	LH	T8,5C80 (T8)	;T8=803C5C80+offset: 
+	LW	T1,0038 (A0)
+//803BCBB4:
+00001825	OR	V1,R0,R0
+03190019	MULTU	T8,T9
+00004012	MFLO	T0
+01091021	ADDU	V0,T0,T1
+04400003	BLTZ	V0,803BCBD4	;if V0<0, return 0
+00000000	NOP
+10000001	BEQ	R0,R0,803BCBD4	;else, use V0
+00401825	OR	V1,V0,R0
+//803BCBD4:
+00601025	OR	V0,V1,R0	;V0=V1: return value
+03E00008	JR	RA
+00000000	NOP
+
+alter it to:	803BCBA0	+610	0C21BE48
+//803BCBB4:
+03190019	MULTU	T8,T9
+00004012	MFLO	T0
+01091021	ADDU	V0,T0,T1
+04420001	*BLTZL	V0,803BCBD4	;if V0<0, return 0
+00001025	*OR	V0,R0,R0
+//803BCBD4:
+03E00008	JR	RA
+00000000	NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+
+Screw this.  Just alter everybody so they pass width, not length.
+
+Hacked!
+//803BD320:	+D90	compute width of first string; A0=@SP+2C
+0C024D88	*JAL	80093620
+24050008	ADDIU	A1,R0,0006	;doesn't this need to be 0x8?
+AFA20038	SW	V0,0038 (SP)	;SP+38=T7: strlen.a
+//803BD334:	+DA4	compute width of second string
+8FA40028	LW	A0,0028 (SP)
+0C024D88	*JAL	80093620
+24050008	ADDIU	A1,R0,0006	;doesn't this need to be 0x8?
+00402825	*OR	A1,V0,R0	;A1=V0: strlen.b+4
+92030002	LBU	V1,0002 (S0)	;V1=S0+2: type
+8FA60038	LW	A2,0038 (SP)	;A2=SP+38: strlen.a
+//803BD344:	type 4		"from " string.a
+24010004	ADDIU	AT,R0,0004
+50610002	*BEQL	V1,AT,803BD364	;type 4 sets "From " string.a
+24C60028	*ADDIU	A2,A2,0028
+24C60018	*ADDIU	A2,A2,0018	;otherwise, assume "tO " string.a
+//803BD364:	
+24010003	ADDIU	AT,R0,0003
+5061000A	*BEQL	V1,AT,803BD374	;type 3 sets "To " string.b, skips past !type 8 test
+24A50018	*ADDIU	A1,A1,0018
+24010007	ADDIU	AT,R0,0007
+50610007	*BEQL	V1,AT,803BD380	;type 7 sets "To " string.b, skips past !type 8 test
+24A50018	*ADDIU	A1,A1,0018
+//803BD380:	type 8		string.b
+24010008	ADDIU	AT,R0,0008
+54610001	BNEL	V1,AT,803BD398	;!type 8 assumes "From " string.b
+24A50028	*ADDIU	A1,A1,0028
+//803BD394:	type 7		string.b -> 7char
+24010009	ADDIU	AT,R0,0009
+50610001	*BEQL	V1,AT,803BD3A4	;type 9 sets width for "happy room" (0x56)
+24050056	*ADDIU	A1,R0,0056	;A1=7: force width.b to 56: "happy room"
+//803BD3A4:	only use the longest strlen
+00C5082A	*SLT	AT,A2,A1
+54200001	*BNEL	AT,R0,803BD3B4	;branch if strlen.a < strlen.b
+00053025	*OR	A2,A1,R0	;A2=A0: strlen.b
+//803BD3B4:	set to minimum strlen if smaller than title
+24010001	ADDIU	AT,R0,0001
+50610002	*BEQL	V1,AT,803BD3D4	;branch if type 1: delivery
+2402003A	*ADDIU	V0,R0,003A	;V0=width of "Delivery"
+2402002A	*ADDIU	V0,R0,002A	;V0=width of "Letter"
+00C2082A	*SLTU	AT,A2,V0
+54200001	*BNEL	AT,R0,803BD3E8	;set to min width if too small
+00023025	*OR	A2,V0,R0
+//803BD3D4:	set to minimum strlen if smaller than title
+//803BD3E4:	call the thing finally
+00102025	OR	A0,S0,R0	;A0=S0: p->bubble
+24050001	ADDIU	A1,R0,0001	;A1=1
+00003825	OR	A3,R0,R0	;A3=0	no options
+24C60004	*ADDIU	A2,A2,0004	;adds about 1mm to end of string, to sort of flush out the box a little
+0C21BDDC	*JAL	803BC9F0
+AFA60038	SW	A2,0038 (SP)	;A2->SP+38: strlen, which sadly is used after this...
+//803BD3F0:
+0C21BF3D	JAL	803BCF74
+	OR	A0,S0,R0
+	BEQ	V0,R0,803BD498
+	LW	A2,0038 (SP)	;A2=SP+38: strlen
+//803BD400:	+E70	fix bubble offset
+	LUI	AT,40E0
+	MTC1	AT,F6		;F6=7.0	[40E00000]
+	LWC1	F4,0028 (S0)
+	ADDIU	T8,A2,FFFC	;T8=strlen-4: bubble offset, accounting for right-hand arrow
+	MTC1	T8,F10
+	ADD.S	F8,F4,F6
+	LUI	AT,803C
+	CVT.S.W	F16,F10	;F16=(float) strlen-4
+	SWC1	F8,0028 (S0)	;S0+28 += 7.0
+	LWC1	F18,6798 (AT)	;F18=803C6798: 0.025	[3CCCCCCD]
+	LUI	AT,803C
+	LWC1	F6,679C (AT)	;F6=803C679C: 0.9	[3F666666]
+	LWC1	F10,0024 (S0)
+	MUL.S	F4,F16,F18	;F4=0.3 (strlen-4)/12
+	ADD.S	F8,F6,F4	;F8=0.3 (strlen-4)/12 + 0.9
+	SUB.S	F16,F10,F8
+	BEQ	R0,R0,803BD498
+	SWC1	F16,0024 (S0)	;SO+24 -= 0.3 (strlen-4)/12 + 0.9
+//803BD448:
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+
+As far as I can figure, the actual width is 59.75.
+  Offset above can negate this to flip around, and scoots in depending on string length.
+  Also, should set the text offset in the "from" line to the proper position.
+
+actual widths:
+0x56	86	"Happy Room"
+0x3A	58	"Delivery"
+0x2A	42	"Letter"
+0x18	24	"To "	(assuming space is 6)
+0x28	40	"From "	(assuming space is 6)
+
+correction for name positions:
+	For whatever crazy reason, subtract the #chars from resultant size for accurate result
+	You know, I don't even +care+ why at this point.  It works.
+//803C4EC0:	8930
+	LW	A0,004C (SP)	;A0=SP+4C: p->"To"
+0C0240B2	*JAL	800902C8
+24050002	ADDIU	A1,R0,0002
+2442FFFE	*ADDIU	V0,V0,FFFE
+
+//803C4FB8:	8A28
+	LW	A0,0048 (SP)
+0C0240B2	*JAL	800902C8
+24050004	ADDIU	A1,R0,0004
+2442FFFC	*ADDIU	V0,V0,FFFC
+
+Hacked!
+//803BD478:	EE8
+	ADDIU	A1,R0,0010
+0C024D88	*JAL	80093620
+	LW	A0,002C (SP)
+	OR	A0,S0,R0
+	OR	A1,R0,R0
+	OR	A2,V0,R0
+0C21BDDC	*JAL	803BC9F0
+	OR	A3,R0,R0
+	etc...
+
+Hacked!
+//803BD524:	F94
+	LW	A0,002C (SP)
+	ADDIU	A1,R0,000A
+0C024D88	*JAL	80093620
+	*NOP
+	OR	A0,S0,R0
+	OR	A1,R0,R0
+	OR	A2,V0,R0
+0C21BDDC	*JAL	803BC9F0
+	OR	A3,R0,R0
+	etc...
+
+
+803BD5B4	needs something more involved; falsify w/ *0xC for now
+	ADDIU	SP,SP,FFB8
+	SW	S0,0018 (SP)
+	OR	S0,A0,R0
+	SW	RA,001C (SP)
+	OR	A0,S0,R0
+	ADDIU	A2,SP,0044
+	JAL	803BCD84
+	ADDIU	A3,SP,0040
+	OR	A0,S0,R0
+	ADDIU	A1,R0,0002
+	LW	A2,0044 (SP)
+	JAL	803BC9E4
+	LW	A3,0040 (SP)
+//803BD5E8:
+
+803BD6FC	needs something more involved; falsify w/ *0xC for now
+	ADDIU	SP,SP,FFC8
+	SW	S1,0018 (SP)
+	SW	S0,0014 (SP)
+	OR	S0,A0,R0
+	OR	S1,A1,R0
+	SW	RA,001C (SP)
+	SW	A2,0040 (SP)
+	OR	A0,S0,R0
+	LW	A1,0040 (SP)
+	ADDIU	A2,SP,0030
+	JAL	803BCD84
+	ADDIU	A3,SP,002C
+	OR	A0,S0,R0
+	ADDIU	A1,R0,0002
+	LW	A2,0030 (SP)
+	JAL	803BC9E4
+	LW	A3,002C (SP)
+//803BD740:
+	
+
+803BD9AC	needs something more involved; falsify w/ *0xC for now
+	ADDIU	SP,SP,FFD0
+	SW	S0,0018 (SP)
+	OR	S0,A0,R0
+	SW	RA,001C (SP)
+	OR	A0,S0,R0
+	ADDIU	A2,SP,002C
+	JAL	803BCD84
+	ADDIU	A3,SP,0028
+	OR	A0,S0,R0
+	ADDIU	A1,R0,0002
+	LW	A2,002C (SP)
+	JAL	803BC9E4
+	LW	A3,0028 (SP)
+//803BD9E0:
+
+quick related bugfix:	fortunes
+//803C4DE0:	+8850	
+54610003	*BNEL	V1,AT,803C4DF0
+
++_+
+
+16 chars really isn't long enough...
+Probably just feed the bugger a new bank in fixed (and cleared) memory.
+How's about 800A1000?
+
+Lands at 803C685C
+Honestly, maybe just make a pointer there that can be pulled...
+
+803BCFBC		initialize text buffer
+	ADDIU	SP,SP,FFB0
+	SW	RA,001C (SP)
+	SW	S0,0018 (SP)
+	SW	A0,0050 (SP)
+	LUI	S0,0001
+	LW	T7,002C (T6)
+	ADDU	S0,S0,T7
+	LW	S0,06D0 (S0)
+	SH	R0,004A (SP)
+	SW	R0,0044 (SP)
+	ADDIU	S0,S0,0008
+	SW	R0,0040 (SP)
+	JAL	803BCB90
+	OR	A0,S0,R0
+	SW	V0,003C (SP)
+//803BCFFC:
+	LW	A2,0034 (SP)
+	LW	A0,0050 (SP)
+	ADDIU	A2,S0,000C
+	JAL	803BC5DC
+	OR	A3,V0,R0
+//803BD010:	initialize the text buffer in two parts
+	ADDIU	A0,S0,0044
+	SW	A0,002C (SP)
+	ADDIU	A1,R0,000A
+	JAL	8009992C
+	ADDIU	A2,R0,0020
+	ADDIU	A0,S0,004C
+	SW	A0,0028 (SP)
+	ADDIU	A1,R0,0008
+	JAL	8009992C
+	ADDIU	A2,R0,0020
+//803BD038:
+	LW	T8,0034 (S0)
+	SLTIU	AT,T8,000A
+	BEQ	AT,R0,803BD14C
+	SLL	T8,T8,0x2
+	LUI	AT,803C
+	ADDU	AT,AT,T8
+	LW	T8,6770 (AT)	;T8=803C6770+offset: 
+	JR	T8
+	NOP
+	
+As far as feeding strings into the buffer, that's as easy as this:
+//803BD010:	+A80	initialize the text buffer in two parts
+3C04800A	*LUI	A0,800A
+24841000	*ADDIU	A0,A0,1000	;A0=800A1000: new buffer location
+AFA4002C	-SW	A0,002C (SP)	;SP+2C=p->primary buffer
+AE040044	*SW	A0,0044 (S0)	;save a pointer in place of the data
+24810008	*ADDIU	AT,A0,0008	;names can't be over 6 anyway...
+AE01004C	*SW	AT,004C (S0)	;save a pointer in place of the data
+AFA10028	*SW	AT,0028 (SP)	;SP+28=p->secondary buffer
+24050028	*ADDIU	A1,R0,0028	;allocate te whole buffer at once
+0C02664B	JAL	8009992C
+24060020	ADDIU	A2,R0,0020
+
+Then, all instances should load the pointers.
+803C5524: S0+44 and S0+4C
+	803C5628	ADDIU	A1,S0,0044	26050044
+			ADDIU	A2,R0,0010	24060010
+		to	LW	A1,0044 (S0)	8E050044
+			ADDIU	A2,R0,0028	24060028
+803C4D8C: 
+	803C4EF4	OR	A1,S0,R0	02002825
+		to	LW	A1,0000 (S0)	8E050000
+	803C4FE0	ADDIU	A1,T7,004C	25E5004C
+		to	LW	A1,004C (T7)	8DE5004C
+
+missed one!
+803BCE1C:	+88C	passed as A0
+	803BCE30	ADDIU	A0,A3,0044	24E40044
+		to	LW	A0,0044 (A3)	8CE40044
+	803BCE38	ADDIU	A1,A3,004C	24E5004C
+		to	LW	A1,004C (A3)	8CE5004C
+
++_+
+
+Resizing inventory drop-down bubbles
+Computed at 803BCD08, returning V0=longest strlen
+803BCD08
+	accepts: A0=p->option label pointer table, A1=#options
+	ADDIU	SP,SP,FFD8
+	SW	S3,0020 (SP)
+	OR	S3,A1,R0
+	SW	RA,0024 (SP)
+	SW	S2,001C (SP)
+	SW	S1,0018 (SP)
+	SW	S0,0014 (SP)
+	BEQ	A0,R0,803BCD64
+	OR	S1,R0,R0
+	BLEZ	S3,803BCD64
+	OR	S0,A0,R0
+	SLL	T6,S3,0x2
+	ADDU	S2,T6,A0
+//803BCD3C:
+	LW	A0,0000 (S0)
+	ADDIU	A1,R0,0008
+	JAL	8009C1C0
+	ADDIU	A2,R0,0020
+	SLT	AT,S1,V0
+	BEQ	AT,R0,803BCD5C
+	ADDIU	S0,S0,0004
+	OR	S1,V0,R0
+//803BCD5C:
+	BNEL	S0,S2,803BCD40
+	LW	A0,0000 (S0)
+	OR	V0,S1,R0
+	LW	RA,0024 (SP)
+	LW	S0,0014 (SP)
+	LW	S1,0018 (SP)
+	LW	S2,001C (SP)
+	LW	S3,0020 (SP)
+	JR	RA
+	ADDIU	SP,SP,0028
+
+Called at 803BCD84, which can default the value to 6
+803BCD84
+	accepts: A0=, A1=, A2=@strlen, A3=p->#options
+	ADDIU	SP,SP,FFE0
+	SW	S0,0018 (SP)
+	OR	S0,A1,R0	;S0=A1: 
+	SW	RA,001C (SP)
+	SW	A0,0020 (SP)
+	SW	A2,0028 (SP)
+	LW	A0,0000 (S0)	;A0=S0+0: option label pointer table
+	LW	A1,0004 (S0)	;A1=S0+4: #options
+	JAL	803BCD08
+	SW	A3,002C (SP)	;SP+2C=A3: p->#options
+	LW	A0,0028 (SP)	;A0=SP+28: @strlen
+	LW	A3,002C (SP)	;A3=p->#options
+	ADDIU	AT,R0,002B
+	SW	V0,0000 (A0)	;V0->A0+0: strlen
+//803BCDBC:	
+	LW	T6,0020 (SP)	;T6=SP+20: 
+	LBU	V1,0000 (T6)	;V1=T6+0: type
+	BNEL	V1,AT,803BCDE8	;branch if not 2B: "Are you"+"certain?"
+	ADDIU	AT,R0,0019
+	LW	T7,0004 (S0)	;T7=S0+4: probably # options
+	ADDIU	T9,R0,0006
+	ADDIU	T8,T7,0002	;T8=#options+2
+	SW	T8,0000 (A3)	;T8->A3+0: update #options
+	BEQ	R0,R0,803BCE08
+	SW	T9,0000 (A0)	;6->A0+0: strlen
+//803BCDE4:	mail disposal adds an unselectable caption
+	ADDIU	AT,R0,0019
+	BNEL	V1,AT,803BCE04	;branch if not 19: "Sure?"
+	LW	T2,0004 (S0)
+	LW	T0,0004 (S0)	;T0=S0+4: probably # options
+	ADDIU	T1,T0,0001	;T1=options+1
+	BEQ	R0,R0,803BCE08
+	SW	T1,0000 (A3)	;T1->A3+0: updated #options
+//803BCE00:	by default set #options
+	LW	T2,0004 (S0)	;T2=S0+4: probably # options
+	SW	T2,0000 (A3)	;T2->A3+0: set #options
+//803BCE08:	return
+	LW	RA,001C (SP)
+	LW	S0,0018 (SP)
+	ADDIU	SP,SP,0020
+	JR	RA
+	NOP
+
+"Sure?"		2A
+"Are you"	3A
+"certain?"	38
+
+Called in 803BD5B4, 803BD6FC, 803BD9AC
+Value used at 803BC9E4: A2, which uses it to generate width percentage.
+
+
+//803BCD40:	+7B0	compute actual width
+	ADDIU	A1,R0,0008
+0C024D88	*JAL	80093620	;from 0C027070
+	*NOP
+
+Then, simply change the jump target to 803B69F0.
+0C21BDD9	->	0C21BDDC
+
+This addresses the other fixed sample corrections
+2401002B	ADDIU	AT,R0,002B
+	*NOP
+//803BCDBC:	+82C
+8FAE0020	LW	T6,0020 (SP)	;T6=SP+20: 
+91C30000	LBU	V1,0000 (T6)	;V1=T6+0: type
+8E0A0004	*LW	T2,0004 (S0)	;T7=S0+4: probably # options
+2419003A	ADDIU	T9,R0,003A
+50610005	*BEQL	V1,AT,803BCDE4	;branch if not 2B: "Are you"+"certain?"
+254A0002	*ADDIU	T2,T2,0002	;T2=#options+2
+//803BCDD4:	mail disposal adds an unselectable caption
+24010019	ADDIU	AT,R0,0019
+14610005	*BNE	V1,AT,803BCE00	;branch if not 19: "Sure?"
+2419002A	*ADDIU	T9,R0,002A
+254A0001	*ADDIU	T2,T2,0001	;T1=options+1
+//803BCDE4:	correct for caption strlen
+0059082A	*SLT	AT,V0,T9
+54200001	*BNEL	AT,R0,+1	;set V0 to T9 if strlen is less than the caption
+00191025	*OR	V0,R0,T9
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+//803BCE00:	by default set #options
+AC820000	*SW	V0,0000 (A0)	;V0->A0+0: strlen
+ACEA0000	SW	T2,0000 (A3)	;T2->A3+0: set #options
+//803BCE08:	return
+	LW	RA,001C (SP)
+	LW	S0,0018 (SP)
+	ADDIU	SP,SP,0020
+	JR	RA
+	NOP

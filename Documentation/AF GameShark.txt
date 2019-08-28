@@ -1,0 +1,104 @@
+Doubutsu no Mori / Animal Forest
+
+(M)
+F103B950 2400
+
+Inventory
+81126ED4	row 1, far left
+81126ED6	row 1, 2nd on left
+81126ED8	row 1, middle
+81126EDA	row 1, 2nd on right
+81126EDC	row 1, far right
+81126EDE	row 2, far left
+81126EE0	row 2, 2nd on left
+81126EE2	row 2, middle
+81126EE4	row 2, 2nd on right
+81126EE6	row 2, far right
+81126EE8	row 3, far left
+81126EEA	row 3, 2nd on left
+81126EEC	row 3, middle
+81126EEE	row 3, 2nd on right
+81126EF0	row 3, far right
+
+Bells in Pocketbook (500000 is normal limit)
+81126EF8
+81126EFA
+
+Current Debt
+81126EFC
+81126EFE
+
+Current Player's Home - expanded
+(when not expanded, use only the middle four values - rows 2-5, and 2nd on left to 2nd on right)
+8112AFCA	top row, far left
+8112AFCC	top row, second on left
+8112AFCE	top row, third on left
+8112AFD0	top row, third on right
+8112AFD2	top row, second on right
+8112AFD4	top row, far right
+8112AFEA	2nd row, far left
+8112AFEC	2nd row, second on left
+8112AFEE	2nd row, third on left
+8112AFF0	2nd row, third on right
+8112AFF2	2nd row, second on right
+8112AFF4	2nd row, far right
+8112B00A	3rd row, far left
+8112B00C	3rd row, second on left
+8112B00E	3rd row, third on left
+8112B010	3rd row, third on right
+8112B012	3rd row, second on right
+8112B014	3rd row, far right
+8112B02A	4th row, far left
+8112B02C	4th row, second on left
+8112B02E	4th row, third on left
+8112B030	4th row, third on right
+8112B032	4th row, second on right
+8112B034	4th row, far right
+8112B04A	5th row, far left
+8112B04C	5th row, second on left
+8112B04E	5th row, third on left
+8112B050	5th row, third on right
+8112B052	5th row, second on right
+8112B054	5th row, far right
+8112B06A	bottom row, far left
+8112B06C	bottom row, second on left
+8112B06E	bottom row, third on left
+8112B070	bottom row, third on right
+8112B072	bottom row, second on right
+8112B074	bottom row, far right
+
+Nook's Shop - Place items on any of these locations
+8122BD02	upper left corner, next to the wall
+8122BD04	upper left corner, next to the table
+8122BD06	upper table, left most item
+8122BD08	upper table, second on left
+8122BD0A	upper table, second on right
+8122BD0C	upper table, right most item
+8122BD22	row 2, far left
+8122BD24	row 2, second to left
+8122BD26	row 2, third to left
+8122BD28	row 2, third to right
+8122BD2A	row 2, second to right
+8122BD2C	row 2, far right
+8122BD42	row 3, clothing stand
+8122BD44	row 3, second to left
+8122BD46	row 3, third to left
+8122BD48	row 3, third to right
+8122BD4A	row 3, second to right
+8122BD4C	row 3, far right
+8122BD62	row 4, far left
+8122BD64	row 4, second to left
+8122BD66	lower table, left most item
+8122BD68	lower table, second on left
+8122BD6A	lower table, second on right
+8122BD6C	lower table, right most item
+8122BD82	lower left item
+8122BD84	row 5, second to left
+8122BD86	row 5, third to left
+8122BD88	row 5, third to right
+8122BD8A	row 5, second to right
+8122BD8C	row 5, far right
+
+forcefully load a 'corrupt' save file
+8008F443 0000
+-Zoinkity

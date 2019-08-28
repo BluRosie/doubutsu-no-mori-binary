@@ -1,0 +1,115 @@
+80065D90	0x14310	retrieve select menu option text
+ADDIU	SP,SP,FF90
+SW	A0,0070 (SP)	;save base address for selectmenu (801425C0)
+OR	A0,A2,R0		;A0=index of text to retrieve (0-1CC)
+SW	RA,001C (SP)
+SW	A1,0074 (SP)	;save buffer target (80142700)
+SW	A3,007C (SP)	;save safe loading location [80273B40]
+BLTZ	A0,80065ED8	;abort if 8000-FFFF
+SLTI	AT,A0,01CC	;could combine these tests into one
+BEQ	AT,R0,80065ED8	;sltiu 01CC, then handle bad string
+ADDIU	A1,SP,006C
+JAL	80065528		;uses index# to get size and offset to text
+ADDIU	A2,SP,0068
+//80065DC0:	prep for retrieving text
+LW	V1,0068 (SP)	;strlen
+LW	T0,006C (SP)	;T0=codeword for text being retrieved
+LW	A0,0074 (SP)	;buffer location (80142700) - target
+BNEZ	V1,80065DE4
+//80065DD0:	if nothing to retrieve, give it a dead line!
+ADDIU	A1,R0,000A	;length of 'fill' string
+JAL	8009992C
+ADDIU	A2,R0,0020	;fill character
+BEQ	R0,R0,80065EDC
+LW	RA,001C (SP)
+//80065DE4:
+BEQ	T0,R0,80065ED8
+ADDIU	T1,R0,FFF8
+AND	A1,T0,T1
+SUBU	V0,T0,A1
+ADDU	T6,V0,V1
+ADDIU	T7,T6,0007
+LUI	A3,8011
+ADDIU	T8,R0,0490
+SW	V0,0040 (SP)
+SW	T8,0010 (SP)
+ADDIU	A3,A3,641C
+AND	A2,T7,T1
+JAL	80026E10
+ADDIU	A0,SP,0048
+LW	V1,0068 (SP)
+SLTIU	AT,V1,FFFF
+BEQ	AT,R0,80065E34
+LW	T9,0040 (SP)
+BEQ	R0,R0,80065E38
+OR	A2,V1,R0
+
+80065E38 copies string from stack to buffer.
+works fine with first string, but fails 2+
+V1 must be getting fried.  Should be a pointer (80142700+?)
+LW	V1,0074 (SP)	;target address - 1st is 80142700
+ADDU	V0,T9,T2		;V0=string in stack; T9=offset from T2=base
+BLEZ	A2,80065EA8	;quit if strlen<=0
+OR	A0,R0,R0
+ANDI	A3,A2,0003
+BEQ	A3,R0,80065E78
+OR	A1,A3,R0
+LBU	T3,0000 (V0)
+ADDIU	A0,A0,0001
+ADDIU	V1,V1,0001
+ADDIU	V0,V0,0001
+BNE	A1,A0,80065E58
+SB	T3,FFFF (V1)
+BEQL	A0,A2,80065EAC
+SLTIU	AT,A0,optional
+//80065E78:
+LBU	T4,0000 (V0)
+ADDIU	A0,A0,0004
+ADDIU	V1,V1,0004
+SB	T4,FFFC (V1)
+LBU	T5,0001 (V0)
+ADDIU	V0,V0,0004
+SB	T5,FFFD (V1)
+LBU	T6,FFFE (V0)
+SB	T6,FFFE (V1)
+LBU	T7,FFFF (V0)
+BNE	A0,A2,80065E78
+SB	T7,FFFF (V1)
+SLTIU	AT,A0,optional
+//80065EAC
+
+
+80065EB0 is a short alignment thingie that gets broken!  crap...
+well, would want to align smaller anyway.  Maybe min spacing=4?
+ADDIU	A1,R0,000A	;sets max characters
+ADDIU	V0,R0,0020	;V0=0x20 - space
+ADDIU	A0,A0,0001
+SLTI	AT,A0,000A	;could set to 0x10....
+SB	V0,0000 (V1)
+BNEZ	AT,80065EB8
+ADDIU	V1,V1,0001
+
+//80065ECC:
+LW	A0,0074 (SP)
+JAL	80065CF8
+LW	A2,007C (SP)
+//80065ED8:
+LW	RA,001C (SP)
+ADDIU	SP,SP,0070
+JR	RA
+SW	A2,0000 (S0)	;added this to handle strlen on the outside
+
+=_=
+
+fix dead pulls!
+//80065DA8:	0x14328
+2C8101CC	SLTIU	AT,A0,01CC	;could combine these tests into one
+50200008	BEQL	AT,R0,80065DD0	;sltiu 01CC, then handle bad string
+8FA40074	LW	A0,0074 (SP)
+
+//80065DD0:	0x14350
+24050001	ADDIU	A1,R0,0001	;length of 'fill' string
+
+//80065DDC:	0x1435C
+1000003E	BEQ	R0,R0,80065ED8	;quit; should set A2=strlen
+00053025	OR	A2,R0,A1

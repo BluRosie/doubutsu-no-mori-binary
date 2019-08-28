@@ -1,0 +1,376 @@
+Table at 80106BF4 contains sizes of commands and type
+	type=2 means the command inserts text
+	type=3 means  the command stores a value
+	type=5 seems to be font attributes
+Table at 80107CB8 list jumps to handle each type
+0x60 entries total
+
+800A05D8	7F00	close window
+800A0614	7F01	open window
+800A0650	7F02	clear screen; return to top of page
+800A06AC	7F03	##
+		malcovikian pause for # (milli?)seconds
+800A0770	7F04	blue arrow page advance; restores original font properties on advance
+800A07E8	7F05	rrggbb
+	change font color
+		rrggbb	color
+800A0864	7F06	quick-advance on
+800A08B0	7F07	quick-advance off
+800A0964	7F08	xx	yyyy	[01]
+	animation bank 0
+		xx	slot # 0-9
+			only slot 0 appears to be used
+		yyyy	animation
+			00FE	used throughout Resetti dialogs
+				appears to be only used command
+800A0984	7F09	xx	yyyy	[01]
+	character animations; animation bank 4
+	7F09 09 0001	hand over map
+	7F09 09 0002	Pelly sets you up to save letters
+		xx	slot # 0-9
+			00	normal animation types; animations below are from this bank
+			01	item-based actions
+				0001	costume change
+				0002	hand over item [02F9]
+				0003	eat item
+				0004	Nook hands over item(s) [07F1]
+				000A	hand over collectable [10F3]
+				000B	measure fish (collectable)?
+				000C	eat fish (collectable)
+				000D	take letter? [08B5/6] [08E1/2] part of post office script
+				000E	take collectable [10F5]
+			02	?	could unload certain text strings
+			03	?
+				00FF	[3A3B]
+				0001	[3A38]
+			04	player orientation?
+				00FF	return to original rotation [3B0B]
+				0001	turns the player toward speaker [3B06]
+			05	
+			06	
+			07	part of one-minute remaining at new years
+				0001
+			08	?	could unload certain text strings
+			09	always just preceed or follow selectmenus
+		yyyy	animation
+			00FD	reset K.K.'s animation
+			00FE	
+			00FF	reset to 'stock' animation
+			0001	generic: furious
+			0002	generic: startled or shock
+			0003	generic: laughter
+			0004	generic: surprise
+			0005	generic: fuming mad
+			0006	generic: !Eureka!
+			0007	generic: bubbles
+			0008	generic: chills
+			0009	generic: sobbing
+			000A	generic: happiness and flowers
+			000B	generic: ? inquisitive
+			000C	generic: idea
+			000D	generic: cold gust of wind
+			000E	generic: filled with joy
+			000F	generic: brainstorming
+			0010	generic: depressed
+			0011	generic: heart torn asunder
+			0012	generic: ready to pounce
+			0013	generic: mellow
+			0014	generic: lovey-dovey
+			0015	generic: cheerful
+			0016	generic: annoyance
+			0017	generic: looks down
+			0018	Rover: laughter
+			0019	Rover: surprise
+			001A	Rover: !Eureka!
+			001B	Rover: shock
+			001C	Rover: anger
+			001D	Rover: smile
+			001E	Rover: sad
+			001F	Rover: ? inquisitive
+			0020	Copper: salute
+			0021	Resetti: fuming mad
+			0022	Resetti: eyebrows furrowed (angry)
+			0023	Resetti: cold gust of wind
+			0024	Resetti: !Eureka!
+			0025	Resetti: jaw-dropping stare
+			0026	Resetti: stare.	white-eyed stare
+			0027	Resetti: flailing wildly
+			0028	K.K.: startled
+			0029	Fortune Teller: spooky fortune telling
+			002A	Resetti?: 
+			
+800A09A4	7F0A	xx	yyyy	[01]
+	animation bank 5
+		xx	slot # 0-9
+			00	
+				251D Copper hands you a map [18CA]
+			01	
+				0007 used when Copper hands you a map [18CA]
+			02	
+				0000 used when Copper hands you a map [18CA]
+		yyyy	animation
+800A09C4	7F0B	xx	yyyy	[01]
+	animation bank 6
+	no known instance in-game
+		xx	slot # 0-9
+		yyyy	animation
+800A09E4	7F0C	xx	yyyy	[01]
+	animation bank 9
+	could be specific to snowman
+		xx	slot # 0-9
+			02	word-guessing games, igloo
+				0001	generate furniture for sale	[1BBE]
+				0002
+				0003
+				0004	generate wallpaper for sale	[1BC0]
+				0005	generate carpet for sale	[1904]
+				0006
+				0007	[1BBD], generate item for sale
+				0008
+				0009	[1BBF]
+				000A
+				000B
+				000C	[18D9] [18F3], card/name games (3 options)
+				000D
+				000E
+				000F
+				0010
+				0011	[18F8], start of price line
+			03	correct answer in word-guessing game
+				0001	[190A], receive item
+				0002	
+				0003	
+				0004	[18DE]
+				0005	[1BAD], player trades item?
+				0006	
+				0008	[1BB6], hand over player's item in trade
+				0009	[18F8], just before announcing price
+				000A	
+				000B	[190B], hand over purchased item
+				000C	
+				000D	take item	[1900] [1BB2]
+				000E	[1BAD], hands over item
+				000F	
+				0010	
+				0011	[1BB6], hand over character's item in trade
+				0012	[18F8], just after item name
+				0013	
+				0014	[190B], take money?
+				0015	
+				0016	give money	[1BB2]
+			04
+			05	
+				0001	[1BAD], start of all trade/purchase accepted
+				0065	[1BAE], start of all trade/purchase denied
+		yyyy	animation
+800A0A04	7F0D	player list
+800A0B14	7F0E	####
+	jump to text#
+800A0B34	7F0F	####
+	when selectmenu option 1 used, stow text#
+800A0B54	7F10	####
+	when selectmenu option 2 used, stow text#
+800A0B74	7F11	####
+	when selectmenu option 3 used, stow text#
+800A0B94	7F12	####
+	when selectmenu option 4 used, stow text#
+800A0D94	7F13	aaaa	bbbb
+	randomize: display one of two messages from msg_txt
+
+800A0DB4	7F14	aaaa	bbbb	cccc
+	randomize: display one of three messages from msg_txt
+
+800A0DD4	7F15	aaaa	bbbb	cccc	dddd
+	randomize: display one of four messages from msg_txt
+	
+[note: with following three commands, be careful!]
+800A0FCC	7F16	aaaa	bbbb
+	load select_menu option menu w/ 2 fields
+		aaaa	option 1 text index in select_txt table
+		bbbb	option 2 text index in select_txt table
+	
+800A0FEC	7F17	aaaa	bbbb	cccc
+	load select_menu option menu w/3 fields
+		aaaa	option 1 text index in select_txt table
+		bbbb	option 2 text index in select_txt table
+		cccc	option 3 text index in select_txt table
+	
+800A100C	7F18	aaaa	bbbb	cccc	dddd
+	load select_menu option menu w/4 fields
+		aaaa	option 1 text index in select_txt table
+		bbbb	option 2 text index in select_txt table
+		cccc	option 3 text index in select_txt table
+		dddd	option 4 text index in select_txt table
+
+800A102C	7F19	jump to set string (7F0E-7F12 +7F77-7F78)
+800A1078	7F1A	player's name	[02]
+800A10D8	7F1B	speaker's name	[02]
+800A1124	7F1C	catchphrase	[02]
+800A1170	7F1D	year:	####Ye	[02]
+800A11B4	7F1E	month:	#Mon	[02]
+800A11F8	7F1F	day:	"weekday"	[02]		80136FC0
+800A123C	7F20	day:	Day of month	[02]
+800A1280	7F21	hours:	a/p.m.#H	[02]	80136FBE
+800A12C4	7F22	minutes:	#Mi	[02]	80136FBD
+800A1308	7F23	seconds:	#	[02]	80136FBC
+800A141C	7F24	string variable slot 1	[02]
+800A1444	7F25	string variable slot 2 in colour	[02]	800A1394: A2=1,A3=A0+280	used in ps/psz for sender's name
+800A1468	7F26	string variable slot 3 in colour	[02]	800A1394: A2=2,A3=A0+281	used in ps for sender's town
+800A148C	7F27	string variable slot 4	[02]
+800A14B4	7F28	string variable slot 5	[02]
+800A14DC	7F29	string variable slot 6 in colour	[02]	800A1394: A2=5,A3=A0+282
+800A1500	7F2A	string variable slot 7	[02]	used in ps for sender's name
+800A1528	7F2B	string variable slot 8	[02]
+800A1550	7F2C	string variable slot 9	[02]
+800A1578	7F2D	string variable slot 10	[02]
+800A1730	7F2E	inserts last selected option from a menu	[02]
+800A1774	7F2F	town name	[02]
+800A17B8	7F30	random number between 0-99	[02]
+800A1844	7F31	string variable slot 21	[02]	text controller + 100
+800A186C	7F32	string variable slot 22	[02]	text controller + 10A
+800A1894	7F33	string variable slot 23	[02]	text controller + 114
+800A18BC	7F34	string variable slot 24	[02]	text controller + 11E
+800A18E4	7F35	string variable slot 25	[02]	text controller + 128
+800A15A0	7F36	string variable slot 11	[02]
+800A15C8	7F37	string variable slot 12	[02]
+800A15F0	7F38	string variable slot 13	[02]
+800A1618	7F39	string variable slot 14	[02]
+800A1640	7F3A	string variable slot 15	[02]
+800A1668	7F3B	string variable slot 16	[02]
+800A1690	7F3C	string variable slot 17	[02]
+800A16B8	7F3D	string variable slot 18	[02]
+800A16E0	7F3E	string variable slot 19	[02]
+800A1708	7F3F	string variable slot 20	[02]
+800A1954	7F40	insert gyroid greeting	[02]
+800A19C4	7F41	unknown	[03]
+800A19E4	7F42	unknown	[03]
+800A1A04	7F43	unknown	[03]
+800A1A24	7F44	unknown	[03]
+800A1A44	7F45	unknown	[03]
+800A1A64	7F46	unknown	[03]
+800A1A84	7F47	unknown	[03]
+800A1AA4	7F48	unknown	[03]
+800A1AC4	7F49	unknown	[03]
+800A1AE4	7F4A	unknown	[03]
+800A1B4C	7F4B	unknown	[03]
+	7F4B-7F4F are called via post office (?) in msg lines A-E
+800A1B6C	7F4C	unknown	[03]
+800A1B8C	7F4D	unknown	[03]
+800A1BAC	7F4E	unknown	[03]
+800A1BCC	7F4F	unknown	[03]
+800A1BEC	7F50	rrggbb	##	[05]
+	change font color for following characters
+		rrggbb	color
+		##	# following characters affected
+800A1C24	7F51	##
+	whisper; set(0) or unset(1) 0x1 flag in text controller+28C
+800A1CA4	7F52	##	[04]
+	sound effect maybe?
+800A1CDC	7F53	##	[04]
+	sound effect maybe?  seems to trigger the thing, but might require setting with 52?
+800A1D14	7F54	##	[05]
+	changes size of next character typed to screen
+800A1D4C	7F55	opens typing dialog, used to insert player and town name
+800A1DD0	7F56	xx yy	[06]
+	best guess: play music x, [y might be transition time]
+		xx	music values
+			00	no music
+			01
+			02
+			03
+			04
+			05
+			06
+			07	Resetti's music
+		
+800A1E38	7F57	####	[06]
+	unknown	[one of these triggers return to normal music]
+800A1EA0	7F58	##
+	unknown	[one of these triggers return to normal music]
+800A1F1C	7F59	##	[07]
+	Sound Effect; 05 is springish sound effect in resetto's dialog
+800A1F7C	7F5A	##	[04]
+	resize font to ##
+800A1FB4	7F5B	open dialog	[07]
+	Prepares a jump to another dialog window, such as clock, letter, etc.
+800A2000	7F5C	unknown	[03]
+800A204C	7F5D	unknown	[03]
+800A2098	7F5E	allow B to default selectmenu option
+800A20E0	7F5F	unknown
+800A2150	7F60	unknown
+	
++-+-+-+
+
+AC-only commands
+7F62	seems they switch out 7F5E for it sometimes
+7F63.####.####	randomize: select a string between #1 and #2, inclusive 
+-
+-
+-
+7F67.##	?
+-
+-
+7F6A.####.####		randomize and interject: use string and return to caller
+7F6B.####.####.####		interject x3
+7F6C.####.####.####.####	interject x4
+-
+-
+-
+-
+7F71	island name (AC only)
+7F72	?	optional if(){} sort of wrapper?
+7F73	?	always...  7F73 \n [close] 7F72 ...more text
+7F74	forces next retrieved string to be lower-case
+7F75	forces next retrieved string to be sentence-case
+7F76	AM/PM
+7F77.####	set string jump when selectmenu option 5 selected (like 7F0E-7F12)
+7F78.####	set string jump when selectmenu option 6 selected
+7F79.####.####.####.####.####	selectmenu x5 type
+7F7A.####.####.####.####.####.####	selectmenu x6 type
+
+7F7B is now the arbitrary limit (can lift to 7F80 by moving tables)
+
+new commands:
+7F6F.####	insert text ID# here; special formatting
+those marked with '`' are not stock
+	0xxx	'select_txt
+	1xxx	furniture--really anything that can be placed in your house
+	20xx	stationary
+	21xx	bags of bells
+	22xx	handheld items (tools, parasols, etc)
+	23xx	fish
+	24xx	clothes
+	25xx	shells, and other assorted small items
+	26xx	carpets
+	27xx	wallpaper
+	28xx	fruit
+	29xx	plants
+	2Axx	music
+	2Bxx	garbage
+	2Cxx	raffle tickets
+	2Dxx	insects
+	2Exx	gift bags
+	2Fxx	turnips
+	3xxx	'mail_txt
+	4xxx	'(reserved for msg_txt)
+	5xxx	'(reserved for msg_txt)
+	6xxx	'(reserved for msg_txt)
+	7xxx	'super_txt
+	8xxx	'superz_txt
+	9xxx	'maila_txt
+	Axxx	'mailb_txt
+	Bxxx	'mailc_txt
+	Cxxx	'psz_txt
+	Dxxx	string_txt
+	Exxx	npc
+	Fxxx	'ps_txt
+7F70	force CAPS
+
+  
++-+-+-+
+
+Seemingly invalid codes used in AC script breaking AF
+7F09	09	00	01
+7F09	09	00	FE
+one of these causes a lock when Rover goes to call Nook on the train
+could use 7F5A.14 + 7F05.969696 + 7F52.88 instead

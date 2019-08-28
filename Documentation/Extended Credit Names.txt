@@ -1,0 +1,104 @@
+C-8574E0	Plays Credits and K.K. Slider's Music
+The bugger can load up to 10 strings at once, meaning it can display upward of ten string to the screen at a given time.
+New entries exist from 66-6B.  Not sure if they'll get caught yet.
+
+Should just make a temporary buffer.  0x20 for each string should be fine, requiring 0x140.
+Maybe just 800A0EE8 (C-675720+4F468).  Probably safe.  Maybe.
+
+Due to display width and my absolute refusal to mirror the screen and extend it, max string length is now 0x15.  Allocate 0xE0
+That makes the target 800A0F48
+
+@ notes entries altered in the pointer correction file
+
+80AA3D08	load next 10 credit strings into buffer
+	ADDIU	SP,SP,FFD8
+	SW	RA,0024 (SP)
+	SW	S3,0020 (SP)
+	SW	S2,001C (SP)
+	SW	S1,0018 (SP)
+	SW	S0,0014 (SP)
+	LUI	T6,8013
+	LW	T6,6F80 (T6)	;T6=80136F80: 
+3C11800A	@LUI	S1,800A
+26310EE8	@ADDIU	S1,S1,0EE8	;S1=800A0EE8: binary+30=p->credit buffer
+	BEQ	T6,R0,80AA3D78
+	LUI	S0,80AA
+	ADDU	S0,S0,A0
+	LBU	S0,4D54 (S0)	;S0=80AA4D54+A0: p->list of bytes
+	OR	S2,R0,R0	;S2=0	init.count
+	ADDIU	S3,R0,000A
+	ADDIU	S0,S0,04EA	;S0=4EA+value: string_txt ID
+//80AA3D4C:	load in next 10 strings
+	OR	A0,S1,R0	;A0=S1: p->target
+24050020	*ADDIU	A1,R0,0020	;A1=strlen F
+	JAL	800C3F70	;retrieve string from string_txt
+	OR	A2,S0,R0	;A2=S0: ID#
+	ADDIU	S0,S0,0001	;S0++	next ID
+	SLTI	AT,S0,0558
+	BNE	AT,R0,80AA3D70	;skip until 558
+	ADDIU	S2,S2,0001	;S2++	count++
+	ADDIU	S0,R0,0557	;S0=557: stick it at 557 until further notice
+//80AA3D70:
+	BNE	S2,S3,80AA3D4C	;loop 10 times
+26310020	*ADDIU	S1,S1,0020	;S1+=F: next spot in buffer
+//80AA3D78:	return
+	LW	RA,0024 (SP)
+	LW	S0,0014 (SP)
+	LW	S1,0018 (SP)
+	LW	S2,001C (SP)
+	LW	S3,0020 (SP)
+	JR	RA
+	ADDIU	SP,SP,0028
+
+//80AA3DE4:	start of buffer
+3C11800A	@LUI	S1,800A
+26310EE8	@ADDIU	S1,S1,0EE8	;S1=800A0EE8: binary+30=p->credit buffer
+
+//80AA3FD4:	print strlen
+24060020	*ADDIU	A2,R0,0020	;A2=strlen 20
+	
+//80AA4030:
+26310020	*ADDIU	S1,S1,0020	;S1+=20: p->next string
+
+802994F0, 802995AC, 8029979C, 802997F8
+
+Slight issue with overrunning the screen buffer...  I'll just offset the bugger a bunch.
+0x15 is probably active display limit.  I don't especially want to rewrite this properly, so setting as such for now.
+
+off again around 528 (LnU), 52A should display 8 lines, 52D (LnU), 52F should start 52A, starts 537 not 532 - 1 U 7L, 53F should be 53A, 545 lines up right
+Oh, maybe its because some wiseguy went and translated the credits oddly. 0.o
+
++_+
+
+Time to hack K.K. so he can take your requests.  Blasted tables screwing everything up.
+80284C50	this loads your request, copies using 80AA47E8, then works out the line he gives you.
+	1B99	doesn't know it
+	1B9B	super-secret squirrel
+	1B9C	request taken
+
+Comparison done at 803B7E00.  Saves to 8022ADEC.
+Hey, maybe it's because they loaded in the whole blasted region instead of doing it on a per-index basis.  They loaded a whole memory bank to 803B88F0?  Aegh...
+803A5DF8 (5E44) eventually calls 803A610C, which loads directly via codeword
+You've got to be kidding me.  This is all derived from 71EAF0.
+
+Not a bad fix.  Just loop something around grabbing each thing.  80096744 auto-sets the strlen to A.
+Can use SP+34.  not used until later on and probably overwritten anyway
+	+888	
+AFA8002C	-SW	T0,002C (SP)
+00003025	*OR	A2,R0,R0
+00000000	*NOP
+00000000	*NOP
+AFA60034	*SW	A2,0034 (SP)
+00060880	*SLL	AT,A2,0x2
+00C10821	*ADDU	AT,AT,A2
+3C048088	LUI	A0,8088
+00010840	@SLL	AT,AT,0x1	;AT=A1*A
+00812021	*ADDU	A0,A0,AT
+24C62A00	*ADDIU	A2,A2,2A00
+0C0259D1	@JAL	80096744	;copy A bytes of item A1's name to A0
+24844E60	ADDIU	A0,A0,4E60
+8FA60034	*LW	A2,0034 (SP)
+2CC10036	*SLTIU	AT,A2,0036
+1420FFF4	*BNE	AT,R0,-FFF4
+24C60001	*ADDIU	A2,A2,0001
+

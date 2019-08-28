@@ -1,0 +1,418 @@
+FLASHram loaded to 80126EA0 after dropping it at 802D5CE0 temporarily
+
+802C33B4	C-854A60+0x534
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)
+JAL	8008F968
+NOP
+JAL	800790C0	;creates a 'blank' mempak thingie at 801379D8
+OR	A0,R0,R0
+LUI	V1,8013
+LUI	T6,8012
+ADDIU	V1,V1,6EA0	;V1=80136EA0: 
+ADDIU	T6,T6,6EC0	;T6=80126EC0: sram copy in memory +0x20 from start
+SW	T6,0138 (V1)	;80126EC0->80136FD8
+JAL	800C9088	;stores 1->8010EDD0
+SB	R0,0003 (V1)	;0->80136EA3
+//802C33EC:
+JAL	800CA230	;stores 0->8010EEE4
+NOP
+JAL	800ABB14	;returns V0=80143388: this data is probably from 0xC330 in sram
+NOP
+JAL	800A7A04	;blanks data at 80143388, setting to default values
+OR	A0,V0,R0	;A0=80143388
+JAL	802C3280	;perform sram verity tests
+NOP
+LW	T7,0018 (SP)
+JAL	8007D1DC
+SW	V0,1E18 (T7)
+//802C3418:
+LUI	V0,8013
+ADDIU	V0,V0,6EA0
+ADDIU	T8,R0,FFFF
+ADDIU	T9,R0,0001
+SW	T8,05A0 (V0)
+SW	R0,0754 (V0)
+SB	T9,04AD (V0)
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+=_=
+
+802C4FF0:		also does the verity test
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)
+SW	A1,001C (SP)
+LUI	A0,8013
+LW	A0,6F84 (A0)	;A0=80136F84: 
+BEQ	A0,R0,802C5020
+NOP
+JAL	8009C040
+NOP
+LUI	AT,8013
+SW	R0,6F84 (AT)
+//802C5020:
+JAL	8007D90C
+NOP
+ADDIU	AT,R0,FFFF
+BEQ	V0,AT,802C503C
+NOP
+JAL	8007D91C
+OR	A0,R0,R0
+JAL	8008EF6C	;performs sram verity test
+NOP
+ADDIU	AT,R0,0001
+BNEL	V0,AT,802C505C	;skip if invalid
+LW	RA,0014 (SP)
+JAL	802C4D88
+NOP
+LW	RA,0014 (SP)
+//802C505C:
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+=_=
+
+rewrite this so it draws the value from memory, not generating one
+8008EEE8	0x3D468	sram name test
+LW	T6,0004 (A0)
+LUI	AT,4E41	->	,8010
+ORI	AT,AT,464A	->	LW	AT,4794 (AT)
+BNE	T6,AT,8008EF00
+OR	V1,R0,R0	->	V0,R0,R0
+ADDIU	V1,R0,0001	->	V0,R0,0001
+OR	V0,V1,R0	->	JR	RA
+JR	RA	->	NOP
+NOP
+
+
+8008EE7C:	16bit checksum calculator?
+	accepts: A0=p->flash data (in rdram), A1=# bytes to test? [F980]
+	fries: A0
+ANDI	T6,A1,0001
+BNEZ	T6,8008EEA8	;if bit 1 set (not 16bit aligned), kill
+OR	V1,R0,R0
+BEQL	A1,R0,8008EEAC	;kill if 0 bytes are to be tested
+OR	V0,V1,R0
+//8008EE90:
+LHU	T7,0000 (A0)	;
+ADDIU	A1,A1,FFFE
+ADDIU	A0,A0,0002
+ADDU	V1,V1,T7
+BNEZ	A1,8008EE90
+ANDI	V1,V1,FFFF
+//8008EEA8:
+OR	V0,V1,R0
+JR	RA
+NOP
+
+rewrite, since it can be shortened and this compresses better
+30A30001	ANDI	V1,A1,0001
+14600008	BNEZ	V1,+8	;if bit 1 set (not 16bit aligned), kill
+00001025	+OR	V0,R0,R0
+10A00006	BEQ	A1,R0,+6
+94830000	LHU	V1,0000 (A0)	;
+//8008EE90:
+24A5FFFE	ADDIU	A1,A1,FFFE
+24840002	ADDIU	A0,A0,0002
+00431021	+ADDU	V0,V0,V1
+1000FFFA	+BEQ	R0,R0,-6
+3042FFFF	+ANDI	V0,V0,FFFF
+03E00008	JR	RA
+//8008EEA8:
+	NOP
+	NOP
+	NOP
+
+=_=
+
+8008F8A0	
+	accepts: A0=p->save data, A1=[0]
+ADDIU	SP,SP,FFC8
+SW	S2,001C (SP)
+SW	S1,0018 (SP)
+OR	S1,A0,R0	;S1=A0: p->data
+OR	S2,A1,R0	;S2=A1: [0]
+SW	RA,0024 (SP)
+SW	S3,0020 (SP)
+SW	S0,0014 (SP)
+ADDIU	T6,R0,0001	;T6=1
+JAL	800CDBE0	;returns V0=word at 8010EF60: ? toggle
+SW	T6,0028 (SP)	;SP+28=1
+ADDIU	AT,R0,0001
+BNE	V0,AT,8008F914	;branch if 8010EF60 not set
+ADDIU	S3,S2,01F3	;S3=initial offset + 1F3
+SLTU	AT,S2,S3
+BEQ	AT,R0,8008F918	;branch if S3>7FFF, as far as I can guess  
+OR	S0,S2,R0	;S0=S2: S0=initial offset
+ADDIU	S2,R0,FFFF	;S2=-1
+//8008F8E8:
+OR	A0,S1,R0	;A0=A1: p->data
+JAL	800CDDE0
+OR	A1,S0,R0	;A1=S0: offset
+BNE	V0,S2,8008F904
+ADDIU	S0,S0,0001
+BEQ	R0,R0,8008F918
+SW	R0,0028 (SP)
+//8008F904:
+BNE	S0,S3,8008F8E8
+ADDIU	S1,S1,0080
+BEQ	R0,R0,8008F91C
+LW	V0,0028 (SP)
+//8008F914:
+SW	R0,0028 (SP)
+LW	V0,0028 (SP)
+LW	RA,0024 (SP)
+LW	S0,0014 (SP)
+LW	S1,0018 (SP)
+LW	S2,001C (SP)
+LW	S3,0020 (SP)
+JR	RA
+ADDIU	SP,SP,0038
+
++-+-+
+
+803BA640	FLASHram loaded to memory after N64 logo
+
+8008F24C	some kind of flashram verity test?  there's four possible routines here...
+...
+//8008F2A8
+JAL	800CDBE0
+SB	R0,791C (AT)	;sets error code to no clock
+...
+//8008F2D4:
+OR	A0,S1,R0	;A0=S1: p->savedata
+JAL	8008F8A0	;no blasted clue.  Does something and returns V0=1, unless an error...
+OR	A1,R0,R0	;A1=0
+//8008F2E0:	triggers 8008EEE8 routine
+JAL	8008EEE8	;test if savefile name = cartridge name!
+OR	A0,S1,R0	;A0=S1: p->savedata
+BEQ	V0,R0,8008F2F4
+OR	A0,S1,R0	;A0=S1: p->savedata
+ADDIU	S2,R0,0001	;S2=1 if the game code in memory matches that in save
+//8008F2F4:
+JAL	8008EE7C	;returns V0=16bit checksum of first F980 bytes	[FFFA]
+ORI	A1,R0,F980
+BNEZ	V0,8008F354	;branch if you got a value back
+OR	A0,S1,R0	;A0=S1: p->savedata
+//8008F304:
+... complicated mess of a thing here, which isn't important
+//8008F354:	loop for each player within save file?
+SLTI	AT,S0,0003
+BEQL	AT,R0,8008F36C	;branch if looped four times
+LW	T1,003C (SP)
+BEQ	R0,R0,8008F2D4
+ADDIU	S0,S0,0001	;S0++
+//8008F368:	other routine cut in here too...
+LW	T1,003C (SP)
+OR	S0,R0,R0	;S0=0
+BNEZ	T1,8008F410
+OR	A0,S1,R0	;A0=S1: p->savedata
+JAL	8002F4C0	;blank 0x10000 of save data - possibly reloads it
+LUI	A1,0001		;A1=0x10000: size of data to blank
+OR	A0,S1,R0	;A0=S1: p->savedata
+JAL	8008F8A0	;16bit checksum of 200 bytes
+ADDIU	A1,R0,0200	;A1=200
+JAL	8008EEE8	;V0=1 if names match
+OR	A0,S1,R0	;A0=S1: p->savedata
+BEQ	V0,R0,8008F3A0	;set S2=1 if names match
+OR	A0,S1,R0
+ADDIU	S2,R0,0001
+//8008F3A0:
+JAL	8008EE7C	;V0=checksum of first F980 bytes	[FFFA]
+ORI	A1,R0,F980
+BNEZ	V0,8008F3FC
+OR	A0,S1,R0
+//8008F3B0:
+...
+//8008F3FC:
+SLTI	AT,S0,0003
+BEQL	AT,R0,8008F414
+LW	T3,003C (SP)
+BEQ	R0,R0,8008F374
+ADDIU	S0,S0,0001
+//8008F410:
+LW	T3,003C (SP)
+ADDIU	V0,R0,0001	;V0=1
+LW	V1,002C (SP)
+LW	A0,0050 (SP)	;A0=[8013A380]
+BNEZ	T3,8008F464
+LW	A1,0030 (SP)
+BNEZ	A1,8008F464
+NOP
+BNEZ	V1,8008F464
+ADDIU	T4,R0,0001
+BEQ	S2,R0,8008F44C	;branch if FLASHram okay
+SW	T4,003C (SP)
+ADDIU	T5,R0,0001
+LUI	AT,8013
+SB	T5,791C (AT)	;8013791C=1: FLASHram corrupt flag
+//8008F44C:
+JAL	8008F020	;sets A0 +0 - +14 equal to 0
+NOP
+JAL	8008ECF0	;sets word A0 at 80106A9C = 0
+ADDIU	A0,R0,0005	;A0=5
+BEQ	R0,R0,8008F518
+LW	V0,003C (SP)
+//8008F464:
+...
+//8008F518:
+LW	RA,0024 (SP)
+LW	S0,0018 (SP)
+LW	S1,001C (SP)
+LW	S2,0020 (SP)
+JR	RA
+ADDIU	SP,SP,0048
+
++-+-+-+-+
+
+verity test when file loads for player - K.K. 
+802C3280
+ADDIU	SP,SP,FFE0
+SW	RA,0014 (SP)
+JAL	8008EF6C	8008EF6C sets A0=80126EA0 (FLASHram data)
+NOP
+	calls:	8008EF0C	verify name
+	returns V0=1 if name is okay
+LUI	A3,8013
+ADDIU	A3,A3,6EA0	;A3=80136EA0: just after FLASHram
+LBU	T7,0A7C (A3)	;T7=8013791C: toggle (usually on)
+ADDIU	V1,R0,0001	;V1=1
+SLTIU	T6,V0,0001	;T6=0 if passed test
+XOR	A2,V1,T7	;A2=!T7
+SLTIU	A2,A2,0001	;TRUE if T7 was set
+SW	T6,001C (SP)	;save verity flag
+JAL	800D4E94
+SW	A2,0018 (SP)	;save toggle test
+//802C32B8:
+LUI	A3,8013
+ADDIU	A3,A3,6EA0
+ADDIU	V1,R0,0001
+BEQ	V0,R0,802C331C
+LW	A2,0018 (SP)
+LW	T0,001C (SP)
+
+
+-_-
+DIFFERENT APROACH
+
+80273814	selects K.K. text based on error level
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)
+LUI	T6,8013
+LBU	T6,791C (T6)	;T6=8013791C: error level
+ADDIU	A0,R0,09D1	;A0=reformat message
+BNEZ	T6,8027383C
+NOP
+BEQ	R0,R0,8027383C
+ADDIU	A0,R0,09CC	;A0=reset clock message
+//8027383C:
+JAL	8007B5C0	;accepts A0=text string to set
+NOP
+JAL	8007BA1C	;set load text flag
+ADDIU	A0,R0,0001
+LW	RA,0014 (SP)
+ADDIU	S0,S0,0018
+JR	RA
+NOP
+//8027385C
+
+called by 8007CAC4, using value at 80104A70's pointer + E8	[80139C40 + E8]
+
+
+8007B5C0	sets string if not busy?
+LUI	V0,8010
+LW	V0,4A70 (V0)	;V0=80104A70: pointer to [80139C40]
+ADDIU	AT,R0,0007
+LW	V1,00E4 (V0)	;V1=[80139C40]+E4: ?
+BEQ	V1,AT,8007B5E8	;save A0 if V1=7,8,or 9
+ADDIU	AT,R0,0008
+BEQ	V1,AT,8007B5E8
+ADDIU	AT,R0,0009
+BNE	V1,AT,8007B5EC	;quit without saving A0
+NOP
+//8007B5E8:
+SW	A0,0300 (V0)	;[80139C40]+300 = text string to be recalled
+JR	RA
+NOP
+
+8007BA1C	set load text flag
+	accepts: A0=flag
+SW	A0,0000 (SP)	;save value
+ANDI	A0,A0,00FF	
+LUI	T6,8010
+LW	T6,4A70 (T6)	;T6=80104A70: pointer to [80139C40]
+SW	A0,02F8 (T6)	;save flag to [80139C40]+2F8
+JR	RA
+NOP
+
+also read by 80273890:
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)
+SW	A1,001C (SP)
+JAL	8007D098
+NOP
+LUI	T6,8013
+LBU	T6,791C (T6)	;T6=error code
+ADDIU	A1,R0,0001
+LW	A0,0018 (SP)
+BNEZ	T6,802738D0	;branch if bad FLASHram
+NOP
+JAL	802737F4
+LW	A0,0018 (SP)
+BEQ	R0,R0,802738DC
+LW	T8,0018 (SP)
+//802738D0:	bad FLASHram
+JAL	802737F4
+OR	A1,R0,R0
+LW	T8,0018 (SP)
+//802738DC:
+LUI	T7,800A
+ADDIU	T7,T7,AC74
+JAL	8009D1F0
+SW	T7,091C (T8)
+JAL	8009EA04
+OR	A0,V0,R0
+ADDIU	V0,R0,0001
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+802737F4
+SLL	T6,A1,0x2	;T6=A1->offset
+LUI	T7,8027
+SW	A1,0938 (A0)	;A1=A0+938: 
+ADDU	T7,T7,T6
+LW	T7,3B0C (T7)	;T7=80273B0C+offset: 
+SW	T7,0940 (A0)	;save to A0+940: 
+JR	RA
+NOP
+
+80273744, 80273570, 802735F4, 80273670, 802736DC, 8009AC74
+
+long story short:
+set 8008F440 to +0, not +1
+
+
+error in save files occurs due to bad A0 value going into 800998C0
+called via 8009C67C, 8009CC94
+A0 set at 8009CD8C: sum of 80126EA0 + T9
+	probably characters and their responses or mail...
+T9=T8+3A00	T8=T5 + T7
+	T5=T4*1148	per bank offset
+	T7=T6*A4	per message offset
+	
+possibly commandeered when new letter writting postscript extends into +D0
+Maybe clip postscripts?  Yeah...  Actually...
+Probably supposed to be clipped to 0x13 max?  Not certain, but that seems like actual maximum value
+could also change the LW SP+D0 in those to be LB or LH
+Seems easier (and safer) to limit postscripts
+

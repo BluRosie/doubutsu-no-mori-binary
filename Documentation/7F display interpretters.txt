@@ -1,0 +1,49 @@
+Bit of an elaborate name, concidering I really don't know how many there are ;*)
+
+800914FC	3FA7C	interpret 7F50 command for display
+	accepts: A0=p->print controller, A1=p->display list
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A2,A0,R0	;A2=A0: p->print controller
+OR	A3,A1,R0	;A3=A1: p->display list
+LW	V0,0000 (A2)	;V0=print+0: p->text
+ADDIU	T9,R0,00FF
+OR	A0,A3,R0	;A0=A3: p->display list
+LBU	T6,0002 (V0)	;T6=cmd+2: red
+ADDIU	A1,A2,0034	;A1=print+34: p->colour
+SB	T6,0034 (A2)	;T6->print+34: red
+LBU	T7,0003 (V0)	;T7=cmd=3: green
+SB	T7,0035 (A2)	;T7->print+35
+LBU	T8,0004 (V0)	;T8=cmd+4: blue
+SB	T9,0037 (A2)	;FF->print+37: alpha
+SB	T8,0036 (A2)	;T8->print+36: blue
+LBU	T0,0005 (V0)	;T0=cmd+5: #bytes
+JAL	800904B8	;insert "set foreground color" microcode op
+SB	T0,0038 (A2)	;T0->print+38: #bytes
+//80091544:
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800904B8	3EA38	insert "set foreground color" microcode op
+	accepts: A0=p->display list, A1=p->colour
+LW	V0,0000 (A0)	;V0=A0+0: DL
+OR	V1,V0,R0	;V1=V0: DL
+LUI	T6,FA00
+SW	T6,0000 (V1)	;T6->DL+0: set_foreground_colour.u
+LBU	T1,0001 (A1)	;T1=A1+1: green
+LBU	T8,0000 (A1)	;T8=A1+0: red
+LBU	T5,0002 (A1)	;T5=A1+2: blue
+LBU	T0,0003 (A1)	;T0=A1+3: alpha
+SLL	T2,T1,0x10
+SLL	T9,T8,0x18
+OR	T3,T9,T2
+SLL	T6,T5,0x8
+OR	T7,T3,T6
+OR	T1,T7,T0	;T1=rr.gg.bb.aa
+SW	T1,0004 (V1)	;T1->DL+4: set_foreground_colour.l: RGBA32 colour
+ADDIU	V0,V0,0008	;V0+=8: advance pointer
+SW	V0,0000 (A0)	;next DL
+JR	RA
+NOP

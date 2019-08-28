@@ -1,0 +1,224 @@
+THE COMPLICATED TEXT RECALL: D1A000
+uses tables at 801071B8 (tbl) and 801071CC (txt)
+data		table		maxlen	contains...
+B01B60	06000000	B0A680	06008B20	0x68	maila
+B04250	060026F0	B0AC90	06009130	0x68	mailb
+B07F40	060063E0	B0B2A0	06009740	0x68	mailc
+B093C0	06007860	B0B8B0	06009D50	0x12	psz
+B09C30	060080D0	B0BEC0	0600A360	0xD	superz
+
+801071B8:
+superz.tbl	maila.tbl	mailb.tbl	mailc.tbl	psz.tbl		
+801071CC:
+superz.txt	maila.txt	mailb.txt	mailc.txt	psz.txt
+
++-+-+
+
+target zones:
+B09C30	06010000	B0BEC0	06012840	0x14	superz
+B01B60	06000000	B0A680	06011000	0x68	maila
+B04250	06005000	B0AC90	06011610	0x68	mailb
+B07F40	0600C000	B0B2A0	06011C20	0x68	mailc
+B093C0	0600F000	B0B8B0	06012230	0x12	psz
+			06012E50
+//80093FD0:	0x42550
+LUI	T2,00D2
+ADDIU	T2,T2,A000	;T2=D1A000, base for all subordinate blocks
+
+			
+			
++-+-+
+
+uses struct:
+0x0	4	bank#
+0x4	4	index#
+0x8	4	p->target
+0xC	4	size
+0x10	4	RESERVED for codeword
+0x14	4	RESERVED for strlen
+
+800940A8:	grab text from multibank index#
+	accepts: A0=p->struct
+ADDIU	SP,SP,FFC8
+SW	S0,0020 (SP)
+OR	S0,A0,R0	;S0=A0=index#,+8=p->buffer,+C=p->strlen
+SW	RA,0024 (SP)
+JAL	80093F94	;V0=multi-block index recall (D1A000)
+OR	A0,S0,R0	;A0=index#
+//800940C0:	fill the string with spaces
+BEQ	V0,R0,80094198	;0=entry is too large or failure
+ADDIU	A2,R0,0020	;A2=" "
+LW	A0,0008 (S0)	;A0=string buffer
+JAL	8009992C	;fill string
+LW	A1,000C (S0)	;A1=strlen
+//800940D4:
+LW	V1,0014 (S0)	;V1=S0+14: p->strlen
+LUI	A3,8011
+ADDIU	T1,R0,FFFE	;T1=mask away bit 1
+BEQ	V1,R0,80094190
+ADDIU	A3,A3,7090	;A3=80117090: "../m_handbill.c"
+LW	V0,0010 (S0)	;V0=S0+10: p->codeword
+LW	A0,0008 (S0)	;A0=target
+ADDIU	T8,R0,0664
+ANDI	T0,V0,0001
+ADDU	T6,V1,T0
+ADDIU	T7,T6,0001
+AND	A2,T7,T1	;A2=strlen: mask away bit 1
+SW	T0,002C (SP)
+SW	T8,0010 (SP)	;SP+10=0x664
+JAL	80026E10	;retrieve data from ROM
+AND	A1,V0,T1	;A1=codeword
+//80094114:
+LW	T0,002C (SP)
+BEQ	T0,R0,80094190
+NOP
+LW	A2,0014 (S0)
+LW	V0,0008 (S0)
+OR	A0,R0,R0
+BLEZ	A2,80094190
+ADDU	V1,V0,T0
+ANDI	A3,A2,0003
+BEQ	A3,R0,80094160
+OR	A1,A3,R0
+//80094140:	copy hanging bytes from V1->V0
+LBU	T9,0000 (V1)
+ADDIU	A0,A0,0001
+ADDIU	V1,V1,0001
+ADDIU	V0,V0,0001
+BNE	A1,A0,80094140
+SB	T9,FFFF (V0)
+BEQ	A0,A2,80094190
+NOP
+//80094160:	copy 'words' from V1->V0
+LBU	T2,0000 (V1)
+ADDIU	A0,A0,0004
+ADDIU	V1,V1,0004
+SB	T2,0000 (V0)
+LBU	T3,FFFD (V1)
+ADDIU	V0,V0,0004
+SB	T3,FFFD (V0)
+LBU	T4,FFFE (V1)
+SB	T4,FFFE (V0)
+LBU	T5,FFFF (V1)
+BNE	A0,A2,80094160
+SB	T5,FFFF (V0)
+//80094190:	return sucessful
+BEQ	R0,R0,8009419C
+ADDIU	V0,R0,0001	;sucessful return
+//80094198:	return
+OR	V0,R0,R0		;horrible failure
+LW	RA,0024 (SP)
+LW	S0,0020 (SP)
+ADDIU	SP,SP,0038
+JR	RA
+NOP
+
++-+
+
+80093F94:	retrieve codeword and strlen for multibank text entry
+	accepts: A0=p->struct
+ADDIU	SP,SP,FFB0
+SW	S0,0020 (SP)
+OR	S0,A0,R0	;S0=A0: +0=bank,+4=index,+8=&buffer?,+C=&strlen,+10=str.codeword,+14=str.strlen
+SW	RA,0024 (SP)
+LW	V0,0004 (S0)	;V0=index
+LUI	T1,0600
+ADDIU	T1,T1,0000	;T1=06000000: offset address mask
+SLTIU	V1,V0,0001
+BEQ	V1,R0,80093FC4	;if V0>0, you'll get two indices for size
+LUI	T8,8010
+BEQ	R0,R0,80093FCC
+OR	T0,R0,R0		;entry=0
+//80093FC4:	when index>0
+ADDIU	T0,V0,FFFF	;T0=real entry (index-1)
+SLL	T0,T0,0x2	;entry->offset
+//80093FCC:
+LW	T6,0000 (S0)	;T6=bank#
+LUI	T2,00D2
+ADDIU	T2,T2,A000	;T2=D1A000, base for all subordinate blocks
+SLL	T7,T6,0x2
+ADDU	T8,T8,T7
+LW	T8,71B8 (T8)	;T8=801071B8: offsets to each of the ROM tbls
+LUI	A3,8011
+ADDIU	T3,R0,061F
+ADDU	T9,T0,T8		;add entry value as well
+SUBU	V0,T9,T1		;get rid of address mask (06000000)
+ADDU	A1,T2,V0
+SW	T3,0010 (SP)
+ADDIU	A3,A3,7080	;A3=80117080: "../m_handbill.c"
+SW	T2,002C (SP)
+SW	T1,0030 (SP)	;save address mask
+SW	V1,0044 (SP)
+ADDIU	A0,SP,0048	;A0=target (SP+0x48)
+JAL	80026E10	;retrieve data from ROM
+ADDIU	A2,R0,0008	;A2=strlen
+//80094018:
+LW	T4,0000 (S0)	;T4=S0+0: bank#
+LUI	T6,8010
+LW	V1,0044 (SP)
+SLL	T5,T4,0x2
+ADDU	T6,T6,T5
+LW	T1,0030 (SP)	;T1=address mask
+LW	T6,71CC (T6)	;T6=801071CC+offset: offsets to each of the ROM txt files
+LW	T2,002C (SP)
+BEQ	V1,R0,8009404C
+SUBU	V0,T6,T1
+LW	T7,0048 (SP)
+BEQ	R0,R0,80094060
+SW	T7,0014 (S0)	;T7->S0+14: strlen
+//8009404C:
+LW	T8,0048 (SP)
+LW	T9,004C (SP)
+ADDU	V0,V0,T8
+SUBU	T3,T9,T8
+SW	T3,0014 (S0)	;T3->S0+14: strlen
+//80094060:
+LW	T5,0000 (S0)	;T5=bank number
+ADDU	T4,T2,V0
+LUI	T7,8010
+SLL	T6,T5,0x2
+SW	T4,0010 (S0)	;T4->S0+10: save codeword
+ADDU	T7,T7,T6
+LW	T7,71A4 (T7)	;T7=801071A4: table of max entry sizes
+LW	T9,0014 (S0)	;T9=S0+14: strlen
+LW	RA,0024 (SP)
+OR	V0,R0,R0
+SLTU	AT,T7,T9		;true if max size < actual
+BNEZ	AT,8009409C
+NOP
+BEQ	R0,R0,8009409C
+ADDIU	V0,R0,0001	;return good!
+//8009409C:
+LW	S0,0020 (SP)
+JR	RA
+ADDIU	SP,SP,0050
+
++-+
+
+8009992C	0x	fill string with character (memset, sortof)
+	accepts: A0=p->buffer,A1=strlen,A2=fill character
+SW	A2,0008 (SP)	;save fill character
+ANDI	A2,A2,00FF
+BEQ	A1,R0,80099978	;strlen
+OR	V0,R0,R0
+ANDI	A3,A1,0003
+BEQ	A3,R0,8009995C
+OR	V1,A3,R0
+//80099948:
+ADDIU	V0,V0,0001
+SB	A2,0000 (A0)
+BNE	V1,V0,80099948
+ADDIU	A0,A0,0001
+BEQ	V0,A1,80099978
+//8009995C:
+ADDIU	V0,V0,0004
+SB	A2,0000 (A0)
+SB	A2,0001 (A0)
+SB	A2,0002 (A0)
+SB	A2,0003 (A0)
+BNE	V0,A1,8009995C
+ADDIU	A0,A0,0004
+//80099978:
+JR	RA
+NOP
+

@@ -1,0 +1,43 @@
+﻿8ED150	map resources
+
+move "row" display on map to right
+0x6E50	points for cur. row# (4)
+FBE6 00DC	->	FC72
+FBE6 0014	->	FC72
+FCAE 00DC	->	FD3A
+FCAE 0014	->	FD3A
+
+move "column" display on map left
+0x6B50	points for cur. column# (4)
+FC72 0014	->	FBE6
+FC72 FF4C	->	FBE6
+FD3A 0014	->	FCAE
+FD3A FF4C	->	FCAE
+
+=_=
+
+shift images used for text labels:
+0x6ED0
+FD4E	->	FCB8
+FF2E	->	FE98
+FF2E	->	FE98
+FD4E	->	FCB8
+FCB8	->	FD4E
+FCB8	->	FD4E
+FE98	->	FF2E
+FE98	->	FF2E
+
++-+-+
+
+Images:
+0x11C8	20 10	I	むら	mura	(town)
+	will be removed until further notice
+0x7B60	40 10	I	ごあんない	goannai	(guide/map)
+	now will read "Town Map"
+	shift it over a little too...
+	FBF0, FE20
+	
+0xB260	40 10	I	ちょうめ	chiyoume (block)	N-S
+	now will read "Row"
+0xB460	40 10	I	ばんち	banchi	(address)	E-W
+	now will read "Column"

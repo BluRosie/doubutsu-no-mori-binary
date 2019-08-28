@@ -1,0 +1,153 @@
+!WARNING!
+  This patch is a very nasty, buggy, terrifying work-in-progress.  It is *not* designed to allow you to play the game.  That you can play the gameto a fair degree is just something of a happy coincidence...
+
+  So, what's the patch?
+
+  This patch is designed primarily for those poor fools who will go through the script and kill all the nasty problem sections that are keeping us from playing a beautifully-translated Animal Forest.  In particular:
+1) Moves the main text banks to the end of the ROM where their size can be managed without any issues.  Unlimitted text!
+2) Moves the main character list to the end of ROM and allows 8-byte long names whereever they may be used.
+3) Extends the text table sizes to allow as many valid entries as in Animal Crossing (at least for most tables)
+4) Allows selectmenus to have entries over 10 characters long
+5) Map uses a letter-number format so it is a little clearer when a location is given in-game.
+6) Time and Date patches:
+	Midnight and noon are 12, not 0
+	Minutes and seconds returned from 7F commands are two byte when preceeded by a colon, ie. 11:02
+	When not preceeded by a colon, minutes and seconds return their normal value, ie. 2 minutes
+	Months and both kinds of days are now textual: ie. Tuesday, September 3rd
+7) Fixes cursor and [END] block positioning on the message board.
+	Still need to address the wrapping though.  Each line still has a 16-character limitation, and total size can't exceed 0x68.
+8) Name entry pages now use fixed-width so they don't look as stupid.
+9) Workaround to allow the game to ignore unknown 7F commands.
+10)Bugfix for items.  They no longer parse the colorizer as though it were text.
+11)Item names use tables, so more than 10-character long item names are possible.
+12)Onhover and inventory text balloons now accept long item names.  Onhover can accept names up to 40 characters long, and inventory up to 16.
+13)Altered the quest generator to generate aliases for long item names.
+14)Item text bubbles are properly resized to account for a variable-width font.
+15)Mail messages now allow 7F text formatting commands.
+
+  The script is responsible for a good deal of the errors that occur, and a properly editted script should correct most of them.
+  It's made to be patched onto an unbyteswapped, uneditted ROM.  You +must+ extend the ROM from 0x1000000 to 0x2000000 with either a hex editor or the extendo program supplied to apply the patch.
+  The file format is Byuu's ups - the new one that I have no part in making but was provided here so you don't have to search it out.  ips won't work, since the new text is placed at 0x1000000, past ips's range.  Besides, the output is smaller and you can unpatch patched files with it.  It's a great format, really.  Use ups.exe - the other is likely source for it or something.
+
++-+
+
+What's slated for the next patch:
+1) Lift the limit on mail and message board text using alias trick.
+2) Address the mempak naming system.  Will be nice if it was the right region and named "Animal Forest"
+3) Translate the last of the pop-up menu text.
+4) Pretty up that ugly variable-width code from before.  Aegh, its ugly.  Will try to offset from center, not push.
+
++-+
+
+Programs:
+
+  Provided in here as well are a few programs for working on the script itself.
+  +In lieu of providing binaries, GrabResources.exe will spit out binaries and tables for all the major text banks that have been identified so far.  That includes all the item lists, conversational text, npc names, messages, etc.
+  +InsertStuff.exe takes the clump of resources spit out by GrabResources and puts them back into the rom.  Both utilities can be used on hacked and normal roms.  
+
+  +AFtoSYLK makes a SYLK table of the text in the table you feed it, and SYLKtoBIN changes that back into something you can dump right back into AF.  The converter also has the option to only output 7F commands or omit them.
+  +AFtoUTF8 can be used for japanese text.  It creates a UTF-8 text file that can be reinserted with UTF8toBIN.   It has most of the options found in the SYLK converters but the output can be editted in common text editors.
+
+  Also included are three tools for working with the compressed Yaz0 files, none of which are my own.  (no point reinventing the wheel)
+  +Zextract.exe by _Demo_, which will accept your rom and dump out a whole lot of decompressed files.
+  +Yaz0 Extractor.exe, credit to Shevious.  It decompresses a single Yaz0 file into a binary.
+  +Yaz0 Encoder.exe, recompiled from Shevious's code.  It will compress a binary into a Yaz0 file.
+  
+  As previously mentioned, extendo.exe can be used to unbyteswap and extend your rom so the patch can be used.
+  In obs-mac2.zip is macetII, created by Obsidian.  It's a checksum recalculator that will work on absolutely any N64 rom you happen across.
+  ups.zip contains the ups patcher.  This is Byuu's patcher, from wherever it was he posted it originally ;*)
+
++-+
+Documentation:
+
+  This folder contains a good deal of the notes taken during all this mess.  A good deal of them won't be of much interest to a large part of the world, but there are four in particular that may prove useful:
++Index.txt	An index of identified compressed and uncompressed files, some of which will have breakdown of their contents.
++ROM ASM Correspondance.txt	For binaries that load into a fixed position in rdram, this lists the ram <-> rom convertion.
++7F Codes.txt	Lists (with varying degree of accuracy) 7F commands, their sizes, and expected data.
++Maximum Entry Sizes.txt	Lists the longest entries can be in certain banks, the total number of entries allowed, and the maximum size of the text bank.
+
++-+
+
+Caveats and Miscellaneous:
+
+Bugs - Both Versions:
+1) Mail bug: due to the 0x60 character limit and the current script, a 7F command can be split across the boundry causing undesired effects.  Mail just needs to be rewritten...
+2) Any dialog that uses entries 0-D2 in the message.txt bank will appear in japanese.
+	That includes most of the text for mempak management, so try to use a clean one.
+3) Possible crash bug when starting a new player.  The game may sit-and-spin upon pulling into your town.  This may have been solved with the mail bug, but as of yet must be thoroughly tested.
+4) Text fowl-ups with Katrina's orange randomized text.  It's my fault for tampering with the 7F commands...
+5) Text line 912 fails to jump to 913.  Should fail gracefully...  This also may have been corrected with the mail bug but must be confirmed.
+	
+Bugs - Emulator Specific:
+1) No known graphics plugin is 100% compatible with this game.  Expect z-buffer and transparency issues in menus.
+2) The Famicom (NES) will not work due to a different plugin issue. You can try whining about this to the plugin developers, but nobody has ever fully supported the sprite microcode, and few allow direct screen drawing or low-level constructors...  
+3) No known emulator emulates the clock feature.  You will need to set it at the beginning of each session.  Refer to the document "Documentation/Clock Access.txt" for more information if you wish to implement this feature in your emulator or plugin.
+4) Certain emulators will assume SRAM is used instead of FLASHram.  SRAM is usually half the size, so you may lose data on the second and third player save files.  Refer to the emulator documentation on how to manually set the save type to FLASHram.
+5) Some emulators protect save data from being overwritten in certain ways, so you may find it impossible to use the in-game 'demolish a town' option.  You can accomplish the same feat by merely deleting the save file from the emulator's save directory.
+
+Bugs - Console Specific:
+1) Mail and train bugs can cause save data corruption.  Your name will still be okay but the other playerdata will be fried.
+2) Recoverable player save data load errors, probably due to triggered letters from Farway.  Possibly corrected by mail bug fix, but requires further testing.
+
+Save Data Requirements:
+  This is not clearly stated (or more probably mis-stated).  The game uses flashram for its normal save files and the controller pak (mempak) for saved messages and travelling data when the train is used.  The game can *not* be hacked to use SRAM due to the amount of data saved, so break out Jet Force Gemini if you want to upload flashram saves to it.  Incidentally, if no save type is found on the cartridge you may still be able to play the game without saving...
+  Saving messages requires 1 Note and 103 pages.
+  Travelling requires 1 Note and 18 pages.
+  +IMPORTANT+
+  Saves from earlier versions of the patches may not be recognised as data structures change.
+  Do not be surprised if you have to restart the game from scratch.
+
+Travelling:
+  Once Nook emancipates you from your indentured servitude, you can travel to a friend's town via the train station.
+  +IMPORTANT+
+  Be certain that you have a mempak with at least 1 note and 18 pages available!  There is a fatal crash bug that can be set off when you do not have the available room!  The bug appears to have been removed in the January 2009 release, but to be on the safe side always have a mempak present.
+  When you talk to the porter, you will board the train and leave town.  From here, you take the memory pak to another Animal Forest and place it in controller 1.
+  When you start the game, they will copy your character's data and you will enter the town on that cartridge, be able to talk to characters, shop, dig, deforest, and whatnot.  You can recieve a town map from the Lost and Found, but you can not send letters.  When you're done, talk to the porter again to save your game.
+  You can visit any number of different towns with this mempak, and the items and cash will be saved on the file.  When you are done travelling, use this mempak file when you load your own town on your own game.  It will copy the information back onto your flashram, and all should be well.  You are now free to dispose of the file if you wish.
+
+Famicom Emulation:
+  +IMPORTANT+
+  No known emulator graphics plugin as of this patch release will allow you to play the famicom.  You will need to reset the game if you attempt to do so.  Currently, it can only be used on console.
+  You can replace the existing games in the rom with your own.
+  All roms must have a 0x10 iNES header (it is amusing that Nintendo is using the iNES headers).  The maximum decompressed rom size is 0xA010.  That pretty much limits you to mapper 0, 1, and 2 games due to page sizes.  Support for mappers 0-2 is definate, but other types have not been tested.
+  What is more tricky is that games that use screen mirroring sporadically will crash.  Support for this was probably coincidental and never really tested.  Vertical mirroring seems less hazardous than horizontal mirroring.  For now, assume these games will not function correctly.
+  The additional FDS audio channel is emulated, but there is likely no support for the FDS itself.  Funny that, as it appears the FDS is a removed game feature.  No known audio issues.
+  Plug a controller into port two to play two player simultaneous games.  Controllers 3-4 are not read.
+  Saving and loading SRAM is not supported, but some games which utilize it may still function correctly if you play them without saving.
+  For the record, any crash while the emulator is running will not damage your save files, but you will set off Resetti.  Most errors thankfully will only cause an infinite loop, so you can exit the emulator normally and continue play.
+  The emulator itself seems to be derived from some other source that was far more complete than the emulator in the game.  It might have been Nintendo's own, if such things were available at WarioWorld.com.  They did, after all, write N64 emulators for the NES and S/C/GB for use on RandNet, and AF was initially designed as either a disk or combo game.
+
+Avoiding Resetti:
+  Resetti is +not+ set off by pressing the reset button or by clock time tests.
+  When you enter the town a flag is set in your save file, and the flag is only cleared when you save the game at the gyroid.  Failing to use the +Save and Quit+ feature is assumed to be a reset.
+  If you do want to deactivate the dreaded mole, the simplest way would be to simply set a [close] command at the start of each of his dialog lines.  This is easily removed and is a heck of a lot easier to implement than an ASM hack.
+
+Other Oddities:
+  If you've been using old save data, occationally features will change between patches and cause odd things to happen.  The best example would be the catchphrases.  These are saved to FLASHram, and funny enough the format has been changed no fewer than three times via patches.  If you are using a save predating the translation, they'll be in japanese.  If it predates the 7-character extension, the first four characters will be fine and the rest japanese.  Factor in the new control code types and you can get even more results.
+  Very often, savestates can be loaded from older patch versions into newer ones.  This has a couple odd consequences.  Any code that's always loaded will not be changed from when the savestate was taken.  Any code that is loaded during the game will change though as soon as it is reloaded.  In general most new code is backward-compatible but not forward-compatible, so you may get all sorts of odd results.
+
+^_^
+
+Note to Translators:
+  If you're using the AC script as reference, be mindful of the 7F commands used in the original script.
+	In general, color, size, sound, and other superficial commands do not matter.
+	However, make sure entries that use menus use the original menus and have the original number of entries; that entries ending in [open] or [close] use the correct one; or entries that utilize jumps still are directed at the correct targets.
+
+  If you're doing item names there are a few things you should know:
+  1) Please make a copy of good, happy names and a seperate list of 10-character wide names.
+	As things stand, +10char names are incredibly difficult to incorporate, so a seperate and (hopefully) temporary list will be very helpful.
+  2) The names of some 2xxx items appear in the 1xxx item list as well.  If you rename one, be certain to rename the other instances of the name.
+	17AC	start T-Shirts
+	1BA8	start Insects
+	1CA8	start Parasols (2204+)
+	As of the June 2010 release, 1xxx items are no longer listed in quadruplicate.
+
+@_@
+  
+  So, if you want to be able to play the game, you will be gravely disappointed.  If you want to work on editting the script so it can be played, have at it.  Normally I wouldn't release something quite this buggy, but it is here so you guys can look over the script and get it up and working.
+
+  Some commands are different between AF and AC, so be certain to edit those to match the AF originals.  Also, although bad commands themselves won't hang the game, the text around them might.  It is also important to note that some text is called directly by the game and not by other script entries, so it may call text that does not exist or is not translated.  
+
+  Personally I hope the final version won't just be a cookie-cutter AC script.  Have at it all ;*)
+
+-Zoinkity

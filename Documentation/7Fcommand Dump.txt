@@ -1,0 +1,2507 @@
+800A05D8	0x4EB58	7F00	close window
+LW	V1,028C (A0)	;V1=controller+28C: flags
+LW	T6,0000 (A1)	;T6=A1+0: text offset
+ADDIU	V0,R0,0002
+ANDI	T7,V1,0008
+BEQ	T7,R0,800A0604	;branch if pause flag unset
+SW	T6,02A0 (A0)	;T6->controller+2A0: text offset->cur.position
+ADDIU	AT,R0,FFF7
+AND	T8,V1,AT	;T8=V1&FFFFFFF7: unset 0x8 flag
+SW	T8,028C (A0)	;update flags
+JR	RA
+ADDIU	V0,R0,0001	;V0=1
+//800A0604:	set pause flag
+ORI	T9,V1,0008
+SW	T9,028C (A0)	;set pause flag
+JR	RA
+NOP	
+
+800A0614	0x4EB94	7F01	open window; same as close window!?
+LW	V1,028C (A0)
+LW	T6,0000 (A1)
+ADDIU	V0,R0,0002
+ANDI	T7,V1,0008
+BEQ	T7,R0,800A0640
+SW	T6,02A0 (A0)
+ADDIU	AT,R0,FFF7
+AND	T8,V1,AT
+SW	T8,028C (A0)
+JR	RA
+ADDIU	V0,R0,0001
+//800A0640:
+ORI	T9,V1,0008
+SW	T9,028C (A0)
+JR	RA
+NOP
+
+800A0650	0x4EBD0	7F02	clear dialog box
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A2,001C (SP)
+JAL	8009DC04	;returns V0=size of command
+LW	A0,0018 (SP)	;A0=p->text controller
+LW	A2,001C (SP)
+LW	A0,0018 (SP)	;A0=p->text controller
+LW	T6,0000 (A2)
+ADDU	T7,T6,V0
+SW	T7,0000 (A2)	;update text offset
+JAL	8009E344
+SW	T7,02A0 (A0)	;T7->controller+2A0: text offset->cur.position
+LW	A0,0018 (SP)	;A0=p->text controller
+JAL	8009E374	;set text controller A0 pause period to A1
+LUI	A1,4120		;A1=41200000
+ADDIU	V0,R0,0002	;V0=2
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A06AC	0x4EC2C	7F03	wait i 1/100secs
+ADDIU	SP,SP,FFE0
+SW	RA,0014 (SP)
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A2,0024 (SP)
+JAL	8009DE6C	;returns F0=wait value converted to float
+SW	A0,0020 (SP)	;SP+20=A0: p->text controller
+LW	A2,0024 (SP)
+LW	A0,0020 (SP)
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+JAL	8009DC04	;returns V0=size of command
+SWC1	F0,001C (SP)
+LW	A2,0024 (SP)
+LW	A0,0020 (SP)
+LWC1	F12,001C (SP)	;F12=wait value
+LW	T6,0000 (A2)
+ADDU	T7,T6,V0
+SW	T7,0000 (A2)	;update text offset
+LW	T9,02BC (A0)	;T9=controller+2BC: TRUE when quick advance used
+SW	T7,02A0 (A0)	;T7->controller+2A0: text offset->cur.position
+BEQL	T9,R0,800A0710	;branch if normal print speed
+MTC1	R0,F4
+BEQ	R0,R0,800A0760	;return if advanced already
+OR	V0,R0,R0
+//800A070C:
+MTC1	R0,F4
+OR	V0,R0,R0
+C.LT.S	F4,F12		;TRUE if 0<wait value
+NOP
+BC1F	800A0760	;return if done waiting
+NOP
+LW	T0,028C (A0)
+SWC1	F12,0294 (A0)
+LUI	AT,3F80
+ANDI	T1,T0,0100
+BEQ	T1,R0,800A0750
+NOP
+MTC1	AT,F12
+JAL	8009FA58
+NOP
+BEQ	R0,R0,800A0760
+ADDIU	V0,R0,0002
+//800A0750:
+JAL	8009FA58
+NOP
+BEQ	R0,R0,800A0760
+ADDIU	V0,R0,0002
+//800A0760:
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+800A0770	0x4ECF0	7F04	pause (blue arrow)
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	V1,028C (A0)	;V1=control switch
+ADDIU	AT,R0,FFF7
+ANDI	T6,V1,0008
+BEQ	T6,R0,800A07C8	;if not set, set it
+ORI	T1,V1,0008	;T1=pause bit set
+AND	T7,V1,AT		;T7=switch unset
+SW	T7,028C (A0)	;save switch
+//800A0798:	advance and quit
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A2,001C (SP)
+JAL	8009DC04	;returns V0=size of command
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+LW	A2,001C (SP)
+LW	A0,0018 (SP)	;A0=p->text controller
+LW	T8,0000 (A2)
+ADDU	T9,T8,V0
+SW	T9,0000 (A2)	;update text offset
+ADDIU	V0,R0,0001	;returns V0=1, which I'm not certain about
+BEQ	R0,R0,800A07D8
+SW	T9,02A0 (A0)	;save current position
+//800A07C8:	set switch without advancing (paused)
+SW	T1,028C (A0)	;save control switch
+LW	T2,0000 (A2)
+ADDIU	V0,R0,0002	;V0=2 (break text reading)
+SW	T2,02A0 (A0)	;T2->controller+2A0: text offset->cur.position
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A07E8	0x4ED68	7F05	font color
+ADDIU	SP,SP,FFE0
+SW	RA,001C (SP)
+SW	A1,0024 (SP)	;save p->offset in text
+LW	V0,01AC (A0)	;V0=controller+0x1AC - font# in use
+ADDIU	A2,A0,0182	;A2=controller+0x182 (color list)
+LW	T7,0024 (SP)
+BLTZ	V0,800A081C	;if not stated, assume value#1
+SLTI	AT,V0,0004	;true if 0-3
+BEQ	AT,R0,800A081C
+SLL	T6,V0,0x2	;value->offset
+ADDU	A2,A0,T6	;A2=controller+offset
+BEQ	R0,R0,800A081C
+ADDIU	A2,A2,0182	;A2=one of four color values saved: red component
+//800A081C:	
+LW	A1,0000 (T7)	;A1=offset in text
+ADDIU	T8,A2,0002	;T8=offset to blue component
+SW	T8,0010 (SP)
+SW	A0,0020 (SP)	;SP+20=A0: p->text controller
+JAL	8009DEE8	;copy color values to target
+ADDIU	A3,A2,0001	;A3=offset to green component
+LW	T9,0024 (SP)
+LW	A0,0020 (SP)
+JAL	8009DC04	;returns V0=size of command
+LW	A1,0000 (T9)
+LW	V1,0024 (SP)
+LW	T0,0000 (V1)
+ADDU	T1,T0,V0
+SW	T1,0000 (V1)	;update text offset
+LW	RA,001C (SP)
+OR	V0,R0,R0	;V0=0
+JR	RA
+ADDIU	SP,SP,0020
+
+800A0864	0x4EDE4	7F06	allow quick-advance
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A2,001C (SP)	;SP+1C=A2: p->text offset
+JAL	8009DC04	;returns V0=size of command
+LW	A0,0018 (SP)	;A0=p->text controller
+LW	A2,001C (SP)	;A2=p->text offset
+ADDIU	T8,R0,0001	;T8=1
+LW	T6,0000 (A2)	;T6=A2+0: text offset
+ADDU	T7,T6,V0	;T7=T6+V0: offset + command size
+SW	T7,0000 (A2)	;update text offset
+LW	T9,0018 (SP)	;T9=p->text controller
+OR	V0,R0,R0	;V0=0
+SW	T8,02C0 (T9)	;1->controller+0x2C0: allow quick-advance
+LW	RA,0014 (SP)
+JR	RA
+ADDIU	SP,SP,0018
+
+800A08B0	0x4EE30	7F07
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A2,001C (SP)	;SP+1C=A2: p->text offset
+JAL	8009DC04	;returns V0=size of command
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+LW	A2,001C (SP)	;A2=p->text offset
+LW	A0,0018 (SP)	;A0=p->text controller
+LW	T6,0000 (A2)	;T6=A2+0: text offset
+ADDU	T7,T6,V0	;T7=T6+V0: offset + command size
+SW	T7,0000 (A2)	;update text offset
+SW	R0,02BC (A0)	;0->controller+0x2BC: not quick-advancing
+SW	R0,02C0 (A0)	;0->controller+0x2C0: disable quick-advance
+LW	RA,0014 (SP)
+OR	V0,R0,R0	;V0=0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A08F8	0x4EE78	process 7F08-7F0C	animation types?
+ADDIU	SP,SP,FFD8
+SW	RA,0014 (SP)
+SW	A0,0028 (SP)	;SP+28=A0: p->text handler
+SW	A1,002C (SP)	;SP+2C=A1: p->text offset
+SW	A2,0030 (SP)	;bank value passed from command (0,4,5,6,9)
+LW	T6,002C (SP)	;T6=SP+2C: p->text offset
+LW	A0,0028 (SP)	;A0=p->text handler
+ADDIU	A2,SP,0024	;A2=target for xx value
+ADDIU	A3,SP,0022	;A3=target for animation value
+JAL	8009DF90	;determine if valid command and retrieve command values
+LW	A1,0000 (T6)	;A1=offset in text
+//800A0924:
+LW	A0,0030 (SP)	;A0=bank value passed from command
+LW	A1,0024 (SP)	;A1=slot value
+JAL	8007B44C	;save animation A2 to slot A1 of bank A0
+LHU	A2,0022 (SP)	;A2=animation value
+//800A0934:	advance past command
+LW	T7,002C (SP)	;T7=SP+2C: p->text offset
+LW	A0,0028 (SP)	;A0=p->text handler
+JAL	8009DC04	;returns V0=size of command
+LW	A1,0000 (T7)	;A1=text offset
+LW	T8,002C (SP)	;T8=SP+2C: p->text offset
+LW	T9,0000 (T8)	;T9=text offset
+ADDU	T0,T9,V0	;T0=T9+V0: new text offset
+SW	T0,0000 (T8)	;update text offset
+//800A0954:	return
+LW	RA,0014 (SP)
+OR	V0,R0,R0	;V0=0
+JR	RA
+ADDIU	SP,SP,0028
+
+	8007B44C	0x	save animation A2 to slot A1 of bank A0
+	SW	A2,0008 (SP)	;save animation value
+	ANDI	A2,A2,FFFF
+	BLTZ	A0,8007B494
+	SLTI	AT,A0,000A
+	BEQ	AT,R0,8007B494	;command value must be 0-9
+	NOP
+	BLTZ	A1,8007B494
+	SLTI	AT,A1,000A
+	BEQ	AT,R0,8007B494	;xx value must be 0-9
+	LUI	T6,8010
+	//8007B474:
+	LW	T6,4A70 (T6)	;T6=80104A70: [80139C40]
+	SLL	T7,A0,0x2
+	ADDU	T7,T7,A0
+	SLL	T7,T7,0x2	;T7=command value * 0x14
+	SLL	T9,A1,0x1	;T9=xx value->offset
+	ADDU	T8,T6,T7	;T8=[80139C40]+bank offset
+	ADDU	T0,T8,T9	;T0=base + bank offset + slot offset
+	SH	A2,0010 (T0)	;save animation value to slot
+	//8007B494:
+	JR	RA
+	NOP
+
+800A0964	0x4EEE4	7F08
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A08F8
+OR	A2,R0,R0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A0984	0x4EF04	7F09
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A08F8
+ADDIU	A2,R0,0004
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A09A4	0x4EF24	7F0A
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A08F8
+ADDIU	A2,R0,0005
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A09C4	0x4EF44	7F0B
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A08F8
+ADDIU	A2,R0,0006
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A09E4	0x4EF64	7F0C
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A08F8
+ADDIU	A2,R0,0009
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A0A04	0x4EF84	7F0D
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A0,R0	;A3=A0: p->text handler
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A3,0018 (SP)	;SP+18=A3: p->text handler
+SW	A2,001C (SP)	;SP+1C=A2: p->text offset
+JAL	8009DC04	;returns V0=size of command
+OR	A0,A3,R0	;A0=A3: p->text handler
+LW	A2,001C (SP)	;A2=p->text offset
+LW	A3,0018 (SP)	;A3=p->text handler
+ADDIU	A1,R0,0001	;A1=1
+LW	T6,0000 (A2)	;T6=A2+0: text offset
+ADDIU	A0,A3,01B0	;A0=handler+1B0: 
+ADDU	T7,T6,V0	;T7=T6+V0: offset+command
+SW	T7,0000 (A2)	;update text offset
+JAL	80065158	;SW A1,00A0 (A0)
+SW	T7,02A0 (A3)	;text offset->handler+2A0: cur.position
+ADDIU	V0,R0,0002	;V0=2
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A0A60	0x4EFE0	used by 7F0E-7F12
+ADDIU	SP,SP,FFD8
+SW	S0,0018 (SP)
+OR	S0,A1,R0	;S0=A1: p->text offset
+SW	RA,001C (SP)
+SW	A0,0028 (SP)	;SP+28=A0: p->text controller
+SW	A2,0030 (SP)	;unique value passed by each command
+LW	T6,0028 (SP)
+LW	T7,000C (T6)
+ADDIU	T8,T7,0010
+JAL	80065040	;returns V0=801425C0, base of selectmenu data
+SW	T8,0020 (SP)
+JAL	800654FC	;V0=A0+80: selected menu option
+OR	A0,V0,R0	;A0=V0: 801425C0
+//800A0A94:
+LW	A1,0000 (S0)
+LW	T9,0020 (SP)
+LW	A2,0030 (SP)	;A2=00FF-0003
+ADDIU	AT,R0,00FF
+ADDU	V1,A1,T9
+LBU	A0,0002 (V1)
+LBU	T1,0003 (V1)
+SLL	A0,A0,0x8
+OR	A0,T1,A0	;A0=command's text#
+BEQ	A2,AT,800A0AC4	
+ANDI	A0,A0,FFFF	;A0=just the number, no extra goodies
+BNE	A2,V0,800A0AEC
+//800A0AC4:
+ORI	AT,R0,FFFF	;AT=-1
+BEQ	A0,AT,800A0AE0
+OR	A1,A0,R0	;A1=text#
+JAL	8009DBA4	;set text ID A1 as next jump for text controller A0
+LW	A0,0028 (SP)	;A0=SP+28: p->text controller
+BEQ	R0,R0,800A0AEC
+LW	A1,0000 (S0)
+//800A0AE0:	invalid text #
+JAL	8009E9A4	;1->A0+2C8
+LW	A0,0028 (SP)	;A0=SP+28: p->text controller
+LW	A1,0000 (S0)
+//800A0AEC:	set new position
+JAL	8009DC04	;returns V0=size of command
+LW	A0,0028 (SP)	;A0=SP+28: p->text controller
+LW	T2,0000 (S0)
+ADDU	T3,T2,V0
+SW	T3,0000 (S0)	;update text offset
+//800A0B00:	return
+LW	RA,001C (SP)
+OR	V0,R0,R0	;V0=0
+LW	S0,0018 (SP)
+JR	RA
+ADDIU	SP,SP,0028
+
+800A0B14	0x4F094	7F0E
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A0A60
+ADDIU	A2,R0,00FF
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A0B34	0x4F0B4	7F0F
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A0A60
+OR	A2,R0,R0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A0B54	0x4F0D4	7F10
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A0A60
+ADDIU	A2,R0,0001
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A0B74	0x4F0F4	7F11
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A0A60
+ADDIU	A2,R0,0002
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A0B94	0x4F114	7F12
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A0A60
+ADDIU	A2,R0,0003
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A0BB4	0x4F134	process response command types 7F13-7F15
+ADDIU	SP,SP,FFB8
+SW	S1,0018 (SP)
+SW	S0,0014 (SP)
+OR	S0,A1,R0	;S0=A1: p->text offset
+OR	S1,A2,R0
+SW	RA,001C (SP)
+SW	A0,0048 (SP)	;SP+48=A0: p->text controller
+LW	T6,0048 (SP)
+SLL	A1,S1,0x10
+SRA	A1,A1,0x10
+LW	A3,000C (T6)
+OR	A0,R0,R0
+ADDIU	A3,A3,0010
+JAL	80099FE8
+SW	A3,003C (SP)
+LW	A3,003C (SP)
+OR	T1,V0,R0
+BLEZ	S1,800A0D3C
+OR	A1,R0,R0
+ANDI	T0,S1,0003
+BEQ	T0,R0,800A0C5C
+OR	A2,T0,R0
+SLL	A0,R0,0x1
+ADDIU	T7,SP,0040
+ADDU	V1,A0,T7
+LW	T8,0000 (S0)
+ADDIU	A1,A1,0001
+ADDIU	V1,V1,0002
+ADDU	T9,T8,A0
+ADDU	T2,T9,A3
+LBU	T3,0002 (T2)
+SLL	T2,T3,0x8
+SH	T2,FFFE (V1)
+LW	T5,0000 (S0)
+ADDU	T6,T5,A0
+ADDU	T7,T6,A3
+LBU	T9,0003 (T7)
+ADDIU	A0,A0,0002
+OR	T3,T9,T2
+BNE	A2,A1,800A0C18
+SH	T3,FFFE (V1)
+BEQ	A1,S1,800A0D3C
+ADDIU	T4,SP,0040
+SLL	A0,A1,0x1
+SLL	T5,S1,0x1
+ADDU	A2,T5,T4
+ADDU	V1,A0,T4
+LW	T6,0000 (S0)
+ADDIU	V1,V1,0008
+ADDU	T7,T6,A0
+ADDU	T8,T7,A3
+LBU	T9,0002 (T8)
+SLL	T8,T9,0x8
+SH	T8,FFF8 (V1)
+LW	T3,0000 (S0)
+ADDU	T5,T3,A0
+ADDU	T4,T5,A3
+LBU	T7,0003 (T4)
+OR	T9,T7,T8
+SH	T9,FFF8 (V1)
+LW	T2,0000 (S0)
+ADDU	T3,T2,A0
+ADDU	T5,T3,A3
+LBU	T4,0004 (T5)
+SLL	T5,T4,0x8
+SH	T5,FFFA (V1)
+LW	T7,0000 (S0)
+ADDU	T8,T7,A0
+ADDU	T9,T8,A3
+LBU	T3,0005 (T9)
+OR	T4,T3,T5
+SH	T4,FFFA (V1)
+LW	T6,0000 (S0)
+ADDU	T7,T6,A0
+ADDU	T8,T7,A3
+LBU	T9,0006 (T8)
+SLL	T8,T9,0x8
+SH	T8,FFFC (V1)
+LW	T3,0000 (S0)
+ADDU	T5,T3,A0
+ADDU	T4,T5,A3
+LBU	T7,0007 (T4)
+OR	T9,T7,T8
+SH	T9,FFFC (V1)
+LW	T2,0000 (S0)
+ADDU	T3,T2,A0
+ADDU	T5,T3,A3
+LBU	T4,0008 (T5)
+SLL	T5,T4,0x8
+SH	T5,FFFE (V1)
+LW	T7,0000 (S0)
+ADDU	T8,T7,A0
+ADDU	T9,T8,A3
+LBU	T3,0009 (T9)
+ADDIU	A0,A0,0008
+OR	T4,T3,T5
+BNE	V1,A2,800A0C70
+SH	T4,FFFE (V1)
+BLTZ	V0,800A0D50
+LW	A0,0048 (SP)
+SLT	AT,V0,S1
+BNEL	AT,R0,800A0D58
+SLL	T6,T1,0x1
+OR	T1,R0,R0
+SLL	T6,T1,0x1
+ADDU	A1,SP,T6
+JAL	8009DBA4
+LHU	A1,0040 (A1)
+LW	A0,0048 (SP)
+JAL	8009DC04	;returns V0=size of command
+LW	A1,0000 (S0)
+LW	T7,0000 (S0)
+ADDU	T8,T7,V0
+SW	T8,0000 (S0)
+OR	V0,R0,R0
+LW	RA,001C (SP)
+LW	S0,0014 (SP)
+LW	S1,0018 (SP)
+JR	RA
+ADDIU	SP,SP,0048
+
+800A0D94	0x4F314	7F13	rand2
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A0BB4
+ADDIU	A2,R0,0002
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A0DB4	0x4F334	7F14	rand3
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A0BB4
+ADDIU	A2,R0,0003
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A0DD4	0x4F354	7F15	rand4
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A0BB4
+ADDIU	A2,R0,0004
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A0DF4	0x4F374	process menu types 7F16-7F18
+ADDIU	SP,SP,FF78
+SW	S5,0040 (SP)
+SW	S4,003C (SP)
+OR	S4,A2,R0	;S4=A2: #options
+OR	S5,A1,R0	;S5=A1: p->text offset
+SW	RA,0044 (SP)
+SW	S3,0038 (SP)
+SW	S2,0034 (SP)
+SW	S1,0030 (SP)
+SW	S0,002C (SP)
+SW	A0,0088 (SP)	;SP+88=A0: p->text controller
+LW	T6,0088 (SP)	;T6=SP+88: p->text controller
+LW	A3,000C (T6)	;A3=controller+C: p->msg_txt bank
+ADDIU	A3,A3,0010	;A3+=10: p->msg_txt
+LW	T7,0000 (S5)	;T7=S5+0: text offset
+SLTI	AT,S4,0003
+ADDU	V1,T7,A3	;V1=T7+A3: p->cur.msg_txt pos
+LBU	V0,0002 (V1)
+LBU	T9,0003 (V1)
+SLL	V0,V0,0x8
+OR	V0,T9,V0	;V0=index.1 ID#
+ANDI	V0,V0,FFFF	;V0->short
+SW	V0,0074 (SP)	;SP+74=V0: index ID#
+LW	T0,0000 (S5)	;T0=S5+0: text offset
+ADDU	V1,T0,A3	;V1=T0+A3: p->cur.msg_txt pos
+LBU	V0,0004 (V1)
+LBU	T2,0005 (V1)
+SLL	V0,V0,0x8
+OR	V0,T2,V0	;V0=index.2 ID#
+ANDI	V0,V0,FFFF	;V0->short
+BNEZ	AT,800A0E94	;branch if only two options
+SW	V0,0078 (SP)	;SP+78=V0: index ID#
+LW	T3,0000 (S5)	;T3=S5+0: text offset
+ADDU	V1,T3,A3	;V1=T3+A3: p->cur.msg_txt pos
+LBU	V0,0006 (V1)
+LBU	T5,0007 (V1)
+SLL	V0,V0,0x8
+OR	V0,T5,V0	;V0=index.3 ID#
+ANDI	V0,V0,FFFF	;V0->short
+SW	V0,007C (SP)	;SP+7C=V0: index ID#
+SLTI	AT,S4,0004
+BNEL	AT,R0,800A0EC4	;branch if only three options
+SLTI	AT,S4,0002
+LW	T6,0000 (S5)	;T6=S5+0: text offset
+ADDU	V1,T6,A3	;V1=T6+A3: p->cur.msg_txt pos
+LBU	V0,0008 (V1)
+LBU	T8,0009 (V1)
+SLL	V0,V0,0x8
+OR	V0,T8,V0	;V0=index.4 ID#
+ANDI	V0,V0,FFFF	;V0->short
+SW	V0,0080 (SP)	;SP+80=V0: index ID#
+SLTI	AT,S4,0002
+BNEZ	AT,800A0F64
+SLTI	AT,S4,0005
+BEQ	AT,R0,800A0F64
+LW	T9,0088 (SP)	;T9=SP+88: p->text controller
+BLEZ	S4,800A0F18
+LW	S2,0020 (T9)	;S2=controller+20: 
+LUI	S1,8014
+ADDIU	S0,SP,0074	;S0=SP+74: p->index ID#
+SLL	T1,S4,0x2
+ADDU	S3,T1,S0
+ADDIU	S1,S1,2700	;S1=80142700: 
+JAL	80065040	;returns V0=801425C0, base of selectmenu data
+NOP
+OR	A0,V0,R0	;A0=V0: p->base
+OR	A1,S1,R0	;A1=S1: p->???
+LW	A2,0000 (S0)	;A2=S0+0: index ID#
+JAL	80065D90	;retrieve select menu option text f/ select.txt
+OR	A3,S2,R0	;A3=S2: 
+ADDIU	S0,S0,0004	;S0+=4	next index ID offset
+BNE	S0,S3,800A0EF0	;loop for each entry
+ADDU	S1,A2,S1
+JAL	80065040	;returns V0=801425C0, base of selectmenu data
+NOP
+OR	T3,R0,R0	;T3=0	default index.3
+OR	T4,R0,R0	;T4=0	default index.4
+LUI	A1,8014
+ADDIU	A1,A1,25C0	;A1=801425C0: base of selectmenu data
+LW	A2,0074 (SP)	;A2=SP+74: index.1
+LW	T2,0078 (SP)
+SLTI	AT,S4,0003
+BEQL	AT,R0,800A0F44	;branch if 2 entries
+LW	T3,007C (SP)
+SLTI	AT,S4,0004
+BEQL	AT,R0,800A0F50	;branch if 3 entries
+LW	T4,0080 (SP)
+SW	S4,007C (A1)	;S4->selectmenu+7C: #entries
+SW	T4,0068 (A1)	;T4->selectmenu+68: index.4
+SW	T3,0064 (A1)	;T3->selectmenu+64: index.3
+SW	T2,0060 (A1)	;T2->selectmenu+60: index.2
+SW	A2,005C (A1)	;A2->selectmenu+5C: index.1
+LW	A0,0088 (SP)	;A0=SP+88: p->text controller
+JAL	8009DC04	;returns V0=size of command
+LW	A1,0000 (S5)	;A1=S5+0: text offset
+LW	T5,0000 (S5)	;T5=S5+0: text offset
+ADDU	T6,T5,V0	;T6=offet+size
+SW	T6,0000 (S5)	;update text offset
+OR	V0,R0,R0	;V0=0	normal return
+LW	RA,0044 (SP)
+LW	S0,002C (SP)
+LW	S1,0030 (SP)
+LW	S2,0034 (SP)
+LW	S3,0038 (SP)
+LW	S4,003C (SP)
+LW	S5,0040 (SP)
+JR	RA
+ADDIU	SP,SP,0088
+
+800A0FA4	0x4F524	this area now accounted for
+
+800A0FCC	0x4F54C	7F16	menu2
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A0DF4
+ADDIU	A2,R0,0002
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A0FEC	0x4F56C	7F17	menu3
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A0DF4
+ADDIU	A2,R0,0003
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A100C	0x4F58C	7F18	menu4
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A0DF4
+ADDIU	A2,R0,0004
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A102C	0x4F5AC	7F19
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A2,001C (SP)	;SP+1C=A2: p->text offset
+JAL	8009DC04	;get command size
+LW	A0,0018 (SP)	;A0=p->text controller
+LW	A2,001C (SP)	;A2=p->text offset
+LW	T6,0000 (A2)	;T6=A2+0: text offset
+ADDU	T7,T6,V0
+SW	T7,0000 (A2)	;update text position
+JAL	8009E9C0
+LW	A0,0018 (SP)	;A0=p->text controller
+OR	V0,R0,R0	;V0=0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1078	0x4F5F8	7F1A	insert player's name
+ADDIU	SP,SP,FFD8
+SW	RA,0014 (SP)
+SW	A1,002C (SP)	;SP+2C=A1: p->text offset
+OR	A3,A0,R0	;A3=A0: p->text controller
+LW	V1,000C (A3)	;V1=controller+C: p->msg_txt bank
+LW	A1,002C (SP)	;A1=p->text offset
+ADDIU	A0,V1,0010	;A0=V1+10: p->msg_txt
+LW	A2,0008 (V1)
+SW	A0,001C (SP)	;SP+1C=A0: p->msg_txt
+JAL	8009EBB0
+SW	V1,0024 (SP)	;SP+24=V1: p->msg_txt bank
+LW	V1,0024 (SP)	;V1=p->msg_txt bank
+LW	A0,001C (SP)	;A0=p->msg_txt
+OR	A2,V0,R0
+SW	V0,0008 (V1)
+LW	T6,002C (SP)	;T6=p->text offset
+JAL	8009EC88
+LW	A1,0000 (T6)
+LW	V1,0024 (SP)
+SW	V0,0008 (V1)
+LW	RA,0014 (SP)
+OR	V0,R0,R0	;V0=0
+JR	RA
+ADDIU	SP,SP,0028
+
+800A10D8	0x4F658	7F1B	insert speaker's name
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+SW	A1,001C (SP)	;SP+1C=A1: p->text offset
+LW	T6,0018 (SP)
+LW	T7,001C (SP)
+LW	V0,000C (T6)	;V0=controller+C: p->msg_txt bank
+LW	A0,0020 (T6)	;A0=controller+20: 
+LW	A2,0000 (T7)	;A2=text offset
+ADDIU	A1,V0,0010	;A1=bank+10: p->msg_txt
+JAL	8009ED14
+LW	A3,0008 (V0)	;A3=bank+8: size of bank
+LW	T8,0018 (SP)	;T8=p->text controller
+LW	T9,000C (T8)	;T9=controller+C: p->msg_txt bank
+SW	V0,0008 (T9)	;V0->bank+8: update size
+LW	RA,0014 (SP)
+OR	V0,R0,R0	;V0=0
+JR	RA
+ADDIU	SP,SP,0018
+
+	8009ED14	
+		accepts: A0=p->???, A1=p->msg_txt, A2=offset, A3=size of bank
+	ADDIU	SP,SP,FFC8
+	SW	RA,001C (SP)
+	SW	A0,0038 (SP)	;SP+38=A0: 
+	SW	A1,003C (SP)	;SP+3C=A1: p->msg_txt
+	SW	A2,0040 (SP)	;SP+40=A2: offset in text
+	SW	A3,0044 (SP)	;SP+44=A3: size of bank
+	LW	A0,003C (SP)	;A0=p->msg_txt
+	JAL	800903A8	;V0=size of command at string A0, offset A1
+	LW	A1,0040 (SP)	;A1=offset
+	//8009ED38:
+	LW	A1,0038 (SP)	;A1=SP+38: p->speaker's data?  not certain
+	SW	V0,0034 (SP)	;SP+34=V0: size of command
+	BEQL	A1,R0,8009ED68
+	SW	R0,0028 (SP)
+	JAL	800ACDF8	;A0=p->current actor's name
+	ADDIU	A0,SP,002C	;A0=SP+2C: buffer for name
+	ADDIU	A0,SP,002C	;A0=SP+2C: p->current actor's name
+	JAL	8009E8D0	;V0=strlen of string A0 size A1, right-aligned no whitespace
+	ADDIU	A1,R0,0006	;A1=strlen 6
+	BEQ	R0,R0,8009ED68
+	SW	V0,0028 (SP)
+	//8009ED64:
+	SW	R0,0028 (SP)
+	//8009ED68:
+	LW	V0,0040 (SP)
+	LW	T6,0028 (SP)
+	LW	T7,0034 (SP)
+	LW	A0,003C (SP)
+	LW	A3,0044 (SP)
+	SW	R0,0010 (SP)
+	ADDU	A1,V0,T6
+	JAL	8009EA2C	;extend text bank for entry; V0=new msg_txt size
+	ADDU	A2,V0,T7
+	//8009ED8C:
+	LW	T8,003C (SP)
+	LW	T9,0040 (SP)
+	SW	V0,0024 (SP)
+	ADDIU	A1,SP,002C
+	LW	A2,0028 (SP)
+	JAL	8009EB44	;formatted copy A2 bytes from string A1 to A0
+	ADDU	A0,T8,T9
+	//8009EDA8:
+	LW	V0,0024 (SP)
+	LW	RA,001C (SP)
+	ADDIU	SP,SP,0038
+	JR	RA
+	NOP
+
+800A1124	0x4F6A4	7F1C	inserts animal's signature sound
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+SW	A1,001C (SP)	;SP+1C=A1: p->text offset
+LW	T6,0018 (SP)
+LW	T7,001C (SP)	;T7=p->curpos
+LW	V0,000C (T6)	;V0=p->msg_text bank
+LW	A0,0020 (T6)	;A0=[80276410]
+LW	A2,0000 (T7)	;A2=curpos
+ADDIU	A1,V0,0010	;A1=p->msg_text
+JAL	8009EDBC	;interject catchphrase
+LW	A3,0008 (V0)	;A3=size of bank
+//800A1154:	update msg_txt size
+LW	T8,0018 (SP)	;T8=p->text controller
+LW	T9,000C (T8)	;T9=p->msg_txt bank
+SW	V0,0008 (T9)	;V0->bank+8: update size
+//800A1160:	return
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+	8009EDBC	interject catchphrase
+		accepts: A0=p->???, A1=p->msg_txt, A2=cur.position, A3=size of msg_txt
+	ADDIU	SP,SP,FFD0
+	SW	RA,001C (SP)
+	SW	A0,0030 (SP)	;SP+30=A0: p->???
+	SW	A1,0034 (SP)	;SP+34=A1: p->msg_txt
+	SW	A2,0038 (SP)	;SP+38=A2: cur.pos
+	SW	A3,003C (SP)	;SP+3C=A3: size
+	LW	A0,0034 (SP)	;A0=p->msg_txt
+	JAL	800903A8	;ret V0=command size
+	LW	A1,0038 (SP)	;A1=cur.pos
+	//8009EDE0:
+	LW	A0,0030 (SP)	;A0=p->region following the last loaded rom data chunk
+	SW	V0,002C (SP)	;save command size
+	BEQL	A0,R0,8009EE08
+	SW	R0,0028 (SP)	;SP+28= NULL pointer
+	JAL	800A9E7C	;pulls ?name? from saveslot?
+	NOP
+	SW	V0,0028 (SP)	;save p->text
+	BEQ	R0,R0,8009EE08
+	LW	A0,0030 (SP)
+	-SW	R0,0028 (SP)
+	//8009EE08:
+	BEQ	A0,R0,8009EE20	;return if NULL pointer
+	ADDIU	A1,R0,0004	;max strlen=4	this limits sound words to 4 chars!
+	JAL	8009E8D0	;right-align text
+	LW	A0,0028 (SP)	;A0=p->text
+	BEQ	R0,R0,8009EE24
+	SW	V0,0024 (SP)	;SP+24=p->string
+	//8009EE20:
+	SW	R0,0024 (SP)
+	LW	V0,0038 (SP)
+	LW	T6,0024 (SP)
+	LW	T7,002C (SP)
+	LW	A0,0034 (SP)
+	LW	A3,003C (SP)
+	SW	R0,0010 (SP)
+	ADDU	A1,V0,T6
+	JAL	8009EA2C	;extend text bank for insertion
+	ADDU	A2,V0,T7
+	//8009EE48:
+	LW	T8,0034 (SP)
+	LW	T9,0038 (SP)
+	SW	V0,0020 (SP)
+	LW	A1,0028 (SP)
+	LW	A2,0024 (SP)
+	JAL	8009EB44	;copy source to destination
+	ADDU	A0,T8,T9
+	//8009EE64:	wrap things up
+	LW	V0,0020 (SP)
+	LW	RA,001C (SP)
+	ADDIU	SP,SP,0030
+	JR	RA
+	NOP
+	
+	800A9E7C:
+		accepts: A0=p->???
+	LBU	T6,0002 (A0)	;T6=index	A0=[80276410]
+	SLTU	V0,R0,A0	;V0=1 always, since A0=pointer, right?
+	OR	A1,R0,R0	;A1=0
+	XORI	T7,T6,0003	;T7=index w/ last two bits cleared...
+	SLTIU	T7,T7,0001	;T7=1 if index was 3
+	AND	T8,V0,T7	;T8=1 if index was 3 and a pointer was used
+	BEQ	T8,R0,800A9EA4	
+	LUI	V1,8011
+	BEQ	R0,R0,800A9EA4
+	LW	A1,0174 (A0)	;A1=[80276584]: [801312E0]
+	//800A9EA4:
+	BEQ	V0,R0,800A9EBC
+	ADDIU	V1,V1,B818	;V1=8010B818: 
+	BEQ	A1,R0,800A9EBC
+	NOP
+	BEQ	R0,R0,800A9EBC
+	ADDIU	V1,A1,04E5	;V1=04E5+[801312E0]
+	//800A9EBC:
+	OR	V0,V1,R0	;return V0=?
+	JR	RA
+	NOP
+	
+
+800A1170	0x4F6F0	7F1D	year
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A3,A1,R0
+LW	T6,0018 (SP)
+LW	A1,0000 (A3)
+LW	V0,000C (T6)
+ADDIU	A0,V0,0010
+JAL	8009EE78
+LW	A2,0008 (V0)
+LW	T7,0018 (SP)
+LW	T8,000C (T7)
+SW	V0,0008 (T8)
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A11B4	0x4F734	7F1E	month
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A3,A1,R0
+LW	T6,0018 (SP)
+LW	A1,0000 (A3)
+LW	V0,000C (T6)
+ADDIU	A0,V0,0010
+JAL	8009EF00
+LW	A2,0008 (V0)
+LW	T7,0018 (SP)
+LW	T8,000C (T7)
+SW	V0,0008 (T8)
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A11F8	0x4F778	7F1F	day of week
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A3,A1,R0
+LW	T6,0018 (SP)
+LW	A1,0000 (A3)
+LW	V0,000C (T6)
+ADDIU	A0,V0,0010
+JAL	8009EF88
+LW	A2,0008 (V0)
+LW	T7,0018 (SP)
+LW	T8,000C (T7)
+SW	V0,0008 (T8)
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A123C	0x4F7BC	7F20	day month
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A3,A1,R0
+LW	T6,0018 (SP)
+LW	A1,0000 (A3)
+LW	V0,000C (T6)
+ADDIU	A0,V0,0010
+JAL	8009F010
+LW	A2,0008 (V0)
+LW	T7,0018 (SP)
+LW	T8,000C (T7)
+SW	V0,0008 (T8)
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A1280	0x4F800	7F21	hours
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A3,A1,R0
+LW	T6,0018 (SP)
+LW	A1,0000 (A3)
+LW	V0,000C (T6)
+ADDIU	A0,V0,0010
+JAL	8009F098
+LW	A2,0008 (V0)
+LW	T7,0018 (SP)
+LW	T8,000C (T7)
+SW	V0,0008 (T8)
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A12C4	0x4F844	7F22	minutes
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A3,A1,R0
+LW	T6,0018 (SP)
+LW	A1,0000 (A3)
+LW	V0,000C (T6)
+ADDIU	A0,V0,0010
+JAL	8009F120
+LW	A2,0008 (V0)
+LW	T7,0018 (SP)
+LW	T8,000C (T7)
+SW	V0,0008 (T8)
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A1308	0x4F888	7F23	seconds
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A3,A1,R0
+LW	T6,0018 (SP)
+LW	A1,0000 (A3)
+LW	V0,000C (T6)
+ADDIU	A0,V0,0010
+JAL	8009F1A8
+LW	A2,0008 (V0)
+LW	T7,0018 (SP)
+LW	T8,000C (T7)
+SW	V0,0008 (T8)
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A134C	0x4F8CC	used to insert string from table
+	used by: 7F24,7F27,7F28,7F2A,7F2B,7F2C,7F2D,7F36,7F37,7F38,7F39,7F3A,7F3B,7F3C,7F3D,7F3E,7F3F
+ADDIU	SP,SP,FFE0
+SW	RA,001C (SP)
+SW	A2,0028 (SP)	;save slot#
+OR	A3,A1,R0	;A3=curpos in msg_txt
+LW	V0,000C (A0)	;V0=msg_txt bank[80141FF0]
+LW	A1,0028 (SP)	;A1=slot #
+LW	V1,0008 (V0)	;V1=sizeof msg_txt
+SW	A0,0020 (SP)	;save text controller
+ADDIU	A2,V0,0010	;A2=p->msg_txt
+JAL	8009F230	;inserts string[10] from bank of 20 to destination
+SW	V1,0010 (SP)	;save sizeof msg_txt
+LW	A0,0020 (SP)	;A0=text controller
+LW	T6,000C (A0)	;T6=msg_txt bank[80141FF0]
+SW	V0,0008 (T6)	;save new sizeof msg_txt
+LW	RA,001C (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0020
+
+	8009F230:	inserts string[10] from bank of 20 to destination
+		accepts: A0=p->text controller, A1=slot#, A2=p->msg_txt, A3=curpos in msg_txt, SP+10=sizeof msg_txt
+	ADDIU	SP,SP,FFC8
+	SW	RA,001C (SP)
+	SW	A0,0038 (SP)	;save text controller
+	SW	A1,003C (SP)	;A1=string# to recall, passed by calling command 0-13
+	SW	A2,0040 (SP)	;save p->msg_txt
+	SW	A3,0044 (SP)	;save curpos in msg_txt
+	LW	T6,003C (SP)	;T6=slot#
+	BLTZ	T6,8009F25C	;RESET value if < 0...
+	SLTI	AT,T6,0014
+	BNEL	AT,R0,8009F264	;...or > 13
+	LW	A0,0040 (SP)	;A0=p->msg_txt
+	//8009F25C:
+	SW	R0,003C (SP)
+	LW	A0,0040 (SP)
+	//8009F264:
+	JAL	800903A8	;get command size
+	LW	A1,0044 (SP)	;A1=SP+44: curpos in msg_txt
+	LW	T8,003C (SP)
+	LW	T7,0038 (SP)	;T7=80142410
+	SW	V0,0034 (SP)	;SP+34=V0: command size
+	SLL	T9,T8,0x2
+	ADDU	T9,T9,T8
+	SLL	T9,T9,0x1	;T9=T8*0xA
+	ADDU	A0,T7,T9
+	ADDIU	A0,A0,0038	;80142448 + offset
+	SW	A0,0024 (SP)
+	JAL	8009E8D0	;RIGHT-ALIGN TEXT
+	ADDIU	A1,R0,000A
+	//8009F298:	offset existing text in msg_txt
+	LW	V1,0044 (SP)	;V1=SP+44: curpos in msg_txt
+	LW	T0,0034 (SP)	;T0=SP+34: command size
+	SW	V0,002C (SP)	;save true strlen
+	LW	A0,0040 (SP)
+	LW	A3,0048 (SP)
+	SW	R0,0010 (SP)
+	ADDU	A1,V1,V0	;A1=V1+V0: msg_txt curpos+strlen
+	JAL	8009EA2C	;extend text bank for entry
+	ADDU	A2,V1,T0	;A2=V1+T0: msg_txt curpos+command size: 
+	//8009F2BC:	copy string to msg_txt
+	LW	T1,0040 (SP)	;T1=SP+44: curpos in msg_txt
+	LW	T2,0044 (SP)
+	SW	V0,0028 (SP)
+	LW	A1,0024 (SP)	;A1=p->source
+	LW	A2,002C (SP)	;A2=strlen
+	JAL	8009EB44	;copy string
+	ADDU	A0,T1,T2	;A0=p->target
+	//8009F2D8:	return
+	LW	V0,0028 (SP)
+	LW	RA,001C (SP)
+	ADDIU	SP,SP,0038
+	JR	RA
+	NOP
+
+
+800A1394	0x4F914	display string in slot A2 in colour A3 at A0+A1
+	accepts: A0=p->text controller, A1=p->cur.pos, A2=slot#, A3=colour ID
+ADDIU	SP,SP,FFD8
+SW	RA,001C (SP)
+SW	A0,0028 (SP)	;A0=80142410: text controller
+SW	A1,002C (SP)	;A1=[801478F8]: p->curpos in msg_txt
+SW	A2,0030 (SP)	;SP+30=A2: save slot # of preloaded text
+SW	A3,0034 (SP)	;SP+34=A3: colour
+LW	T6,0034 (SP)	;T6=colour
+LW	T8,0030 (SP)	;T8=slot
+LW	T7,0028 (SP)	;T7=text controller
+BEQ	T6,R0,800A13F4	;if colour==0, then don't alter colour
+SLL	T9,T8,0x2
+LW	V1,000C (T7)	;V1=p->msg_txt bank
+ADDU	T9,T9,T8
+SLL	T9,T9,0x1	;T9=slot? * 0xA	each string[10] is preloaded to bank by ASM
+ADDU	A3,T7,T9	;A3=text controller + offset
+LW	A2,0008 (V1)	;sizeof msg_txt
+SW	T6,0010 (SP)	;SP+10=colour
+ADDIU	A3,A3,0038	;base for texty pre-loaded stuff is controller + 38 (80142448)
+LW	A1,002C (SP)	;A1=p->curpos
+SW	V1,0024 (SP)	;SP+24=V1: p->msg_txt bank
+JAL	8009F2EC	;insert 7F50 colour command of colour #SP+10 to colourize text A3 at A0+A1
+ADDIU	A0,V1,0010	;A0=p->msg_txt
+LW	V1,0024 (SP)	;V1=p->msg_txt bank
+SW	V0,0008 (V1)	;V0->V1+8: update size of bank
+//800A13F4:	replace the command with the string
+LW	T0,002C (SP)	;T0=p->curpos
+LW	A0,0028 (SP)	;A0=p->text controller
+LW	A2,0030 (SP)	;A2=slot#
+JAL	800A134C	;copy string from slot A2 to A0+A1
+LW	A1,0000 (T0)	;A1=curpos
+//800A1408:	return
+OR	V0,R0,R0	;V0=0
+LW	RA,001C (SP)
+ADDIU	SP,SP,0028
+JR	RA
+NOP
+
+	8009F2EC	insert 7F50 colour command of colour #SP+10 to colourize text A3 at A0+A1
+		accepts: A0=p->target, A1=p->cur.position, A2=max size. A3=p->text, SP+10=colour#
+	ADDIU	SP,SP,FFD0
+	SW	RA,001C (SP)
+	SW	A0,0030 (SP)	;SP+30=A0: p->target
+	SW	A1,0034 (SP)	;SP+34=A1: p->cur.pos
+	SW	A2,0038 (SP)	;A2=SP+38: max.size
+	OR	A0,A3,R0	;A0=A3: p->text
+	JAL	8009E8D0	;V0=strlen, right-aligned no whitespace
+	ADDIU	A1,R0,000A	;A1=strlen 10
+	//8009F30C:	create and insert colour command
+	LW	T7,0040 (SP)	;T7=[SP+10]: colour#
+	LW	T6,0034 (SP)	;T6=p->cur.pos
+	LUI	T9,8010
+	SLL	T8,T7,0x2
+	LW	A2,0000 (T6)	;A2=cur.pos
+	ADDIU	T9,T9,7B78	;T9=80107B78
+	SUBU	T8,T8,T7	;T8=colour*3
+	ADDU	V1,T8,T9	;V1=80107B78+offset: p->colour in table
+	LUI	T0,8010
+	ADDIU	T0,T0,7B88	;T0=80107B88: p->colour cmd.
+	LBU	T1,0000 (V1)	;T1=c.table+0: red
+	LBU	T2,0001 (V1)	;T2=c.table+1: green
+	LBU	T3,0002 (V1)	;T3=c.table+2: blue
+	SB	V0,0005 (T0)	;V0->cmd+5: strlen->#chars slot
+	SW	R0,0010 (SP)	;SP+10=0: 
+	LW	A0,0030 (SP)	;A0=p->target
+	LW	A3,0038 (SP)	;A3=max.size
+	ADDIU	A1,A2,0006	;A1=cur.pos+6: p->after inserted colour command
+	SW	A2,0024 (SP)	;SP+24=A2: cur.pos
+	SB	T1,0002 (T0)	;T1->cmd+2: red
+	SB	T2,0003 (T0)	;T2->cmd+3: green
+	JAL	8009EA2C	;extend text bank for entry; V0=new msg_txt size
+	SB	T3,0004 (T0)	;T3->cmd+4: blue
+	//8009F368:	copy command to text
+	LW	T4,0030 (SP)	;T4=p->target
+	LW	T5,0024 (SP)	;T5=cur.pos
+	LUI	A1,8010
+	SW	V0,0028 (SP)	;SP+28=V0: new msg_txt bank size
+	ADDIU	A1,A1,7B88	;A1=80107B88: p->colour cmd.
+	ADDIU	A2,R0,0006	;A2=strlen 6
+	JAL	800998C0	;copy A2 bytes from string A1 to A0
+	ADDU	A0,T4,T5	;A0=target+offset: p->target
+	//8009F388:	update current position
+	LW	V1,0034 (SP)	;V1=SP+34: p->cur.pos
+	LW	T6,0000 (V1)	;T6=cur.pos
+	ADDIU	T7,T6,0006	;T7=cur.pos+6
+	SW	T7,0000 (V1)	;update cur.pos
+	//8009F398:	return
+	LW	RA,001C (SP)
+	LW	V0,0028 (SP)
+	JR	RA
+	ADDIU	SP,SP,0030
+
+800A141C	0x4F99C	7F24
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+OR	A2,R0,R0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1444	0x4F9C4	7F25
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+ADDIU	A2,R0,0001	;A2=slot 1
+JAL	800A1394	;display string in slot A2 in colour A3 at A0+A1
+LBU	A3,0280 (A0)	;A3=controller+280: colour.1
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1468	0x4F9E8	7F26	print string slot 2 in colour
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+ADDIU	A2,R0,0002	;A2=slot 2
+JAL	800A1394	;display string in slot A2 in colour A3 at A0+A1
+LBU	A3,0281 (A0)	;A3=controller+281: colour.2
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A148C	0x4FA0C	7F27	recall string from 80142466
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)	;A1=position in msg_txt
+JAL	800A134C
+ADDIU	A2,R0,0003	;slot 3
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A14B4	0x4FA34	7F28	recall string from 80142470
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,0004
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A14DC	0x4FA5C	7F29	recall string (actor) from 8014247A
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+ADDIU	A2,R0,0005	;A2=slot 5
+JAL	800A1394	;display string in slot A2 in colour A3 at A0+A1
+LBU	A3,0282 (A0)	;A3=80142692: [1]
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1500	0x4FA80	7F2A
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,0006
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1528	0x4FAA8	7F2B
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,0007
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1550	0x4FAD0	7F2C
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,0008
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1578	0x4FAF8	7F2D
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,0009
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A15A0	0x4FB20	7F36
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,000A
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A15C8	0x4FB48	7F37
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,000B
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A15F0	0x4FB70	7F38
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,000C
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1618	0x4FB98	7F39
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,000D
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1640	0x4FBC0	7F3A
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,000E
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1668	0x4FBE8	7F3B
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,000F
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1690	0x4FC10	7F3C
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,0010
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A16B8	0x4FC38	7F3D
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,0011
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A16E0	0x4FC60	7F3E
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,0012
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1708	0x4FC88	7F3F
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A134C
+ADDIU	A2,R0,0013
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1730	0x4FCB0	7F2E	insert last selectmenu option
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A1,001C (SP)
+LW	V0,000C (A0)	;V0=controller+C: p->msg_txt bank
+LW	T6,001C (SP)
+LW	A3,0008 (V0)	;A3=bank+8: sizeof msg_txt
+LW	A2,0000 (T6)	;A2=text offset
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+JAL	8009F3A8	;insert last selected option f/ text controller A0 to A1 at offset A2 of size A3
+ADDIU	A1,V0,0010	;A1=V0+10: p->msg_txt
+LW	A0,0018 (SP)	;A0=p->text controller
+LW	T7,000C (A0)	;T7=controller+C: p->msg_txt bank
+SW	V0,0008 (T7)	;update sizeof msg_txt
+LW	RA,0014 (SP)
+OR	V0,R0,R0	;V0=0
+JR	RA
+ADDIU	SP,SP,0018
+
+	8009F3A8:
+	ADDIU	SP,SP,FFD0
+	SW	RA,001C (SP)
+	SW	A0,0030 (SP)
+	SW	A1,0034 (SP)
+	SW	A2,0038 (SP)
+	SW	A3,003C (SP)
+	LW	A0,0034 (SP)
+	JAL	800903A8	;get command size
+	LW	A1,0038 (SP)
+	LW	T6,0030 (SP)	;T6=80142410
+	LW	T0,0038 (SP)
+	LW	A0,0034 (SP)
+	LW	V1,0228 (T6)	;V1=80142638: strlen of selected
+	SW	R0,0010 (SP)
+	LW	A3,003C (SP)
+	ADDU	A2,T0,V0
+	ADDU	A1,T0,V1
+	JAL	8009EA2C	;extend text bank for string
+	SW	V1,0024 (SP)
+	LW	T7,0034 (SP)
+	LW	T8,0038 (SP)
+	LW	A1,0030 (SP)	;A1=80142410
+	SW	V0,0020 (SP)
+	LW	A2,0024 (SP)
+	ADDU	A0,T7,T8
+	JAL	8009EB44	;copy string A0 to destination A1
+	ADDIU	A1,A1,021C	;A1=8014262C: buffer for selected text
+	LW	V0,0020 (SP)
+	LW	RA,001C (SP)
+	ADDIU	SP,SP,0030
+	JR	RA
+	NOP
+
+
+800A1774	0x4FCF4	7F2F	insert town name
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A3,A1,R0
+LW	T6,0018 (SP)
+LW	A1,0000 (A3)
+LW	V0,000C (T6)
+ADDIU	A0,V0,0010
+JAL	8009F428
+LW	A2,0008 (V0)
+LW	T7,0018 (SP)
+LW	T8,000C (T7)
+SW	V0,0008 (T8)
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A17B8	0x4FD38	7F30	display a number between 0-99
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A3,A1,R0
+LW	T6,0018 (SP)
+LW	A1,0000 (A3)
+LW	V0,000C (T6)
+ADDIU	A0,V0,0010
+JAL	8009F50C
+LW	A2,0008 (V0)
+LW	T7,0018 (SP)
+LW	T8,000C (T7)
+SW	V0,0008 (T8)
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+8009F50C	0x	displays a random number 0-100?
+	ADDIU	SP,SP,FFD0
+	SW	RA,001C (SP)
+	SW	A0,0030 (SP)
+	SW	A1,0034 (SP)
+	SW	A2,0038 (SP)
+	LW	A0,0030 (SP)
+	JAL	800903A8	;this just finds length of command
+	LW	A1,0034 (SP)
+	SW	V0,002C (SP)
+	//8009F530:	generate random number
+	OR	A0,R0,R0	;A0=short added to value
+	JAL	80099FE8	;ret V0=#
+	ADDIU	A1,R0,0064	;A1=short * value
+	//8009F53C:
+	ADDIU	AT,R0,0064
+	DIV	V0,AT
+	MFHI	A1
+	ANDI	A1,A1,FFFF	;A1=# % 100
+	ADDIU	A0,SP,0028	;A0=target for text
+	ADDIU	A2,R0,0002	;A2=max strlen
+	ADDIU	A3,R0,0001	;align left
+	JAL	8009264C	;converts numeral into string
+	SW	R0,0010 (SP)	;normal write
+	//8009F560:
+	LW	V1,0034 (SP)
+	LW	T6,002C (SP)
+	SW	V0,0024 (SP)
+	LW	A0,0030 (SP)
+	LW	A3,0038 (SP)
+	SW	R0,0010 (SP)
+	ADDU	A1,V1,V0
+	JAL	8009EA2C	;extend text bank
+	ADDU	A2,V1,T6
+	//8009F584:
+	LW	T7,0030 (SP)
+	LW	T8,0034 (SP)
+	SW	V0,0020 (SP)
+	ADDIU	A1,SP,0028
+	LW	A2,0024 (SP)
+	JAL	8009EB44	;copy source to destination
+	ADDU	A0,T7,T8
+	//8009F5A0:
+	LW	V0,0020 (SP)
+	LW	RA,001C (SP)
+	ADDIU	SP,SP,0030
+	JR	RA
+	NOP
+
+800A17FC	0x4FD7C	insert text for commands 7F31-7F35
+	accepts: A0=p->text controller, A1=cur.msg_txt pos, A2=entry#(0-4)
+ADDIU	SP,SP,FFE0
+SW	RA,001C (SP)
+SW	A2,0028 (SP)	;SP+28=A2: entry#
+OR	A3,A1,R0	;A3=A1: curpos in msg_txt
+LW	V0,000C (A0)	;V0=A0+C: msg_txt bank[80141FF0]
+LW	A1,0028 (SP)	;A1=SP+28: entry#
+LW	V1,0008 (V0)	;V1=V0+8: sizeof msg_txt
+SW	A0,0020 (SP)	;SP+20=A0: p->text controller
+ADDIU	A2,V0,0010	;A2=V0+10: p->msg_txt
+JAL	8009F5B4	;inserts text from entries starting at text controller + 100 (80142210)
+SW	V1,0010 (SP)	;SP+10=V1: sizeof msg_txt
+LW	A0,0020 (SP)	;A0=SP+20: text controller
+LW	T6,000C (A0)	;T6=A0+C: msg_txt bank
+SW	V0,0008 (T6)	;V0->T6+8: update sizeof msg_txt
+LW	RA,001C (SP)
+OR	V0,R0,R0	;V0=0
+JR	RA
+ADDIU	SP,SP,0020
+
+	8009F5B4	0x4DB34	inserts text from entries starting at text controller + 100 (80142210)
+		accepts: A0=p->text controller, A1=entry#(0-4), A2=p->msg_txt, A3=curpos in msg_txt, SP+10=sizeof msg_txt
+	ADDIU	SP,SP,FFC8
+	SW	RA,001C (SP)
+	SW	A0,0038 (SP)	;SP+38=A0: p->text controller
+	SW	A1,003C (SP)	;SP+3C=A1: entry#
+	SW	A2,0040 (SP)	;SP+40=A2: p->msg_txt
+	SW	A3,0044 (SP)	;SP+44=A3: curpos
+	LW	T6,003C (SP)	;T6=A1: entry#
+	BLTZ	T6,8009F5E0	;branch if invalid entry#
+	SLTI	AT,T6,0005
+	BNEL	AT,R0,8009F5E8	;branch if 0-4
+	LW	A0,0040 (SP)
+	//8009F5E0:	default invalid entries to 0
+	SW	R0,003C (SP)	;SP+3C=0: default to entry 0
+	LW	A0,0040 (SP)	;A0=A2: p->msg_txt
+	//8009F5E8:	select string and determine strlen
+	JAL	800903A8	;get command size
+	LW	A1,0044 (SP)	;A1=A3: curpos
+	LW	T8,003C (SP)	;T8=entry#
+	LW	T7,0038 (SP)	;T7=p->text controller
+	SW	V0,0034 (SP)	;SP+34=V0: cmd_size
+	SLL	T9,T8,0x2
+	ADDU	T9,T9,T8
+	SLL	T9,T9,0x1	;T9=entry# * 0xA (strlen)
+	ADDU	A0,T7,T9	;A0=T7+T9: controller + offset
+	ADDIU	A0,A0,0100	;A0+=100: controller + 100 + offest
+	SW	A0,0024 (SP)	;SP+24=A0: p->string source
+	JAL	8009E8D0	;V0=strlen, right-aligned no whitespace
+	ADDIU	A1,R0,000A	;A1=A: strlen
+	//8009F61C:	extend text bank
+	LW	V1,0044 (SP)	;V1=SP+44: curpos
+	LW	T0,0034 (SP)	;T0=SP+34: cmd_size
+	SW	V0,002C (SP)	;SP+2C=V0: strlen.actual
+	LW	A0,0040 (SP)	;A0=SP+40: p->msg_txt
+	LW	A3,0048 (SP)	;A3=[SP+10 f/caller]: sizeof msg_txt
+	SW	R0,0010 (SP)	;SP+10=0
+	ADDU	A1,V1,V0	;A1=curpos+strlen
+	JAL	8009EA2C	;extend text bank for string
+	ADDU	A2,V1,T0	;A2=curpos+cmd_size
+	//8009F640:	copy string to destination
+	LW	T1,0040 (SP)	;T1=SP+40: p->msg_txt
+	LW	T2,0044 (SP)	;T2=SP+44: curpos
+	SW	V0,0028 (SP)	;SP+28=V0: new sizeof msg_txt
+	LW	A1,0024 (SP)	;A1=SP+24: p->string source
+	LW	A2,002C (SP)	;A2=SP+2C: strlen
+	JAL	8009EB44	;copy string to destination
+	ADDU	A0,T1,T2	;A0=msg_txt + curpos
+	//8009F65C:	return
+	LW	V0,0028 (SP)	;V0=new sizeof msg_txt
+	LW	RA,001C (SP)
+	ADDIU	SP,SP,0038
+	JR	RA
+	NOP
+
+800A1844	0x4FDC4	7F31	string variable slot 21 [text controller +100]
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0	;A3=A1: 
+LW	A1,0000 (A3)	;A1=A3+0: cur.msg_txt position
+JAL	800A17FC
+OR	A2,R0,R0	;A2=entry 0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A186C	0x4FDEC	7F32	string variable slot 22 [text controller +10A]
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A17FC
+ADDIU	A2,R0,0001
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1894	0x4FE14	7F33	string variable slot 23 [text controller +114]
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A17FC
+ADDIU	A2,R0,0002
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A18BC	0x4FE3C	7F34	string variable slot 24 [text controller +11E]
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A17FC
+ADDIU	A2,R0,0003
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A18E4	0x4FE64	7F35	string variable slot 25 [text controller +128]
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	800A17FC
+ADDIU	A2,R0,0004
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A190C	0x4FE8C	insert text from text controller (A0) + 132, offset A2 to msg_txt, offset A1
+	accepts: A0=p->text controller, A1=text offset, A2=offset(?)
+ADDIU	SP,SP,FFE0
+SW	RA,001C (SP)
+SW	A2,0028 (SP)	;SP+28=A2: 
+OR	A3,A1,R0	;A3=A1: text offset
+LW	V0,000C (A0)	;V0=controller+C: p->msg_txt bank
+LW	A1,0028 (SP)	;A1=A2: 
+LW	V1,0008 (V0)	;V1=bank+8: sizeof msg_txt
+SW	A0,0020 (SP)	;SP+20=A0: p->text controller
+ADDIU	A2,V0,0010	;A2=V0+10: p->msg_txt
+JAL	8009F670	;inserts string at text controller + 132
+SW	V1,0010 (SP)	;SP+10=sizeof msg_txt
+LW	A0,0020 (SP)
+LW	T6,000C (A0)
+SW	V0,0008 (T6)
+LW	RA,001C (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0020
+
+800A1954	0x4FED4	7F40	only used by gyroid when retrieving a message; 
+	pulls it from text controller +132, which is last possible string slot
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A3,A1,R0	;A3=A1: p->text offset
+LW	A1,0000 (A3)	;A1=A3+0: text offset
+JAL	800A190C	;insert text from text controller (A0) + 132, offset A2 to msg_txt, offset A1
+OR	A2,R0,R0	;A2=0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A197C	0x4FEFC	???; used by 41-4A
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A2,0020 (SP)	;store passed value
+OR	A3,A1,R0
+LW	A1,0000 (A3)
+JAL	8009DC04	;returns V0=size of command
+SW	A3,001C (SP)
+LW	A3,001C (SP)
+LW	T6,0000 (A3)
+ADDU	T7,T6,V0
+SW	T7,0000 (A3)	;update text offset
+JAL	8007B650	;stores A0->address @ 80104A70
+LB	A0,0023 (SP)	;A0=1st byte of passed value
+OR	V0,R0,R0	;V0=0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A19C4	0x4FF44	7F41
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A197C
+OR	A2,R0,R0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A19E4	0x4FF64	7F42
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A197C
+ADDIU	A2,R0,0001
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1A04	0x4FF84	7F43
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A197C
+ADDIU	A2,R0,0002
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1A24	0x4FFA4	7F44
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A197C
+ADDIU	A2,R0,0003
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1A44	0x4FFC4	7F45
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A197C
+ADDIU	A2,R0,0004
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1A64	0x4FFE4	7F46
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A197C
+ADDIU	A2,R0,0005
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1A84	0x50004	7F47
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A197C
+ADDIU	A2,R0,0006
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1AA4	0x50024	7F48
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A197C
+ADDIU	A2,R0,0007
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1AC4	0x50044	7F49
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A197C
+ADDIU	A2,R0,0008
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1AE4	0x50064	7F4A
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A197C
+ADDIU	A2,R0,0009
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+//80113898 is probably a voice tone value
+//801138A0 is a much larger counter
+//801138A4 is a counter of some kind
+800A1B04	0x50084	???; used by 4B-4F.  Might be tied to tone of voice
+	accepts: A0=p->text controller, A1=p->cur.position, A2=tone(?)
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A2,0020 (SP)	;SP+20=A2: 
+OR	A3,A1,R0	;A3=A1: p->cur.pos
+LW	A1,0000 (A3)	;A1=cur.pos
+JAL	8009DC04	;returns V0=size of command
+SW	A3,001C (SP)	;SP+1C=A3: p->cur.pos
+LW	A3,001C (SP)	;A3=p->cur.pos
+LW	T6,0000 (A3)	;T6=cur.pos
+ADDU	T7,T6,V0
+SW	T7,0000 (A3)	;update text offset
+JAL	8009FB2C	;stores A0->80113898, and 0 to 801138A0 and 801138A4
+LBU	A0,0023 (SP)	;A0=[A2 f/caller]
+//800A1B38:	return
+OR	V0,R0,R0	;V0=0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1B4C	0x500CC	7F4B	normal tone?
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A1B04
+OR	A2,R0,R0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1B6C	0x500EC	7F4C
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A1B04
+ADDIU	A2,R0,0001
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1B8C	0x5010C	7F4D
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A1B04
+ADDIU	A2,R0,0002
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1BAC	0x5012C	7F4E
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A1B04
+ADDIU	A2,R0,0003
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1BCC	0x5014C	7F4F
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+JAL	800A1B04
+ADDIU	A2,R0,0004
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1BEC	0x5016C	7F50	font color # characters
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+JAL	8009DC04	;returns V0=size of command
+SW	A2,001C (SP)
+LW	A2,001C (SP)	;A2=p->text offset
+LW	T6,0000 (A2)	;T6=text offset
+ADDU	T7,T6,V0
+SW	T7,0000 (A2)	;update text offset
+LW	RA,0014 (SP)
+OR	V0,R0,R0	;V0=0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A1C24	0x501A4	7F51	set whisper flag
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A2,001C (SP)
+JAL	8009DFF4	;V0=command value
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+LW	A0,0018 (SP)	;A0=txt controller
+BEQ	V0,R0,800A1C60	;if 0, set switch 0x1
+LW	A2,001C (SP)	;A2=curpos
+LW	T6,028C (A0)	;T6=some option switch
+ADDIU	AT,R0,FFFE
+AND	T7,T6,AT	;kill switch 0x1: whisper OFF
+BEQ	R0,R0,800A1C6C
+SW	T7,028C (A0)	;save it back
+//800A1C60:	toggle flag if command value 0
+LW	T8,028C (A0)
+ORI	T9,T8,0001	;set switch 0x1: whisper ON
+SW	T9,028C (A0)
+//800A1C6C:	update position and return
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A2,001C (SP)
+JAL	8009DC04	;returns V0=size of command
+SW	A0,0018 (SP)
+LW	A2,001C (SP)
+LW	A0,0018 (SP)
+LW	T0,0000 (A2)
+ADDU	T1,T0,V0
+SW	T1,0000 (A2)	;update text offset
+SW	T1,02A0 (A0)	;save curpos to controller+0x2A0?
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A1CA4	0x50224	7F52
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+JAL	8009DC04	;returns V0=size of command
+SW	A2,001C (SP)
+LW	A2,001C (SP)
+LW	T6,0000 (A2)
+ADDU	T7,T6,V0
+SW	T7,0000 (A2)	;update text offset
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A1CDC	0x5025C	7F53
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+JAL	8009DC04	;returns V0=size of command
+SW	A2,001C (SP)
+LW	A2,001C (SP)
+LW	T6,0000 (A2)
+ADDU	T7,T6,V0
+SW	T7,0000 (A2)	;update text offset
+LW	RA,0014 (SP)
+OR	V0,R0,R0	;V0=0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A1D14	0x50294	7F54
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+JAL	8009DC04	;returns V0=size of command
+SW	A2,001C (SP)
+LW	A2,001C (SP)
+LW	T6,0000 (A2)
+ADDU	T7,T6,V0
+SW	T7,0000 (A2)	;update text offset
+LW	RA,0014 (SP)
+OR	V0,R0,R0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A1D4C	0x502CC	7F55
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	V1,028C (A0)	;V1=controller+28C: flags
+ADDIU	AT,R0,FFF7
+ANDI	T6,V1,0008
+BEQ	T6,R0,800A1DB0	;branch if 0x8 flag not set
+ORI	T3,V1,0008
+AND	T7,V1,AT	;T7=flags&FFFFFF7: unset 0x8 flag
+SW	T7,028C (A0)	;update flags
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A2,001C (SP)
+JAL	8009DC04	;returns V0=size of command
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+LW	A2,001C (SP)
+LW	A0,0018 (SP)
+LW	T8,0000 (A2)
+ADDU	T9,T8,V0
+SW	T9,0000 (A2)	;update text offset
+LW	T1,028C (A0)	;T1=controller+28C: flags
+ADDIU	V0,R0,0001	;V0=1
+SW	T9,02A0 (A0)
+ORI	T2,T1,0002	;T2=flags|2
+BEQ	R0,R0,800A1DC0
+SW	T2,028C (A0)	;set 0x2 flag
+//800A1DB0:
+SW	T3,028C (A0)
+LW	T4,0000 (A2)	;T4=A2+0: text offset
+ADDIU	V0,R0,0002	;V0=2
+SW	T4,02A0 (A0)	;T4->controller+2A0: text offset->cur.position
+//800A1DC0:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1DD0	0x50350	7F56
+ADDIU	SP,SP,FFD0
+SW	S0,0018 (SP)
+OR	S0,A1,R0
+SW	RA,001C (SP)
+SW	A0,0030 (SP)	;SP+30=A0: p->text controller
+LW	A0,0030 (SP)
+LW	A1,0000 (S0)
+ADDIU	A2,SP,002C
+JAL	8009E084
+ADDIU	A3,SP,0028
+LW	A0,002C (SP)
+JAL	8009FB54
+LW	A1,0028 (SP)
+LW	A0,0030 (SP)
+JAL	8009DC04	;returns V0=size of command
+LW	A1,0000 (S0)
+LW	T6,0000 (S0)
+ADDU	T7,T6,V0
+SW	T7,0000 (S0)	;update text offset
+LW	T9,0030 (SP)
+OR	V0,R0,R0
+SW	T7,02A0 (T9)
+LW	RA,001C (SP)
+LW	S0,0018 (SP)
+JR	RA
+ADDIU	SP,SP,0030
+
+800A1E38	0x503B8	7F57
+ADDIU	SP,SP,FFD0
+SW	S0,0018 (SP)
+OR	S0,A1,R0	;S0=A1: p->text offset
+SW	RA,001C (SP)
+SW	A0,0030 (SP)	;SP+30=A0: p->text controller
+LW	A0,0030 (SP)
+LW	A1,0000 (S0)	;A1=S0+0: text offset
+ADDIU	A2,SP,002C
+JAL	8009E118
+ADDIU	A3,SP,0028
+LW	A0,002C (SP)
+JAL	8009FBD8
+LW	A1,0028 (SP)
+LW	A0,0030 (SP)	;A0=p->text controller
+JAL	8009DC04	;returns V0=size of command
+LW	A1,0000 (S0)	;A1=S0+0: text offset
+LW	T6,0000 (S0)	;T6=S0+0: text offset
+ADDU	T7,T6,V0	;T7=offset+command
+SW	T7,0000 (S0)	;update text offset
+LW	T9,0030 (SP)	;T9=p->text controller
+OR	V0,R0,R0	;V0=0
+SW	T7,02A0 (T9)	;T7->controller+2A0: text offset->cur.position
+LW	RA,001C (SP)
+LW	S0,0018 (SP)
+JR	RA
+ADDIU	SP,SP,0030
+
+800A1EA0	0x50420	7F58
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	V1,028C (A0)	;V1=controller+28C: flags
+LW	T6,0000 (A2)
+ANDI	T7,V1,0008
+BEQ	T7,R0,800A1F00	;branch if 0x8 flag not set
+SW	T6,02A0 (A0)
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+JAL	8009E17C
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+LW	A0,0018 (SP)	;A0=p->text controller
+BLEZ	V0,800A1EDC
+OR	V1,V0,R0
+ADDIU	V1,V0,FFFF
+LW	T0,028C (A0)	;T0=controller+28C: flags
+SLL	T8,V1,0x1
+ADDIU	AT,R0,FFF7
+ADDIU	T9,T8,0001
+AND	T1,T0,AT
+SH	T9,0270 (A0)
+SW	T1,028C (A0)
+BEQ	R0,R0,800A1F0C
+ADDIU	V0,R0,0001	;V0=1
+//800A1F00:
+ORI	T2,V1,0008
+SW	T2,028C (A0)
+ADDIU	V0,R0,0002	;V0=2
+//800A1F0C:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A1F1C	0x5049C	7F59	sound effect
+ADDIU	SP,SP,FFD8
+SW	S0,0018 (SP)
+OR	S0,A1,R0
+SW	RA,001C (SP)
+SW	A0,0028 (SP)	;SP+28=A0: p->text controller
+LW	A0,0028 (SP)
+LW	A1,0000 (S0)
+JAL	8009E264
+ADDIU	A2,SP,0024
+JAL	8009FC2C
+LW	A0,0024 (SP)
+LW	A0,0028 (SP)
+JAL	8009DC04	;returns V0=size of command
+LW	A1,0000 (S0)
+LW	T6,0000 (S0)
+ADDU	T7,T6,V0
+SW	T7,0000 (S0)	;update text offset
+LW	T9,0028 (SP)
+OR	V0,R0,R0	;V0=0
+SW	T7,02A0 (T9)	;T7->controller+2A0: text offset->cur.position
+LW	RA,001C (SP)
+LW	S0,0018 (SP)
+JR	RA
+ADDIU	SP,SP,0028
+
+800A1F7C	0x504FC	7F5A	font size
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+JAL	8009DC04	;returns V0=size of command
+SW	A2,001C (SP)
+LW	A2,001C (SP)
+LW	T6,0000 (A2)
+ADDU	T7,T6,V0
+SW	T7,0000 (A2)	;update text offset
+LW	RA,0014 (SP)
+OR	V0,R0,R0	;V0=0
+JR	RA
+ADDIU	SP,SP,0018
+
+800A1FB4	0x50534	7F5B	open most recent letter to character
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A2,001C (SP)
+JAL	8009DC04	;returns V0=size of command
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+LW	A2,001C (SP)
+LW	A0,0018 (SP)
+LW	T6,0000 (A2)
+ADDU	T7,T6,V0
+SW	T7,0000 (A2)	;update text offset
+LW	T8,028C (A0)	;T8=controller+28C: flags
+OR	V0,R0,R0	;V0=0
+ORI	T9,T8,0002
+SW	T9,028C (A0)	;set text control switch 0x2
+LW	RA,0014 (SP)
+JR	RA
+ADDIU	SP,SP,0018
+
+800A2000	0x50580	7F5C
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A2,001C (SP)	;SP+1C=A2: p->text offset
+JAL	8009DC04	;returns V0=size of command
+LW	A0,0018 (SP)	;A0=p->text controller
+LW	A2,001C (SP)	;A2=p->text offset
+LW	T6,0000 (A2)	;T6=offset
+ADDU	T7,T6,V0
+SW	T7,0000 (A2)	;update text offset
+JAL	8009FDA0
+LW	A0,0018 (SP)	;A0=p->text controller
+OR	V0,R0,R0	;V0=0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A204C	0x505CC	7F5D
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A2,001C (SP)
+JAL	8009DC04	;returns V0=size of command
+LW	A0,0018 (SP)	;A0=p->text controller
+LW	A2,001C (SP)
+LW	T6,0000 (A2)
+ADDU	T7,T6,V0
+SW	T7,0000 (A2)	;update text offset
+JAL	8009FDF8
+LW	A0,0018 (SP)	;A0=p->text controller
+OR	V0,R0,R0	;V0=0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+	8009FDF8	
+		accepts: A0=p->text controller
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+	LW	V0,0020 (A0)	;V0=controller+20: p->???
+	BEQL	V0,R0,8009FE40	;return if invalid pointer
+	LW	RA,0014 (SP)
+	LBU	T6,0002 (V0)	;T6=data+2: 
+	ADDIU	AT,R0,0003
+	BNEL	T6,AT,8009FE40	;return if not set to 3: type=text ID?
+	LW	RA,0014 (SP)
+	//8009FE1C:
+	LHU	V1,0006 (V0)	;V1=data+6: npc ID#
+	ORI	AT,R0,D026
+	BEQ	V1,AT,8009FE34	;branch if D026: ""
+	ORI	AT,R0,D037
+	BNEL	V1,AT,8009FE40	;return if not D037: ""
+	LW	RA,0014 (SP)
+	//8009FE34:
+	JAL	800D1FF0
+	ADDIU	A0,R0,0007
+	//8009FE3C:	return
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0018
+	JR	RA
+	NOP
+
+800A2098	0x50618	7F5E
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A2,A1,R0	;A2=A1: p->text offset
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+JAL	8009DC04	;returns V0=size of command
+SW	A2,001C (SP)
+LW	A2,001C (SP)
+LW	T6,0000 (A2)
+ADDU	T7,T6,V0
+JAL	80065040	;returns V0=801425C0, base of selectmenu data
+SW	T7,0000 (A2)	;update text offset
+JAL	80065EE8	;stores 1->80142678: allow B to default selectmenu
+OR	A0,V0,R0	;A0=V0: p->selectmenu
+OR	V0,R0,R0	;V0=0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A20E0	0x50660	7F5F
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A2,A1,R0	;A2=A1: p->text offset
+JAL	8009DBE0	;V0=1 if pointer at 80136F34 and @ nonzero
+SW	A2,001C (SP)
+BEQ	V0,R0,800A2130	;branch if not set
+LW	A2,001C (SP)
+//800A2100:	advance past command and update position
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A2,001C (SP)
+JAL	8009DC04	;returns V0=size of command
+LW	A0,0018 (SP)	;A0=p->text controller
+LW	A2,001C (SP)	;A2=p->cur.pos
+LW	T6,0000 (A2)	;T6=cur.pos
+ADDU	T7,T6,V0
+SW	T7,0000 (A2)	;update text offset
+LW	T9,0018 (SP)	;T9=p->text controller
+OR	V0,R0,R0	;V0=0
+BEQ	R0,R0,800A2140
+SW	T7,02A0 (T9)	;T7->controller+2A0: update cur.pos
+//800A2130:	update position and return: break
+LW	T0,0000 (A2)	;T0=cur.pos
+LW	T1,0018 (SP)	;T1=p->text controller
+ADDIU	V0,R0,0002	;V0=2	break read loop!
+SW	T0,02A0 (T1)	;T0->controller+2A0: update cur.pos
+//800A2140:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A2150	0x506D0	7F60
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;SP+18=A0: p->text controller
+OR	A2,A1,R0	;A2=A1: p->text offset
+JAL	8009DBE0	;V0=1 if pointer at 80136F34 and @ nonzero
+SW	A2,001C (SP)
+BNEZ	V0,800A21A0
+LW	A2,001C (SP)
+LW	A1,0000 (A2)	;A1=A2+0: text offset
+SW	A2,001C (SP)
+JAL	8009DC04	;returns V0=size of command
+LW	A0,0018 (SP)	;A0=p->text controller
+LW	A2,001C (SP)
+LW	T6,0000 (A2)
+ADDU	T7,T6,V0
+SW	T7,0000 (A2)	;update text offset
+LW	T9,0018 (SP)	;T9=p->text controller
+OR	V0,R0,R0	;V0=0
+BEQ	R0,R0,800A21B0
+SW	T7,02A0 (T9)	;T7->controller+2A0: text offset->cur.position
+//800A21A0:	
+LW	T0,0000 (A2)
+LW	T1,0018 (SP)	;T1=p->text controller
+ADDIU	V0,R0,0002	;V0=2
+SW	T0,02A0 (T1)
+//800A21B0:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A21C0	0x50740	handle 7FXX command requests
+	returns V0=0,1,2
+	0 is normal -keep reading, 1 unknown, 2=break reading loop
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+LW	V0,000C (A0)	;V0=start of text bank data
+LW	T6,0000 (A1)	;T6=current position in bank
+ADDIU	AT,R0,007F
+ADDIU	V0,V0,0010	;V0=p->text bank itself
+ADDU	A2,T6,V0		;A2=p->current place in bank	(bank+curpos)
+LBU	V1,0000 (A2)	;retrieve char
+OR	V0,R0,R0
+BNE	V1,AT,800A222C	;quit if not a 7F command
+NOP
+LBU	V0,0001 (A2)	;V0=command type
+BLTZ	V0,800A2214	;smallest is 7F00
+SLTI	AT,V0,0061
+BEQ	AT,R0,800A2214	;largest allowed is 7F60
+SLL	T7,V0,0x2	;T7=command->offset
+LUI	V1,8010
+ADDU	V1,V1,T7
+LW	V1,7CB8 (V1)	;get p->command processing from table at 80107CB8
+BNEZ	V1,800A221C
+NOP
+//800A2214:
+BEQ	R0,R0,800A222C	;skip if invalid
+OR	V0,R0,R0
+//800A221C:	jump to process command
+JALR	RA,V1
+NOP
+BEQ	R0,R0,800A2230
+LW	RA,0014 (SP)
+//800A222C:
+LW	RA,0014 (SP)
+//800A2230:
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+the command processing jump receives the following data:
+V0=command type
+A0=p->text bank controller
+A2=p->current position in text bank
+T6=current position in bank (offset)

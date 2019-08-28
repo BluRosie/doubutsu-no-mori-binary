@@ -1,0 +1,244 @@
+Now that the blasted 7F6F command is finished, begin the overhaul!
+Note this only overhauls strings copied to msg_txt.
+
+C-76F8D0+1774	802C4EB4	deliver item from blah to blah
+	actor names are okay (8 is common, none exceed 10)
+	items will be retained by ID
+	will probably need to initialize slot before copy...
+//802C4F48:	1808	copy item to slot 2
+	LW	T1,0028 (SP)	;T1=SP+28: p->quest data
+	LHU	A1,0018 (T1)	;A1=T1+18: item ID
+	BEQL	A1,R0,802C4F88	;branch if no item
+	LW	T3,0028 (SP)
+A7A5004A	*SH	A1,004A (SP)
+34057F6F	*ORI	A1,R0,7F6F
+	JAL	8009D1F0	;V0=p->text controller
+A7A50048	*SH	A1,0048 (SP)
+	ADDIU	T2,R0,0002
+	SW	T2,0010 (SP)	;SP+10=2: 
+	OR	A0,V0,R0	;A0=V0: p->text controller
+	ADDIU	A1,R0,0002	;A1=slot 2
+	ADDIU	A2,SP,0048	;A2=SP+48: p->str
+	JAL	8009D820
+24070004	*ADDIU	A3,R0,0004	;A3=A: strlen
+//802C4F84:	1844
+
+need room, so taking advantage of all the quest items being sequential (2503-250C)
+802C4344	C04	copy random quest item to A0
+	accepts: A0=p->target for quest item
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+	SW	A0,0018 (SP)	;SP+18=A0: p->target
+	JAL	8002C9AC	;F0=random number (0-1.0)
+	NOP
+	LUI	AT,4120
+	MTC1	AT,F4		;F4=AT: 10.0	[41200000]
+	LW	T0,0018 (SP)	;T0=SP+18: p->target
+	MUL.S	F6,F0,F4	;F6=rand*10.0
+	TRUNC.W.S	F8,F6
+	MFC1	T7,F8		;T7=F8: random value from 0-9
+	NOP
+25F92503	*ADDIU	T9,T7,2503	;T9=802C77C0+offset: quest item
+	SH	T9,0000 (T0)	;T9->T0+0: quest item->
+	LW	RA,0014 (SP)
+	JR	RA
+	ADDIU	SP,SP,0018
+	*NOP
+	*NOP
+	*NOP
+
++_+
+
+C-675720	should handle a lot of cases
+
+800BB6A0	69C20	copy name of item A0 to slot A1; must be slot 5-A
+	accepts: A0=item#, A1=slot#
+	ADDIU	SP,SP,FFD8
+	SW	RA,0014 (SP)
+	SW	A0,0028 (SP)	;SP+28=A0: item ID#
+	SW	A1,002C (SP)	;SP+2C=A1: slot#
+3085FFFF	*ANDI	A1,A0,FFFF	;A1=item->short
+//	ANDI	A2,A0,FFFF	;A2=item->short
+10A0000A	*BEQ	A1,R0,800BB6E0	;return if 0
+//	BEQ	A2,R0,800BB6E0	;return if 0
+A7A5001E	*SH	A1,001E (SP)
+//	ADDIU	A0,SP,001C	;A0=SP+1C: p->text buffer
+34057F6F	*ORI	A1,R0,7F6F
+//	JAL	80096740	;copy item A1's name to A0
+A7A5001C	*SH	A1,001C (SP)
+//	ANDI	A1,A2,FFFF	;A1=A2->short: item ID#
+	JAL	8009D1F0	;V0=p->text controller
+	NOP
+	OR	A0,V0,R0	;A0=V0: p->text controller
+	LW	A1,002C (SP)	;A1=SP+2C: slot#
+	ADDIU	A2,SP,001C	;A2=SP+1C: p->text
+	JAL	8009D88C	;set entry
+24070004	*ADDIU	A3,R0,0004	;A3=strlen A
+//	ADDIU	A3,R0,000A	;A3=strlen A
+//800BB6E0:	return
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0028
+	JR	RA
+	NOP
+
+800BB6F0	69C70	???	quest recall, used to write text variables (2x slots)
+	accepts: A0=item#, A1=slot#
+	ADDIU	SP,SP,FFD8
+	SW	RA,0014 (SP)
+	SW	A0,0028 (SP)
+	SW	A1,002C (SP)
+	ANDI	A2,A0,FFFF
+	BEQ	A2,R0,800BB730
+A7A6001E	*SH	A2,001E (SP)
+//	ADDIU	A0,SP,001C
+34067F6F	*ORI	A2,R0,7F6F
+//	JAL	80096740	;copy item A1's name to A0
+A7A6001C	*SH	A2,001C (SP)
+//	ANDI	A1,A2,FFFF
+	JAL	8009D1F0
+	NOP
+	OR	A0,V0,R0
+	LW	A1,002C (SP)
+	ADDIU	A2,SP,001C
+	JAL	8009D6D0
+24070004	*ADDIU	A3,R0,0004
+//	ADDIU	A3,R0,000A
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0028
+	JR	RA
+	NOP
+
+***note***
+  These I picked up via search, so they will require more investigation.
+  All follow the pattern: load text, then copy to slot via 80092D10
+  Probably won't work right, especially at first.
+
+note: also could use 8-letter NPC name patch
+800A5E58	543D8	set variable slots: 1: actor A0, 2: item A1, 3: number A3, 4: number A2
+	accepts: A0=actor ID#, A1=item ID#, A2=number 0-9, A3=number 0-9
+//800A5E8C:	
+ADDIU	A0,SP,0020
+JAL	80096740	;copy item A1's name to A0
+LHU	A1,0046 (SP)
+ADDIU	A0,R0,0002
+ADDIU	A1,SP,0020
+JAL	80092D10
+ADDIU	A2,R0,000A
+//800A5EA8:	
+
+//800A5E8C:	5440C
+00000000	*NOP
+34057F6F	*ORI	A1,R0,7F6F
+A7A50044	*SH	A1,0044 (SP)
+24040002	ADDIU	A0,R0,0002
+27A50044	*ADDIU	A1,SP,0044
+	JAL	80092D10
+24060004	*ADDIU	A2,R0,0004
+//800A5EA8:	
+
+800A99B8	57F38	no bloody clue
+//800A9A3C:
+JAL	800A992C
+ADDIU	A0,SP,0026
+ADDIU	A0,SP,002C
+JAL	80096740	;copy item A1's name to A0
+LHU	A1,0026 (SP)
+ADDIU	A0,R0,0002
+ADDIU	A1,SP,002C
+JAL	80092D10
+ADDIU	A2,R0,000A
+//800A9A60:
+
+//800A9A3C:
+	JAL	800A992C
+	ADDIU	A0,SP,0026
+00000000	*NOP
+34057F6F	*ORI	A1,R0,7F6F
+A7A50024	*SH	A1,0024 (SP)
+	ADDIU	A0,R0,0002
+27A50024	*ADDIU	A1,SP,0024
+	JAL	80092D10
+24060004	*ADDIU	A2,R0,0004
+//800A9A60:
+
+800B6C14	65194	
+//800B6C30:	
+LW	T6,00D8 (SP)
+ADDIU	A0,SP,0020
+JAL	80096740	;copy item A1's name to A0
+LHU	A1,0000 (T6)
+OR	A0,R0,R0
+ADDIU	A1,SP,0020
+JAL	80092D10
+ADDIU	A2,R0,000A
+//800B6C50:
+
+//800B6C30:	651B0
+	LW	T6,00D8 (SP)
+95C50000	*LHU	A1,0000 (T6)
+A7A50022	*SH	A1,0022 (SP)
+34057F6F	*ORI	A1,R0,7F6F
+A7A50020	+SH	A1,0020 (SP)
+	OR	A0,R0,R0
+	ADDIU	A1,SP,0020
+	JAL	80092D10
+24060004	*ADDIU	A2,R0,0004
+//800B6C50:
+
+800BB86C	69DEC	???
+//800BB8B8:
+LHU	T8,008A (SP)
+ADDIU	A0,SP,006C
+BEQL	T8,R0,800BB8E4
+LW	T1,0084 (SP)
+JAL	80096740	;copy item A1's name to A0
+OR	A1,T8,R0
+OR	A0,R0,R0
+ADDIU	A1,SP,006C
+JAL	80092D10
+ADDIU	A2,R0,000A
+//800BB8E0:
+
+//800BB8B8:	69E38
+	LHU	T8,008A (SP)
+A7B8006E	*SH	T8,006E (SP)
+	BEQL	T8,R0,800BB8E4
+	LW	T1,0084 (SP)
+34057F6F	*ORI	A1,R0,7F6F
+A7A5006C	*SH	A1,006C (SP)
+	OR	A0,R0,R0
+	ADDIU	A1,SP,006C
+	JAL	80092D10
+24060004	*ADDIU	A2,R0,0004
+//800BB8E0:
+
+800C0E98	6F418	
+//800C0F18:
+BEQ	V0,AT,800C1060	;return if V0=1
+ADDIU	A0,SP,00E4
+JAL	80096740	;copy item A1's name to A0
+LHU	A1,00FA (SP)
+ADDIU	A0,R0,0007
+ADDIU	A1,SP,00E4
+JAL	80092D10
+ADDIU	A2,R0,000A
+//800C0F40:
+
+//800C0F18:	6F498
+	BEQ	V0,AT,800C1060	;return if V0=1
+00000000	*NOP
+34057F6F	*ORI	A1,R0,7F6F
+A7A500F8	*SH	A1,00F8 (SP)
+	ADDIU	A0,R0,0007
+27A500F8	*ADDIU	A1,SP,00F8
+	JAL	80092D10
+24060004	*ADDIU	A2,R0,0004
+//800C0F40:
+
+Another at 800CC324, saving it to 801446BD via 8009C1C0.
+From all the floats I'd say item balloon.
+
++_+
+
+Inherant problems:
+*) Need to rewrite colouration scheme for extracted words.  I'm guessing an on/off sort of colourizer would work, or a toggle.  In any case, don't draw from strlen, which would always be 4.

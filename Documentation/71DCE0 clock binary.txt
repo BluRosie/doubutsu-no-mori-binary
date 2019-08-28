@@ -1,0 +1,38 @@
+0x1040	803B8E10	9	"Set Clock"
+0x104C	803B8E1C	14	"20  Y   M   D "
+0x105C	803B8E2C	5	":    "
+
+0x1080	803B8E50	4	(float) x pos year	42D00000	[104.]
+0x1084	803B8E54	4	(float) y pos year	42E60000	[115.]
+0x1088	803B8E58	4	(float) x pos month	43120000	[146.]
+0x108C	803B8E5C	4	(float) y pos month	42E60000	[115.]
+0x1090	803B8E60	4	(float) x pos day	433C0000	[188.]
+0x1094	803B8E64	4	(float) y pos day	42E60000	[115.]
+0x1098	803B8E68	4	(float) x pos hours	42BA0000	[ 93.]
+0x109C	803B8E6C	4	(float) y pos hours	43090000	[137.]
+0x10A0	803B8E70	4	(float) x pos minutes	42F90000	[124.5]
+0x10A4	803B8E78	4	(float) y pos minutes	43090000	[137.]
+
+0xAB4	803B8884:	'draws' the text
+ADDIU	A1,A1,8E1C	(41EC)
+OR	A0,S8,R0
+ADDIU	A2,R0,000E
+
+0xB18	803B88E8
+:	'draws' the semicolon
+ADDIU	A1,A1,8E2C	(41FC)
+OR	A0,S8,R0
+ADDIU	A2,R0,0005
+
+------------------
+0x1049	->	"20    Y      M      D\0\0"
+0xAB6	->	41E9	[offset to string]
+0xABE	->	0015	[number of chars in string]
+0x1099	->	C4	[offset for hour: 42C40000, 98]
+0x1060	->	":"	[3A - colon]
+0xB1A	->	4200	[offset to char]
+0xB23	->	01	[num of chars in string]
+0x1081	->	C8	[year offset]
+0x1089	->	0C	[month offset]
+0x1091	->	36	[day offset]
+

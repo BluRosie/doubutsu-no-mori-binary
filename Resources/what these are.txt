@@ -1,0 +1,8 @@
+  This folder is dedicated to compressed binaries that were hacked.  If you need to change something falling within the compressed file, be sure to change it here.  I don't think that will really happen, but its better than nothing.
+  The Images folder contains original targas for converted image text, when that shows up.
+
+  An index of the binaries is in the Documentation folder one folder up from here, titled Index.txt suprisingly enough.  It should list these and many, many more.
+
++-+
+
+-Zoinkity

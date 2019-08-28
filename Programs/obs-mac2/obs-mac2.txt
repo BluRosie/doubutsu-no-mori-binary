@@ -1,0 +1,80 @@
+           ______                           ______                             
+           \_    |                         |    _/                 /\ -poyZ/99 
+____________|    |___     ________      ___|    |         ________/  \_________
+\ _    _    |    _   \_.--\    __/_____/   _    |______.--\_    _/    \     _ /
+:\/    /    |    /    /    \    \     |    \    |     /    _    |    \ \    \/:
+:/__________|________/___________\____|_________|____/__________|_____\______\:
++-----------------------------------------------------------------------------+
+:                                                                             :
+:                        O   B   S   I   D   I   A   N                        :
+:                                                                             :
++-----------------------------------------------------------------------------+
+:                                                                             :
+:   Whats in obs-mac2.zip?                                  12th January 2001 :
+:   ----------------------                                                    :
+:                                                                             :
+:       obs-mac2.txt         Guide to MacetII (This File)                     :
+:       obs-mac2.nfo         Brief Info                                       :
+:       macetII.exe          MacetII - N64 CRC Calculation Utility            :
+:                                                                             :
++-----------------------------------------------------------------------------+
+:                                                                             :
+:   MacetII - N64 CRC Calculation Utility.                                    :
+:   --------------------------------------                                    :
+:                                                                             :
+:   The 2nd public release of Macet allows users to correctly calculated      :
+:   crc's for all N64 cic / bootcodes. No other tool supports all of the      :
+:   bootcodes, despite what they may claim!                                   :
+:                                                                             :
+:   Supported bootcodes:                                                      :
+:                                                                             :
+:      Mario-Type   NUS-CIC-6102 and NUS-CIC-7101                             :
+:      Starf-Type   NUS-CIC-6101                                              :
+:      Lylat-Type   NUS-CIC-7102                                              :
+:      Diddy-Type   NUS-CIC-6103 and NUS-CIC-7103                             :
+:      Yoshi-Type   NUS-CIC-6106 and NUS-CIC-7106                             :
+:      Zelda-Type   NUS-CIC-6105 and NUS-CIC-7105                             :
+:                                                                             :
+:   The main reason for this release is to include support for all bootcodes  :
+:   (since they are 'so easy' to implement) and because someone requested we  :
+:   release an updated version.                                               :
+:                                                                             :
++-----------------------------------------------------------------------------+
+:                                                                             :
+:   How do I use MacetII?                                                     :
+:   ---------------------                                                     :
+:                                                                             :
+:   MacetII is best controlled from the command line prompt. However from     :
+:   Windows, the user could just drag and drop the desired file on the        :
+:   MacetII executable and run the program that way.                          :
+:                                                                             :
+:   At the prompt type:                                                       :
+:                                                                             :
+:      macetII <filename>                                                     :
+:                                                                             :
++-----------------------------------------------------------------------------+
+:                                                                             :
+:   Obsidian brings you more N64 utilities, look out for more of our          :
+:   projects in the future...                                                 :
+:                                                                             :
+:   Any suggestions for additional features in any of our software is always  :
+:   welcome. User feedback is a major driving force in us releasing our       :
+:   tools to the public. Any results in using this tool would be helpful!     :
+:                                                                             :
+:   Thanks to our various supporters in the scene, remember who brings you    :
+:   innovative tools, and who doesn't. Remember who continues to keep the     :
+:   scene alive, and who doesn't. Obsidian will continue to support the N64   :
+:   throughout 2001 and beyond!                                               :
+:                                                                             :
++-----------------------------------------------------------------------------+
+:                                                                             :
+:             http://go.to/obsidian/  -  obs@startrekmail.com                 :
+:                                                                             :
++---------------------+---------------+---------------+-----------------------+
+:          ______     : Obsidian Team :  Department   :                       :
+:          \_    |    +---------------+---------------+            /\ -poyZ/99:
+:___________|    |___ :   WT_Riker    :   Coding      :   ________/  \_________
+\ _    _    |    _   \:   JL_Picard   :   Coding      :.--\_    _/    \     _ /
+:\/    /    |    /    :   Refried     :   Coding      :    _    |    \ \    \/:
+:/__________|________/:   CrowTRobo   :   Coding      :_________|_____\______\:
+`---------------------+---------------+---------------+-----------------------'

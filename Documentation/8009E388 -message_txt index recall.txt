@@ -1,0 +1,96 @@
+8009E388:	0x4C908	msg.txt index recall; called from 8009E558
+	accepts: A0=entry#
+ADDIU	SP,SP,FFB8
+SW	S0,0020 (SP)
+OR	S0,A0,R0		;S0=entry #, 
+SW	RA,0024 (SP)
+SW	A1,004C (SP)	[801478B4]
+SW	A2,0050 (SP)	[801478B0]
+BLTZ	S0,0x4CA24	;test negative entry #
+SLTI	AT,S0,2DE8
+BEQ	AT,R0,0x4CA24	;entry only valid if between 0-2DE8
+ANDI	T6,S0,0001
+BEQ	T6,R0,0x4C974	;a test to see if entry is an offset or literal
+ADDIU	A0,SP,0030
+//8009E3B8:	convert to offset and pull offset to text from index
+SLL	T7,S0,0x2	;T7=entry*4
+LUI	T9,00D0
+ADDIU	T9,T9,9000	;T9=CF9000: index bank
+ADDIU	T8,T7,FFFC
+LUI	A3,8011
+ADDIU	T0,R0,0357
+SW	T0,0010 (SP)
+ADDIU	A3,A3,7250	;A3=80117250: "../m_msg_main.c"
+ADDU	A1,T8,T9
+JAL	80026E10
+ADDIU	A2,R0,0008	;A2=8	strlen
+//8009E3E4:	0x4C964
+LW	V0,0030 (SP)	;current offset in txt
+LW	T1,0034 (SP)	;next txt offset
+BEQ	R0,R0,8009E464
+SUBU	V1,T1,V0		;V1=size of data block
+//8009E3F4:	0x4C974
+BNEZ	S0,8009E42C	;test entry=0
+ADDIU	A0,SP,0030
+//8009E3FC:	if entry=0...
+LUI	A1,00D0
+LUI	A3,8011
+ADDIU	T2,R0,035E
+SW	T2,0010 (SP)
+ADDIU	A3,A3,7260	;A3=80117260: "../m_msg_main.c"
+ADDIU	A1,A1,9000	;A1=CF9000
+ADDIU	A0,SP,0030
+JAL	80026E10
+ADDIU	A2,R0,0008
+OR	V0,R0,R0
+BEQ	R0,R0,8009E464
+LW	V1,0030 (SP)
+//8009E42C:	most ordinary offsets
+SLL	T3,S0,0x2	;T3=offset: entry*4
+LUI	T5,00D0
+ADDIU	T5,T5,9000	;T5=CF9000: index bank
+ADDIU	T4,T3,FFF8	;T4=offset-8
+LUI	A3,8011
+ADDIU	T6,R0,0364	;T6=0x364
+SW	T6,0010 (SP)
+ADDIU	A3,A3,7270	;A3=80117270: "../m_msg_main.c"
+ADDU	A1,T4,T5		;A1=CF9000+(offset-1)	codeword
+JAL	80026E10		;extract!
+ADDIU	A2,R0,0010	;A2=0x10	strlen
+LW	V0,0034 (SP)	;V0=value of entry
+LW	T7,0038 (SP)	;T7=value of following entry
+SUBU	V1,T7,V0		;V1=length of data at entry
+//8009E464:	0x4C9E4	convert msg.tbl value to msg.txt codeword...
+SLTI	AT,V1,0401	;test if txt string < 0x400 (buffer size)
+BEQ	AT,R0,8009E490	;bail if overrun possible
+LW	T2,004C (SP)
+LW	T0,004C (SP)	[T0=801478B4]
+LUI	T8,00BD
+ADDIU	T8,T8,4000	;T8=00BD4000, start codeword for text binaries...
+ADDU	T9,V0,T8	T9=codeword for txt binary...
+SW	T9,0000 (T0)	[codeword->801478B4]
+LW	T1,0050 (SP)	[T1=801478B0]
+BEQ	R0,R0,8009E4B4
+SW	V1,0000 (T1)	[strlen->801478B0]
+//8009E490:
+SW	R0,0000 (T2)	;0 set as codeword
+LW	T3,0050 (SP)
+SW	R0,0000 (T3)	;0 set as length
+BEQ	R0,R0,8009E4B8
+LW	RA,0024 (SP)
+//8009E4A4:	4CA24
+LW	T4,004C (SP)
+SW	R0,0000 (T4)	;0 set as codeword
+LW	T5,0050 (SP)
+SW	R0,0000 (T5)	;0 set as length
+//8009E4B4:	4CA34
+LW	RA,0024 (SP)
+LW	S0,0020 (SP)
+ADDIU	SP,SP,0048
+JR	RA
+NOP
+
+/*one possibility is to eliminate add at lines 67+
+  that would make the return a literal offset within the BD4000 table
+  Keyword recall would be for BD4000 itself, then add offset to value
+  then, repeat for -every single table-  lament...*/

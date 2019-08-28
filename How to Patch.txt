@@ -1,0 +1,38 @@
+How to Apply the Animal Forest .ups Patch
+-----------------------------------------
+
+  Applying a .ups patch is just as simple as a .ips patch, and Byuu's patch tool is provided in this distribution.  There's a few extra steps to make an uneditted Japanese Doubutsu no Mori game ready for patching, but those are simple enough too.
+
+  You'll need three files from this big zip of stuff:
+  In the 'Programs' folder: extendo.exe
+  In the 'Programs' folder: ups.zip
+  In the main directory: NAFE_WIP_day_month_year.ups
+	(The day, month, and year differ on the release date of the patch)
+
+
+Preparing Doubutsu no Mori for Patching:
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+  The original game was not large enough to fit all the data into it, so the rom will need to be extended a bit in order to apply the patch.  Also, some ROMs may be byteswapped, and for the patch to work it must be unbyteswapped.  For this, we'll use extendo.exe, which handles both problems.  It copies the ROM you feed it, swaps it if necessary, then asks if you want to extend it.
+  Step-by-Step
+  1) Get 'extendo.exe' from the 'programs' folder
+  2) Drag-&-drop your ROM onto the program
+  3) After copying and swapping the file (this may take some time), it will ask if you want to extend the file to 256Mb.  Type 'y'.  If it says it is already 256Mb, type 'n'.
+  
+  The program should automatically spit out a copy of the ROM with the same name followed by '_ext'.  You'll use this file when you apply the patch.
+
+*_*
+  
+Applying the Patch
++-+-+-+-+-+-+-+-+-+
+
+  Byuu's ups patching program is provided in the 'programs' folder.  Find the zip file named 'ups.zip', then unzip the file's contents to a convenient directory.  The program 'ups.exe' is what you'll use to apply the patch.
+  Step-by-Step
+  1) Unzip and run 'ups.exe'
+  2) In the lower-left corner, tick the 'apply patch' button if it is not already selected
+  3) On the +original file+ line, use the filename for the extended Doubutsu no Mori rom
+  4) On the +patch file+ line, use the filename for the 'NAFE_WIP_day_month_year.ups' file
+  5) On the +output file+ line, type a filename of your desire
+  6) Press the 'Apply' button in the lower-left corner.  When finished, a message will appear in the lower-right box
+
+-Zoinkity

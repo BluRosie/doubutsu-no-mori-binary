@@ -1,0 +1,44 @@
+802C1394	0x	create selectmenu with standard options
+
+
+80065278	COPY TO BUFFER
+
++-+
+not important
+800902CC	0x3E84C	V0 = width of text to display on-screen in bubble
+	accepts: A0=p->text(80142700), A1=strlen, A2=width type
+ADDIU	SP,SP,FFD0
+SW	S4,0028 (SP)
+SW	S3,0024 (SP)
+OR	S3,A1,R0	;S3=strlen
+OR	S4,A2,R0	;S4=type
+SW	RA,002C (SP)
+SW	S2,0020 (SP)
+SW	S1,001C (SP)
+SW	S0,0018 (SP)
+OR	S2,R0,R0	;S2=total.width
+BLEZ	S3,8009031C
+OR	S0,R0,R0	;S0=init.count
+OR	S1,A0,R0	;S1=A0: p->string
+//80090300:
+LBU	A0,0000 (S1)	;A0=cur.char in string
+JAL	8009028C	;compute render width for single character
+OR	A1,S4,R0	;A1=S4: type
+ADDU	S2,S2,V0	;S2+=V0: total.width+=width
+ADDIU	S0,S0,0001	;count++
+BNE	S0,S3,80090300	;loop for strlen
+ADDIU	S1,S1,0001	;S1++	next char in string
+//8009031C:
+ANDI	T6,S2,0001	;T6=TRUE if odd total.width
+BEQ	T6,R0,8009032C
+LW	S0,0018 (SP)
+ADDIU	S2,S2,0001	;S2++	only even width
+//8009032C:
+OR	V0,S2,R0	;V0=total.width
+LW	RA,002C (SP)
+LW	S1,001C (SP)
+LW	S2,0020 (SP)
+LW	S3,0024 (SP)
+LW	S4,0028 (SP)
+JR	RA
+ADDIU	SP,SP,0030

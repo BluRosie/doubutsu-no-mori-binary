@@ -1,0 +1,132 @@
+800911E8	3F768	prints formatted char to screen, calling 8009069C; only prints to small coloured bubbles
+	accepts: A0=, A1=p->target DL, A2=char#, A3=p->(float) ???, SP+10=p->(float) display size, SP+14=char.width, SP+18=
+ADDIU	SP,SP,FF88
+SW	RA,0024 (SP)
+SW	S0,0020 (SP)
+SW	A0,0078 (SP)	;SP+78=A0: 
+SW	A1,007C (SP)	;SP+7C=A1: p->target DL
+SW	A2,0080 (SP)	;SP+80=A2: char#
+SW	A3,0084 (SP)	;SP+84=A3: 
+LW	T6,007C (SP)	;T6=[A1]: p->target DL
+LW	T8,0078 (SP)	;T8=[A0]: p->???
+ADDIU	T9,SP,0064
+LW	T7,0000 (T6)	;T7=[A1]+0: target DL (p->DL)
+ADDIU	T0,SP,0060
+ADDIU	A0,SP,0074	;A0=SP+74: p->target DL
+SW	T7,0074 (SP)	;save pointer to display list
+LW	S0,029C (T8)	;S0=[A0]+29C: table of sequence entries
+ADDIU	A2,SP,006C	;A2=p->SP+6C: @row.offset
+ADDIU	A3,SP,0068	;A3=p->SP+68: @col.offset
+ADDIU	S0,S0,FFC0	;S0-=40: next set of entries, recording sequences for different point combos
+SW	S0,029C (T8)	;update p->table
+SW	T0,0014 (SP)	;SP+14=p->SP+60: @linebot
+SW	T9,0010 (SP)	;SP+10=p->SP+64: @imgoffedge
+JAL	8009069C	;font ASM assembly subroutine
+LW	A1,0080 (SP)	;A1=[A2]: char#
+//80091244:	generate font proportion values used in table
+LW	V0,0088 (SP)	;V0=[SP+10 f/caller]: display size
+LW	V1,0084 (SP)
+LUI	AT,4320
+MTC1	AT,F12
+LWC1	F8,0000 (V0)
+LWC1	F4,0000 (V1)
+LUI	AT,42F0
+SUB.S	F10,F8,F12
+MTC1	AT,F14
+LWC1	F6,0004 (V1)
+SUB.S	F0,F4,F12
+LUI	AT,4180
+MTC1	AT,F16
+SUB.S	F2,F6,F14
+SWC1	F10,0040 (SP)
+LWC1	F18,0004 (V0)
+MUL.S	F8,F0,F16
+NEG.S	F2,F2
+SUB.S	F4,F18,F14
+MUL.S	F18,F2,F16
+LW	T1,006C (SP)	;T1=SP+6C: probably row offset, as in the #bytes skipped to get to the left edge of the character within the character bank...
+LW	T2,008C (SP)	;T2=[SP+14 f/caller]: char.width
+NEG.S	F6,F4
+LW	T5,0068 (SP)	;T5=SP+68: probably column offset; base to the general height of image
+LW	T6,0090 (SP)	;T6=[SP+18 f/caller]: char.height
+TRUNC.W.S	F10,F8
+ADDU	T3,T1,T2	;T3=row.offset+char.width: right edge offset
+ADDU	T7,T5,T6	;T7=col.offset+char.height: lower edge offset
+TRUNC.W.S	F4,F18
+MFC1	A1,F10
+SLL	T4,T3,0x6	;T4=r.edge off.*40: lrs
+SLL	T8,T7,0x6	;T8=l.edge.off.*40: lrt
+MFC1	A2,F4
+SLL	A3,T1,0x6	;A3=row.offset*40: uls
+SLL	T0,T5,0x6	;T0=col.offset*40: ult
+SWC1	F6,0044 (SP)
+SW	T4,0064 (SP)	;SP+64=T4: lrs
+SW	T8,0060 (SP)	;SP+60=T8: lrt
+SW	A3,006C (SP)	;SP+6C=A3: uls
+SW	T0,0068 (SP)	;SP+68=T0: ult
+SW	T0,0010 (SP)	;SP+10=ult
+//800912E8:	set entry: ;uls,ult
+OR	A0,S0,R0	;A0=S0: p->table
+SW	A1,0030 (SP)
+JAL	80090848	;sets table entry at A0 texture size and tile size data
+SW	A2,002C (SP)
+//800912F8:	set entry: ;uls,lrt
+LUI	AT,4180
+MTC1	AT,F8
+LWC1	F6,0044 (SP)
+LW	T6,0060 (SP)	;T6=lrt
+LW	A1,0030 (SP)
+MUL.S	F10,F6,F8
+ADDIU	A0,S0,0010	;A0=S0+10: p->target entry
+LW	A3,006C (SP)	;A3=uls
+SW	T6,0010 (SP)	;SP+10=lrt
+TRUNC.W.S	F18,F10
+MFC1	A2,F18
+JAL	80090848	;sets table entry at A0 texture size and tile size data
+SW	A2,0028 (SP)
+//8009132C:	set entry: ;lrs,lrt
+LUI	AT,4180
+MTC1	AT,F6
+LWC1	F4,0040 (SP)
+LW	T8,0060 (SP)	;T8=lrt
+LW	A2,0028 (SP)
+MUL.S	F8,F4,F6
+ADDIU	A0,S0,0020	;A0=S0+20: p->target entry
+LW	A3,0064 (SP)	;A3=SP+64: lrs
+SW	T8,0010 (SP)	;SP+10=lrt
+TRUNC.W.S	F10,F8
+MFC1	A1,F10
+JAL	80090848	;sets table entry at A0 texture size and tile size data
+SW	A1,0030 (SP)
+//80091360:	set entry: ;lrs,ult
+LW	T1,0068 (SP)	;T1=ult
+LW	A1,0030 (SP)
+ADDIU	A0,S0,0030
+LW	A2,002C (SP)
+LW	A3,0064 (SP)	;A3=lrs
+JAL	80090848	;sets table entry at A0 texture size and tile size data
+SW	T1,0010 (SP)	;SP+10=ult
+//8009137C:	
+LW	T5,0074 (SP)
+LUI	T3,0100
+ORI	T3,T3,4008	;T3=01004008
+ADDIU	T2,T5,0008
+SW	T2,0074 (SP)
+SW	S0,0004 (T5)
+SW	T3,0000 (T5)
+LW	T9,0074 (SP)
+LUI	T4,0600
+ORI	T4,T4,0204	;T4=06000204
+ADDIU	T0,T9,0008
+SW	T0,0074 (SP)
+ADDIU	T6,R0,0406	;T6=00000406
+SW	T6,0004 (T9)
+SW	T4,0000 (T9)
+LW	T7,0074 (SP)
+LW	T8,007C (SP)
+SW	T7,0000 (T8)
+//800913C4:	return
+LW	RA,0024 (SP)
+LW	S0,0020 (SP)
+JR	RA
+ADDIU	SP,SP,0078

@@ -1,0 +1,132 @@
+copied from "hacking text recall routine":
+
+walkaround bubbles:
+801446A0 is the working buffer for this data
+0x0	4	[float] 
+0x4	4	[float] 
+0x8	4	[float] 
+0xC	4	[float] 
+0x10	4	[float] 
+0x14	4	[float] bubble width percentage; also used to center text
+0x18	2	bubble state counter; could maybe get away with a single byte...
+0x1A	2	item #
+0x1C	1	0-4	bubble state; offset in 80117B40 pointer table
+	0	blank
+	1	minibubble 1
+	2	minibubble 2
+	3	open: grow to full
+	4	close: dissolve to blank
+0x1D	A	string
+0x27	1	TRUE when resizing bubble
+
++_+
+
+Well, one possibility is to just push the buffer size.
+The other is to use some empty space someplace as a buffer, then just place a pointer here.
+
++_+
+
+800CBF80	7A500	allocates entry using 8002F4C0?  Fills item# with 800CC9C4?  Uses 800CCE08
+800CBFBC	7A53C
+800CC3EC	7A96C
+
++_+
+
+step 1: move the +0x27 byte
+	Want to move it to 0x1D, shifting the string forward a byte.
+Usage:
+800CBFBC	
+	SB @ 800CC01C
+	SB @ 800CC3D8
+800CC3EC
+	LBU @ 800CC428
+
+
+step 2: move the string
+Usage:
+800CBFBC
+	LUI @ 800CC308, ADDIU @ 800CC314
+	LUI @ 800CC32C, ADDIU @ 800CC330
+800CC3EC
+	LUI @ 800CC93C, ADDIU @ 800CC984
+	
+
+step 3: extend allocated string length
+800CBFBC
+	ADDIU @ 800CC334
+800CC3EC
+	ADDIU @ 800CC98C
+
+step 4: allocate larger buffer
+	Could use 0x28 bytes at 800A1028 (0x4F5A8)
+
++_+
+
+Try just relocating the buffer and setting size...
+800CC308	7A888	3C04800A
+800CC314	7A894	24841028
+800CC32C	7A8AC	3C04800A
+800CC330	7A8B0	24841028
+800CC334	7A8B4	24050028
+800CC93C	7AEBC	3C05800A
+800CC984	7AF04	24A51028
+800CC98C	7AF0C	24060028
+
+//800CC308:	7A888
+3C04800A	*LUI	A0,800A
+97B90042	LHU	T9,0042 (SP)
+17020002	*BNE	T8,V0,800CC320	;branch if onhover item differs from displayed item
+24841028	*ADDIU	A0,A0,1028	;A0=bubble+1D: p->text
+14400004	BNE	V0,R0,800CC32C	;branch if displayed item not NULL
+24050028	*ADDIU	A1,R0,0028	;A1=strlen
+//800CC320:	7A8A0	retrieve item name from ROM
+A519001A	SH	T9,001A (T0)	;T9->bubble+1A: item#
+0C0259D2	*JAL	80096748	;copy A1 bytes of item A2's name from ROM to A0
+97A60042	*LHU	A2,0042 (SP)	;A1=SP+42: item#
+
+Screw this.  Works well enough ;*)
+
++_+
+
+Now the balloon sizes.  Oh is this going to be fun...
+Basis of sizing is this:
+	presumes fixed char width of 12 (0xC)
+	"minimum" balloon size is 2char (16.0)
+	"maximum" balloon size is Achar, or 8+2
+	width is a percentage value, figured as a percentage of 8
+
+compare to this:
+	get physical width of string
+	subtract 24.0 to account for two characters
+	figure proportion to 96.0, which is 8*C
+
+800902C8	computes width of variable-width string
+	accepts: A0=p->string, A1=strlen
+800902CC	computes width of string
+	accepts: A0=p->string, A1=strlen, A2=width type (0-variable; 1-fixed)
+
+8009E8D0	V0=strlen of string A0, length A1 minus whitespace
+
+//800CC32C:	7A8AC	determine actual strlen
+3C04800A	LUI	A0,800A
+24841028	ADDIU	A0,A0,1028	;A0=800A1028: p->text
+0C027A34	*JAL	8009E8D0	;V0=actual strlen of A0, of size A1
+24050028	*ADDIU	A1,R0,0028	;A1=strlen 28
+3C04800A	*LUI	A0,800A
+24841028	*ADDIU	A0,A0,1028	;A0=800A1028: p->text
+0C0240B2	*JAL	800902C8	;V0=width of string A0, size A1::variable width
+00402825	*OR	A1,V0,R0
+//800CC348:	7A8C8	figure baloon expansion
+2442FFE8	*ADDIU	V0,V0,FFE8	;V0=strlen-16: account for min bubble size
+44829000	MTC1	V0,F18
+3C0142C0	LUI	AT,42C0
+46809120	CVT.S.W	F4,F18	;F4=(float) strlen
+44814000	MTC1	AT,F8		;F8=96.0	[42C00000]
+3C088014	LUI	T0,8014
+46082403	*DIV.S	F16,F4,F8	;F16=(strlen-2.0)/96.0
+E51046B4	*SWC1	F16,46B4 (T0)	;F16->bubble+14: proportion of max size(?)
+10000002	BEQ	R0,R0,800CC378
+910446BC	*LBU	A0,46BC (T0)	;A0=bubble+1C: state
+//800CC374:	7A8F4
+	
+That was a little +too+ easy.

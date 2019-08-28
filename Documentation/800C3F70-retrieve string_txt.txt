@@ -1,0 +1,173 @@
+800C3F70	0x724F0	retrieve string from string_txt
+	accepts: A0=p->target,A1=max size,A2=string index to retrieve
+ADDIU	SP,SP,FF58
+SW	S0,0020 (SP)
+OR	S0,A1,R0		;S0=size
+SW	RA,0024 (SP)
+SW	A0,00A8 (SP)	;save target
+OR	A3,A2,R0		;A3=string#
+BLTZ	A3,800C4070	;should be between 0...
+SLTI	AT,A3,061A
+BEQ	AT,R0,800C4070	;...and 0x61A
+OR	A0,A3,R0		;A0=string#
+ADDIU	A1,SP,00A4	;A1=target for codeword
+JAL	800C3E30		;converts string# to codeword and size
+ADDIU	A2,SP,00A0	;A2=target for size
+LW	T0,00A0 (SP)	;T0=strlen
+LW	V1,00A4 (SP)	;V1=codeword
+LW	A0,00A8 (SP)	;A0=target
+BNEZ	T0,800C3FC8
+OR	A1,S0,R0		;A1=max size
+//800C3FB8:	if strlen=0 or entry not found...
+JAL	8009992C		;create fill string with max# entries
+ADDIU	A2,R0,0020	;A2=0x20 - " "
+BEQ	R0,R0,800C4074
+LW	RA,0024 (SP)
+//800C3FC8:	retrieve text
+BEQ	V1,R0,800C4070	;kill if no codeword
+ADDIU	T1,R0,FFF8
+AND	A1,V1,T1	;A1=codeword&FFFFFFF8: floor() to DW boundry
+SUBU	V0,V1,A1	;V0=difference b/w real and doubleword aligned
+ADDU	T6,V0,T0	;T6=strlen+difference in DW-alignment
+ADDIU	T7,T6,0007	;T7=pullstrlen DW-alignment
+LUI	A3,8011
+ADDIU	T8,R0,0099
+SW	V0,0048 (SP)	;save difference b/w actual and pull point
+SW	T8,0010 (SP)	;save 0x99->SP+0x10
+ADDIU	A3,A3,7910	;A3=80117910: ../m_string.c
+AND	A2,T7,T1	;A2=pullstrlen DW-extended
+ADDIU	A0,SP,0050	;A0=target
+JAL	80026E10	;suck data
+SW	T0,00A0 (SP)	;save strlen
+LW	T0,00A0 (SP)	;T0=strlen
+LW	V1,00A8 (SP)	;V1=target
+LW	T9,0048 (SP)	;T9=difference in pull point and real start
+SLT	AT,S0,T0
+BEQ	AT,R0,800C4020	;if max size <strlen...
+ADDIU	T2,SP,0050
+OR	T0,S0,R0		;...set strlen to maxsize
+//800C4020:	get real start of string
+OR	A1,T0,R0		;A1=strlen
+ADDU	A0,T9,T2		;A0=real start of string
+OR	V0,R0,R0		;V0=counter
+BLEZ	T0,800C4050	;handle maxsize=0...
+SW	T0,00A0 (SP)	;save strlen
+//800C4034:	loopus to copy to final buffer
+LBU	T3,0000 (A0)	;T3=char
+ADDIU	V0,V0,0001	;count++
+SLT	AT,V0,A1
+ADDIU	V1,V1,0001	;next byte in target buffer
+ADDIU	A0,A0,0001	;next byte in source buffer
+BNEZ	AT,800C4034	;loop if more characters
+SB	T3,FFFF (V1)	;save char to target
+//800C4050:	if strlen=0 or need fill characters
+SLT	AT,V0,S0
+BEQ	AT,R0,800C4070	;skip if count>=strlen
+ADDIU	A0,R0,0020	;A0=" "
+//800C405C:	loopus to copy fill characters
+ADDIU	V0,V0,0001
+SLT	AT,V0,S0
+SB	A0,0000 (V1)
+BNEZ	AT,800C405C
+ADDIU	V1,V1,0001
+//800C4070:	finish things up
+LW	RA,0024 (SP)
+//800C4074:
+LW	S0,0020 (SP)
+ADDIU	SP,SP,00A8
+JR	RA
+NOP
+
+
+800C3E30	0x723B0	converts string_txt ID to codeword and size
+ADDIU	SP,SP,FFB8
+SW	S0,0020 (SP)
+OR	S0,A0,R0	;S0=string#
+SW	RA,0024 (SP)
+SW	A1,004C (SP)	;save target for codeword
+SW	A2,0050 (SP)	;save target for size
+BLTZ	S0,800C3F4C	;string# should be between 0...
+SLTI	AT,S0,061A
+BEQ	AT,R0,800C3F4C	;...and 0x61A
+ANDI	T6,S0,0001
+BEQ	T6,R0,800C3E9C	;even entries will need to be returned differently
+ADDIU	A0,SP,0030	;A0=target: SP+0x30
+//800C3E60:	suck up odd entries
+SLL	T7,S0,0x2	;T7=index->offset (next entry, actually)
+LUI	T9,00D2
+ADDIU	T9,T9,8000	;T9=0xD18000 - base for index
+ADDIU	T8,T7,FFFC	;T8=offset-4: offset for entry
+LUI	A3,8011
+ADDIU	T0,R0,003E
+SW	T0,0010 (SP)	;SP+0x10 = 0x3E
+ADDIU	A3,A3,78E0	;A3=801178E0: ../m_string.c
+ADDU	A1,T8,T9	;A1=codeword
+JAL	80026E10	;copy A2 bytes from ROM codeword A1 to A0
+ADDIU	A2,R0,0008	;A2=size to pull from ROM
+LW	V0,0030 (SP)	;V0=index value (offset to entry in ROM txt table)
+LW	T1,0034 (SP)	;T1=following index value
+BEQ	R0,R0,800C3F0C
+SUBU	V1,T1,V0	;V1=length
+//800C3E9C:	index 0
+BNEZ	S0,800C3ED4	;branch if not index 0
+ADDIU	A0,SP,0030	;A0=SP+30: p->target
+LUI	A1,00D2
+LUI	A3,8011
+ADDIU	T2,R0,0045
+SW	T2,0010 (SP)	;SP+10=45: debug value
+ADDIU	A3,A3,78F0	;A3=801178F0: "../m_string.c"
+ADDIU	A1,A1,8000	;A1=D18000: base codeword
+ADDIU	A0,SP,0030	;A0=SP+30: p->target
+JAL	80026E10	;copy A2 bytes from ROM codeword A1 to A0
+ADDIU	A2,R0,0008	;A2=size 8
+OR	V0,R0,R0
+BEQ	R0,R0,800C3F0C
+LW	V1,0030 (SP)	;V1=SP+30: p->size
+//800C3ED4:	even indices
+SLL	T3,S0,0x2	;T3=index->offset
+LUI	T5,00D2
+ADDIU	T5,T5,8000	;T5=D18000: base codeword
+ADDIU	T4,T3,FFF8	;T4=offset-8: offset to entry
+LUI	A3,8011
+ADDIU	T6,R0,004B
+SW	T6,0010 (SP)	;SP+10=4B: debug value
+ADDIU	A3,A3,7900	;A3=80117900: "../m_string.c"
+ADDU	A1,T4,T5	;A1=codeword+offset
+JAL	80026E10
+ADDIU	A2,R0,0010	;A2=size 10
+LW	V0,0034 (SP)	;V0=SP+34: current index
+LW	T7,0038 (SP)	;T7=SP+38: following index
+SUBU	V1,T7,V0	;V1=strlen
+//800C3F0C:	retrieve string using ROM address
+SLTI	AT,V1,0041
+BEQ	AT,R0,800C3F38	;skip retrieval if over string size limit 65 chars
+LW	T2,004C (SP)	;T2=SP+4C: @codeword
+LW	T0,004C (SP)	;T0=SP+4C: @codeword
+LUI	T8,01B1
+ADDIU	T8,T8,A000	;T8=base codeword for string_txt
+ADDU	T9,V0,T8	;T9=codeword+offset: codeword for text entry
+SW	T9,0000 (T0)	;save codeword
+LW	T1,0050 (SP)	;T1=SP+50: @strlen
+BEQ	R0,R0,800C3F5C
+SW	V1,0000 (T1)	;save strlen
+//800C3F38:	return NULLs if over maximum strlen
+SW	R0,0000 (T2)	;0->@codeword
+LW	T3,0050 (SP)	;T3=SP+50: @strlen
+SW	R0,0000 (T3)	;0->@strlen
+BEQ	R0,R0,800C3F60
+LW	RA,0024 (SP)
+//800C3F4C:	return NULLs if outside index
+LW	T4,004C (SP)	;T4=SP+4C: @codeword
+SW	R0,0000 (T4)	;0->@codeword
+LW	T5,0050 (SP)	;T5=SP+50: @strlen
+SW	R0,0000 (T5)	;0->@strlen
+LW	RA,0024 (SP)
+//800C3F60:	return
+LW	S0,0020 (SP)
+ADDIU	SP,SP,0048
+JR	RA
+NOP
+
++-+
+extending the table should be as easy as changing those two lookup values
+lets make it use the complete AC list!

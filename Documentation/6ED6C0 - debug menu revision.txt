@@ -1,0 +1,183 @@
+  Foolishly I didn't update this as it was hacked, so part of the reduction isn't noted here.
+  
+Revised settings handlers, reduced to make room for a few new ones.
+Incidentally, the big whoop here is that the game mostly does work right, so bug handling is a moot point.
+808002F8	advance selection 4: weather
+	SW	A0,0000 (SP)
+	LUI	A0,8013
+	ADDIU	A0,A0,6EA0	;A0=80136EA0: runtime variables
+	LH	V1,056C (A0)	;V1=8013740C: weather
+	ADDIU	T6,R0,0003
+	OR	V0,R0,R0
+	ADDIU	V1,V1,0001	;V1++
+	SLTI	AT,V1,0005	;TRUE if 0-4
+50200001	*BEQL	AT,R0,+1
+	OR	V1,R0,R0
+	-BGEZL	V1,80800330
+	-SH	V1,056C (A0)
+	-OR	V1,R0,R0	;V1=reset to 0
+//8080032C:	update weather and time of day/season(?)
+	SH	V1,056C (A0)	;update value
+	SH	T6,056E (A0)	;3->8013740E: 
+	SLL	T8,V1,0x4
+	ORI	T9,T8,0003	;T9=weather*10 | 3
+	-LUI	AT,8013
+A099F439	*SB	T9,F439 (A0)	;T9->801362D9: time:???
+	JR	RA
+	NOP
+
+8080034C	advance selection 5: gender
+	SW	A0,0000 (SP)
+	LUI	A0,8013
+	LW	A0,6FD8 (A0)	;A0=80136FD8: p->playerdata
+	OR	V0,R0,R0
+	LB	V1,0010 (A0)	;V1=playerdata+10: gender
+38630001	*XORI	V1,V1,0001	;V1++
+	-BGEZ	V1,80800378	;branch if nice, valid number
+	-ANDI	V1,V1,0001	;V1&=1: limit to 2 genders
+	-BEQ	V1,R0,80800378
+	-NOP
+	-ADDIU	V1,V1,FFFE
+//80800378:	return
+	SB	V1,0010 (A0)	;update value
+	JR	RA
+	NOP
+
+80800384	advance selection 6: face type
+	SW	A0,0000 (SP)
+	LUI	A0,8013
+	LW	A0,6FD8 (A0)	;A0=80136FD8: p->playerdata
+	OR	V0,R0,R0
+	LB	V1,0011 (A0)	;V1=playerdata+11: face type
+	ADDIU	V1,V1,0001	;V1++
+	-BGEZ	V1,808003B0	;branch if a nice, valid number
+	ANDI	V1,V1,0007	;V1&=7: limits to 8 faces
+	-BEQ	V1,R0,808003B0	;will never branch...
+	-NOP
+	-ADDIU	V1,V1,FFF8	;V1-=8, which would only cause issues
+//808003B0:	return
+	SB	V1,0011 (A0)	;update value
+	JR	RA
+	NOP
+
+808003BC	advance selection 7: bee sting status
+	SW	A0,0000 (SP)
+	LUI	A0,8013
+	ADDIU	A0,A0,6EA0	;A0=80136EA0: runtime variables
+	LB	V1,0A38 (A0)	;V1=801378D8: beesting register
+	OR	V0,R0,R0
+38630001	*XORI	V1,V1,0001
+	-ADDIU	V1,R0,0001
+	-BEQ	R0,R0,808003E4	;branch if 1
+	-OR	V1,R0,R0
+	-ADDIU	V1,R0,0001
+//808003E4:	essentially same as XOR V1...
+	SB	V1,0A38 (A0)	;toggle value
+	JR	RA
+	NOP
+
+808003F0	advance selection 8: data source
+	SW	A0,0000 (SP)
+	LUI	A0,8013
+	ADDIU	A0,A0,6EA0	;A0=80136EA0: runtime variables
+	LB	V1,07E0 (A0)	;V1=80137680: data source
+	OR	V0,R0,R0
+38630001	*XORI	V1,V1,0001
+	-ADDIU	V1,R0,0001
+	-BEQ	R0,R0,80800418	;branch if 1
+	-OR	V1,R0,R0
+	-ADDIU	V1,R0,0001
+//80800418:	essentially same as XOR V1...
+	SB	V1,07E0 (A0)	;toggle value
+	JR	RA
+	NOP
+
+relink the time/date edit, because I don't know how it was done otherwise
+really could just bundle these two to save a smidgeon of space...
+808002D8	advance selection 2: time/date
+24030002	*ADDIU	V1,R0,0002
+	OR	V0,R0,R0
+	JR	RA
+AC830208	*SW	V1,0208 (A0)	;2->manager+208: set interface: time/date edit
+
+80800424	advance selection 9: shirt
+24030003	*ADDIU	V1,R0,0003
+	OR	V0,R0,R0
+	JR	RA
+AC830208	*SW	V1,0208 (A0)	;2->manager+208: set interface: time/date edit
+
++_+
+
+//8080150C:	print string
+	LW	T7,001C (SP)	;T7=SP+1C: beesting
+	LW	A0,0020 (SP)	;A0=SP+20: p->target
+	LUI	A1,8080
+55E00002	*BNEL	T7,R0,80801534	;stung if nonzero
+24A52370	*ADDIU	A1,A1,2370	;A1=80802370: "Bee Sting: Stung"
+//80801520:	not stung
+24A5235C	*ADDIU	A1,A1,235C	;A1=8080235C: "Bee Sting: Not Stung"
+	JAL	8002B770	;fprintf(A0,A1,...)
+	*NOP
+	-BEQ	R0,R0,80801540
+	-LW	RA,0014 (SP)
+//80801534:	stung
+	-JAL	8002B770	;fprintf(A0,A1,...)
+	-ADDIU	A1,A1,2370	;A1=80802370: "Bee Sting: Stung"
+//8080153C:	return
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0020
+	JR	RA
+	NOP
+
+
+//80801574:	print string
+	LW	T7,001C (SP)	;T7=SP+1C: data source
+	LW	A0,0020 (SP)	;A0=SP+20: p->target
+	LUI	A1,8080
+55E00002	*BNEL	T7,R0,+2	;branch if nonzero
+24A52394	*ADDIU	A1,A1,2394	;A1=80802394: "Data: ???"
+//80801588:	
+24A52380	*ADDIU	A1,A1,2380	;A1=80802380: "Data: ???"
+	JAL	8002B770	;fprintf(A0,A1,...)
+	*NOP
+	-BEQ	R0,R0,808015A8
+	-LW	RA,0014 (SP)
+//8080159C:
+	-JAL	8002B770	;fprintf(A0,A1,...)
+	-ADDIU	A1,A1,2394	;A1=80802394: "Data: ???"
+//808015A4:	return
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0020
+	JR	RA
+	NOP
+
+
+808015B4	display face type
+	accepts: A0=p->target, A1=p->manager
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+	SW	A0,0018 (SP)	;SP+18=A0: p->target
+	SW	A1,001C (SP)	;SP+1C=A1: p->manager
+	-LW	A0,0018 (SP)
+	ADDIU	A1,R0,0017
+	JAL	8002AEEC
+	ADDIU	A2,R0,000C
+//808015D4:	print string
+	LUI	T6,8013
+	LW	T6,6FD8 (T6)	;T6=80136FD8: p->playerdata
+	-LUI	A2,8080
+	LUI	A1,8080
+81C60011	*LB	A2,0011 (T6)	;T7=playerdata+11: face type
+	ADDIU	A1,A1,23AC	;A1=808023AC: "Face   : type %d"
+	JAL	8002B770	;fprintf(A0,A1,...)
+8FA40018	LW	A0,0018 (SP)	;A0=SP+18: p->target
+	-SLL	T8,T7,0x2	;T8=T7*4: type->offset
+	-ADDU	A2,A2,T8
+	-LW	A2,1DD8 (A2)	;A2=80801DD8+offset: pointer table: p->type.str
+//80801600:	return
+	LW	RA,0014 (SP)
+	ADDIU	SP,SP,0018
+	JR	RA
+	NOP
+
+Will have to find how they set the events.  Just need to pull the byte and swap out text.

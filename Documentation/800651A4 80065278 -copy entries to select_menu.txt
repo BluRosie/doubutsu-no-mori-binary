@@ -1,0 +1,143 @@
+80065278	0x	copy strings from buffer to entry locations
+	accepts:	A0=801425C0, A1=p->str1, A2=len str1, A3=p->str2, T2=len str2, T3=len str3, T4=len str4, SP+14=p->str3 or NOP, SP+1C=p->str4 or NOP
+ADDIU	SP,SP,FFE8	(SP-18: set SP+14,18,1C,20 before this routine)
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;save base value
+SW	A1,001C (SP)	;save p->str1
+SW	A3,0024 (SP)	;save p->str2
+LW	A0,0018 (SP)	;not that A0 has changed...
+JAL	80065198		;RESET NUMBER OF SELECT_MENU ENTRIES
+	SW	R0,007C (A0)
+	JR	RA
+	NOP
+SW	A2,0020 (SP)	;save strlen1
+//80065298:
+LW	A1,001C (SP)	;A1=p->str1
+LW	A2,0020 (SP)	;A2=strlen1
+BEQL	A1,R0,800652C4	;skip on NULL
+LW	A1,0024 (SP)	;A1=p->str2
+BLEZ	A2,800652C0	;skip if 0 strlen
+SLTIU	AT,A2,FFFF	;altered to fry test - string cap
+BEQL	AT,R0,800652C4
+LW	A1,0024 (SP)	;A1=p->str2
+JAL	800651A4
+LW	A0,0018 (SP)	;A0=base value
+//800652C0
+LW	A1,0024 (SP)
+LW	A2,0028 (SP)	;A2=strlen2
+BEQL	A1,R0,800652EC
+LW	A1,002C (SP)
+BLEZ	A2,800652E8
+SLTIU	AT,A2,FFFF	;altered to fry test
+BEQL	AT,R0,800652EC
+LW	A1,002C (SP)
+JAL	800651A4
+LW	A0,0018 (SP)
+//800652E8
+LW	A1,002C (SP)
+LW	A2,0030 (SP)	;A2=strlen3
+BEQL	A1,R0,80065314
+LW	A1,0034 (SP)
+BLEZ	A2,80065310
+SLTIU	AT,A2,FFFF	;altered to fry test
+BEQL	AT,R0,80065314
+LW	A1,0034 (SP)
+JAL	800651A4
+LW	A0,0018 (SP)
+//80065310
+LW	A1,0034 (SP)
+LW	A2,0038 (SP)	;A3=strlen4
+BEQL	A1,R0,8006533C
+LW	RA,0014 (SP)
+BLEZ	A2,80065338
+SLTIU	AT,A2,FFFF	;altered to fry test
+BEQL	AT,R0,8006533C
+LW	RA,0014 (SP)
+JAL	800651A4
+LW	A0,0018 (SP)
+//80065338:
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800651A4	0x	copy select_menu entry from buffer to slot
+	accepts: A0=base for menu (801425C0), A1=p->str, A2=strlen
+	returns: V0=entry# or -1 if invalid
+ADDIU	SP,SP,FFD0
+SW	RA,0014 (SP)
+SW	A0,0030 (SP)	;save base for menu
+OR	A3,A1,R0		;A3=p->str
+BEQL	A3,R0,80065268	;return -1 if NULL pointer
+ADDIU	V0,R0,FFFF
+BLEZ	A2,80065264	;quit if length negative
+SLTIU	AT,A2,FFFF	;altered to fry test
+BEQ	AT,R0,80065264	;quit if strlen is stupid
+LW	T6,0030 (SP)	;T6=801425C0
+LW	T7,007C (T6)	;T7=number of entries in menu
+ADDIU	T0,T6,007C	;T0=p->#entries
+OR	A0,A3,R0		;A0=p->str
+SLTI	AT,T7,0004
+BEQ	AT,R0,80065264	;menu should only have 1-4 entries
+OR	A1,A2,R0		;A1=strlen
+//800651E4:
+LW	T1,0000 (T0)	;T1=#entries
+SW	T0,0018 (SP)	;save p->#entries
+SW	A3,0034 (SP)	;save p->str
+JAL	8009E8D0
+SW	T1,0028 (SP)	;save #entries
+	//8009E8D0	0x	align text to right margin?
+	ADDIU	V0,A1,FFFF	;V0=strlen-1
+	BLTZ	V0,8009E8FC	;bail if strlen=0
+	OR	V1,V0,R0		;V1=strlen-1
+	ADDU	V0,A0,V0		;V0=str+strlen-1
+	ADDIU	A0,R0,0020	;A0=blank space
+	//8009E8E4:	loopus!
+	LBU	T6,0000 (V0)	;T6=character at end of string
+	BNEL	A0,T6,8009E900	;if it isn't a space, quit
+	ADDIU	V0,V1,0001
+	ADDIU	V1,V1,FFFF	;set position to previous character
+	BGEZ	V1,8009E8E4
+	ADDIU	V0,V0,FFFF
+	//8009E8FC:
+	ADDIU	V0,V1,0001	;V0=strlen omitting trailing spaces
+	JR	RA
+	NOP
+//800651F8:
+LW	A3,0034 (SP)	;A3=p->str
+LW	A2,0030 (SP)	;A2=base
+BEQ	R0,T1,80065210	;skip if entry=0
+SLL	T8,T1,0x2	;T8=entry->offset
+ADDU	T8,A2,T8		;T8=base+offset to size
+LW	T8,0058 (T8)	;T8=saved strlen for previous entry
+//80065210:
+ADDU	V1,A2,T8		;V1=base+offset to target string entry
+LW	T0,0018 (SP)	;T0=p->#entries
+OR	A1,V0,R0		;A1=strlen omitting trailing spaces
+ADDIU	V1,V1,0034	;V1=string entry location
+BLEZ	V0,80065244	;skip if no string available
+OR	A0,R0,R0		;counter for character copy
+//80065228:	loopus - copy from buffer to entries
+LBU	T9,0000 (A3)	;T9=char
+ADDIU	A0,A0,0001	;A0++
+SLT	AT,A0,A1		;true if cur<total
+ADDIU	V1,V1,0001	;V1=target location++
+ADDIU	A3,A3,0001	;A3=source++
+BNEZ	AT,80065228
+SB	T9,FFFF (V1)	;save to target location
+//80065244:
+SLL	T2,T1,0x2	;T2=entry#->offset
+ADDU	T3,A2,T2
+SW	A1,005C (T3)	;save strlen to strlen slot
+LW	T4,0000 (T0)	;T4=#entries
+OR	V0,T1,R0		;V0=entry#
+ADDIU	T5,T4,0001
+BEQ	R0,R0,80065268
+SW	T5,0000 (T0)	;save new entry number
+//80065264:	return failure
+ADDIU	V0,R0,FFFF
+//80065268:	quit
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0030
+JR	RA
+NOP

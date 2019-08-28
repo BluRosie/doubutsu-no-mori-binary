@@ -1,0 +1,333 @@
+from ../ac_animal_logo.c (ROM 854A60)
+
+2C5398	2518	offsets to the display lists for the background blocks
+2C53B0	2530	offsets to the display lists for the forground letters
+
+Foreground Dark 	5 samples
+2C53C8	2548	R component
+2C53DC	255C	G component
+2C53F0	2570	B component
+
+Background Light	5 samples
+2C5404	2584	R component
+2C5418	2598	G component
+2C542C	25AC	B component
+
+Background Dark 	5 samples
+2C5440	25C0	R component
+2C5454	25D4	G component
+2C5468	25E8	B component
+
+
+	25FC	
+----------------
+
+802C4BDC	routine that calls below for each letter
+
+802C3EA8:	0x	routine loading the background squares
+ADDIU	SP,SP,FFA0
+SW	A2,0068 (SP)	//A2=image being processed
+LUI	AT,4180
+SLL	A2,A2,0x10	//A2*=0x10000
+MTC1	AT,F0
+SRA	A2,A2,0x10	//A2/=0x10000
+SW	RA,0014 (SP)
+SW	A0,0060 (SP)
+SLL	V0,A2,0x2	//V0=A2*4 (change to offset)
+LUI	AT,802C
+ADDU	AT,AT,V0	//AT+=offset
+LWC1	F4,537C (AT)	//F4=802C537C+
+LUI	AT,4320
+MTC1	AT,F6
+LUI	AT,802C
+LWC1	F16,5548 (AT)	//F16=802C5548
+LUI	AT,802C
+SUB.S	F8,F4,F6
+LWC1	F18,5394 (AT)	//F18=802C5394
+LUI	AT,42F0
+MTC1	AT,F4
+MUL.S	F10,F8,F0
+LUI	AT,4392
+ADD.S	F6,F18,F4
+MTC1	A2,F4
+LW	T6,0000 (A1)
+SW	V0,001C (SP)
+MUL.S	F8,F6,F0
+SUB.S	F12,F10,F16
+MTC1	AT,F10
+LUI	AT,C1A0
+MTC1	AT,F18
+SW	T6,0058 (SP)
+CVT.S.W	F6,F4
+ADD.S	F16,F8,F10
+MUL.S	F8,F18,F6
+SWC1	F16,004C (SP)
+ADD.S	F12,F12,F8
+JAL	800E020C
+SWC1	F12,0050 (SP)
+//802C3F48:
+
+//802C3FD4:
+LW	A1,0040 (SP)
+LW	V1,005C (SP)
+LUI	T2,802C
+SW	V0,0004 (A1)
+LUI	A1,DE00
+OR	V0,V1,R0	//V0=V1
+//802C3FEC:	0x
+ADDIU	T2,T2,52D0	//T2=802C52D0 (display list for background)
+SW	T2,0004 (V0)	//T2->+4	[image display index]
+SW	A1,0000 (V0)	//DE000000->+0
+ADDIU	V1,V1,0008	//V1+=8
+LW	A3,0060 (SP)
+LUI	T3,FA00
+ORI	A0,V1,R0	//A0=V1
+SW	T3,0000 (A0)	//FA000000->
+LW	V0,02B4 (A3)	//V0<-image index
+LUI	T4,802C
+LUI	T7,802C
+SLL	V0,V0,0x2	//V0*=4 (convert to offset)
+ADDU	T4,T4,V0	//T4+=offset
+LUI	T1,802C
+LW	T4,542C (T4)	//T4<-802C542C+	B component
+ADDU	T1,T1,V0	//T1+=offset
+ADDU	T7,T7,V0	//T7+=offset
+LW	T8,5404 (T7)	//T8<-802C5404+	R component
+LW	T1,5418 (T1)	//T1<-802C5418+	G component
+ANDI	T5,T4,00FF
+SLL	T6,T5,0x8	//T6=T5*0x100
+SLL	T9,T8,0x18	//T9=T8*0x1000000
+ANDI	T2,T1,00FF
+SLL	T3,T2,0x10	//T3=T2*0x10000
+OR	T0,T6,T9
+OR	T4,T0,T3
+//802C4058:	(0x)
+ORI	T5,T4,0078	//T5=RGBA (alpha at about half)	BACKGROUND LIGHT color
+SW	T5,0004 (A0)	//RGBA->+4	[image display index]
+ADDIU	V1,V1,0008	//V1+=8
+LUI	A2,FB00
+OR	A0,V1,R0	//A0=V1
+SW	A2,0000 (A0)	//FB000000->	[image display index]
+LW	V0,02B4 (A3)	//V0=image index
+LUI	T7,802C
+LUI	T9,802C
+SLL	V0,V0,0x2	//V0*=4 (convert to offset)
+ADDU	T7,T7,V0	//T7+=offset
+LUI	T3,802C
+LW	T7,5468 (T7)	//T7<-802C5468+	B component
+ADDU	T3,T3,V0	//T3+=offset
+ADDU	T9,T9,V0	//T9+=offset
+LW	T1,5440 (T9)	//T1<-802C5440+	R component
+LW	T3,5454 (T3)	//T3<-802C5454+	G component
+ANDI	T8,T7,00FF
+SLL	T6,T8,0x8	//T6=T8*0x100
+SLL	T2,T1,0x18	//T2=T1*0x1000000
+ANDI	T4,T3,00FF
+SLL	T5,T4,0x10	//T5=T4*0x10000
+OR	T0,T6,T2
+OR	T7,T0,T5
+ORI	T8,T7,00FF	//T8=RGBA (alpha at full)	BACKGROUND dark color
+SW	T8,0004 (A0)	//RGBA->+4	[image display index]
+ADDIU	V1,V1,0008	//V1+=8
+OR	V0,V1,R0	//V0=V1
+SW	A1,0000 (V0)	//DE000000->	[image display index]
+LW	T9,001C (SP)
+//802C40D0:	0x1254
+LUI	T1,802C
+LUI	T6,802C
+ADDU	T1,T1,T9	//T1=base addy for images + offset
+LW	T1,5398 (T1)	//T1=802C5398=image offset
+ADDIU	V1,V1,0008	//V1+=8 (8016F5A8)
+//802C40E4:	(0x1264)
+ADDIU	T6,T6,52F8	//T6=802C52F8 (short snippet of display list script)
+SW	T1,0004 (V0)	//T1->(8016F5A4)
+OR	V0,V1,R0	//V0=V1
+SW	A1,0000 (V0)	//DE000000->(8016F5A8)
+SW	T6,0004 (V0)	//address of short display list snippet->(8016F5AC)
+ADDIU	V1,V1,0008	//V1+=8
+OR	V0,V1,R0	//V0=V1
+LUI	T2,FA00
+LUI	T3,FFE6
+ORI	T3,T3,00FF	//T3=FFE600FF	FOREGROUND dark color
+ORI	T2,T2,00FF	//T2=FA0000FF
+SW	T2,0000 (V0)	//T2->(8016F5B0)
+SW	T3,0004 (V0)	//T3->(8016F5B4)	FOREGROUND light color
+ADDIU	V1,V1,0008	//V1+=8
+OR	A0,V1,R0	//A0=V1
+SW	A2,0000 (A0)	//FB000000->(8016F5B8)
+LW	V0,02B4 (A3)	//V0<-802C5570+2B4=802C5824
+LUI	T4,802C
+LUI	T7,802C
+SLL	V0,V0,0x2	//V0*=4 (change to offset)
+ADDU	T4,T4,V0	//T4+=offset
+LUI	T6,802C
+LW	T4,53F0 (T4)	//T4=802C53F0+ (0x2570)	B component
+ADDU	T6,T6,V0	//T6+=offset
+ADDU	T7,T7,V0	//T7+=offset
+LW	T8,53C8 (T7)	//T8=802C53C8+ (0x2548)	R component
+LW	T6,53DC (T6)	//T6=802C53DC+ (0x255C)	G component
+ANDI	T0,T4,00FF
+SLL	T5,T0,0x8	//T5=T0*0x100
+SLL	T9,T8,0x18	//T9=T8*0x1000000
+ANDI	T2,T6,00FF
+SLL	T3,T2,0x10	//T3=T2*0x10000
+OR	T1,T5,T9
+OR	T4,T1,T3	//T4=RGB value
+ORI	T0,T4,00FF	//T0=RGBA (alpha FF)
+SW	T0,0004 (A0)	//RGBA->(8016F5BC)	FOREGROUND dark color
+ADDIU	V1,V1,0008	//V1+=8
+OR	V0,V1,R0	//V0=V1
+SW	A1,0000 (V0)	//DE000000->(8016F5C0)
+LW	T7,001C (SP)
+LUI	T8,802C
+ADDIU	V1,V1,0008	//V1+=8
+ADDU	T8,T8,T7	//T8=offset to next letter
+LW	T8,53B0 (T8)	//T8=802C53B0+ (0x2530)	offset to letter
+SW	T8,0004 (V0)	//T8->(8016F5C4)
+LW	T5,0058 (SP)
+SW	V1,02B8 (T5)	//V1->(80145338)
+JAL	800E0244
+NOP
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0060
+JR	RA
+NOP
+
+--------
+800E0244:
+LUI	V0,8014
+ADDIU	V0,V0,62B4	//V0=801462B4
+LW	T6,0000 (V0)	//T6<-801462B4 (80310EA0)
+ADDIU	T7,T6,FFC0
+SW	T7,0000 (V0)	//T7->(80310EA0)	offset to current letter/backdrop
+JR	RA
+NOP
+
+-----------------
+802C52A8	0x2428	display list script
+E7000000 00000000 
+D9C0F9FA 00000000 
+EF082CF0 00504244 
+FCFFFFFF FFFDF2F9 
+DF000000 00000000 
+
+802C52D0	0x2450	display list script - Backgrounds
+E7000000 00000000 
+D9C0F9FA 00000000 
+EF082CF0 00504244 
+FC309C61 553AF77B 
+DF000000 00000000 
+
+802C52F8	0x2478	display list script - Letters
+E7000000 00000000 
+D9C0F9FA 00000000 
+EF082CF0 00504244 
+FC30FE61 55FEF379 
+D9000000 00000400 
+DF000000 00000000 
+
+-----------------
+RAM listing of images created at runtime	8016F4C8
+FA lists a foreground color (RGBA)
+FB lists a background color (RGBA)
+DE is used for file offsets (06 is point within mapping file, otherwise literal address)
+
+back1	FA000032 B4FF5A78 light green (half visible)
+	FB000000 78C83CFF darker green
+	DE000000 06002FF0 DE000000 802C52F8 
+img1	FA0000FF FFE600FF yellow
+	FB000000 145000FF dark green
+	DE000000 06003060 DA380003 80167378 DE000000 802C52D0 
+back2	FA000032 B4FF5A78 light green (half visible)
+	FB000000 78C83CFF darker green
+	DE000000 060054F0 DE000000 802C52F8 
+img2	FA0000FF FFE600FF 
+	FB000000 145000FF 
+	...
+back3		
+
+----------------
+----------------
+colors:
+foreground
+FFE600	145000	yellow/
+FFE600	463C78	yellow/
+FFE600	004678	yellow/
+FFE600	502864	yellow/
+FFE600	5A1E28	yellow/
+
+background
+B4FF5A	78C83C	
+D2B4FF	B496E6	
+96F0FF	64E4E6	
+F0A0FF	C878E6	
+FF8C78	F07878	
+
+----------------
+----------------
+For edit!
+Switch "dark" and "light" alpha for background.
+	11DB-> FF
+	123B-> 78
+Set mapping for background to use same as foreground.
+	116E-> 20E8
+
+Try applying alpha to dark for foreground.
+	12EF-> 78
+(alpha on letter palettes appears to have no effect)
+
+Make all letters 2-sided.
+	2498->E3001001
+	249E->0000
+
+Hack the colors for background to friendly ones.
+Use same dark hue as foreground.  Recycle background hues.
+	
+Position hacks	802C537C
+0x24FC gives floats that dictate left/right pos.  For second line, may need to make more...
+#	offset	chars	float value	equiv	new floats	new
+1	24FC	A/F	433F0000	191	43570000	213
+2	2500	n/o	43690000	233	437C0000	252
+3	2504	i/r	43898000	275	438F8000	287
+4	2508	m/e	439E8000	317	439FC000	319.5
+5	250C	a/s	43B14000	354.5	43B0C000	353.5
+6	2510	l/t	43C64000	396.5	43BFC000	383.5
+	2514	height	C2A60000	-83	C2960000	-75
+
+
+Rotation hacking
+new pos:	ul, ur, lr, ll
+A 1	30D0	(-7 deg)		[-2/-4 -3/+3 +2/+4 +3/-3]
+n 2	55D0	(-10 deg)		[-4/-4 -5/+2 +3/+4 +5/-2]
+i 3	26F0
+m 4	4D70	(+5 deg)		[+3/+2 +1/-3 -2/-2 -2/+3]
+a 5	3610	(+15 deg)		[+6/+3 +5/-3 -3/-2 -3/+4]
+l 6	3AB0	(+5 deg)		[+3/+2 +1/-3 -2/-2 -2/+3]
+F 1	3F30	+7 deg	FFD8FF5B 0022FF59 002AFFC3 FFDFFFC8	[+5/+2 +4/-3 -3/-2 -2/+3]
+o 2	2D70
+r 3	2B70	-15deg	FFE0FF66 002AFF6E 001DFFB9 FFD2FFB0	[-8/-6 -9/+3 +4/+4 +6/-4]
+e 4	4A10	+15deg	FFD7FF6E 0023FF68 002BFFB3 FFE0FFB9	[+6/+3 +5/-3 -3/-2 -3/+4]
+s 5	4810
+t 6	3550	-15deg	FFE0FF56 002AFF5F 001DFFC8 FFD3FFBF	[-7/-7 -9/+2 +4/+5 +6/-4]
+
+
+scooting TM left
+Set on a texrect (E4)
+Uses routine at 800BE1D4 to do so.  A3=lrx, T9=lry, A1=ulx, A2=uly
+260C = x pos, 2610 = y pos (+10, *4)
+112 -> FA
+
+new letter positions
+char	image	size	pins	mapping
+A	2DA8	480	25D0	2900
+n	3228	200	2650	29D8
+i	3428	300	26D0	2AB0
+m	3728	480	2750	2B88
+a	3BA8	200	27D0	2C60
+l	3DA8	300	2850	2D38
+F	40A8	300	2590	2890
+o	43A8	200	2610	2968
+r	45A8	200	2690	2A40
+e	47A8	200	2710	2B18
+s	49A8	200	2790	2BF0
+t	4BA8	300	2810	2CC8

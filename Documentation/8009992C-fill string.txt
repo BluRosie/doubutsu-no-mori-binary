@@ -1,0 +1,26 @@
+8009992C	0x	fills out a string with spaces in a rather complex way
+	accepts: A0=target, A1=strlen, A2=fill character
+SW	A2,0008 (SP)	;save org. character
+ANDI	A2,A2,00FF	;1 character long, though not necessary...
+BEQ	A1,R0,80099978	;quit if strlen=0
+OR	V0,R0,R0
+ANDI	A3,A1,0003	;A3=test for first three characters
+BEQ	A3,R0,8009995C
+OR	V1,A3,R0
+//80099948:	copy 1,2,3 characters - other loop does sets of four
+ADDIU	V0,V0,0001
+SB	A2,0000 (A0)
+BNE	V1,V0,80099948
+ADDIU	A0,A0,0001
+BEQ	V0,A1,80099978
+//8009995C:	do a set of four characters
+ADDIU	V0,V0,0004
+SB	A2,0000 (A0)
+SB	A2,0001 (A0)
+SB	A2,0002 (A0)
+SB	A2,0003 (A0)
+BNE	V0,A1,8009995C
+ADDIU	A0,A0,0004
+//80099978:	quit
+JR	RA
+NOP

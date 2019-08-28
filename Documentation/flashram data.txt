@@ -1,0 +1,39 @@
+header:
+0x0	4	00000002
+0x4	5	game name: NAFJ0
+0x8	2	(note: overlaps 0x4 entry) short checkword for verity tests
+0xA	8	current time
+0x12
+
+Slot 1:	0xBD0
+0x20	6	player's name
+0x26	6	town name
+0x2C	2	?
+0x2E	2	short checkword; should match 0x8 in file
+
+Slot 2:	0xBD0
+0xBF0	6	player's name
+0xBF6	6	town name
+0xBFC	2	?
+0xBFE	2	short checkword; should match 0x8 in file
+
+Slot 3:	0xBD0
+0x17C0	6	player's name
+0x17C6	6	town name
+0x17CC	2	?
+0x17CE	2	short checkword; should match 0x8 in file
+
+Slot 4:	0xBD0
+0x2390	6	player's name
+0x2396	6	town name
+0x239C	2	?
+0x239E	2	short checkword; should match 0x8 in file
+
+messages:
+0x2F60	6	town name
+0x2F66	2	01 00
+0x2F68	2	short checkword; should match 0x8 in file
+0x2F6A	0x60	message 1
+0x2FCA	8	message 1 timestamp (?)
+
+	

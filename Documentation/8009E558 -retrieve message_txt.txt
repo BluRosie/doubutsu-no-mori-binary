@@ -1,0 +1,73 @@
+0x	Retrieve text from msg_main text bank using index value
+	called by 8009FFB0
+//8009E558:	
+ADDIU	SP,SP,FFB0
+SW	S0,0020 (SP)
+OR	S0,A0,R0
+SW	RA,0024 (SP)
+SW	A1,0054 (SP)
+SW	A2,0058 (SP)
+BEQ	S0,R0,8009E63C
+LW	A0,0054 (SP)	#A0=entry#
+ADDIU	A1,SP,004C	#target address
+JAL	8009E388		#processes the index recall value: sep. file
+ADDIU	A2,SP,0048
+//8009E584:	
+LW	V1,004C (SP)	#V1=txt codeword f/ stack
+LW	T0,0048 (SP)	#T0=strlen
+BEQL	V1,R0,8009E640	#bail if NULL pointer
+SW	R0,0000 (S0)
+BEQ	T0,R0,8009E63C	#bail if strlen=0
+ADDIU	T1,R0,FFF8
+AND	A1,V1,T1		#A1=V1 to nearest DW boundry
+SUBU	V0,V1,A1		#V0=difference in values
+ADDU	T6,V0,T0		#T6=strlen accounting for difference
+ADDIU	T7,T6,0007
+ADDIU	A0,S0,0010	#move target address? [80142000]
+LUI	A3,8011
+ADDIU	T8,R0,03C2	#T8=0x3C2
+SW	V0,0040 (SP)	#hold onto difference: used as offset later
+SW	T8,0010 (SP)
+ADDIU	A3,A3,7280	#A3=80117280: ".../m_msg_main.c"
+SW	A0,0028 (SP)
+JAL	80026E10		#retrieves data from ROM from codeword
+AND	A2,T7,T1		#A2=strlen to DW boundry
+//8009E5D0:	
+LW	A3,0028 (SP)
+LW	T0,0048 (SP)
+LW	T9,0040 (SP)
+OR	A2,T0,R0
+OR	V1,A3,R0
+ADDU	A0,S0,T9
+ADDIU	A0,A0,0010
+BLEZ	T0,8009E610	#skip string copy
+OR	A1,R0,R0		#A1=0: counter
+//8009E5F4:	copy string?
+LBU	T2,0000 (A0)
+ADDIU	A1,A1,0001	#counter++
+SLT	AT,A1,A2
+ADDIU	V1,V1,0001
+ADDIU	A0,A0,0001
+BNEZ	AT,8009E5F4
+SB	T2,FFFF (V1)
+//8009E610:	
+LW	T3,0054 (SP)
+ADDIU	T4,R0,0001
+SW	T4,0000 (S0)	#1->S0
+OR	A0,A3,R0
+JAL	8009E4C8
+SW	T3,0004 (S0)
+SW	V0,0008 (S0)
+LW	T5,0058 (SP)
+ADDIU	V0,R0,0001	#V0=1: successful string capture
+BEQ	R0,R0,8009E644
+SW	T5,000C (S0)
+//8009E63C:	
+SW	R0,0000 (S0)
+OR	V0,R0,R0		#V0=0: bad string pull.  sadness...
+//8009E644:	quit!
+LW	RA,0024 (SP)
+LW	S0,0020 (SP)
+ADDIU	SP,SP,0050
+JR	RA
+NOP

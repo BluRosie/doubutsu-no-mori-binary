@@ -1,0 +1,896 @@
+../m_ledit_ovl.c
+803BD200 is a register of stuff for message board editor
+0x0	1	
+0x1	1	
+0x2	2	
+0x4	2
+0x6	2
+0x8	4
+0xC	2	visibility of cursor (smaller when faded during blink)
+0xE	2	tied to blink
+0x10	4	
+0x14	2	
+0x16	2	cursor position in chars from start (0)
+0x18	2	
+0x1A	2	
+0x1C	2	total count of characters
+0x1E	2	-1
+0x20	2	cursor x position in chars (1st = 0)
+0x22	2	cursor y position in chars
+0x24	4	p->text
+0x28	4	p->ASM
+0x2C	4	p->code to display text
+
+C-727260	803B7DD0
+
+803B8FAC	writes [END] block
+	accepts: A0=SP+58,A1=[80229050],A2=p->txt block,A3=#chars in row
+//803B90E0	+	write the text in the message
+JAL	80090E98	;print text to screen
+SW	RA,0034 (SP)
+
+//803B90F8
+BEQL	S4,AT,803B912C
+MTC1	S0,F10
+BNEZ	S3,803B9110
+ADDIU	AT,R0,0010
+BNEL	S0,AT,803B912C
+MTC1	S0,F10
+ADD.S	F6,F20,F30
+SUB.S	F4,F22,F26
+SWC1	F4,0000 (S6)
+BEQ	R0,R0,803B9150
+SWC1	F8,0000 (S7)
+//803B9128	+1358	is what gives the [end] block its position (aegh!)
+MTC1	S0,F10		;S0=char in row count
+LUI	AT,4140
+MTC1	AT,F18		;F18=12.0	horizontal (chars in row)
+CVT.S.W	F16,F10	;F16=#chars in row as float
+SUB.S	F10,F28,F20	;F10=difference from edge to center?	;F28=120.0, F20=63.0
+MUL.S	F4,F16,F18	;F4=x display pos
+ADD.S	F6,F4,F22	;F4=x pos + offset from edge
+SUB.S	F8,F6,F26	;F8=x pos accounting for difference from edge to center?
+SWC1	F8,0000 (S6)
+SWC1	F10,0000 (S7)
+ADDIU	S4,S4,0001
+ADDIU	AT,R0,0006
+BNE	S4,AT,803B9038
+ADD.S	F20,F20,F30	;F20= y offset+ amount per line(F30=16.0)
+ETC...
+
+//803B9348
+LW	T7,0064 (SP)		;[803B78B8]
+ADDIU	AT,R0,0002
+LW	T9,0004 (T7)
+BNEL	T9,AT,803B9408	;branch if not writing (T9==2)
+LW	RA,003C (SP)
+BEQL	S0,R0,803B9408	;pointer can't be NULL
+LW	RA,003C (SP)
+//803B9364 +1594	is what gives the cursor its crazy offset value!
+LH	T8,0020 (S0)	;803BD200+20
+LUI	AT,803C
+LWC1	F10,97CC (AT)	;F10=803B97CC: 0.3	probably offset between displayed chars
+ADDIU	T0,T8,FFFF	;T0=column count-1
+MTC1	T0,F6
+LH	T1,0022 (S0)	;T1=row count most likely (tested only on first row)
+LUI	AT,4140
+CVT.S.W	F8,F6	;F8=count as float
+MTC1	AT,F18		;F18=12.0	horizontal (b/w chars)
+LUI	AT,4180
+LW	T2,002C (S1)	;T2=[803A7680]=[8022AD0C+2C]
+LUI	T3,0001	;T3=0x10000
+OR	A0,S1,R0
+ADD.S	F16,F8,F10	;F16=count+offset (.3)
+MTC1	T1,F8		;F8=row count
+ADDU	T3,T3,T2	;T3=[803B7680]
+LW	T3,06E0 (T3)	;T3=803BD200!?
+CVT.S.W	F10,F8	
+MUL.S	F4,F16,F18	;F4=x cursor display position (#spaces*12)
+MTC1	AT,F16		;AT=16.0	vertical (row) 
+LW	T9,002C (T3)	;T9=[803BC8D0]
+LW	A1,0068 (SP)	;A1=[80229050]
+MUL.S	F18,F10,F16	;F18=y cursor display position
+ADD.S	F6,F4,F22	;F6=x cur. pos + 63.0, which could be offset from edge of screen
+MFC1	A2,F6		;A2=x cur. pos.
+ADD.S	F4,F18,F20	;F4=y cur. pos + 63.0, which is probably top edge of screen
+MFC1	A3,F4		;A3=y cur. pos
+JALR	RA,T9
+NOP
+
+REWRITE:	p->bank=803B97D8
+start=(curpos - row) + p->bank
+strlen=row
+//803B935C	+158C
+12000029	*BEQ	S0,R0,803B9404
+24060000	*ADDIU	A2,R0,R0	;variable width, unless I screwed up again!
+//803B9364 +1594	is what gives the cursor its crazy offset value!
+86050020	*LH	A1,0020 (S0)	;803BD200+20	#char over in row: strlen
+3C04803C	*LUI	A0,803C
+C48A97CC	`*LWC1	F10,97CC (A0)	;F10=803B97CC: offset b/w char and cursor	-7 should be new value: C1000000 is better
+860E0016	*LH	T6,0016 (S0)	;T0=chars over the cursor is
+01C57023	*SUBU	T6,T6,A1	;T6=#chars-strlen (text at start of row)
+008E2021	*ADDU	A0,A0,T6	;A0+=start pos in string
+0C0240B3	*JAL	800902CC
+248497D8	*ADDIU	A0,A0,97D8	;p->bank
+44823000	++MTC1	V0,F6
+8E2A002C	LW	T2,002C (S1)	;T2=[803A7680]=[8022AD0C+2C]
+3C0B0001	LUI	T3,0001	;T3=0x10000
+46803220	CVT.S.W	F8,F6	;F8=count as float
+02202025	OR	A0,S1,R0
+460A4100	`*ADD.S	F4,F8,F10	;F16=count+offset
+86090022	LH	T1,0022 (S0)	;T1=Y count most likely
+44894000	MTC1	T1,F8		;F8=y count
+016A5821	ADDU	T3,T3,T2	;T3=[803B7680]
+8D6B06E0	LW	T3,06E0 (T3)	;T3=803BD200!?
+468042A0	CVT.S.W	F10,F8	
+3C014180	LUI	AT,4180
+44818000	MTC1	AT,F16		;AT=16.0	vertical (row) 
+8D79002C	LW	T9,002C (T3)	;T9=[803BC8D0]
+8FA50068	LW	A1,0068 (SP)	;A1=[80229050]
+46105482	MUL.S	F18,F10,F16	;F18=y cursor display position
+46162180	ADD.S	F6,F4,F22	;F6=x cur. pos + 63.0, which could be offset from edge of screen
+44063000	MFC1	A2,F6		;A2=x cur. pos.
+46149100	ADD.S	F4,F18,F20	;F4=y cur. pos + 63.0, which is probably top edge of screen
+0320F809	JALR	RA,T9
+44072000	MFC1	A3,F4		;A3=y cur. pos
+
+REWRITE:
+at this point, S0=#chars in row, S6 a pointer to next one
+so, could use S0=len, S6-S0=p->txt
+//803B90F8	+1328
+1281000B	*BEQ	S4,AT,803B9128
+00102825	*OR	A1,R0,S0
+BNEZ	S3,803B9110
+ADDIU	AT,R0,0010
+16010007	*BNE	S0,AT,803B9128
+00000000	*NOP
+//803B9110:
+ADD.S	F6,F20,F30
+SUB.S	F4,F22,F26
+SWC1	F4,0000 (S6)
+BEQ	R0,R0,803B9150
+SWC1	F8,0000 (S7)
+//803B9128	+1358	is what gives the [end] block its position (aegh!)
+02B02023	*SUBU	A0.S5,S0
+0C0240B3	*JAL	800902CC
+24060000	*ADDIU	A2,R0,0000
+44828000	*MTC1	V0,F16	;move and convert the width
+4614E281	SUB.S	F10,F28,F20	;F10=difference from edge to center?	;F28=120.0, F20=63.0
+46808120	*CVT.S.W	F4,F16	;F16=width as float
+E6EA0000	SWC1	F10,0000 (S7)
+46162180	ADD.S	F6,F4,F22	;F4=x pos + offset from edge
+461A3201	SUB.S	F8,F6,F26	;F8=x pos accounting for difference from edge to center?
+E6C80000	SWC1	F8,0000 (S6)
+//803B9150:
+ADDIU	S4,S4,0001
+ADDIU	AT,R0,0006
+BNE	S4,AT,803B9038
+ADD.S	F20,F20,F30	;F20= y offset+ amount per line(F30=16.0)
+
+
+the simplest solution is to just move the cursor with the text, not use fixed-width
+800902CC returns V0=width, so push to COP1 and CVT.S.W yo
+	accepts: A0=p->str, A1=strlen, A2=width type (1,0)
+vert*16 is start
+
+This doesn't account for the underlying issue of the right edge needing to move
+wordwrap will suck.  Will need to:
+1) compare a 'row''s width to max,
+2) keep track of #characters in each line
+3) retain limitted # chars in message
+4) OPTIONALLY, create real wordwrap that looks for non-text
+   most likely, this will *not* happen
+On the plus side, the cursor tracking will still work (probably)
+
+-unless...
+  can use message_txt buffer for a near-infinite amount of text and fix the messages in the save file
+    eek...  that will be horrendous...
+      too bad I can't pawn it off on somebody else...
+
+@_@
+Oh yeah, same hack, but for the Gyroid message screen
+//803B8158:	0x388
+BEQL	S5,AT,803B818C
+MTC1	S0,F10
+BNEZ	S3,803B8170
+ADDIU	AT,R0,0010
+BNEL	S0,AT,803B818C
+MTC1	S0,F10
+ADD.S	F6,F20,F30
+SUB.S	F4,F22,F26
+SUB.S	F8,F28,F6
+SWC1	F4,0000 (S6)
+BEQ	R0,R0,803B81B0
+SWC1	F8,0000 (S7)
+MTC1	S0,F10	;S0=position in chars
+//803B818C:	0x3BC
+LUI	AT,4140	;AT=12.0
+MTC1	AT,F18
+CVT.S.W	F16,F10
+SUB.S	F10,F28,F20
+MUL.S	F4,F16,F18
+ADD.S	F6,F4,F22
+SUB.S	F8,F6,F26
+SWC1	F8,0000 (S6)
+SWC1	F10,0000 (S7)
+ADDIU	S5,S5,0001
+ADDIU	AT,R0,0004
+BNE	S5,AT,803B80B4
+ADD.S	F20,F20,F30
+REWRITE:
+at this point, S0=#chars in row, S6 a pointer to next one
+so, could use S0=len, S6-S0=p->txt
+//803B8158	+388
+12A1000B	*BEQ	S5,AT,803B8188
+00102825	*OR	A1,R0,S0
+BNEZ	S3,803B8170
+ADDIU	AT,R0,0010
+16010007	*BNE	S0,AT,803B8188
+00000000	*NOP
+//803B8170:	+3A0
+ADD.S	F6,F20,F30
+SUB.S	F4,F22,F26
+SUB.S	F8,F28,F6
+SWC1	F4,0000 (S6)
+BEQ	R0,R0,803B81B0
+SWC1	F8,0000 (S7)
+//803B8188	+3B8	is what gives the [end] block its position (aegh!)
+02902023	*SUBU	A0,S4,S0	;A0=p->string; S4=p->[END], S0=# in row
+0C0240B3	*JAL	800902CC
+24060000	*ADDIU	A2,R0,0000
+44828000	*MTC1	V0,F16	;move and convert the width
+4614E281	SUB.S	F10,F28,F20	;F10=difference from edge to center?	;F28=120.0, F20=63.0
+46808120	*CVT.S.W	F4,F16	;F16=width as float
+E6EA0000	SWC1	F10,0000 (S7)
+46162180	ADD.S	F6,F4,F22	;F4=x pos + offset from edge
+461A3201	SUB.S	F8,F6,F26	;F8=x pos accounting for difference from edge to center?
+E6C80000	SWC1	F8,0000 (S6)
+//803C81B0
+
+//803B82C0:	cursor position
+LH	T8,0020 (S0)
+LUI	AT,803C
+LWC1	F8,8620 (AT)	;F8=offset for cursor from edge of letter 0.3
+ADDIU	T0,T8,FFFF
+MTC1	T0,F4	;F4=count-1
+LH	T1,0022 (S0)
+LUI	AT,4140	;AT=12.0
+CVT.S.W	F6,F4	;F6=count as float
+MTC1	AT,F16	;F16=12.0	horizontal spacing
+LUI	AT,4180
+LW	T2,002C (S1)
+LUI	T3,0001
+OR	A0,S1,R0
+ADD.S	F10,F6,F8	;F10=count+offset
+MTC1	T1,F6	;F6=row count
+ADDU	T3,T3,T2
+LW	T3,06E0 (T3)
+CVT.S.W	F8,F6	;F8=row as float
+MUL.S	F18,F10,F16	;F18=x cursor position (count*12)
+MTC1	AT,F10		;F10=16.0	vertical spacing
+LW	T9,002C (T3)
+LW	A1,0040 (SP)
+MUL.S	F16,F8,F10	;F16=y cursor position (row * 16)
+ADD.S	F4,F18,F12	;F4=xpos + screenedge 63.0
+MFC1	A2,F4		;A2=x cur. pos.
+ADD.S	F18,F16,F0	;F18=ypos + screenedge 63.0
+MFC1	A3,F18		;A3=y cur. pos.
+JALR	RA,T9
+NOP
+
+!REVISION!
+tacking this at 800902C8!
+24060000	*ADDIU	A2,R0,R0	;variable width, unless I screwed up again!
+
+//803B82B4:	+4E4
+C7B40048	*LWC1	F20,0048 (SP)
+	BEQ	S0,R0,803B8360
+	LWC1	F12,0044 (SP)
+//803B82C0:	cursor position
+86050020	*LH	A1,0020 (S0)	;803BD200+20	#char over in row: strlen
+3C01803C	LUI	AT,803C
+C4288620	LWC1	F8,8620 (AT)	;F8=803B8620: offset value 0.3 -> -8.4 (12*.3-12)
+860E0016	*LH	T6,0016 (S0)	;T0=chars over the cursor is total
+01C57023	*SUBU	T6,T6,A1	;T6=#chars-strlen (text at start of row)
+8E040024	*LW	A0,0024 (S0)	;A0=p->text
+0C0240B2	*JAL	800902C8	;dang... fries F0...  set F0->F20
+008E2021	*ADDU	A0,A0,T6	;A0+=start pos in string
+44825000	*MTC1	V0,F10	;F6=line width
+8E2A002C	LW	T2,002C (S1)	;T2=[803A7680]=[8022AD0C+2C]
+3C0B0001	LUI	T3,0001	;T3=0x10000
+468051A0	CVT.S.W	F6,F10	;F8=count as float
+02202025	OR	A0,S1,R0
+46083480	*ADD.S	F18,F6,F8	;F10=count+offset
+86090022	LH	T1,0022 (S0)	;T1=Y count most likely
+44893000	MTC1	T1,F6	;F6=row count
+016A5821	ADDU	T3,T3,T2
+8D6B06E0	LW	T3,06E0 (T3)
+46803220	CVT.S.W	F8,F6	;F8=row as float
+3C014180	LUI	AT,4180
+44815000	MTC1	AT,F10		;F10=16.0	vertical spacing
+8D79002C	LW	T9,002C (T3)
+8FA50040	LW	A1,0040 (SP)
+460A4402	MUL.S	F16,F8,F10	;F16=y cursor position (row * 16)
+460C9100	ADD.S	F4,F18,F12	;F4=xpos + screenedge 63.0
+44062000	MFC1	A2,F4		;A2=x cur. pos.
+46148480	ADD.S	F18,F16,F20	;F18=ypos + screenedge 63.0
+0320F809	JALR	RA,T9
+44079000	MFC1	A3,F18		;A3=y cur. pos.
+
+@_@
+
+Letter writting dialog +also+ needs the same hack done.
+Aegh...  Could they not reuse any code at all?
+
+803CADC0	1	section you're writting in (0=super,1=body,2-post)
+803CADC1	1	screen vertical offset 2-7
+803CADC2	1	
+803CADC3	1	strlen of recipient's name
+803CADC4	1	
+803CADC5	1	superscript strlen
+803CADC6	1	message length
+803CADC7	1	postscript strlen (includes your name)
+803CADC8	6	recipient
+803CADCE	6	recipient's town name
+803CADD4	6	the other six bytes from a location entry
+803CADDA	6	sender
+803CADE0	6	sender's town name
+803CADE6	6	the other six bytes from a location entry
+803CADEF	1	point at which the recipient's name occurs in the superscript
+803CADF2	0xA	superscript, beside recipient name
+803CADFC	0x60	letter's content
+803CAE5C	0x10	postscript (your name, etc)
+
+803D0540	the block of position stuff that all these use
+
+803D0564	p->current text
+
+set position of recipient's name:
+
+
+set position of postscript
+803C9BA4:	+
+ADDIU	SP,SP,FFC0
+LUI	AT,3F80
+MTC1	AT,F0	;F0=1.0
+MTC1	A2,F12
+MTC1	A3,F14
+SW	RA,003C (SP)
+SW	A0,0040 (SP)
+SW	A1,0044 (SP)
+LW	T6,0040 (SP)
+LUI	V0,0001
+ADDIU,T8,R0,0010	;T8=16 characters a line
+LW	T7,002C (T6)	;T7=[803A7680]
+LW	T0,0050 (SP)	;T0=p->RGB
+//803C9BD8:
+LUI	AT,4140
+ADDU	V0,V0,T7	;V0=[803B7680]
+LW	V0,06E4 (V0)	;V0=[803CADC0]: p->message data and text
+MTC1	AT,F4		;F4=12.0	delta x
+ADDIU	T4,R0,00FF	;T4=alpha component
+LBU	A2,0007 (V0)	;A2=strlen of postscript
+SWC1	F14,0010 (SP)	;save y panning offset?
+LBU	T1,0000 (T0)	;T1=red component
+SUBU	T9,T8,A2	;T9=16 - strlen (right-align text)
+MTC1	T9,F6		;F6=xpos
+SW	T1,0014 (SP)	;save red
+LBU	T2,0001 (T0)	;T2=green component
+CVT.S.W	F8,F6	;F8=xpos->[float]
+//803C9C0C:
+LW	A0,0044 (SP)
+SW	T2,0018 (SP)	;save green
+LBU	T3,0002 (T0)	;T3=blue component
+SW	R0,0034 (SP)
+SWC1	F0,0030 (SP)
+MUL.S	F10,F4,F8	;F10=12 * xpos
+SWC1	F0,002C (SP)
+SW	R0,0028 (SP)
+SW	R0,0024 (SP)
+SW	T4,0020 (SP)	;save alpha
+ADDIU	A1,V0,009C	;A1=p->text
+SW	T3,001C (SP)	;save blue
+ADD.S	F12,F12,F10	;F12=x position + panning offset?
+MFC1	A3,F12
+JAL	80090E98	;print text to screen
+NOP
+//803C9C4C
+LW	RA,003C (SP)
+ADDIU	SP,SP,0040
+JR	RA
+NOP
+
+REVISED TO CORRECTLY ALIGN TO RIGHT
+803C9BA4:	+B54
+27BDFFC0	ADDIU	SP,SP,FFC0
+3C013F80	LUI	AT,3F80
+44866000	MTC1	A2,F12
+AFBF003C	SW	RA,003C (SP)
+AFA40040	SW	A0,0040 (SP)
+AFA50044	SW	A1,0044 (SP)
+//store the obvious
+AFA70010	*SW	A3,0010 (SP)	;save y panning offset?
+8FA80050	LW	T0,0050 (SP)	;T0=p->RGB
+91090000	LBU	T1,0000 (T0)	;T1=red component
+AFA90014	SW	T1,0014 (SP)	;save red
+91090001	LBU	T1,0001 (T0)	;T2=green component
+AFA90018	SW	T1,0018 (SP)	;save green
+91090002	LBU	T1,0002 (T0)	;T3=blue component
+AFA9001C	SW	T1,001C (SP)	;save blue
+91090003	*LBU	T1,0003 (T0)	;T4=alpha component
+AFA90020	SW	T1,0020 (SP)	;save alpha
+AFA00024	SW	R0,0024 (SP)
+AFA00028	SW	R0,0028 (SP)
+AFA1002C	*SW	AT,002C (SP)
+AFA10030	*SW	AT,0030 (SP)
+AFA00034	SW	R0,0034 (SP)
+//figure out all the addresses; what was V0 must now be T7 until the very end
+8FAE0040	LW	T6,0040 (SP)
+3C020001	LUI	V0,0001
+8DCA002C	LW	T2,002C (T6)	;T7=[803A7680]
+004A1021	ADDU	V0,V0,T2	;V0=[803B7680]
+8C4A06E4	*LW	T2,06E4 (V0)	;V0=[803CADC0]: p->message data and text
+//803C9BD8:
+2544009C	*ADDIU	A0,T2,009C	;A1=p->text
+0C0240B2	*JAL	800902C8
+91450007	*LBU	A1,0007 (T2)	;A1=strlen
+//803C9C0C:
+241800C0	*ADDIU,T8,R0,00C0	;T8=box width is 120 units
+0302C823	*SUBU	T9,T8,V0	;T9=16 - strlen (right-align text)
+44993000	MTC1	T9,F6		;F6=xpos
+8FA40044	LW	A0,0044 (SP)
+468032A0	*CVT.S.W	F10,F6	;F8=xpos->[float]
+91460007	*LBU	A2,0007 (T2)	;A2=strlen of postscript
+2545009C	*ADDIU	A1,T2,009C	;A1=p->text
+460A6300	ADD.S	F12,F12,F10	;F12=x position + panning offset?
+44076000	MFC1	A3,F12
+0C0243A6	JAL	80090E98	;print text to screen
+000A1025	*OR	V0,R0,T2
+//803C9C4C
+8FBF003C	LW	RA,003C (SP)
+03E00008	JR	RA
+27BD0040	ADDIU	SP,SP,0040
+00000000	NOP
+00000000	NOP
+00000000	NOP
+
+
+sets cursor position:
+803C9A38:	+
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;save [8022AD0C]
+SW	A2,0020 (SP)	;[float] save x correction from caller
+SW	A3,0024 (SP)	;[float] save y correction from caller
+ADDIU	T1,R0,0001	;T1=1
+LW	T6,0018 (SP)
+LUI	AT,0001
+LW	V0,002C (T6)	;V0=[803A7680]
+OR	A0,T6,R0	;A0=T6: [8022AD0C]
+ADDU	V0,V0,AT	;V0=[803B7680]
+LW	V1,06E4 (V0)	;V1=[803CADC0]: p->message data and text
+LW	T0,06E0 (V0)	;T0=[803D0540], block of position data for cursor, etc
+LBU	A3,0002 (V1)	;A3=mode: 1 brings up the recipient menu
+OR	A2,T0,R0	;A2=control block
+BNEL	T1,A3,803C9A94
+LBU	A0,0000 (V1)	;A0=current section of message
+//803C9A7C:	recipient selection dialog
+LW	A2,0020 (SP)
+JAL	803C98FC	;bring up menu to select a different recipient
+LW	A3,0024 (SP)
+BEQ	R0,R0,803C9B98
+LW	RA,0014 (SP)
+//803C9A90:	superscript cursor position
+LBU	A0,0000 (V1)	;-SKIP
+LH	V0,0020 (A2)	;V0=xpos in line
+ADDIU	AT,R0,0002
+BNEZ	A0,803C9AD0	;probably tests section; 0=superscript, 1=text body section, 2=postscript
+ADDIU	V0,V0,FFFF	;pos--
+BNEL	A3,AT,803C9AB4
+MTC1	V0,F4	;F4=xpos
+ADDIU	V0,V0,0006	;V0+=6 (offsets to right)
+MTC1	V0,F4	;F4=xpos+6
+//803C9AB4:
+LUI	AT,803D
+MTC1	R0,F12
+CVT.S.W	F6,F4
+LWC1	F8,ADA8 (AT)
+MOV.S	F2,F12
+BEQ	R0,R0,803C9B38
+ADD.S	F0,F6,F8
+//803C9AD0:	cursor static position
+BNEL	T1,A0,803C9B0C	;skip all this if A0!=1
+LBU	T9,0007 (V1)	;T9=postscript length
+MTC1	V0,F10	;F10=cursor xpos
+LH	T7,0022 (A2)	;T7=cursor y position
+LUI	AT,803D
+CVT.S.W	F16,F10	;F16=xpos
+LWC1	F18,ADAC (AT)	;F18=803CADAC: 3E99999A	0.3	cursor offset
+ADDIU	T8,T7,0001	;T8=ypos++
+MTC1	T8,F4
+LUI	AT,4140	;AT=12.0	y offset
+MTC1	AT,F12	;F12=12.0
+ADD.S	F0,F16,F18	;F0=cursor xpos+offset
+BEQ	R0,R0,803C9B38
+CVT.S.W	F2,F4	;F2=ypos
+//803C9B08:	postcript cursor position
+LBU	T9,0007 (V1)	;T9=postscript length	-SKIPPED
+LUI	AT,803D
+LWC1	F10,ADB0 (AT)	;F10=803CADB0: 3E99999A	0.3	cursor offset
+SUBU	T2,V0,T9	;T2=T2=xpos-ps strlen
+ADDIU	T3,T2,0010	;T3=right-aligned
+MTC1	T3,F6
+LUI	AT,40E0	;AT=7.0	ypos?
+MTC1	AT,F2	;F2=7.0
+CVT.S.W	F8,F6	;F8=xpos
+LUI	AT,41C0	;AT=24.0
+MTC1	AT,F12
+ADD.S	F0,F8,F10	;F0=xpos + offset
+//803C9B38:	all bounce here: set x position
+LUI	AT,4280	;AT=64.0	screen width
+MTC1	AT,F16
+LWC1	F18,0020 (SP)	;F18=x correction from caller
+LUI	AT,4140	;AT=12.0	delta x
+MTC1	AT,F6	;F6=12.0
+ADD.S	F4,F16,F18	;F4=x: screen position + panning correction
+//803C9B50:	set y position
+LUI	AT,4180	;AT=16.0	delta y
+MUL.S	F8,F0,F6	;F8=xpos * 12
+MTC1	AT,F18	;F18=16.0
+LWC1	F16,0024 (SP)	;F16=y correction
+LUI	AT,4210	;AT=36.0	
+MUL.S	F6,F2,F18	;F6=ypos * 16
+LW	T9,002C (T0)
+LW	A0,0018 (SP)
+ADD.S	F10,F4,F8	;F10=xpos + x screen offset
+SUB.S	F4,F16,F6	;F4= y panning offset - ypos 
+MFC1	A2,F10	;A2=final x position
+MTC1	AT,F10	;F10=36.0
+SUB.S	F8,F4,F12	;F8= y panning offset - ypos - y screen offset
+SUB.S	F18,F10,F8	;F18=36-y panning offset + ypos + y screen offset
+MFC1	A3,F18	;A3=final y position
+JALR	RA,T9
+NOP
+//803C9B94:
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+MAJOR FREAKING REVISION	keep V1,F0,F4 safe from 800902CC/8: A0=p->str,A1=strlen
+could go fairly generic.
+  get full position (+16), add to pointer, subtract curxpos to get width
+  trick is both x-scripts offset
+  oh, and when you're done, you need to hack the pointer correction table as well ;*)
+803C9A38:	+
+	ADDIU	SP,SP,FFE8
+	SW	RA,0014 (SP)
+	SW	A0,0018 (SP)	;save [8022AD0C]
+	SW	A2,0020 (SP)	;[float] save x correction from caller
+	SW	A3,0024 (SP)	;[float] save y correction from caller
+AFA50010	SW	A1,0010 (SP)
+	ADDIU	T1,R0,0001	;T1=1 (TEXT BLOCK)
+	LW	T6,0018 (SP)
+	LUI	AT,0001
+	LW	V0,002C (T6)	;V0=[803A7680]
+	OR	A0,T6,R0	;A0=T6: [8022AD0C]
+	ADDU	V0,V0,AT	;V0=[803B7680]
+	//803C9A64:
+8C4A06E4	*LW	T2,06E4 (V0)	;V1=[803CADC0]: p->message data and text
+8C4806E0	LW	T0,06E0 (V0)	;T0=[803D0540], block of position data for cursor, etc
+91470002	*LBU	A3,0002 (T2)	;A3=mode: 1 brings up the recipient menu
+55270006	*BNEL	T1,A3,803C9A8C
+85060016	*LH	A2,0016 (T0)	;A2=curpos
+//803C9A78:	recipient selection dialog
+	;note: 803C98FC does not need V1
+8FA60020	LW	A2,0020 (SP)
+0C0F263F	JAL	803C98FC	;bring up menu to select a different recipient
+8FA70024	LW	A3,0024 (SP)
+10000033	BEQ	R0,R0,803C9B54
+8FBF0014	LW	RA,0014 (SP)
+//803C9A8C:	generic to all types
+;plan is to stuff A2->T0, V1->T2 so they are safe.
+;send A0=p->string(A2+24)+pos(A2+16)-curpos(A2+20), A1=strlen (A2+20) to 800902C8
+;That returns V0=width.  fries F0,F4,AT,V1,A2,T6
+85050020	*LH	A1,0020 (T0)	;A1=strlen (char in line)
+8D040024	*LW	A0,0024 (T0)	;p->string
+00862021	*ADDU	A0,A0,A2	;p+#bytes
+0C0240B2	*JAL	800902C8	;returns V0=width of line
+00852023	*SUBU	A0,A0,A1	;p+bytes-cur = start of test region
+//803C9AA0:
+91440000	*LBU	A0,0000 (T2)	;A0=current section of message
+24010002	ADDIU	AT,R0,0002
+14800009	BNEZ	A0,803C9AD0	;probably tests section; 0=superscript, 1=text body section, 2=postscript
+244B0040	*ADDIU	T3,V0,0040	;stow xwidth nice and safe, while adding the width offset to it!
+//803C9AB0:	superscript cursor position
+	;get width of name + 1 space - yes, it will be aligned!
+	;803CADC8 starts the name
+14270005	*BNE	A3,AT,803C9AC8	;mode 2= superscript edit (right of recipient)
+91450003	*LBU	A1,0003 (T2)	;A1=recipient's strlen
+0C0240B2	*JAL	800902C8	;returns V0=width of line
+25440008	*ADDIU	A0,T2,0008	;p->recipient's name
+24420008	*ADDIU	V0,V0,0008	;V0+=8	offsets to right for 'space'
+004B5821	*ADDU	T3,T3,V0	;T3+=offset
+//803C9AC8:
+1000000E	BEQ	R0,R0,803C9B04
+0000C025	*OR	T8,R0,R0	;the y and offset
+//803C9AD0:	cursor static position
+54890006	*BNEL	T1,A0,803C9AEC	;skip all this if A0!=1
+91450007	*LBU	A1,0007 (T2)	;T9=postscript length
+850F0022	LH	T7,0022 (T0)	;T7=cursor y position
+25F80001	*ADDIU	T8,T7,0001	;T8=ypos+1
+0018C100	*SLL	T8,T8,0x4	;ypos*16
+10000007	BEQ	R0,R0,803C9B04
+2718000C	*ADDIU	T8,T8,000C	;add the offset
+//803C9AEC:	postcript cursor position
+;0x120 is the right-aligned edge.  Subtract strlen from this to get start x pos
+;for cursor, add startxpos to its own offset
+;I +think+ the T0+24 points to the postscript in this case
+;	otherwise, just use T2+9C
+0C0240B2	*JAL	800902C8	;returns V0=total width	
+8D040024	*LW	A0,0024 (T0)
+241800C0	*ADDIU	T8,R0,00C0	;right edge
+03021023	*SUBU	V0,T8,V0	;V0=size of box-length of postscript	start of string position
+004B5821	*ADDU	T3,T3,V0	;xpos= xpos + start of string position
+24180088	*ADDIU	T8,R0,0088	;T8=7*16 + 24
+//803C9B04:	all bounce here: set x position
+448B2000	*MTC1	T3,F4	;F4=xpos
+C7B20020	LWC1	F18,0020 (SP)	;F18=x correction from caller
+468021A0	*CVT.S.W	F6,F4	;F4=x pos converted
+3C01803D	*LUI	AT,803D
+C428ADA8	*LWC1	F8,ADA8 (AT)	;F8=803CADA8: -8.4	x cursor offset C1066666
+46083200	*ADD.S	F8,F6,F8	;F0=xpos+width + cursor offset
+46124280	*ADD.S	F10,F8,F18	;F10=xpos+width+cursor + panning correction
+44065000	MFC1	A2,F10	;A2=final xpos
+//803C9B24:	set y position
+44982000	MTC1	T8,F4
+C7B00024	LWC1	F16,0024 (SP)	;F16=y correction
+8FA50010	LW	A1,0010 (SP)
+468021A0	CVT.S.W	F6,F4	;F6=ypos
+3C014210	LUI	AT,4210	;AT=36.0	
+44815000	MTC1	AT,F10
+8D19002C	LW	T9,002C (T0)
+8FA40018	LW	A0,0018 (SP)
+46068201	SUB.S	F8,F16,F6	;F4=y correction - ypos
+46085481	SUB.S	F18,F10,F8	;F18=36-height+ypos+offset
+0320F809	JALR	RA,T9
+44079000	MFC1	A3,F18
+//803C9B54:
+8FBF0014	LW	RA,0014 (SP)
+03E00008	JR	RA
+27BD0018	ADDIU	SP,SP,0018
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+
+@_@
+
+Mail: superscript of DOOM!
+
+803C9E98	803CA170
+ONLY REVISION SHOWN HERE!  dASM IN SEPERATE DOC
+
+803C9E98:	+E48
+27BDFF80	ADDIU	SP,SP,FF80
+F7B40040	SDC1	F20,0040 (SP)
+4487A000	MTC1	A3,F20
+AFBF0054	SW	RA,0054 (SP)
+AFB20050	SW	S2,0050 (SP)
+AFB1004C	SW	S1,004C (SP)
+AFB00048	SW	S0,0048 (SP)
+AFA50084	SW	A1,0084 (SP)
+8C8E002C	LW	T6,002C (A0)	;T6=[803A7680]
+8CCF0004	LW	T7,0004 (A2)
+3C110001	LUI	S1,0001
+24010001	ADDIU	AT,R0,0001
+022E8821	ADDU	S1,S1,T6	;S1=[803B7680]: 
+15E10062	BNE	T7,AT,803CA058	;branch if you're editting the superscript right now!
+8E3106E4	LW	S1,06E4 (S1)	;S1=803CADC0: message data block
+//803C9ED4:
+92320003	LBU	S2,0003 (S1)	;S2=strlen for recipient's name
+2630002E	-ADDIU	S0,S1,002E	;S0=p->block+2E: 01, then place recipient's name occurs in superscript
+//803C9EDC:	write everything before recipient's name
+3C013F80	+LUI	AT,3F80
+44810000	+MTC1	AT,F0	;F0=1.0
+C7A40090	LWC1	F4,0090 (SP)	;F4=36.0	y screen offset
+8FA20094	LW	V0,0094 (SP)	;V0=[803CAD40]: pointer to RGBA value
+E7A40010	-SWC1	F4,0010 (SP)	;save y screen offset
+90590000	LBU	T9,0000 (V0)	;T9=red component
+AFB90014	SW	T9,0014 (SP)	;save red
+90590001	*LBU	T9,0001 (V0)	;T1=green component
+AFB90018	*SW	T9,0018 (SP)	;save green
+90590002	*LBU	T9,0002 (V0)	;T2=blue component
+AFB9001C	*SW	T9,001C (SP)	;save blue
+90590003	*LBU	T9,0003 (V0)	;T3=alpha component
+AFB90020	*SW	T9,0020 (SP)	;save alpha
+AFA00024	SW	R0,0024 (SP)	;save 0
+AFA00028	SW	R0,0028 (SP)	;save 0
+E7A0002C	SWC1	F0,002C (SP)	;save 1.0
+E7A00030	SWC1	F0,0030 (SP)	;save 1.0
+AFA00034	SW	R0,0034 (SP)	;save 0
+4407A000	MFC1	A3,F20		;A3=x screen offset
+92060001	LBU	A2,0001 (S0)	;A2=location in superscript for recipient's name
+26050004	ADDIU	A1,S0,0004	;A1=p->block+32: superscript text
+0C0243A6	JAL	80090E98	;write text to screen
+8FA40084	LW	A0,0084 (SP)	;A0=[80229050]
+//803C9F38:	determine width of string
+26040004	*ADDIU	A0,S0,0004
+0C0240B2	*JAL	800902C8	;returns V0=width of string
+92050001	*LBU	A1,0001 (S0)	;A2=location in superscript for recipient's name
+//803C9F44:
+920C0001	LBU	T4,0001 (S0)	;T4=location in superscript for recipient's name
+3C013F80	LUI	AT,3F80
+44810000	MTC1	AT,F0		;F0=1.0
+44823000	*MTC1	V0,F6		;F6=starting xpos
+8FA40084	LW	A0,0084 (SP)	;A0=[80229050]
+05810005	BGEZ	T4,803C9F70
+46803220	CVT.S.W	F8,F6
+3C014F80	LUI	AT,4F80
+44815000	MTC1	AT,F10	;F10=4294967296.0
+00000000	NOP
+460A4200	ADD.S	F8,F8,F10
+//803C9F70:
+C7A40090	LWC1	F4,0090 (SP)	;F4=36.0	y screen offset
+240D00B9	ADDIU	T5,R0,00B9	;T5=0xB9 (red component)
+240E00FF	ADDIU	T6,R0,00FF	;T6=alpha component
+AFAD0014	SW	T5,0014 (SP)	;save red
+AFA00018	SW	R0,0018 (SP)	;save green (0)
+AFA0001C	SW	R0,001C (SP)	;save blue (0)
+AFAE0020	SW	T6,0020 (SP)	;save alpha
+26250008	ADDIU	A1,S1,0008	;A1=p->block+8: p->recipient's name
+02403025	OR	A2,S2,R0	;A2=strlen of recipient's name
+4608A500	*ADD.S	F20,F20,F8	;F20=xwidth + x screen offset
+AFA00024	SW	R0,0024 (SP)	;save 0
+AFA00028	SW	R0,0028 (SP)	;save 0
+E7A0002C	SWC1	F0,002C (SP)	;save 1.0
+E7A00030	SWC1	F0,0030 (SP)	;save 1.0
+AFA00034	SW	R0,0034 (SP)	;save 0
+4407A000	MFC1	A3,F20		;A3=xfinalpos
+0C0243A6	JAL	80090E98
+E7A40010	SWC1	F4,0010 (SP)	;save y screen offset
+//803C9FB8:	determine width of name string
+26240008	*ADDIU	A0,S1,0008	;A1=p->block+8: p->recipient's name
+0C0240B2	*JAL	800902C8	;returns V0=width of string
+02402825	*OR	A1,S2,R0	;A2=strlen of recipient's name
+//803C9FC8:
+44823000	*MTC1	V0,F6		;F6=strlen of recipient: start xpos
+92080001	LBU	T0,0001 (S0)	;T0=location in superscript for recipient's name
+3C013F80	LUI	AT,3F80
+44810000	MTC1	AT,F0		;F0=1.0
+2901000A	SLTI	AT,T0,000A	;strlen for superscript can't exceed 10 chars
+1020005E	BEQ	AT,R0,803CA154	;skip this section if there is nothing to write
+8FA20094	LW	V0,0094 (SP)	;V0=p->RGBA value
+C7B20090	LWC1	F18,0090 (SP)	;F18=y screen offset
+922F0005	LBU	T7,0005 (S1)	;T7=superscript strlen
+468032A0	CVT.S.W	F10,F6	;F10=[float] start xpos
+E7B20010	SWC1	F18,0010 (SP)	;save y screen offset
+02082821	ADDU	A1,S0,T0	;A1=803CADEE+start of str following name
+90590000	*LBU	T9,0000 (V0)	;T8=red component
+AFB90014	*SW	T9,0014 (SP)	;save red
+90590001	LBU	T9,0001 (V0)	;T9=green component
+AFB90018	SW	T9,0018 (SP)	;save green
+90590002	*LBU	T9,0002 (V0)	;T1=blue component
+AFB9001C	*SW	T9,001C (SP)	;save green
+90590003	*LBU	T9,0003 (V0)	;T2=alpha component
+AFB90020	*SW	T9,0020 (SP)	;save green
+24A50004	ADDIU	A1,A1,0004	;A1=p->str
+460AA500	*ADD.S	F20,F20,F10	;F20=width of initial string + width of recipient's name
+AFA00024	SW	R0,0024 (SP)	;save 0
+AFA00028	SW	R0,0028 (SP)	;save 0
+E7A0002C	SWC1	F0,002C (SP)	;save 1.0
+E7A00030	SWC1	F0,0030 (SP)	;save 1.0
+AFA00034	SW	R0,0034 (SP)	;save 0
+4407A000	MFC1	A3,F20		;A3=xpos
+8FA40084	LW	A0,0084 (SP)	;A0=[80229050]
+0C0243A6	JAL	80090E98	;write that string
+01E83023	SUBU	A2,T7,T0	;A2=strlen: superscript strlen - pos for name
+10000045	BEQ	R0,R0,803CA158	;bail out
+8FBF0054	LW	RA,0054 (SP)
+	NOP
+	NOP
+	NOP
+	NOP
+etc...
+
++-+-+-+-+
+
+Post Office Mailbox Name Editing
+//803C9DB8:
+LH	T9,0020 (V1)	;T9=count
+LUI	AT,803D
+LWC1	F4,A388 (AT)	;F4=803CA388: 3E99999A	0.3 cursor offset
+ADDIU	T6,T9,FFFF	;T6=count-- (accounting for side)
+MTC1	T6,F16
+LUI	AT,4140
+MTC1	AT,F8		;F8=12.0
+CVT.S.W	F18,F16	;F18=[float] count
+LW	T9,002C (V1)
+MFC1	A3,F2
+OR	A0,T8,R0
+LW	A1,00F0 (SP)
+ADD.S	F6,F18,F4	;F6=count+cursor offset
+MUL.S	F10,F6,F8	;F10=count * 12.0
+ADD.S	F16,F10,F12	;F16=xpos + screen offset
+MFC1	A2,F16
+JALR	RA,T9
+NOP
+
+!REVISED!	C-72C280+D68
+803D6200	CONTROLLER
+//803C9DB8:	fries: AT,V1,T6,T7,F0,F4, so save the V1
+//want to pull pointer (0x24), use cursor x position (0x20) as strlen
+84650020	*LH	A1,0020 (V1)	;A1=count
+8C640024	*LW	A0,0024 (V1)	;A0=p->str
+0C0240B2	*JAL	800902C8
+0003C825	*OR	T9,R0,V1
+00191825	*OR	V1,R0,T9
+44828000	*MTC1	V0,F16
+3C01808A	LUI	AT,803D
+C424C078	LWC1	F4,A388 (AT)	;F4=803CA388: C1066666	-8.4 cursor offset
+468084A0	CVT.S.W	F18,F16	;F18=[float] count
+8C79002C	LW	T9,002C (V1)
+44071000	MFC1	A3,F2
+03002025	OR	A0,T8,R0
+8FA500F0	LW	A1,00F0 (SP)
+46049180	ADD.S	F6,F18,F4	;F6=count+cursor offset
+460C3400	*ADD.S	F16,F6,F12
+44068000	MFC1	A2,F16
+0320F809	JALR	RA,T9
+00000000	NOP
+
+Need to make some space, so lets reduce this fun little subroutine:
+803C94E4:	+494
+LW	A1,001C (SP)
+LW	V0,0024 (SP)
+ADDIU	V1,R0,0001
+LW	T8,0004 (A1)
+LUI	AT,0001
+ADDU	AT,AT,V0
+BNEL	V1,T8,803C9518
+SW	R0,06A0 (AT)
+LUI	AT,0001
+ADDU	AT,AT,V0
+BEQ	R0,R0,803C9518
+SW	V1,06A0 (AT)
+SW	R0,06A0 (AT)
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0028
+JR	RA
+NOP
+
+REWRITE	803C94E4:	+494
+	LW	A1,001C (SP)
+	LW	V0,0024 (SP)
+	ADDIU	V1,R0,0001
+	LW	T8,0004 (A1)
+	LUI	AT,0001
+	ADDU	AT,AT,V0
+	*BNEL	V1,T8,+2
+	SW	R0,06A0 (AT)
+	-SW	V1,06A0 (AT)
+	-LW	RA,0014 (SP)
+	-ADDIU	SP,SP,0028
+	-JR	RA
+	NOP
+	NOP	;LUI	AT,0001
+	NOP	;ADDU	AT,AT,V0
+	NOP	;BEQ	R0,R0,803C9518
+	NOP	;SW	R0,06A0 (AT)
+
+
+(NOTE: 803C5738 is used for letter details onHover)
+
++_+

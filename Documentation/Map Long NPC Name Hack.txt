@@ -1,0 +1,145 @@
+C-7255B0 is the victim this time.  Pointer conversion 8088DBD0, in rdram at 803B7DD0.
+
+803B8088:
+	803B8230 loads up the character names when necessary.
+803B8430
+
+803B8630 (+860) is called to build the character list, setting to A0+an absurd offset.
+That's called via 803B9D70, at 803B9DE0.
+
+S0	p->crazy-huge block of data including the table of stuff
+
++3C44	0x24	player map entries	0x9 each entry; 4 entries
+	0x0	6	string
+	0x6	1	if -1, prints darkened (for "vacant" entries)
+	0x7	1	
+	0x8	1	0; forces default position of houses
++3C68	0x88	animal map entries	0x9 each entry; 0xF entries allocated, though 0xA possible?
+	0x0	6	string
+	0x6	1	(same as player entries?)
+	0x7	1	
+	0x8	1	
++3CF0	0x64	resident entries?
+	0x0	4	p->map entry
+	
+	0x10	2	
+	0x12	2	pic ID, also used to derive special entries
+
++3D7C	0x10	pointer table: p->player entries	0x4 each entry; 4 entries
++3D8C	2	4
++3D8E	2	1
+
++3F4E	1	town name strlen
+
++_+
+
+  Honestly, the easiest thing would be to just set up a "fake" 7F entry to indicate you're loading an actor ID#.  Copy the actor's name to the stack, force the strlen, and hope for the best.
+  This does rely on accurate detection, since player names would still be strings.
+  
+//8088E008:
+	SLL	T8,S6,0x3
+	SUBU	T8,T8,S6
+	SLL	T8,T8,0x3	;T8=S6*38: 
+00000000	*NOP
+3C098013	*LUI	T1,8013
+	ADDIU	T1,T1,6EA0	;T1=80136EA0: cuts the chase short, just tacking on 10000 here...
+24047F6F	*ADDIU	A0,R0,7F6F	;really just need any old indicator, but using this two-byte one lets hackers know what the heck is up
+03099821	*ADDU	S3,T8,T1	;S3=80136EA0 + offset: runtime variables+offset: 
+//8088E028:	rewritten to simply copy the ID with command
+97C50000	*LHU	A1,0000 (S8)	;A1=S8: p->actor ID
+A6440000	*SH	A0,0000 (S2)	;A0=S2: p->target
+A6450002	*SH	A1,0002 (S2)
+	ADDIU	S1,S0,0002
+
+On second thought, load to a fixed buffer and set pointers to data
+	Why not 800A0F80?  That whole blasted region's going to get filled before long ;*)
+//8088E008:	803B8208	+438	copy name to entry
+0016C0C0	SLL	T8,S6,0x3	;T8=count*8
+0316C823	*SUBU	T9,T8,S6
+0019C8C0	*SLL	T9,T9,0x3	;T9=count*38: 
+3C04800A	*LUI	A0,800A
+3C098013	*LUI	T1,8013
+25296EA0	ADDIU	T1,T1,6EA0	;T1=80136EA0: cuts the chase short, just tacking on 10000 here...
+00982021	*ADDU	A0,A0,T8
+03299821	ADDU	S3,T9,T1	;S3=80136EA0 + offset: runtime variables+offset: 
+24840F80	*ADDIU	A0,A0,0F80	;A0=800AFF80+offset: p->string buffer for entry#
+AA440000	*SWL	A0,0000 (S2)
+BA440003	*SWR	A0,0003 (S2)	;That should store the pointer to the entry
+03C02825	OR	A1,S8,R0	;A1=S8: p->actor ID
+0C02B346	JAL	800ACD18	;retrieve actor's name by ID
+26110002	ADDIU	S1,S0,0002
+0C02B441	JAL	800AD104
+93C4000B	LBU	A0,000B (S8)
+A2420006	SB	V0,0006 (S2)
+3C0142F0	LUI	AT,42F0
+44813000	MTC1	AT,F6
+C6640168	LWC1	F4,0168 (S3)
+240A0001	ADDIU	T2,R0,0001
+27D304E0	ADDIU	S3,S8,04E0
+4606203C	C.LT.S	F4,F6
+00000000	NOP
+45030002	*BC1TL	8088E074
+A2400007	SB	R0,0007 (S2)
+//8088E070:	+4A0
+
+
+
+
+//8088F26C:	+169C	803B946C	loop to print resident names
+868F0010	LH	T7,0010 (S4)	;T7=resident+10: 
+00008025	OR	S0,R0,R0	;S0=0	init.count
+3C014140	LUI	AT,4140
+59E00035	BLEZL	T7,8088F350	;return on an invalid entry
+8FBF0074	LW	RA,0074 (SP)
+4481D000	MTC1	AT,F26		;F26=12.0: yoffset per entry	[41400000]
+3C013F40	LUI	AT,3F40
+4481A000	MTC1	AT,F20		;F20=0.75: [3F400000]
+2413FFFF	ADDIU	S3,R0,FFFF
+8E250000	LW	A1,0000 (S1)	;A1=S1+0: p->string
+02402025	OR	A0,S2,R0	;A0=S2: 
+24060006	ADDIU	A2,R0,0006	;A2=strlen 6
+80B80006	LB	T8,0006 (A1)	;T8=entry+6: 
+240B00A5	ADDIU	T3,R0,00A5
+240C0091	ADDIU	T4,R0,0091
+12780004	*BEQ	S3,T8,8088F2BC	;print darkened entry if T8 = -1
+240D008C	ADDIU	T5,R0,008C
+//8088F2B0:	+16E0	print in orange
+240B00FF	*ADDIU	T3,R0,00FF
+240C004B	*ADDIU	T4,R0,004B
+240D0028	*ADDIU	T5,R0,0028
+//8088F2BC:	+16EC	fish up a character name if pointer instead of string
+24010080	*ADDIU	AT,R0,0080
+90AE0000	*LBU	T6,0000 (A1)
+142E000E	*BNE	AT,T6,8088F304
+00000000	*NOP
+88A10000	*LWL	AT,0000 (A1)
+98A10003	*LWR	AT,0003 (A1)
+24060008	*ADDIU	A2,R0,0008	;A2=strlen 8
+00202825	*OR	A1,AT,R0	;A1=p->string
+10000008	*BEQ	R0,R0,0008	;this exists just in case I'm an idiot and accidentally place data here...
+00000000	*NOP
+	*
+	*
+	*
+	*
+	*
+	*
+	*
+//8088F300:	print in general
+	*NOP
+	MFC1	A3,F24		;A3=F24: xpos
+AFB30020	*SW	S3,0020 (SP)	;SP+20=FF: alpha
+	SWC1	F22,0010 (SP)	;SP+10=F22: ypos
+	SW	T3,0014 (SP)	;SP+14=A5: red
+	SW	T4,0018 (SP)	;SP+18=91: green
+	SW	T5,001C (SP)	;SP+1C=8C: blue
+	SW	R0,0024 (SP)
+	SW	R0,0028 (SP)
+	SWC1	F20,002C (SP)
+	SWC1	F20,0030 (SP)
+	JAL	80090E98	;print text to screen
+	SW	R0,0034 (SP)
+//8088F334:	+1764	loop for each resident
+	
+	
+	

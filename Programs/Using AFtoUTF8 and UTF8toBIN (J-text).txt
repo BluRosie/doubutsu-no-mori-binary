@@ -1,0 +1,190 @@
+﻿(note: this document is unicode-formatted. If it looks stupid or you're missing characters, change either your font or open it in another document reader.)
+
+
+AF Japanese Text Conversion Tools
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  These tools convert Animal Forest binaries into a table of text entries, and likewise convert it back.  Unlike the SYLK converters, these spit out UTF-8 text files which you can open in just about any text editor.  Yep, even Notepad (or Notepad++)  Text entries aren't formatted as pretty, using the old newline-equals-new-entry format, but it does allow you to type in pure japanese.  Squee!  It will also accept the crazy [codename] versions of the japanese as well, if you want to copy it in or something.  Otherwise, its capabilities are comparable to that of the SYLK converter utilities without all the weirdness about japanese text and quotes.  
+
+  These tools act as a replacement for AFvert.  Its primary advantage is that it is not limitted to ANSI text.
+
+  In lieu of distributing copyrighted binaries around the web, you can use the program GrabResources.exe to retrieve the text tables and binaries from both a standard and hacked Doubutsu no Mori/Animal Forest rom.  The output files are ready to be converted.
+
++-+-+
+Usage:
+  AFtoUTF8.exe		converts binary files to UTF-8 formatted text file
+	You need a .bin file containing the text and .tbl file that sets the sizes in the same directory.  If they aren't named the same, you'll need to tell it the path.  Drag-and-drop the .bin file onto the program, or give its name at the prompt.  It automatically spits out a .txt file of the same name into the directory (hopefully).  Worst case it will spit it into either the root of the drive or your document file, depending how it feels that day.
+
+  UTF8toBIN.exe		converts text file to AFtext binary and table
+	Drag-and-drop a .txt file onto the program.  It splits it into a .bin and .tbl of the same name (again hopefully).  It expects the text entries to be preceeded by a line number followed by a tab, though you can use the -t switch on the command line to get around this.  It tests for the tab, not the text, so you can freely change the line numbers without affecting anything.
+	As a special note, it doesn't check if your text file for content.  If you give a command too long it won't know.  It doesn't know how large each table should be or if there's a limit to data in a certain table.  You must proof your script before compiling.
+
+NO FILENAMES CAN BEGIN WITH A "-"!  Then it will think this is a switch, not a file.  Sorry.
+
++-+-+
+Format:
+  By default a four-digit hexadecimal line number appears to the left of a text entry, followed by a tab.  That can be disabled, but it would be almost silly to.  All text for that entry appears on a single line.  There are returns/linefeeds/newlines/etc. between each entry.
+
+  Quotes ("") are acceptable.  Also, all aliases used in the SYLK converters will also be accepted, including such as $q for ", all japanese character aliases, etc.
+[] for special characters and commands
+## for straight binary values
+$  for certain text characters
+
+  A complete list of accepted characters is in the "Using AFtoSYLK and SYLKtoBIN.txt" file.  Certain common ones are:
+0x5C	+	stress, as in rupturing an artery
+0x85	*	・	(middle dot- somewhat hard to tell here)
+
+0x2B	$h	heart
+0x2F	$n	♪
+0x3B	$d	bead of sweat (teardrop)
+0xBF	$s	:) smiley face
+0xCD	\r	return
+
++-+-+
+
+7F Command Pneumonics:
+  By default, all known 7F commands are output using codewords in brackets [].  It isn't the most forgiving thing, so try to stay close to the original samples.  The aliased commands are listed below.  Commands not listed here are output in straight binary within ##.
+  To try to simplify things a little, commands that accept values will have the values accepted listed below, and an example.
+  !NOTE!: some commands have been removed due to programmer's stupidity
+	also, 7F08-7F0C will remain in binary form due to complexity
+
+Commands:
+7F00	[close]	close text window
+7F01	[open]	open text window
+7F02	[CLS]	clears window and returns to upper left.  Also resets text attributes.
+7F03	[pause i]	pause for i hundreths of a second.  i=0<->256.
+	ex. [pause 3] pauses for 3 hundreths of a second.
+7F04	[wait]	places a blue advance button in the lower left, waiting for the user to press the button to advance
+7F05	[color r g b]	change font color to rgb.  r is the red component, g the green, b the blue.
+	ex. [color 80 80 80] makes the text grey.
+7F06	[quick on]	turns quick-advance on, allowing players to press a button to instantly display text up to a pause.
+7F07	[quick off]	disables quick-advance.
+7F0E	[jump ####]	jumps to message_txt # given when this one is complete
+7F0F	[selected 1 ####]	sets text to jump to when option 1 on a [menu] is selected ;use the list with 7F19
+7F10	[selected 2 ####]	sets text to jump to when option 2 on a [menu] is selected
+7F11	[selected 3 ####]	sets text to jump to when option 3 on a [menu] is selected
+7F12	[selected 4 ####]	sets text to jump to when option 4 on a [menu] is selected
+7F13	[rand aaaa bbbb]
+7F14	[rand aaaa bbbb cccc]
+7F15	[rand aaaa bbbb cccc dddd]	displays one of several text strings on the screen.
+	a, b, c, and d are hex values matching the list# in the first column of the 'message_data' text bank
+	ex. [rand 31A2 31A3 31A4] displays either: "I hope we'll be friends...", "I'm just glad I got to see you...", or "I get so shy sometimes..."
+7F16	[menu aaaa bbbb]
+7F17	[menu aaaa bbbb cccc]
+7F18	[menu aaaa bbbb cccc dddd]	creates a menu with 2-4 options.
+	a, b, c, and d are hex values matching the list# in the first column of the 'select_data' text bank
+	ex. [menu 25 26] displays a menu with entries "That's right!" and "That's wrong!".
+7F19	[jump2sel]	jump to selected text; follows a list of 7F0F-7F12
+7F1A	[player]	player's name
+7F1B	[speaker]	speaker's name
+7F1C	[nickname]	displays a silly pet name for the player
+7F1D	[year]	displays the current year
+7F1E	[month]	displays the current month as a digit, ranging from 1-12
+7F1F	[day] or [weekday]	displays the day as Sunday, Monday, Tuesday, etc.
+7F20	[day#] or [date]	displays the day of the month, in the hacked rom as 1st - 31st
+7F21	[hours]	displays current time in hours, 1-12
+7F22	[mins]	displays current minutes, 0-59	note: preceeding mins or secs with a colon (ie.[hours]:[mins]) gives 2 digit time
+7F23	[secs]	displays current seconds, 0-59	but on its own will give  1 digit time *in the hacked ROM only!*
+7F24	[string 1]	usually displays a character's name, so [name] is also acceptable
+7F25	[string 2]	string slot #2, in a predetermined color embedded in code
+7F26	[string 3]	string slot #3, in a predetermined color embedded in code
+7F27	[string 4]	string slot #4
+7F28	[string 5]	string slot #5
+7F29	[string 6]	string slot #6, in a predetermined color embedded in code
+7F2A	[string 7]	string slot #7
+7F2B	[string 8]	string slot #8
+7F2C	[string 9]	string slot #9
+7F2D	[string 10]	string slot #10
+7F2E	[recall]	recalls previously selected menu option
+7F2F	[town]	displays the town name
+7F30	[number]	creates a random number
+7F31	[string 21]	string slot #21.  [item] is also acceptable
+7F32	[string 22]	string slot #22
+7F33	[string 23]	string slot #23
+7F34	[string 24]	string slot #24
+7F35	[string 25]	string slot #25
+7F36	[string 11]	string slot #11
+7F37	[string 12]	string slot #12
+7F38	[string 13]	string slot #13
+7F39	[string 14]	string slot #14
+7F3A	[string 15]	string slot #15
+7F3B	[string 16]	string slot #16
+7F3C	[string 17]	string slot #17
+7F3D	[string 18]	string slot #18
+7F3E	[string 19]	string slot #19
+7F3F	[string 20]	string slot #20
+7F40	[message]	inserts your personal greeting
+7F50	[color #i r g b]	use the color rgb for the next i characters or until end of line.  More like a highligher, not altering the current text color.  # must be present or it treats it like 7F05.
+	ex. [color #8 0 0 256] makes the next 8 characters bright blue.
+7F51	[whisper on] or [whisper off]	when on, following text is not spoken in animalese but a soft typing sound.
+7F54	[size1 i]	sets the font size for the next character in the text only
+7F59	[sound i]	plays sound effect i.  No, I don't have a list handy.
+	ex. [sound 4] is the loading sound, [sound 5] plays the springish sound effect in Resetto's dialog
+7F5A	[size i]	sets the font size to i of pixels.  the larger i is, the larger the text, in theory
+	ex. [size 20] sets the font to 20 pixels, like the small font used in the train on the phone
+7F5E	[default]	specific to [select] menus, allows you to press B to use the default entry
+
+  These are Animal Crossing-specific commands and will probably not be added in.  They are output so you know what you're looking at.
+7F63	[`range aaaa bbbb]	randomly selects an entry in message_txt between #a and #b, inclusive
+7F6A	[`interject aaaa bbbb]	similiar to the [rand]omizer commands, except this inserts the string instead of jumping to it.
+7F6B	[`interject aaaa bbbb cccc]	well, this one is entirely presumption...
+7F6C	[`interject aaaa bbbb cccc dddd]	as is this one...
+7F71	[`isle]	name of the island in AC
+7F73	[`if]	optionally displays stuff following either the [`if] or [`else] tag.
+7F72	[`else]	acts as a sort of switch.  Unlike [rand], they probably stored the test value in AC.
+7F77	[`selected 5 ####]	sets text to jump to when option 5 on a [menu] is selected ;use the list with 7F19
+7F78	[`selected 6 ####]	sets text to jump to when option 6 on a [menu] is selected
+7F79	[`menu aaaa bbbb cccc dddd eeee]		exactly like [menu] command, just accepts more fields
+7F7A	[`menu aaaa bbbb cccc dddd eeee ffff]	AF has a limit of four options, AC maxes out at 6
+
+  Three commands from Animal Crossing have been hacked into the game and now work swimmingly.
+  Use them!!
+7F74	[capitalize]	capitalizes first letter of next retrieved string, and forces the rest lower-case
+7F75	[lowercase]	forces all letters in the next retrieved string to be lower-case
+7F76	[am/pm]	displays either AM or PM.  severed from the japanese [hours] command
+
+  These have been hacked in but do not exist in Animal Crossing
+  Use them!!
+7F6F	[TEXT ####]	inserts a text string.  The string number is specially-formatted:
+	0xxx	select_txt
+	1xxx	furnishings
+	2xxx	items
+	3xxx	mail_txt
+	7xxx	super_txt
+	8xxx	superz_txt
+	9xxx	maila_txt
+	Axxx	mailb_txt
+	Bxxx	mailc_txt
+	Cxxx	psz_txt
+	Dxxx	string_txt
+	Exxx	npc
+	Fxxx	ps_txt
+7F70	[CAPS]	capitalizes all letters in next retrieved string
+
++-+-+
+
+Command Line Switches:
+  You can use either - or /, upper-case or lower-case for command line switches.  A screen with all the accepted switches is available if you type in either /?, -?, /H, /h, -H, or -h.
+
+AFtoUTF8.exe switches:
+/Q or -Q	quiet mode - no messages appear, and kills 7F/80 errors in the SYLK file
+/L or -L	remove line numbers - be sure to cite again when converting back to a binary
+/T or -T	disable text output (commands only)	all text characters are omitted.  Only 7F/80 commands appear
+/C or -C	disable 7F/80 command output		displays text only.  commands are omitted without placeholders
+/J or -J	disable output of japanese characters	skips all japanese characters, including「」・。.ー
+/A or -A	ignore known AC-specific 7F/80 commands	skip AC-only commands, specificly 7F74 and 7F75.  They change case.
+/B or -B	force binary output for 7F/80 commands	no command pneumonics are used
+/N or -N	don't allow hacked commands		doesn't allow the added 7F74-76 commands
+/7 or -7	uses happy pneumonics for known 7F commands (default).  Unknowns are pure binary.  Overrides binary output switch
+/8 or -8	friendly 80 command aliases		to be implemented - 80xx commands aren't handled at all yet
+
+UTF8toBIN.exe switches:
+/o or -o	create offset file, not table.  this was used with a different tool and not in-game.  debug option, in other words
+/L or -L	ignore line number column.  If the text is not preceeded by a numeral and tab, be sure to use this switch
+/Q or -Q	If you saved the text document as UTF-8 (no BOM) you'll normally get an error since the 'header' for the file is missing.  This normally will throw an error that asks you if you'd like to continue.  Use this flag to bypass the check.  There shouldn't be any adverse effects.  Shouldn't...
+
++-+
+
+One last note about the source:
+  Source is provided in the folder "sourcecode".  It is probably attrociously-written.  I only picked up the very minimum needed to put together silly stuff like this.  Sorry, and feel free to rewrite it as you see fit.  No need to ask.  Bugsquashing is highly appreciated.
+
+-Zoinkity

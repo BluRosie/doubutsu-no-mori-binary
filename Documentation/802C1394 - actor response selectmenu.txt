@@ -1,0 +1,174 @@
+Goodie!	fix seems to work now!
+
+802C1394	C-792DC0 + 0xA94	creates actor response selectmenu
+ADDIU	SP,SP,FF50
+SW	RA,004C (SP)
+SW	S6,0048 (SP)
+SW	S5,0044 (SP)
+SW	S4,0040 (SP)
+SW	S3,003C (SP)
+SW	S2,0038 (SP)
+SW	S1,0034 (SP)
+SW	S0,0030 (SP)
+ADDIU	S5,A0,0188	;S5=p->list of entries to pull from ROM
+OR	S6,S5,R0		;S6=S5
+ADDIU	S0,SP,0074	;S0=buffer start
+ADDIU	V0,SP,0084	;V0=buffer end
+//802C13C8:
+ADDIU	S0,S0,0004
+SLTU	AT,S0,V0
+BNEZ	AT,802C13C8
+SW	R0,FFFC (S0)	;blank entries in buffer
+LW	T6,0010 (S5)	;T6=#entries
+OR	S1,R0,R0		;counter=0
+BLEZ	T6,802C1450
+SLTI	AT,S1,0004
+//802C13E8:
+BEQ	AT,R0,802C1450	;kill loop after first four entries
+SLL	V0,S1,0x2	;V1=# * 4
+SLL	T8,S1,0x2
+SLL	T0,S1,0x2
+ADDU	T0,T0,S1
+ADDU	T8,T8,S1
+SLL	T8,T8,0x1	;T8=# * 0xA
+SLL	T0,T0,0x1	;T0=# * 0xA
+ADDIU	T7,SP,0074
+ADDIU	T9,SP,0084
+ADDU	S3,T8,T9
+ADDU	S2,T0,T9		;S2=point on stack for string
+ADDU	S0,V0,T7		;S0=p->list of pointers to strings on stack (S2)
+JAL	80065040		;returns V0=base for selectmenu
+ADDU	S4,S5,V0
+OR	A0,V0,R0		;A0=selectmenu base
+OR	A1,S3,R0		;A1=buffer target
+LW	A2,0000 (S4)	;A2=text index to retrieve
+JAL	80065D90		;get select_txt entry from ROM;ret A2=size,replaces index# w/ size
+OR	A3,R0,R0
+SW	S2,0000 (S0)	;save pointer to string; overwrites size value stuffed here...
+LW	T1,0010 (S6)	;T1=total # entries
+ADDIU	S1,S1,0001	;S1++: next entry in table
+SLT	AT,S1,T1
+BNEL	AT,R0,802C13E8	;keep going as long as there are entries
+SLTI	AT,S1,0004
+//802C1450:	build the menu
+JAL	80065040		;returns V0=801425C0
+NOP
+LW	T3,007C (SP)	;T3=p->str3 or NULL
+LW	T5,0080 (SP)	;T5=p->str4 or NULL
+ADDIU	T2,R0,000A	;T2=strlen 2
+ADDIU	T4,R0,000A	;T4=strlen 3
+ADDIU	T6,R0,000A	;T6=strlen 4
+SW	T6,0020 (SP)	;SP+20= strlen 4
+SW	T4,0018 (SP)	;SP+18= strlen 3
+SW	T2,0010 (SP)	;SP+10= strlen 2
+OR	A0,V0,R0		;A0=base for selectmenu data
+LW	A1,0074 (SP)	;A1= p->str1
+ADDIU	A2,R0,000A	;A2=strlen 1
+LW	A3,0078 (SP)	;A3= p->str2
+SW	T3,0014 (SP)	;SP+14= p->str3
+JAL	80065278		;copy strings to menu slots
+SW	T5,001C (SP)	;SP+1C= p->str4
+ADDIU	V0,R0,0001
+LW	RA,004C (SP)
+LW	S0,0030 (SP)
+LW	S1,0034 (SP)
+LW	S2,0038 (SP)
+LW	S3,003C (SP)
+LW	S4,0040 (SP)
+LW	S5,0044 (SP)
+LW	S6,0048 (SP)
+JR	RA
+ADDIU	SP,SP,00B0
+
+
++-+-+-+-+
+
+Stack spots SP+10-24 appear safe through this routine
+80065D90 doesn't change ANY of the S# variables
+
+S0	SP+0x74 +offset	list of p->str for each entry as loaded
+S1	option count
+S2	SP+0x84 +strlens	string buffer - 0x2C max size
+S3	SP+0x84 +strlens	same as S2, seemingly
+S4	p->index number for text to load from ROM
+S5	p->base address for selectmenu data - 0-C:indices, 10:size
+S6	same as S5
+
+cheap & dirty rewrite:
+//802C13E0:	C-792DC0 + 0xAE0
+0016	*BLEZ	T6,802C143C	->	
+	SLTI	AT,S1,0004
+27B00074	ADDIU	S0,SP,0074	;set initial S0
+27B30084	ADDIU	S3,SP,0084	;set target address
+//802C13F0:
+2A210004	+SLTI	AT,S1,0004
+10200011	-BEQ	AT,R0,802C143C	;kill loop after first four entries
+00111080	-SLL	V0,S1,0x2	;V1=# * 4
+02609025	*OR	S2,S3,R0		;S2=point on stack for string: save addy
+0C019410	JAL	80065040		;returns V0=base for selectmenu
+02A2A021	ADDU	S4,S5,V0		;S4=next index in list, S5 being p->index list
+00402025	OR	A0,V0,R0		;A0=selectmenu base
+02602825	OR	A1,S3,R0		;A1=buffer target
+8E860000	LW	A2,0000 (S4)	;A2=text index to retrieve
+0C019764	JAL	80065D90		;get select_txt entry from ROM;ret A2=size,replaces index# w/ size
+00003825	OR	A3,R0,R0
+AE120000	SW	S2,0000 (S0)	;save pointer to string; overwrites size value stuffed here...
+AE06FFA0	*SW	A2,FFA0 (S0)	;stow the strlen
+00D39821	*ADDU	S3,S3,A2		;S3=target+strlen: working addy
+8EC90010	LW	T1,0010 (S6)	;T1=total # entries
+26310001	ADDIU	S1,S1,0001	;S1++: next entry in table
+0229082A	SLT	AT,S1,T1
+1420FFEE	*BNEZ	AT,802C13F0	;keep going as long as there are entries
+26100004	*ADDIU	S0,S0,0004	;S0=p->list of pointers to strings on stack (S2)
+//802C143C:	build the menu
+0C019410	JAL	80065040		;returns V0=801425C0
+8FA60014	*LW	A2,0014 (SP)	;A2=strlen 1
+00402025	+OR	A0,V0,R0		;A0=base for selectmenu data
+8FAA0018	*LW	T2,0018 (SP)	;T2=strlen 2
+8FAC001C	*LW	T4,001C (SP)	;T4=strlen 3
+AFAA0010	SW	T2,0010 (SP)	;SP+10= strlen 2
+AFAC0018	SW	T4,0018 (SP)	;SP+18= strlen 3
+8FA50074	+LW	A1,0074 (SP)	;A1= p->str1
+8FA70078	LW	A3,0078 (SP)	;A3= p->str2
+8FAB007C	-LW	T3,007C (SP)	;T3=p->str3 or NULL
+8FAD0080	-LW	T5,0080 (SP)	;T5=p->str4 or NULL
+AFAB0014	SW	T3,0014 (SP)	;SP+14= p->str3
+0C01949E	JAL	80065278		;copy strings to menu slots
+AFAD001C	SW	T5,001C (SP)	;SP+1C= p->str4
+
+longstanding issue:
+within copy routine
+
+800A0FA4	0x4F524	new routine: return V1=correct offset in 80142700 buffer
+	accepts: A2=p->selectmenu base, T0=option#
+	fries: T0,T8
+00C01825	OR	V1,A2,R0
+10080006	BEQ	R0,T0,+6	;if 1st option, back to jump
+0008C080	SLL	T8,T0,0x2
+00D8C021	ADDU	T8,A2,T8
+8F180058	LW	T8,0058 (T8)
+00781821	ADDU	V1,T8,V1
+1000FFFA	BEQ	R0,R0,FFFA	;loopus
+2508FFFF	ADDIU	T0,T0,FFFF	;counter--
+	//800A0FC4:
+03E00008	JR	RA
+24630140	ADDIU	V1,V1,0140
+
+
+Patch copy routine:
+[if you have time later, condense this mess!]
+//800651F8:	0x13778
+LW	A3,0034 (SP)
+LW	A2,0030 (SP)
+BEQ	R0,T1,80065210	->	0C0283E9	JAL 800A0FA4
+SLL	T8,T1,0x2	->	00094025	OR	T0,T1,R0
+ADDU	T8,A2,T8		->	NOP
+LW	T8,0058 (T8)	->	NOP
+//80065210:
+ADDU	V1,A2,T8		->	NOP
+LW	T0,0018 (SP)
+OR	A1,V0,R0
+ADDIU	V1,V1,0140	->	NOP
+BLEZ	V0,80065244
+OR	A0,R0,R0
+LBU	T9,0000 (A3)

@@ -1,0 +1,197 @@
+C963B0:	010F4000-010FF1A0	item list
+	each entry 0xA in size
+well, will just have to increase the size of them and give it a table to work with
+
+80096740	copy item A1's name to A0
+	accepts: A0=p->target, A1=item ID#
+ADDIU	SP,SP,FFC0
+SW	RA,0014 (SP)
+SW	A0,0040 (SP)	;p->target
+SW	A1,0044 (SP)	;item code number
+ANDI	A2,A1,FFFF	;A2=item code
+JAL	800BF10C	;muddles out the different item type correction values
+ANDI	A0,A2,FFFF
+ANDI	A0,V0,F000	;A0=V0&F000: item type
+SRA	A0,A0,0xC	;A0=first nibble of code
+ADDIU	AT,R0,0001
+ANDI	A2,V0,FFFF
+BEQ	A0,AT,800967E0	;branch if 1xxx item
+OR	V1,V0,R0
+ADDIU	AT,R0,0002
+BNE	A0,AT,80096834	;default to NULL string if not a 2xxx item
+//8009677C:	2xxx item entries
+ANDI	T6,A2,0F00
+SRA	T7,T6,0x8	;T7=second nibble of code
+SLL	T8,T7,0x2	;T8=nibble to offset
+LUI	T9,8010
+ADDU	T9,T9,T8
+ANDI	T0,A2,00FF	;TO=item# in bank
+LW	T9,76BC (T9)	;T9=801076BC+offset: offset to bank within item table
+SLL	T1,T0,0x2
+ADDU	T1,T1,T0
+SLL	T1,T1,0x1	;T1=item# * 10
+LUI	T3,0600
+ADDIU	T3,T3,0000	;T3=06000000: mask for 'offsets' in 801076BC
+LUI	T5,010F
+ADDU	T2,T9,T1	;T2= bank+#
+SUBU	T4,T2,T3	;T4=literal offset
+ADDIU	T5,T5,4000	;T5=010F4000: item codeword
+ADDU	A1,T4,T5	;A1=codeword to text
+JAL	80096710	;pull from rom
+ADDIU	A0,SP,0028	;A0=target buffer for string
+LW	A0,0040 (SP)	;A0=target (sent by caller)
+ADDIU	A1,SP,0028	;A1=p->buffer
+JAL	800998C0	;copy from A1 to A0
+ADDIU	A2,R0,000A	;A2=strlen, always 10
+BEQ	R0,R0,80096850
+LW	RA,0014 (SP)
+//800967E0:	1xxx entries
+ANDI	T6,A2,0FFF	;T6=all but first nibble: item #
+SLL	T7,T6,0x2
+ADDU	T7,T7,T6
+LUI	T8,0600
+ADDIU	T8,T8,1D98	;T8=06001D98: base offset for 1xxx items
+SLL	T7,T7,0x1	;T7=item# * 10
+LUI	T9,0600
+ADDIU	T9,T9,0000	;T9=06000000
+ADDU	T0,T7,T8	;T0=base+#
+LUI	T2,010F
+ADDIU	T2,T2,4000	;T2=010F4000: item codeword
+SUBU	T1,T0,T9	;T1=actual offset
+ADDU	A1,T1,T2	;A1=codeword for item
+JAL	80096710	;pull it from rom
+ADDIU	A0,SP,0028
+LW	A0,0040 (SP)	;A0=final target
+ADDIU	A1,SP,0028	;A1=source
+JAL	800998C0	;copy to final destination
+ADDIU	A2,R0,000A	;A2=strlen, which is always 10 with these
+BEQ	R0,R0,80096850
+LW	RA,0014 (SP)
+//80096834:	default
+BNEZ	V1,8009684C
+LW	A0,0040 (SP)	;A0=target
+LUI	A1,8010
+ADDIU	A1,A1,76B0	;A1=801076B0: blank entry (10 spaces)
+JAL	800998C0	;copy to final destination
+ADDIU	A2,R0,000A	;A2=strlen always 10
+LW	RA,0014 (SP)
+//80096850:	return
+ADDIU	SP,SP,0040
+JR	RA
+NOP	
+
+
+80096710	redirect to ROM pull
+	accepts: A0=p->buffer, A1=codeword, A2=strlen
+ADDIU	SP,SP,FFE0
+SW	RA,001C (SP)
+LUI	A3,8011
+ADDIU	T6,R0,0055
+SW	T6,0010 (SP)
+ADDIU	A3,A3,70B0	;A3="../m_item_name.c"
+JAL	80026E10
+ADDIU	A2,R0,000A
+LW	RA,001C (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+800BF10C	6D68C	V0=2xxx IDs corresponding to 1xxx items, when applicable
+	accepts: A0=item ID#
+ADDIU	SP,SP,FFE8
+SW	A0,0018 (SP)
+ANDI	A0,A0,FFFF	;A0->short
+SW	RA,0014 (SP)
+SLTI	AT,A0,17AC	;TRUE if ID# < clothes.start
+BNEZ	AT,800BF16C	;branch if not clothes
+OR	V1,A0,R0	;V1=A0: ID#
+SLTI	AT,V1,1BA8	;TRUE if ID#< clothes.end
+BEQ	AT,R0,800BF16C	;branch if not clothes
+SLTI	AT,V1,17AC	;TRUE if ID# < clothes.start
+BNEZ	AT,800BF15C	;branch if not clothes, which can't happen
+OR	A0,R0,R0	;A0=0
+SLTI	AT,V1,1BA8	;TRUE if ID# < clothes.end
+BEQ	AT,R0,800BF15C	;branch if not clothes, which also can't happen
+NOP
+//800BF148:	convert to natural shirt value
+ADDIU	A0,V1,E854	;A0=V1-17AC
+SRA	V0,A0,0x2	;V0=A0/4: accounting for the quadriplicate
+ADDIU	V0,V0,2400	;V0+=2400: ID->shirt
+BEQ	R0,R0,800BF220
+ANDI	V0,V0,FFFF	;V0->short
+//800BF15C:	default to first shirt
+OR	V0,A0,R0	;V0=A0: 0
+ADDIU	V0,V0,2400	;V0=2400
+BEQ	R0,R0,800BF220
+ANDI	V0,V0,FFFF	;V0->short
+//800BF16C:	detect 1xxx insects
+SLTI	AT,V1,1BA8	;TRUE if ID# < insects.start
+BNEZ	AT,800BF1B4	;branch if not insects
+SLTI	AT,V1,1C28	;TRUE if ID# < insects.end
+BEQ	AT,R0,800BF1B4	;branch if not insects
+SLTI	AT,V1,1BA8	;TRUE if ID# < insects.start
+BNEZ	AT,800BF1A8	;branch if not insects, which can't happen
+OR	A0,R0,R0
+SLTI	AT,V1,1C28	;TRUE if ID# < insects.end
+BEQ	AT,R0,800BF1A8	;branch if not insects, which can't happen
+NOP
+//800BF194:	convert to natural insect value
+ADDIU	A0,V1,E458	;A0=V1-1BA8
+SRA	A0,A0,0x2	;A0/=4: accounting for the quadriplicate
+ADDIU	V0,A0,2D00	;V0=A0+2D00: ID->insect
+BEQ	R0,R0,800BF220
+ANDI	V0,V0,FFFF	;V0->short
+//800BF1A8:	default insect
+ADDIU	V0,A0,2D00	;V0=2D00: default to common butterfly
+BEQ	R0,R0,800BF220
+ANDI	V0,V0,FFFF	;V0->short
+//800BF1B4:	detect 1xxx fish
+SLTI	AT,V1,1C28
+BNEZ	AT,800BF1F8	;branch if not fish.start
+SLTI	AT,V1,1CA8
+BEQ	AT,R0,800BF1F8	;branch if not fish.end
+SLTI	AT,V1,1C28
+BNEZ	AT,800BF1E8	;branch if not fish.start, which can't happen
+OR	A0,R0,R0
+SLTI	AT,V1,1CA8
+BEQ	AT,R0,800BF1E8	;branch if not fish.end, which can't happen
+NOP
+//800BF1DC:	convert ID to fish#
+ADDIU	A0,V1,E3D8	;A0=V1-1C28
+BEQ	R0,R0,800BF1E8
+SRA	A0,A0,0x2	;A0/=4: accounting for the quadriplicate
+//800BF1E8:	convert to fish text ID
+JAL	800A56CC	;V0=fish text ID from fish# A0
+NOP
+BEQ	R0,R0,800BF224
+LW	RA,0014 (SP)
+//800BF1F8:	detect 1xxx parasols
+SLTI	AT,V1,1CA8	;TRUE if ID# < parasols.start
+BNEZ	AT,800BF21C
+SLTI	AT,V1,1D28	;TRUE if ID# < parasols.end
+BEQ	AT,R0,800BF21C
+ADDIU	V0,V1,E358	;V0=V1-1CA8
+SRA	V0,V0,0x2	;V0/=4: accounting for the quadriplicate
+ADDIU	V0,V0,2204	;V0+=2204: ID->parasol
+BEQ	R0,R0,800BF220
+ANDI	V0,V0,FFFF
+//800BF21C:	default return is original item#
+OR	V0,A0,R0	;V0=A0: item ID#
+//800BF220:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800A56CC	V0=fish text ID from fish# A0
+	accepts: A0=fish#
+BLTZ	A0,800A56E4	;branch if invalid fish#
+SLTI	AT,A0,0020
+BEQ	AT,R0,800A56E4	;branch if not a valid fish
+ADDIU	V0,A0,2300	;V0=A0+2300: convert to fish ID
+JR	RA
+ANDI	V0,V0,FFFF	;V0->short
+//800A56E4:
+OR	V0,R0,R0
+JR	RA
+NOP

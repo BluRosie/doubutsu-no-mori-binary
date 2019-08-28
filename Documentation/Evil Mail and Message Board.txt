@@ -1,0 +1,916 @@
+This last bugger is the worst of it.
+
+Three part hack.
+1) The re-read buffer must increase in size.
+2) Text wrapping should be on a width-overrun principle.
+3) Need a super-annoying new storage method that preserves 7Fxx replacement strings.  This will break mail message #1, which requires 10 be stored.  Others will just fit.
+	Otherwise, if #3 isn't used would need to implement a compression method to use at runtime on the fully-expanded messages.  Whether every possible message would fit within the size limit would be tedious to test.
+
+  #3 avoids limitting the amount of saved data in hacked games.  All hand-written messages are still limitted by the 0x60 size issue.  
+
++_+
+
+  Normal operation is:
+  1) Message is loaded into buffer.
+  2) Message is scanned for text replacement types. (7F24-2D,36-3F, possibly others)
+  3) Text replacement commands are replaced by their strings in message.
+  4) Revised message is copied to playerdata, which is then saved.
+  
+  Revised operation would require:
+  1) Two buffers are used: buffer.msg and buffer.save.
+  2) Message ID is encoded in a 7F/80 command saved to buffer.save.  Set message size to command size.
+  3) Message is loaded into buffer.msg.
+  4) Message is scanned for text replacement types. (7F24-2D,36-3F, possibly others)
+  5) Index of replacement types used is made.
+  6) Each used replacement type string is encoded in a 7F/80 command within buffer.save, following the message ID command.
+  7) Buffer.save is copied to playerdata, which is then saved.
+  
+  To display these requires three passes.
+  1) Message up to message size is copied to display buffer.
+  2) Save pointer to end of message.  All data following message is assumed either fill or replacement type data.
+  3) Parse message and replace commands with saved string data.
+  4) Further parse the message and handle subset of 7F commands as if they were from the msg_txt buffer.  In particular, a correct 7F6F implementation.
+  
+  This is just as painful as it sounds.  It also breaks one feature, which may or may not be used.  It doesn't retain colourize info for 7F25, 26, 29.
+
++_+
+
+  7F6F can be reused for message ID replacement, assuming it uses a sort of altered format.  Doesn't matter, since it's internal-only anyway.
+  Replacement strings fall after the data, so they can be a specialized format:
+0x0	1	second byte of command# (in 7F24, would be 24)
+0x1	1	strlen
+0x2	var	string
+
+  Not efficient, but you're not going to parsing it that many times.  String will obviously be left-aligned text.
+  Bad data would be a strlen over A, type or strlen 0, or exceeding 0x60 saved message buffer.
+
++_+
+
+Very simple and stupid text wrapping.  (Note this is not wordwrap!)
+Physical message space:
+region name	#chars	width
+superscript		
+message	0x60	0xC0
+postscript		
+
+  Minimum, you need to keep track of three things:
+  1) #chars per sentence, or in other words up to each newline.
+  2) Total lines, which is #newlines + #times strings overrun width.
+  3) Total #chars, which when writting can't exceed 0x60 and display 0x???.
+  
+  Lines can't exceed 6, though if you assume a '\r' at the end like legit messages then you'd count 7.
+  Hand-written messages can't exceed 0x60 chars, counting all whitespace.
+  Line-wrap would occur when the physical width is exceeded.
+  
+  Fun part: display buffer needs to be at least twice this.  Message will need to handle at least 200 chars.  Could push to 256 just to get a round number hexadecimally.
+  
++_+
+
+  Minimum required:
+super	21+8/10 for message	0x20 buffer
+ps/psz	31, or 21+10	0x20 buffer.  ps requires string2 copy
+
+Store [string 2], always author's name.
+
+=_=
+
+80129E00
+Message Board Storage Format:	0x68
+0x0	0x60	message
+0x60	1	???
+0x62	1	???
+0x63	1	day
+0x64	1	month
+0x65	1	
+0x66	2	year
+
++_+
+
+800D51E0	V0=TRUE if any of components A2 set equal in message controllers A0 and A1
+	accepts: A0=p->message.control, A1=p->sample.control, A2=mask
+ANDI	T6,A2,0001
+BEQ	T6,R0,800D5200	;branch if flag 0x1 not set
+OR	V1,R0,R0
+LBU	T7,0000 (A1)
+LBU	T8,0000 (A0)
+BNEL	T7,T8,800D5204
+ANDI	T9,A2,0002
+ADDIU	V1,R0,0001
+//800D5200:
+ANDI	T9,A2,0002
+BEQ	T9,R0,800D5220
+ANDI	T2,A2,0004
+LBU	T0,0001 (A1)
+LBU	T1,0001 (A0)
+BNE	T0,T1,800D5220
+NOP
+ORI	V1,V1,0002
+//800D5220:
+BEQ	T2,R0,800D523C
+ANDI	T5,A2,0008
+LBU	T3,0002 (A1)
+LBU	T4,0002 (A0)
+BNE	T3,T4,800D523C
+NOP
+ORI	V1,V1,0004
+//800D523C:
+BEQ	T5,R0,800D5258
+ANDI	T8,A2,0010
+LBU	T6,0004 (A1)
+LBU	T7,0004 (A0)
+BNE	T6,T7,800D5258
+NOP
+ORI	V1,V1,0008
+//800D5258:
+BEQ	T8,R0,800D5274
+ANDI	T1,A2,0020
+LBU	T9,0003 (A1)
+LBU	T0,0003 (A0)
+BNE	T9,T0,800D5274
+NOP
+ORI	V1,V1,0010
+//800D5274:
+BEQ	T1,R0,800D5290
+ANDI	T4,A2,0040
+LBU	T2,0005 (A1)
+LBU	T3,0005 (A0)
+BNE	T2,T3,800D5290
+NOP
+ORI	V1,V1,0020
+//800D5290:	test year
+BEQL	T4,R0,800D52B0
+AND	T7,V1,A2
+LHU	T5,0006 (A1)
+LHU	T6,0006 (A0)
+BNEL	T5,T6,800D52B0
+AND	T7,V1,A2
+ORI	V1,V1,0040
+//800D52AC:
+AND	T7,V1,A2
+XOR	V0,A2,T7
+SLTIU	V0,V0,0001
+JR	RA
+NOP
+
++_+
+
+803B7DD0
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A1,001C (SP)
+SB	R0,0000 (A0)
+SB	R0,0002 (A0)
+JAL	800A5CB0	;V0=#valid messages
+SW	A0,0018 (SP)
+LW	A0,0018 (SP)	;A0=p->
+ADDIU	T8,V0,FFFF	;T8=V0-1: #messages-1
+SB	V0,0003 (A0)	;V0->A0+3: displayed message number
+SB	T8,0004 (A0)	;T8->A0+4: #messages-1
+SB	T8,0005 (A0)	;T8->A0+5: #messages-1
+SB	R0,0006 (A0)	;0->A0+6: 
+LW	T9,001C (SP)
+LWC1	F4,0018 (T9)
+SWC1	F4,0070 (A0)
+LW	RA,0014 (SP)
+JR	RA
+ADDIU	SP,SP,0018
+
++_+
+
+all within 727260
+Message board messages
+
+[803B8FAC]
+8089542C	11DC	displays message one row at a time
+	accepts: A0=p->type controller, A1=p->manager, A2=p->msg.txt, A3=msg.len, SP+10=(float)xpos, SP+14=(float)ypos, SP+18=p->(float)xend, SP+1C=p->(float)yend
+27BDFF68	ADDIU	SP,SP,FF68
+AFBE0090	SW	S8,0090 (SP)
+AFB50084	SW	S5,0084 (SP)
+AFB10074	SW	S1,0074 (SP)
+00E08825	OR	S1,A3,R0	;S1=A3: msg.len
+00C0A825	OR	S5,A2,R0	;S5=A2: p->msg.txt
+0080F025	OR	S8,A0,R0	;S8=A0: 
+AFBF0094	SW	RA,0094 (SP)
+AFB7008C	SW	S7,008C (SP)
+AFB60088	SW	S6,0088 (SP)
+AFB40080	SW	S4,0080 (SP)
+AFB3007C	SW	S3,007C (SP)
+;AFB20078	SW	S2,0078 (SP)
+AFB00070	SW	S0,0070 (SP)
+F7BE0068	SDC1	F30,0068 (SP)
+F7BC0060	SDC1	F28,0060 (SP)
+F7BA0058	SDC1	F26,0058 (SP)
+F7B80050	SDC1	F24,0050 (SP)
+F7B60048	SDC1	F22,0048 (SP)
+F7B40040	SDC1	F20,0040 (SP)
+AFA5009C	SW	A1,009C (SP)
+3C014180	LUI	AT,4180
+4481F000	MTC1	AT,F30		;F30= 16.0	[41800000]
+3C0142F0	LUI	AT,42F0
+4481E000	MTC1	AT,F28		;F28= 120.0	[42F00000]
+3C014320	LUI	AT,4320
+4481D000	MTC1	AT,F26		;F26= 160.0	[43200000]
+3C013F80	LUI	AT,3F80
+4481C000	MTC1	AT,F24		;F24= 1.0	[3F800000]
+0000A025	OR	S4,R0,R0	;S4=0	init count.row
+C7B600A8	LWC1	F22,00A8 (SP)	;F22=[SP+10]: xpos
+C7B400AC	LWC1	F20,00AC (SP)	;F20=[SP+14]: ypos
+8FB700B4	LW	S7,00B4 (SP)
+8FB600B0	LW	S6,00B0 (SP)
+00008025	OR	S0,R0,R0	;S0=0: init count.str	necessary for dead fields
+//808954B8:	display each line by finding linebreak
+00009825	*OR	S3,R0,R0	;init.S3--no newline
+1A200032	BLEZ	S1,80895550	;skip parsing if no message left to parse!
+00152025	*OR	A0,S5,R0	;V0=S5: p->msg.txt
+24050000	*ADDIU	A1,R0,0000	;A1=0: width type-variable (hacked)
+0C024D98	*JAL	80093660	;V0=#chars, V1=T if newline to linebreak for string A0 of length A2, type A1--std.messagewindow
+00113025	*OR	A2,S1,R0	;A2=S1: remaining strlen
+00028025	*OR	S0,V0,R0	;S0=V0	count.str
+00039825	*OR	S3,V1,R0	;S3=V1	newline found
+//808954DC:	line correction for displaying trailing newlines
+12600005	BEQ	S3,R0,808954F4	;branch if not a newline
+00103025	OR	A2,S0,R0	;A2=S0: #chars in string
+8FCF0004	LW	T7,0004 (S8)	;T7=S8+4: display '\r' symbol flag
+24010002	ADDIU	AT,R0,0002
+55E10001	*BNEL	T7,AT,+1	;branch if 2 set: displaying '\r' symbol
+24C6FFFF	*ADDIU	A2,A2,FFFF	;A2=count.str-1
+//808954F4:	display line to screen
+10C00010	BEQ	A2,R0,80895538	;branch if blank line
+8FA4009C	LW	A0,009C (SP)
+4407B000	MFC1	A3,F22		;A3=F22: xpos
+2418001E	ADDIU	T8,R0,001E
+241900FF	ADDIU	T9,R0,00FF
+AFB90020	SW	T9,0020 (SP)	;SP+20=FF: alpha
+AFB80014	SW	T8,0014 (SP)	;SP+14=1E: red
+02A02825	OR	A1,S5,R0	;A1=S5: p->msg.txt
+E7B40010	SWC1	F20,0010 (SP)	;SP+10=F20: ypos
+AFA00018	SW	R0,0018 (SP)	;SP+18=0: green
+AFA0001C	SW	R0,001C (SP)	;SP+1C=0: blue
+AFA00024	SW	R0,0024 (SP)	;SP+24=0
+AFA00028	SW	R0,0028 (SP)	;SP+28=0
+E7B8002C	SWC1	F24,002C (SP)	;SP+2C=1.0
+E7B80030	SWC1	F24,0030 (SP)	;SP+30=1.0
+0C0243A6	JAL	80090E98	;print text to screen
+AFA00034	SW	R0,0034 (SP)	;SP+34=0
+//80895538:	retrieve width of string
+02308823	SUBU	S1,S1,S0	;S1-=S0: msg.len-count.str
+16200013	BNEZ	S1,8089558C	;do this only on last line
+02B0A821	ADDU	S5,S5,S0	;S5+=S0: p->next char in message
+02B02023	SUBU	A0,S5,S0	;A0=S5-S0: p->current char in message
+02002825	OR	A1,R0,S0	;A1=S0: msg.len
+0C0240B3	JAL	800902CC	;V0=display width of A1 characters in string A0
+24060000	ADDIU	A2,R0,0000	;A2=0: width type-variable (hacked)
+44828000	MTC1	V0,F16
+//80895558:	determine position of END on last line
+461AB201	SUB.S	F8,F22,F26	;F8=width + xpos - 160.0: lrx-position
+2A810005	SLTI	AT,S4,0005
+46808120	CVT.S.W	F4,F16	;F4=(float) width
+4614E281	SUB.S	F10,F28,F20	;F10=120.0 - ypos: lry-position
+10200005	*BEQ	AT,R0,80895580	;branch if on final row
+2C4100C1	*SLTIU	AT,V0,00C1
+38210001	*XORI	AT,AT,0001	;AT=TRUE if over 0xB0
+00330825	*OR	AT,AT,S3
+54200002	*BNEL	AT,R0,+2	;branch if newline OR near overrun
+461E5280	*ADD.S	F10,F10,F30	;F6=ypos+16.0: next row's position
+//80895580:	offset x position if END on same row
+46082200	*ADD.S	F8,F4,F8	;F8=width + xpos
+//80895584:	save final {x,y} position
+E6EA0000	SWC1	F10,0000 (S7)	;S7=yend
+E6C80000	SWC1	F8,0000 (S6)	;S6=xend
+//8089558C:	loop for 6 lines
+26940001	ADDIU	S4,S4,0001	;S4++	count.row+1
+2A810006	SLTI	AT,S4,0006
+1420FFC9	*BNEZ	AT,808954B8	;loop for six lines
+461EA500	ADD.S	F20,F20,F30	;ypos+=16.0: next row
+//808955E0:	return
+E7B400AC	SWC1	F20,00AC (SP)	;F20->[SP+14 f/caller]: save new ypos
+8FBF0094	LW	RA,0094 (SP)
+D7B40040	LDC1	F20,0040 (SP)
+D7B60048	LDC1	F22,0048 (SP)
+D7B80050	LDC1	F24,0050 (SP)
+D7BA0058	LDC1	F26,0058 (SP)
+D7BC0060	LDC1	F28,0060 (SP)
+D7BE0068	LDC1	F30,0068 (SP)
+8FB00070	LW	S0,0070 (SP)
+8FB10074	LW	S1,0074 (SP)
+;8FB20078	LW	S2,0078 (SP)
+8FB3007C	LW	S3,007C (SP)
+8FB40080	LW	S4,0080 (SP)
+8FB50084	LW	S5,0084 (SP)
+8FB60088	LW	S6,0088 (SP)
+8FB7008C	LW	S7,008C (SP)
+8FBE0090	LW	S8,0090 (SP)
+03E00008	JR	RA
+27BD0098	ADDIU	SP,SP,0098
+//fill
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+
+gyroid message now:	71D580
+80882B2C	25C	[803B802C]	displays message one row at a time
+	accepts: A0=p->type controller, A1=p->manager, A2=(float)xpos, A3=(float)ypos
+	ADDIU	SP,SP,FF68
+	SDC1	F22,0048 (SP)
+	SDC1	F20,0040 (SP)
+	SW	S8,0090 (SP)
+	MTC1	A3,F20		;F20=A3: ypos
+	MTC1	A2,F22		;F22=A2: xpos
+	OR	S8,A1,R0	;S8=A1: p->manager
+	SW	RA,0094 (SP)
+	SW	S7,008C (SP)
+	SW	S6,0088 (SP)
+	SW	S5,0084 (SP)
+	SW	S4,0080 (SP)
+	SW	S3,007C (SP)
+;AFB20078	SW	S2,0078 (SP)
+	SW	S1,0074 (SP)
+	SW	S0,0070 (SP)
+	SDC1	F30,0068 (SP)
+	SDC1	F28,0060 (SP)
+	SDC1	F26,0058 (SP)
+	SDC1	F24,0050 (SP)
+	LUI	AT,4180
+	MTC1	AT,F30		;F30= 16.0	[41800000]
+	LUI	AT,42F0
+	MTC1	AT,F28		;F28= 120.0	[42F00000]
+	LUI	AT,4320
+	MTC1	AT,F26		;F26= 160.0	[43200000]
+	LUI	AT,3F80
+	MTC1	AT,F24		;F24= 1.0	[3F800000]
+	LW	S4,0024 (A0)	;S4=controller+24: p->text
+	LH	S1,001C (A0)	;S1=controller+1C: text.len
+	OR	S5,R0,R0	;S5=0	init.count.row
+	LW	S7,00AC (SP)
+	LW	S6,00A8 (SP)
+00008025	*OR	S0,R0,R0	;S0=0: init count.str	necessary for dead fields
+//80882BB4:	loop to display each line
+00009825	OR	S3,R0,R0	;S3=0	newline flag
+1A20002F	BLEZ	S1,80882C78	;skip parsing if no message to parse!
+00142025	*OR	A0,R0,S4	;V0=S4: p->msg.txt
+24050000	*ADDIU	A1,R0,0000	;A1=0: width type-variable (hacked)
+0C024D98	*JAL	80093660	;V0=#chars, V1=T if newline to linebreak for string A0 of length A2, type A1--std.messagewindow
+00113025	*OR	A2,S1,R0	;A2=S1: remaining strlen
+00028025	*OR	S0,V0,R0	;S0=V0	count.str
+00039825	*OR	S3,V1,R0	;S3=V1	newline found
+//80882BD4:	display line to screen
+12000013	BEQ	S0,R0,80882C24	;branch if blank line
+	OR	A0,S8,R0	;A0=S8: p->manager
+	MFC1	A3,F22		;A3=F22: xpos
+	ADDIU	T7,R0,005A
+	ADDIU	T8,R0,000A
+	ADDIU	T9,R0,0082
+	ADDIU	T0,R0,00FF
+	SW	T0,0020 (SP)	;SP+20=FF: alpha
+	SW	T9,001C (SP)	;SP+1C=82: blue
+	SW	T8,0018 (SP)	;SP+18=A: green
+	SW	T7,0014 (SP)	;SP+14=5A: red
+	OR	A1,S4,R0	;A1=S4: p->text
+	OR	A2,S0,R0	;A2=S0: text.len
+	SWC1	F20,0010 (SP)	;SP+10=F20: ypos
+	SW	R0,0024 (SP)	;SP+24=0
+	SW	R0,0028 (SP)	;SP+28=0
+	SWC1	F24,002C (SP)	;SP+2C=1.0
+	SWC1	F24,0030 (SP)	;SP+30=1.0
+	JAL	80090E98	;print text to screen
+	SW	R0,0034 (SP)	;SP+34=0
+//80882C24:	compute {x,y} at end of message
+02308823	SUBU	S1,S1,S0	;S1-=S0: text.len-count.str
+16200013	BNE	S1,R0,80882C78	;branch if more message remains
+0290A021	ADDU	S4,S4,S0	;S4+=S0: p->next char in message
+02902023	*SUBU	A0,S4,S0	;A0=S4-S0: p->current char in message
+02002825	*OR	A1,R0,S0	;A1=S0: msg.len
+0C0240B3	*JAL	800902CC	;V0=display width of A1 characters in string A0
+24060000	*ADDIU	A2,R0,0000	;A2=0: width type-variable (hacked)
+44828000	*MTC1	V0,F16
+//80882C44:	determine position of END on last line
+461AB201	SUB.S	F8,F22,F26	;F8=width + xpos - 160.0: lrx-position
+2AA10003	SLTI	AT,S5,0003
+46808120	CVT.S.W	F4,F16	;F4=(float) width
+4614E281	SUB.S	F10,F28,F20	;F10=120.0 - ypos: lry-position
+10200005	*BEQ	AT,R0,80882C6C	;branch if on final row
+2C4100C1	*SLTIU	AT,V0,00C1
+38210001	*XORI	AT,AT,0001	;AT=TRUE if over 0xB0
+00330825	*OR	AT,AT,S3
+54200002	*BNEL	AT,R0,+2	;branch if newline OR near overrun
+461E5281	*ADD.S	F10,F10,F30	;F6=ypos+16.0: next row's position
+//80882C6C:	offset x position if END on same row
+46082200	*ADD.S	F8,F4,F8	;F8=width + xpos
+//80882C70:	save final {x,y} position
+E6EA0000	SWC1	F10,0000 (S7)	;S7=yend
+E6C80000	SWC1	F8,0000 (S6)	;S6=xend
+//80882C78:	loop for 4 lines
+26B50001	ADDIU	S5,S5,0001	;S5++	count.row+1
+2AA10004	*SLTI	AT,S5,0004
+1420FFCC	*BNE	AT,R0,80882BB4	;loop for four lines
+461EA500	ADD.S	F20,F20,F30	;ypos+=16.0: next row
+//80882CC0:	return
+	LW	RA,0094 (SP)
+	LDC1	F20,0040 (SP)
+	LDC1	F22,0048 (SP)
+	LDC1	F24,0050 (SP)
+	LDC1	F26,0058 (SP)
+	LDC1	F28,0060 (SP)
+	LDC1	F30,0068 (SP)
+	LW	S0,0070 (SP)
+	LW	S1,0074 (SP)
+;8FB20078	LW	S2,0078 (SP)
+	LW	S3,007C (SP)
+	LW	S4,0080 (SP)
+	LW	S5,0084 (SP)
+	LW	S6,0088 (SP)
+	LW	S7,008C (SP)
+	LW	S8,0090 (SP)
+	JR	RA
+	ADDIU	SP,SP,0098
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+
+...and the nightmare that is the mail block
+80889A9C	C0C	[803C9C5C]	display mail message body
+	accepts: A0=, A1=p->manager, A2=p->text, A3=(float)xpos, SP+10=p->(float)ypos, SP+14=p->(float)xend, SP+18=p->(float)yend, SP+1C=RGBA
+	ADDIU	SP,SP,FF68
+	SDC1	F20,0040 (SP)
+	MTC1	A3,F20		;F20=A3: ypos
+	SW	RA,0094 (SP)
+	SW	S8,0090 (SP)
+	SW	S7,008C (SP)
+	SW	S6,0088 (SP)
+	SW	S5,0084 (SP)
+	SW	S4,0080 (SP)
+	SW	S3,007C (SP)
+;	SW	S2,0078 (SP)
+	SW	S1,0074 (SP)
+	SW	S0,0070 (SP)
+	SDC1	F30,0068 (SP)
+	SDC1	F28,0060 (SP)
+	SDC1	F26,0058 (SP)
+	SDC1	F24,0050 (SP)
+	SDC1	F22,0048 (SP)
+	SW	A1,009C (SP)	;SP+9C=A1: p->manager
+	SW	A2,00A0 (SP)	;SP+A0=A2: xpos
+	LUI	AT,4140
+	MTC1	AT,F30		;F30=12.0	[41400000]
+	LW	T6,002C (A0)
+	LUI	AT,4180
+	MTC1	AT,F28		;F28= 16.0	[41800000]
+	LUI	V0,0001
+	LUI	AT,42F0
+	MTC1	AT,F26		;F26= 120.0	[42F00000]
+	ADDU	V0,V0,T6
+	LW	V0,06E4 (V0)	;V0=V0+6E4: p->mail.controller
+	LUI	AT,4320
+	MTC1	AT,F24		;F24= 160.0	[43200000]
+	LUI	AT,3F80
+	MTC1	AT,F22		;F22=1.0	[3F800000]
+	OR	S6,R0,R0	;S6=0	init.count.row
+	LW	S8,00AC (SP)	;S8=[SP+14 f/caller]: p->xend
+	LW	S7,00B4 (SP)	;S7=[SP+1C f/caller]: rgba
+	LW	S3,00A8 (SP)	;S3=[SP+10 f/caller]: p->ypos
+00008025	*OR	S0,R0,R0	;S0=0: init count.str
+;8FA300B0	LW	V1,00B0 (SP)	;V1=[SP+14 f/caller]: p->yend
+2455003C	ADDIU	S5,V0,003C	;S5=mail+3C: p->text
+90510006	LBU	S1,0006 (V0)	;S1=mail+6: text.len
+//80889B44:	[803C9D04]	loop to display each line
+0000A025	OR	S4,R0,R0	;S4=0: init newline flag
+1A200038	BLEZ	S1,80889C78	;skip parsing if no message to parse!
+00152025	*OR	A0,S5,R0	;V0=S5: p->msg.txt
+24050000	*ADDIU	A1,R0,0000	;A1=0: width type-variable (hacked)
+0C024D98	*JAL	80093660	;V0=#chars, V1=T if newline to linebreak for string A0 of length A2, type A1--std.messagewindow
+00113025	*OR	A2,S1,R0	;A2=S1: remaining strlen
+00028025	*OR	S0,V0,R0	;S0=V0	count.str
+0003A025	*OR	S4,V1,R0	;S3=V1	newline found
+//80889B64:	line correction for displaying trailing newlines
+12800006	*BEQ	S4,R0,80889BB4	;branch if not a newline
+00103025	*OR	A2,S0,R0	;A2=S0: #chars in string
+8FB8009C	LW	T8,009C (SP)
+8F190004	LW	T9,0004 (T8)	;T9=T8+4: type flag
+24010001	ADDIU	AT,R0,0001
+57210001	*BNEL	T9,AT,+1	;branch if 2 set: displaying '\r' symbol
+24C6FFFF	*ADDIU	A2,A2,FFFF	;A2=count.str-1
+//80889BB4:	display line to screen
+10C00013	*BEQ	A2,R0,80889C0C	;skip if nothing to print
+C6640000	LWC1	F4,0000 (S3)	;F4=S3+0: ypos
+4407A000	MFC1	A3,F20		;A3=F20: xpos
+8FA400A0	LW	A0,00A0 (SP)
+02A02825	OR	A1,S5,R0	;A1=S5: p->text
+92E80000	LBU	T0,0000 (S7)	;T0=S7+0: red
+92E90001	LBU	T1,0001 (S7)	;T1=S7+1: green
+92EA0002	LBU	T2,0002 (S7)	;T2=S7+2: blue
+92EB0003	*LBU	T3,0003 (S7)	;T3=S7+3: alpha
+E7A40010	SWC1	F4,0010 (SP)	;SP+10=F4: ypos
+AFA80014	SW	T0,0014 (SP)	;SP+14=T0: red
+AFA90018	SW	T1,0018 (SP)	;SP+18=T1: green
+AFAA001C	SW	T2,001C (SP)	;SP+1C=T2: blue
+AFAB0020	SW	T3,0020 (SP)	;SP+20=FF: alpha
+AFA00024	SW	R0,0024 (SP)	;SP+24=0
+AFA00028	SW	R0,0028 (SP)	;SP+28=0
+E7B6002C	SWC1	F22,002C (SP)	;SP+2C=1.0
+E7B60030	SWC1	F22,0030 (SP)	;SP+30=1.0
+0C0243A6	JAL	80090E98	;print text to screen
+AFA00034	SW	R0,0034 (SP)	;SP+34=0
+//80889C0C:	compute {x,y} at end of message
+02308823	SUBU	S1,S1,S0	;S1-=S0: text.len-count.str
+16200015	*BNE	S1,R0,80889C78	;branch if more message remains
+02B0A821	ADDU	S5,S5,S0	;S5+=S0: p->next char in message
+02B02023	*SUBU	A0,S5,S0	;A0=S5-S0: p->current char in message
+02002825	OR	A1,R0,S0	;A1=S0: text.len
+0C0240B3	JAL	800902CC	;V0=display width of A1 characters in string A0
+24060000	*ADDIU	A2,R0,0000	;A2=0: width type-variable (hacked)
+44829000	MTC1	V0,F18
+//80889C38:	determine position of END on last line
+C6700000	LWC1	F16,0000 (S3)	;F16=S3+0: ypos
+2AC10005	*SLTI	AT,S6,0005
+46809120	CVT.S.W	F4,F18	;F4=(float) width
+4618A281	*SUB.S	F10,F20,F24	;F10=width + xpos - 160.0: lrx-position
+4610D481	*SUB.S	F18,F26,F16	;F18=120.0 - ypos: lry-position
+10200005	*BEQ	AT,R0,80889C6C	;branch if on final row
+2C4100C1	*SLTIU	AT,V0,00C1
+38210001	*XORI	AT,AT,0001	;AT=TRUE if over 0xB0
+00340825	*OR	AT,AT,S4
+54200002	*BNEL	AT,R0,+2	;branch if newline OR near overrun
+461C9481	*SUB.S	F18,F18,F28	;F10=ypos+16.0: next line
+//80889C6C:	offset x position if END on same row
+46045280	*ADD.S	F10,F10,F4	;F8=width + xpos
+//80889C70:	save final {x,y} position
+8FA300B0	LW	V1,00B0 (SP)	;V1=[SP+14 f/caller]: p->yend
+E7CA0000	SWC1	F10,0000 (S8)	;F10->S8+0: save xend
+E4720000	SWC1	F18,0000 (V1)	;F18->V1+0: save yend
+//80889C78:	loop for 6 lines
+C6640000	LWC1	F4,0000 (S3)	;F4=S3+0: ypos
+26D60001	ADDIU	S6,S6,0001	;S6++	count.row++
+2AC10006	*SLTI	AT,S6,0006
+461C2180	ADD.S	F6,F4,F28	;F6= ypos+16.0: next row
+1420FFC1	*BNEZ	AT,80889B44	;loop for six lines
+E6660000	SWC1	F6,0000 (S3)	;update ypos
+//80889C90:	return
+8FBF0094	LW	RA,0094 (SP)
+D7B40040	LDC1	F20,0040 (SP)
+D7B60048	LDC1	F22,0048 (SP)
+D7B80050	LDC1	F24,0050 (SP)
+D7BA0058	LDC1	F26,0058 (SP)
+D7BC0060	LDC1	F28,0060 (SP)
+D7BE0068	LDC1	F30,0068 (SP)
+8FB00070	LW	S0,0070 (SP)
+8FB10074	LW	S1,0074 (SP)
+;8FB20078	LW	S2,0078 (SP)
+8FB3007C	LW	S3,007C (SP)
+8FB40080	LW	S4,0080 (SP)
+8FB50084	LW	S5,0084 (SP)
+8FB60088	LW	S6,0088 (SP)
+8FB7008C	LW	S7,008C (SP)
+8FBE0090	LW	S8,0090 (SP)
+03E00008	JR	RA
+27BD0098	ADDIU	SP,SP,0098
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+
+	
+That fixes the script and END block.
+Onward to the cursor!
+
+@.@
+
+Cursor is recycled between all type interfaces
+
+C-71F4E0 +0x9AC
+80885AEC	[803BA1FC]	set cursor position; returns V0=row, V1=column
+	accepts: A0=p->type controller, A1=column(w/i row), A2=row, A3=text offset to cursor (pos.cursor)
+27BDFFD0	ADDIU	SP,SP,FFD0
+AFBF002C	SW	RA,002C (SP)
+AFB00014	SW	S0,0014 (SP)
+AFB10018	SW	S1,0018 (SP)
+;AFB2001C	SW	S2,001C (SP)
+;8492001A	LH	S2,001A (A0)	;S2=type.controller+1A: max.rows
+8C840024	LW	A0,0024 (A0)	;V0=type.controller+24: p->text
+AFA50020	SW	A1,0020 (SP)	;SP+20= @column
+AFA60024	SW	A2,0024 (SP)	;SP+24= @row
+//80885B10:	[803BA220]	initialize and test for empty field
+00078025	OR	S0,A3,R0	;S0=A3	init.count
+00008825	OR	S1,R0,R0	;S1=0	init.count.row
+18E0000F	BLEZ	A3,80885B58	;branch if invalid or empty field
+//80885B1C:	[803BA22C]	get #chars in cur.line
+AFA40028	SW	A0,0028 (SP)	;SP+28= p->text
+24050000	ADDIU	A1,R0,0000	;A1=0: width type-variable (hacked)
+0C024D98	JAL	80093660	;V0=#chars, V1=T if newline to linebreak for string A0 of length A2, type A1--std.messagewindow
+00103025	OR	A2,S0,R0	;A2=S1: remaining strlen
+02028023	SUBU	S0,S0,V0	;S0-=#chars
+1A000007	BLEZ	S0,80885B50	;save values if you're at the end
+//80885B34:	[803BA244]	loop if there's more to go
+8FA40028	LW	A0,0028 (SP)	;A0=p->text
+26310001	ADDIU	S1,S1,0001	;count.row++
+;1632FFF7	BNE	S1,S2,80885B1C	;loop for remaining rows
+1000FFF7	BEQ	R0,R0,80885B1C	;loop for any remaining rows
+00822021	ADDU	A0,A0,V0	;A0+=#chars
+//80885B44:	[803BA254]	otherwise, assume at physical end of message
+24420001	ADDIU	V0,V0,0001	;place cursor beyond text
+10000004	BEQ	R0,R0,80885B5C
+2631FFFF	ADDIU	S1,S1,FFFF	;drop a row
+//80885B54:	[803BA260]	
+10600002	BEQ	V1,R0,80885B5C
+02238821	ADDU	S1,S1,V1	;count.row+=newline
+00001025	OR	V0,R0,R0	;resets values to zero on branch
+//80885B5C:	[803BA26C]	store new values
+8FA50020	LW	A1,0020 (SP)
+8FA60024	LW	A2,0024 (SP)
+A4A20000	SH	V0,0000 (A1)
+A4D10000	SH	S1,0000 (A2)
+//80885B6C:	[803BA27C]	return
+8FB00014	LW	S0,0014 (SP)
+8FB10018	LW	S1,0018 (SP)
+;8FB2001C	LW	S2,001C (SP)
+8FBF002C	LW	RA,002C (SP)
+03E00008	JR	RA
+27BD0030	ADDIU	SP,SP,0030
+
+Now to correct cursor up/down.
+Effectively, you work out what row/column you want, then see if it exists ;*)
+80885A74	[803BA184]	update cursor.pos for currently set row/column pair
+	accepts: A0=p->type.controller
+27BDFFD0	ADDIU	SP,SP,FFD0
+AFBF002C	SW	RA,002C (SP)
+AFB00028	SW	S0,0028 (SP)
+AFB10024	SW	S1,0024 (SP)
+AFB20020	SW	S2,0020 (SP)
+00808025	OR	S0,A0,R0	;S0=A0: p->type.controller
+86110022	LH	S1,0022 (S0)	;V1=controller+22: cursor.row
+00009025	OR	S2,R0,R0	;A2=0	init.count
+//80885A94:	read chars from each row until length
+8E040024	LW	A0,0024 (S0)	;A0=controller+24: p->text
+00922021	ADDU	A0,A0,S2	;A0+=count	p->cur.text
+8606001C	LH	A2,001C (S0)	;A2=controller+1C: message length
+24050000	ADDIU	A1,R0,0000
+0C024D98	JAL	80093660	;V0=#chars, V1=T if newline to linebreak for string A0 of length A2, type A1--std.messagewindow
+00D23023	SUBU	A2,A2,S2	;A2-=count	remaining
+//80885AAC:	loop until row count met
+2631FFFF	ADDIU	S1,S1,FFFF	;S1--	row--
+0623FFF8	BGEZL	S1,80885A94	;loop for each row
+02429021	ADDU	S2,S2,V0	;inc. count on loop
+//80885AB8:	update cursor.pos and return
+86050020	LH	A1,0020 (S0)	;A1=controller+20: cursor.column
+0045082A	SLT	AT,V0,A1	;TRUE if row.length < cursor.column
+50200001	BEQL	AT,R0,+1	;if row.length smaller, use it instead
+00A01025	OR	V0,A1,R0
+02429021	ADDU	S2,S2,V0	;count+=#columns
+A6120016	SH	S2,0016 (S0)	;update cursor.pos
+//80885AD0:	return
+8FBF002C	LW	RA,002C (SP)
+8FB00028	LW	S0,0028 (SP)
+8FB10024	LW	S1,0024 (SP)
+8FB20020	LW	S2,0020 (SP)
+03E00008	JR	RA
+27BD0030	ADDIU	SP,SP,0030
+	*NOP
+
+80885CBC	[803BA3CC]	V0=length of cur.cursor row
+	accepts: A0=p->type controller
+27BDFFD8	ADDIU	SP,SP,FFD8
+AFBF0024	SW	RA,0024 (SP)
+AFB00020	SW	S0,0020 (SP)
+AFB1001C	SW	S1,001C (SP)
+8490001C	LH	S0,001C (A0)	;S0=A0+1C: text.len
+84910022	LH	S1,0022 (A0)	;S1=A0+22: cursor pos.row
+8C840024	LW	A0,0024 (A0)	;V0=A0+24: p->text
+//80885CD8:	get length of line
+AFA40018	SW	A0,0018 (SP)	;SP+28= p->text
+24050000	ADDIU	A1,R0,0000	;A1=0: width type-variable (hacked)
+0C024D98	JAL	80093660	;V0=#chars, V1=T if newline to linebreak for string A0 of length A2, type A1--std.messagewindow
+00103025	OR	A2,S0,R0	;A2=S1: remaining strlen
+//80885CE8:	update positions and loop until final row
+02028023	SUBU	S0,S0,V0	;S0-=#chars
+8FA40018	LW	A0,0018 (SP)
+00822021	ADDU	A0,A0,V0
+1E20FFF8	BGTZ	S1,80885CD8
+2631FFFF	ADDIU	S1,S1,FFFF
+//80885CFC:	return length of line
+;00431023	*SUBU	V0,V0,V1	;this should remove one character, so will return length without the newline
+8FBF0024	LW	RA,0024 (SP)
+8FB00020	LW	S0,0020 (SP)
+8FB1001C	LW	S1,001C (SP)
+03E00008	JR	RA
+27BD0028	ADDIU	SP,SP,0028
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+
+minor update, to detect newlines and allow cursor->beginning
+80885F6C	[803BA67C]	0xE2C	move cursor up a row
+	accepts: A0=p->type controller
+27BDFFE8	ADDIU	SP,SP,FFE8
+AFBF0014	SW	RA,0014 (SP)
+84820022	LH	V0,0022 (A0)	;V0=controller+22: cursor.row
+5840000A	*BLEZL	V0,80885FA4	;return if at top row
+0000C025	*OR	T8,R0,R0	;moves cursor to 0,0
+244EFFFF	ADDIU	T6,V0,FFFF	;T6=row-1
+A48E0022	SH	T6,0022 (A0)	;update row
+0C0EE8F3	JAL	80885CBC	;V0=count in cursor's row
+AFA40018	SW	A0,0018 (SP)
+8FA40018	LW	A0,0018 (SP)	;A0=p->type.controller
+0043C023	*SUBU	T8,V0,V1	;T8=count-1: length ignoring newline
+848F0020	LH	T7,0020 (A0)	;T7=controller+20: cursor.column
+01E2082A	SLT	AT,T7,V0	;TRUE if column count < length
+50200001	*BEQL	AT,R0,80885FA8	;branch if original was shorter
+A4980020	SH	T8,0020 (A0)	;update cursor.column
+//80885FA8:
+84990016	*LH	T9,0016 (A0)
+13200003	*BEQ	T9,R0,80885FBC
+24190001	ADDIU	T9,R0,0001
+0C0EE861	JAL	80885A74	;update cursor.pos for currently set row/column pair
+A0990015	SB	T9,0015 (A0)	;1->controller+15: 
+//80885FBC:	return
+8FBF0014	LW	RA,0014 (SP)
+03E00008	JR	RA
+27BD0018	ADDIU	SP,SP,0018
+00000000	NOP
+
+and cursor down on last row...
+//80886058:	0xF18	add a newline if press down at end of message
+	LH	T3,001C (S0)	;T3=controller+1C: text.len
+	LH	T4,0016 (S0)	;T4=controller+16: cursor.pos
+	ADDIU	T5,R0,00CD
+	OR	A0,S0,R0	;A0=S0: p->type.controller
+556CFFF5	*BNEL	T3,T4,80886040	;return if cursor isn't at the end of the text bank
+87A9002E	*LH	T1,002E (SP)
+
+oh, and maybe rewrite this so it can replace as well as insert chars
+80885DD4	[803BA4E4]	0xC94	add char to text block
+	accepts: A0=p->type controller, A1=TRUE if INSERTING char (opt.)
+24050001	*ADDIU	A1,R0,0001	;default: insert char
+//	
+	ADDIU	SP,SP,FF60
+	SW	S0,0018 (SP)
+	OR	S0,A0,R0	;S0=A0: p->type.controller
+	SW	RA,001C (SP)
+	LH	T6,0018 (S0)	;T6=controller+18: max.column
+	LH	T7,001A (S0)	;T7=controller+1A: max.row
+	LH	T8,001C (S0)	;T8=controller+1C: text.len
+	ADDIU	T0,SP,003C	;T0=SP+3C: p->buffer
+	MULTU	T6,T7
+	ADDIU	A2,SP,0026	;A2=SP+26: @cur.row
+00003812	*MFLO	A3	;A1=max.column * max.row: max.len
+0305C021	*ADDU	T8,T8,A1
+00F8C023	*SUBU	T8,A3,T8	;T8=max.len - text.len - inserted byte when necessary
+0700002A	*BLTZ	T8,80885EB8	;return if reached max length
+AFA50020	*SW	A1,0020 (SP)
+	LH	T9,0016 (S0)	;T9=controller+16: cursor.pos
+	LW	A0,0024 (S0)	;A0=controller+24: p->text
+	OR	V0,T0,R0	;V0=T0: p->buffer
+;	BLEZ	T9,80885E40	;branch if at start of message
+	OR	V1,R0,R0	;V1=0	init.count
+//80885E1C:	copy text prior to cursor into buffer
+860A0016	-LH	T2,0016 (S0)	;T2=controller+16: cursor.pos
+90890000	LBU	T1,0000 (A0)	;T1=char in text
+146A0005	*BNE	V1,T2,+5
+860B001E	*LH	T3,001E (S0)	;T3=convert char
+54A00004	*BNEL	A1,R0,+4
+92090013	LBU	T1,0013 (S0)	;T3=controller+13: append char
+05630001	*BGEZL	T3,+1
+A04BFFFF	*SB	T3,FFFF (V0)	;replace previous char with conversion
+24840001	ADDIU	A0,A0,0001	;A0++	text++
+0067082A	*SLT	AT,V1,A3	;TRUE if count < max.len
+24630001	ADDIU	V1,V1,0001	;V1++	count++
+24420001	ADDIU	V0,V0,0001	;V1++	buffer++
+5420FFF4	*BNEL	AT,R0,80885E24	;loop until cursor met
+A049FFFF	SB	T1,FFFF (V0)	;save char to buffer
+//80885E40:	insert char
+//80885E54:	copy remaining text to buffer
+//80885E70:	get final position and compare to maximums
+	LW	T5,0024 (S0)	;T5=controller+24: p->text
+02002025	OR	A0,S0,R0	;A0=S0: p->type.controller
+8607001C	-LH	A3,001C (S0)	;A3=controller+1C: text.len
+AFAD0030	SW	T5,0030 (SP)	;SP+30=T5: p->text
+00E53821	*ADDU	A3,A3,A1	;A3++	text.len++
+AE080024	SW	T0,0024 (S0)	;T0->controller+24: p->buffer
+0C0EE87F	JAL	80885AEC	;set cursor position
+27A50024	-ADDIU	A1,SP,0024	;A1=SP+24: @cur.column
+	LW	T6,0030 (SP)	;T6=p->text
+	LH	T8,001A (S0)	;T8=controller+1A: max.row
+	SW	T6,0024 (S0)	;T6->controller+24: replace p->text
+	LH	T7,0026 (SP)	;T7=cur.row
+	SLT	AT,T7,T8	;TRUE if cur.row < max.row
+10200009	*BEQ	AT,R0,80885EB4	;return if exceeded length
+8FA50020	*LW	A1,0020 (SP)
+14A00005	*BNE	A1,R0,+5
+02002025	*OR	A0,S0,R0	;A0=S0: p->type.controller
+0C22186B	*JAL	808861AC	;convert current char
+00000000	*NOP
+10000003	*BEQ	R0,R0,80885EB4
+00000000	*NOP
+0C22174B	JAL	80885D2C	;insert char into text
+00000000	NOP
+//80885EB4:	return
+	LW	RA,001C (SP)
+	LW	S0,0018 (SP)
+	ADDIU	SP,SP,00A0
+	JR	RA
+	NOP
+
+patch this to recycle the bugger
+//80886390:	0x1250	mode 7: convert char
+	*NOP
+10000002	*BEQ	R0,R0,0002
+00002825	*OR	A1,R0,R0
+//8088639C:	mode 8: insert char
+24050001	*ADDIU	A1,R0,0001
+	*JAL	80885DD8	;add char to text block
+
++_+
+
+!EXPERIMENTAL!
+maybe 80093660	41BE0
+
+uhm, stupid question, but shouldn't this take max#chars as A3, *12 (0xC)?
+I've just sort of assumed all text regions are 0xC0 wide...
+
+80093660	41BE0	below, default A3 to message board width (0x108)
+340700C0	ORI	A3,R0,00C0
+
+80093664	41BE4	V0=#chars of type A1 until either you hit max width A3 or a newline; V1=TRUE if newline at end
+	accepts: A0=p->text, A1=width type, A2=strlen, A3=max.width
+27BDFFD0	ADDIU	SP,SP,FFD0
+AFB30024	SW	S3,0024 (SP)
+00069825	OR	S3,A2,R0	;S3=maxlen
+AFBF002C	SW	RA,002C (SP)
+AFB20020	SW	S2,0020 (SP)
+AFB1001C	SW	S1,001C (SP)
+AFB00018	SW	S0,0018 (SP)
+00079025	OR	S2,A3,R0	;S2=A3: total.width
+00008025	OR	S0,R0,R0	;S0=init.count
+00048825	OR	S1,A0,R0	;S1=A0: p->string
+	//8009368C:	A1 (type) is presumed unsullied
+92240000	LBU	A0,0000 (S1)	;A0=cur.char in string
+340100CD	ORI	AT,R0,00CD	;AT='\r'
+10810008	BEQL	A0,AT,800936B8	;include the return in the line
+24030001	ADDIU	V1,R0,0001	;V1=TRUE when newline found
+0C0240A3	JAL	8009028C	;compute render width for single character
+26310001	ADDIU	S1,S1,0001	;S1++	next char in string
+02429023	SUBU	S2,S2,V0	;S2-=V0: total.width+=width
+0240082A	SLT	AT,S2,R0	;TRUE while total is less than expected
+14200003	BNE	AT,R0,800936BC	;return if you overshoot the width
+00001825	OR	V1,R0,R0	;V1=FALSE when not at newline
+5613FFF5	BNEL	S0,S3,8009368C	;loop for strlen
+26100001	ADDIU	S0,S0,0001	;count++
+	//800936BC:	correction for overrun when newline detected
+02130823	SUBU	AT,S0,S3
+58200003	BLEZL	AT,800936D0
+02001025	OR	V0,S0,R0	;V0=count
+02601025	OR	V0,S3,R0	;return max as final
+00001825	OR	V1,R0,R0	;reset newline flag
+	//800936D0:	return
+8FBF002C	LW	RA,002C (SP)
+8FB1001C	LW	S1,001C (SP)
+8FB20020	LW	S2,0020 (SP)
+8FB30024	LW	S3,0024 (SP)
+03E00008	JR	RA
+27BD0030	ADDIU	SP,SP,0030
+
+|_|
+

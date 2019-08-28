@@ -1,0 +1,3552 @@
+Note: this disassembly pertains to a hacked binary
+
+80885140
+LBU	V1,0004 (A0)
+LUI	T7,8089
+LUI	T8,8089
+BEQ	V1,R0,80885160
+NOP
+ADDIU	AT,R0,0002
+BNE	V1,AT,80885188
+ADDU	A0,A1,A2
+BEQ	A3,R0,80885178
+ADDU	A0,A1,A2
+ADDU	AT,A0,R0
+SLL	A0,A0,0x2
+BEQ	R0,R0,80885188
+ADDU	A0,A0,AT
+SLL	T6,A1,0x2
+ADDU	T6,T6,A1
+BEQ	R0,R0,80885188
+ADDU	A0,T6,A2
+SLL	A1,V1,0x2
+ADDU	T7,T7,A1
+LW	T7,85DC (T7)	;T7=808885DC+offset: 
+ADDU	T8,T8,A1
+LW	T8,85C8 (T8)	;T8=808885C8+offset: 
+DIV	A0,T7
+BNE	T7,R0,808851AC
+NOP
+BREAK	00001C00
+ADDIU	AT,R0,FFFF
+BNE	T7,AT,808851C4
+LUI	AT,8000
+BNE	A0,AT,808851C4
+NOP
+BREAK	00001800
+MFHI	A0
+ADDU	T9,T8,A0
+LBU	V0,0000 (T9)
+JR	RA
+NOP
+
+808851D8	control stick interface
+ADDIU	SP,SP,FFE8
+LUI	A1,8011
+ADDIU	A1,A1,EF90
+SW	RA,0014 (SP)
+LW	T6,002C (A0)
+LUI	V1,0001
+LW	T7,0000 (A1)	;T7=8010EF90: 
+ADDU	V1,V1,T6
+LW	V1,06E0 (V1)	;V1=V1+6E0: p->type.controller
+LWC1	F0,00D0 (T7)
+LUI	AT,8089
+LBU	T8,0000 (V1)	;T8=controller+0: char.lit
+ADDIU	T9,R0,0008
+SB	T8,0001 (V1)	;controller+0 -> controller+1: stow previous value
+LWC1	F4,8AA0 (AT)	;F4=80888AA0: 
+C.LT.S	F0,F4
+NOP
+BC1FL	80885230
+LW	T0,0000 (A1)
+BEQ	R0,R0,808852E0
+SB	T9,0000 (V1)	;8->controller+0: char.lit = default
+//8088522C:
+LW	T0,0000 (A1)	;T0=8010EF90: 
+LH	V0,00B4 (T0)
+SLTI	AT,V0,9000
+BEQL	AT,R0,8088524C
+SLTI	AT,V0,9000
+BEQ	R0,R0,808852E0
+SB	R0,0000 (V1)	;0->controller+0: char.lit
+//80885248:
+SLTI	AT,V0,9000
+BNE	AT,R0,80885264
+SLTI	AT,V0,B000
+BEQ	AT,R0,80885264
+ADDIU	T1,R0,0007
+BEQ	R0,R0,808852E0
+SB	T1,0000 (V1)	;7->controller+0: char.lit
+//80885264:
+SLTI	AT,V0,D000
+BEQ	AT,R0,80885278
+ADDIU	T2,R0,0006
+BEQ	R0,R0,808852E0
+SB	T2,0000 (V1)	;6->controller+0: char.lit
+//80885278:
+SLTI	AT,V0,F000
+BEQ	AT,R0,8088528C
+ADDIU	T3,R0,0005
+BEQ	R0,R0,808852E0
+SB	T3,0000 (V1)	;5->controller+0: char.lit
+//8088528C:
+SLTI	AT,V0,1000
+BEQ	AT,R0,808852A0
+ADDIU	T4,R0,0004
+BEQ	R0,R0,808852E0
+SB	T4,0000 (V1)	;4->controller+0: char.lit
+//808852A0:
+SLTI	AT,V0,3000
+BEQ	AT,R0,808852B4
+ADDIU	T5,R0,0003
+BEQ	R0,R0,808852E0
+SB	T5,0000 (V1)	;3->controller+0: char.lit
+//808852B4:
+SLTI	AT,V0,5000
+BEQ	AT,R0,808852C8
+ADDIU	T6,R0,0002
+BEQ	R0,R0,808852E0
+SB	T6,0000 (V1)	;2->controller+0: char.lit
+//808852C8:
+SLTI	AT,V0,7000
+BEQ	AT,R0,808852DC
+ADDIU	T7,R0,0001
+BEQ	R0,R0,808852E0
+SB	T7,0000 (V1)	;1->controller+0: char.lit
+//808852DC:
+SB	R0,0000 (V1)	;0->controller+0: char.lit
+//808852E0:	next page in set
+LBU	T8,0001 (V1)	;T8=controller+1: 
+LBU	T9,0000 (V1)	;T9=controller+0: 
+BEQL	T8,T9,8088536C	;return if both match
+SB	R0,0002 (V1)
+LBU	V0,0000 (V1)	;V0=controller+0: char.lit
+ADDIU	T0,R0,0001
+ADDIU	AT,R0,0008
+BEQ	V0,AT,8088536C	;return if already at 8
+SB	T0,0002 (V1)	;1->controller+2: 
+ADDIU	AT,R0,0007
+BEQ	V0,AT,8088536C	;return if 7
+ADDIU	AT,R0,0005
+BEQ	V0,AT,8088536C	;return if 5
+ADDIU	AT,R0,0006
+BEQL	V0,AT,80885370	;return if 6
+LW	RA,0014 (SP)
+LBU	V0,0004 (V1)	;V0=controller+4: char.set
+ADDIU	AT,R0,0002
+BEQL	V0,R0,8088533C	;branch if first set
+LH	T1,0006 (V1)
+BNE	V0,AT,80885348	;if char.set is 2 or 0, check char.subset
+NOP
+//80885338:	check subset
+LH	T1,0006 (V1)	;T1=controller+6: char.subset
+ADDIU	AT,R0,FFFF
+BEQ	T1,AT,80885358	;branch if -1
+NOP
+//80885348:
+JAL	800D1A9C
+ADDIU	A0,R0,040F
+BEQ	R0,R0,80885370
+LW	RA,0014 (SP)
+//80885358:
+JAL	800D1A9C
+ADDIU	A0,R0,0411
+BEQ	R0,R0,80885370
+LW	RA,0014 (SP)
+//80885368:
+SB	R0,0002 (V1)	;0->controller+2: 
+//8088536C:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+8088537C
+ADDIU	SP,SP,FFE0
+SW	RA,0014 (SP)
+JAL	80078D78
+SW	A0,0020 (SP)
+JAL	80078DF4
+SH	V0,001A (SP)
+LHU	T6,001A (SP)
+LW	A0,0020 (SP)
+ADDIU	T9,R0,000F
+OR	V1,V0,T6
+ANDI	V1,V1,400F
+BEQ	V1,R0,808853C8
+OR	A1,V1,R0
+LH	T7,0006 (A0)
+ADDIU	AT,R0,FFFF
+ANDI	T8,V1,4000
+BEQL	T7,AT,808853E8
+LW	T1,0008 (A0)
+BEQ	T8,R0,808853E4
+ADDIU	T0,R0,000D
+SW	A1,0008 (A0)
+SB	T9,0010 (A0)
+SB	T0,000F (A0)
+SB	R0,000E (A0)
+BEQ	R0,R0,808854BC
+OR	V0,R0,R0
+LW	T1,0008 (A0)
+ADDIU	T9,R0,000F
+ADDIU	T0,R0,000D
+BNE	V1,T1,8088545C
+ANDI	V0,V1,4000
+LBU	T2,000E (A0)
+ADDIU	AT,R0,0001
+BNEL	T2,AT,8088541C
+LBU	A1,0010 (A0)
+LBU	V0,000F (A0)
+BLEZ	V0,80885418
+ADDIU	T3,V0,FFFF
+SB	T3,000F (A0)
+LBU	A1,0010 (A0)
+ADDIU	V0,R0,0009
+BLEZ	A1,80885430
+ADDIU	T4,A1,FFFF
+BEQ	R0,R0,808854BC
+SB	T4,0010 (A0)
+LBU	T5,000F (A0)
+ANDI	V0,V1,4000
+ADDIU	T7,R0,0003
+BNE	T5,R0,80885450
+ADDIU	T8,R0,0001
+ADDIU	T6,R0,0001
+BEQ	R0,R0,8088546C
+SB	T6,0010 (A0)
+SB	T7,0010 (A0)
+BEQ	R0,R0,8088546C
+SB	T8,000E (A0)
+SW	V1,0008 (A0)
+SB	T9,0010 (A0)
+SB	T0,000F (A0)
+SB	R0,000E (A0)
+BEQ	V0,R0,8088547C
+ANDI	T1,V1,0002
+BEQ	R0,R0,808854BC
+ADDIU	V0,R0,0006
+BEQ	T1,R0,8088548C
+ANDI	T2,V1,0004
+BEQ	R0,R0,808854BC
+ADDIU	V0,R0,0002
+BEQ	T2,R0,8088549C
+ANDI	T3,V1,0008
+BEQ	R0,R0,808854BC
+ADDIU	V0,R0,0004
+BEQ	T3,R0,808854AC
+ANDI	T4,V1,0001
+BEQ	R0,R0,808854BC
+ADDIU	V0,R0,0003
+BEQ	T4,R0,808854BC
+OR	V0,R0,R0
+BEQ	R0,R0,808854BC
+ADDIU	V0,R0,0001
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+808854CC	advance character set when Z pressed; V0=TRUE when altered
+	accepts: A0=p->type controller
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A1,A0,R0	;A1=A0: p->type.controller
+ADDIU	A0,R0,2000	;A0=2000: Z button
+JAL	80078DAC	;TRUE if buttons A0 held
+SW	A1,0018 (SP)	;SP+18=A1: p->type.controller
+BEQ	V0,R0,8088551C	;branch if not held
+LW	A1,0018 (SP)	;A1=p->type.controller
+LBU	T6,0004 (A1)	;T6=controller+4: char.set
+ADDIU	T8,R0,FFFF
+SB	R0,0005 (A1)	;0->controller+5: char.offset
+ADDIU	T7,T6,0001	;T7=char.set+1
+ANDI	T9,T7,00FF
+SLTI	AT,T9,0005	;TRUE if char.set < 5
+SB	T7,0004 (A1)	;update char.set
+BNE	AT,R0,80885514	;branch if valid set
+SH	T8,0006 (A1)
+SB	R0,0004 (A1)	;reset char.set
+//80885514:	return TRUE when altered
+BEQ	R0,R0,80885520
+ADDIU	V0,R0,0001
+//8088551C:	return FALSE
+OR	V0,R0,R0
+//80885520:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+80885530
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A1,A0,R0
+LBU	T6,0000 (A1)
+ADDIU	AT,R0,0006
+ORI	A0,R0,8000	;A0=8000: A button
+BNEL	T6,AT,80885570
+LH	T8,0006 (A1)
+JAL	80078DAC	;TRUE if buttons A0 held
+SW	A1,0018 (SP)
+BNE	V0,R0,80885590	;branch if A pressed
+LW	A1,0018 (SP)
+LBU	T7,0002 (A1)
+BNEL	T7,R0,80885594
+LH	T9,0006 (A1)
+LH	T8,0006 (A1)
+ADDIU	AT,R0,FFFF
+ADDIU	A0,R0,4000	;A0=4000: B button
+BEQL	T8,AT,808855CC
+OR	V0,R0,R0
+JAL	80078DAC	;TRUE if buttons A0 held
+SW	A1,0018 (SP)
+BEQ	V0,R0,808855C8	;branch if not held
+LW	A1,0018 (SP)
+LH	T9,0006 (A1)
+ADDIU	AT,R0,FFFF
+ADDIU	T2,R0,0003
+BNE	T9,AT,808855BC
+ADDIU	T3,R0,FFFF
+LBU	T0,0005 (A1)
+SB	T2,0003 (A1)
+ADDIU	V0,R0,0001
+ADDIU	T1,T0,0003
+BEQ	R0,R0,808855CC
+SB	T1,0005 (A1)
+SH	T3,0006 (A1)
+BEQ	R0,R0,808855CC
+ADDIU	V0,R0,0001
+OR	V0,R0,R0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+808855DC
+LBU	V1,0000 (A0)
+BLTZ	V1,808855F0
+SLTI	AT,V1,0005
+BNEL	AT,R0,808855FC
+LBU	T6,0005 (A0)
+JR	RA
+ADDIU	V0,R0,FFFF
+LBU	T6,0005 (A0)
+ADDU	V0,T6,V1
+JR	RA
+NOP
+
+80885608
+ADDIU	SP,SP,FFE0
+SW	RA,0014 (SP)
+OR	A1,A0,R0
+LBU	V0,0004 (A1)
+ADDIU	AT,R0,0002
+BEQL	V0,R0,80885630
+LH	T6,0006 (A1)
+BNEL	V0,AT,80885680
+OR	V0,R0,R0
+LH	T6,0006 (A1)
+ADDIU	AT,R0,FFFF
+OR	A0,A1,R0
+BNEL	T6,AT,80885680
+OR	V0,R0,R0
+JAL	808855DC
+SW	A1,0020 (SP)
+ADDIU	AT,R0,FFFF
+BEQ	V0,AT,8088567C
+LW	A1,0020 (SP)
+ORI	A0,R0,8000	;A0=8000: A button
+SW	V0,001C (SP)
+JAL	80078DAC	;TRUE if buttons A0 held
+SW	A1,0020 (SP)
+LW	V1,001C (SP)
+BEQ	V0,R0,8088567C	;branch if not held
+LW	A1,0020 (SP)
+SH	V1,0006 (A1)
+BEQ	R0,R0,80885680
+ADDIU	V0,R0,0001
+OR	V0,R0,R0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+80885690
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+LBU	A2,0000 (A0)
+LBU	V0,0004 (A0)
+BLTZ	A2,808856D0
+SLTI	AT,A2,0005
+BEQ	AT,R0,808856D0
+NOP
+BEQ	V0,R0,808856C0
+ADDIU	AT,R0,0002
+BNEL	V0,AT,808856DC
+LH	V0,0006 (A0)
+LH	T6,0006 (A0)
+ADDIU	AT,R0,FFFF
+BNEL	T6,AT,808856DC
+LH	V0,0006 (A0)
+BEQ	R0,R0,808856F8
+ADDIU	V0,R0,FFFF
+LH	V0,0006 (A0)
+ADDIU	AT,R0,FFFF
+BNE	V0,AT,808856F0
+OR	A1,V0,R0
+BEQ	R0,R0,808856F0
+LBU	A1,0005 (A0)
+JAL	80885140
+OR	A3,R0,R0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+80885708
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)
+JAL	80078DAC	;TRUE if buttons A0 held
+ORI	A0,R0,8000	;A0=8000: A button
+BEQL	V0,R0,80885750	;branch if not held
+OR	V0,R0,R0
+JAL	80885690
+LW	A0,0018 (SP)
+ADDIU	A0,R0,FFFF
+BEQ	V0,A0,8088574C
+LW	T6,0018 (SP)
+SB	V0,0013 (T6)
+LW	T7,0018 (SP)
+ADDIU	V0,R0,0001
+BEQ	R0,R0,80885750
+SH	A0,0006 (T7)
+OR	V0,R0,R0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+80885760
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)
+JAL	808854CC	;advance character set when Z pressed; V0=TRUE when altered
+LW	A0,0018 (SP)
+BEQ	V0,R0,8088578C
+NOP
+JAL	800D1A9C
+ADDIU	A0,R0,0037
+BEQ	R0,R0,808857E8
+OR	V0,R0,R0
+JAL	80885530
+LW	A0,0018 (SP)
+BEQ	V0,R0,808857AC
+NOP
+JAL	800D1A9C
+ADDIU	A0,R0,0038
+BEQ	R0,R0,808857E8
+OR	V0,R0,R0
+JAL	80885608
+LW	A0,0018 (SP)
+BEQ	V0,R0,808857CC
+NOP
+JAL	800D1A9C
+ADDIU	A0,R0,0032
+BEQ	R0,R0,808857E8
+OR	V0,R0,R0
+JAL	80885708
+LW	A0,0018 (SP)
+BEQL	V0,R0,808857E8
+OR	V0,R0,R0
+BEQ	R0,R0,808857E8
+ADDIU	V0,R0,0008
+OR	V0,R0,R0
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+808857F8	type interface
+ADDIU	SP,SP,FFE0
+SW	RA,001C (SP)
+SW	S0,0018 (SP)
+OR	A1,A0,R0
+LW	T6,002C (A1)
+LUI	S0,0001
+ADDIU	A0,R0,1000	;A0=1000: Start
+ADDU	S0,S0,T6
+JAL	80078DAC	;TRUE if buttons A0 held
+LW	S0,06E0 (S0)	;S0=S0+6E0: p->type.controller
+BEQ	V0,R0,80885830	;skip if button not held
+ADDIU	T7,R0,0005
+BEQ	R0,R0,80885868
+SB	T7,0011 (S0)	;5->controller+11: mode 5-save
+//80885830:	test for char conversion
+JAL	80078DAC	;TRUE if buttons A0 held
+ADDIU	A0,R0,0010	;A0=10: R button
+BEQ	V0,R0,80885848	;skip if button not held
+ADDIU	T8,R0,0007
+BEQ	R0,R0,80885868
+SB	T8,0011 (S0)	;7->controller+11: mode 7-convert char
+//80885848:
+JAL	8088537C
+OR	A0,S0,R0	;A0=S0: p->type.controller
+ANDI	T9,V0,00FF
+BNE	T9,R0,80885868	;branch if set
+SB	V0,0011 (S0)	;V0->controller+11: update mode
+JAL	80885760
+OR	A0,S0,R0	;A0=S0: p->type.controller
+SB	V0,0011 (S0)	;V0->controller+11: update mode
+//80885868:	return
+LW	RA,001C (SP)
+LW	S0,0018 (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+8088587C	initialize type interface
+ADDIU	SP,SP,FFE0
+SW	RA,0014 (SP)
+ADDIU	A2,R0,0008
+LUI	A3,0001
+LW	T6,002C (A0)
+ADDIU	T8,R0,FFFF
+LUI	T1,8089
+ADDU	T7,T6,A3
+LW	V1,06E0 (T7)	;V1=T7+6E0: p->type.controller
+SB	A2,0000 (V1)	;8->controller+0: reset char.lit
+SB	A2,0001 (V1)	;8->controller+1: reset char.litbuf
+SB	R0,0002 (V1)	;0->controller+2: 
+ADDIU	T9,R0,0300
+SH	T9,0004 (V1)	;300->controller+4: char.set
+SH	T8,0006 (V1)	;-1 ->controller+6: reset char.subset
+SB	R0,0011 (V1)	;0->controller+11: mode 0-no action
+SB	R0,0013 (V1)	;0->controller+13: append char
+SB	R0,0014 (V1)	;0->controller+14: normal wheel
+LW	T9,0038 (A1)
+SLL	T0,T9,0x1
+ADDU	T1,T1,T0
+LH	T1,85F0 (T1)
+SH	T1,001A (V1)	;T1->controller+1A: max.row
+LW	T2,0040 (A1)
+SW	T2,0024 (V1)	;T2->controller+24: p->text
+LW	V0,003C (A1)
+BLEZL	V0,80885924
+LW	T5,0038 (A1)
+SH	V0,0018 (V1)	;V0->controller+18: max.column
+LH	T3,0018 (V1)	;T3=controller+18: max.column
+LH	T4,001A (V1)	;T4=controller+1A: max.row
+SW	V1,001C (SP)	;SP+1C=V1: p->type.controller
+OR	A0,T2,R0
+MULTU	T3,T4
+ADDIU	A2,R0,0020
+MFLO	A1
+JAL	8009C1C0	;V0=actual strlen
+NOP
+LW	V1,001C (SP)	;V1=p->type.controller
+BEQ	R0,R0,80885948
+SH	V0,001C (V1)	;V0->controller+1C: text.len
+LW	T5,0038 (A1)
+ADDIU	T6,R0,0010
+BNEL	T5,R0,8088594C
+ADDIU	T1,R0,FFFF
+SH	T6,0018 (V1)	;10->controller+18: max.column
+LW	T7,002C (A0)
+ADDU	T8,T7,A3
+LW	T9,06E4 (T8)
+LBU	T0,0006 (T9)
+SH	T0,001C (V1)	;T0->controller+1C: text.len
+ADDIU	T1,R0,FFFF
+SH	R0,0016 (V1)	;0->controller+16: cursor.pos
+SH	R0,0020 (V1)	;0->controller+20: cursor.column
+SH	R0,0022 (V1)	;0->controller+22: cursor.row
+SH	T1,001E (V1)	;-1->controller+1E: conversion char "Special"
+//8088595C:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+8088596C	[803BA07C]
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+LW	T6,002C (A0)
+LUI	V0,0001
+ADDIU	AT,R0,0008
+ADDU	V0,V0,T6
+LW	V0,06E0 (V0)	;V0=V0+6E0: p->type.controller
+LBU	V1,0011 (V0)	;V1=controller+11: mode
+BNEL	V1,AT,808859FC	;branch if not mode 8: insert char
+ADDIU	AT,R0,0007
+JAL	8009F730	;V0=value for char or -1 if command
+LBU	A0,0013 (V0)	;A0=controller+13: append char
+ADDIU	AT,R0,0052
+BEQ	V0,AT,808859DC
+OR	V1,V0,R0
+ADDIU	AT,R0,0050
+BEQ	V0,AT,808859DC
+ADDIU	AT,R0,004F
+BEQ	V0,AT,808859DC
+ADDIU	AT,R0,0051
+BEQ	V0,AT,808859DC
+ADDIU	AT,R0,0054
+BEQ	V0,AT,808859DC
+ADDIU	AT,R0,0055
+BEQ	V0,AT,808859DC
+ADDIU	AT,R0,FFFF
+BNEL	V0,AT,808859E4
+ANDI	A0,V1,00FF
+ADDIU	V1,R0,004E
+ANDI	A0,V1,00FF
+OR	A1,R0,R0
+JAL	800D1BE4
+ADDIU	A2,R0,0020
+BEQ	R0,R0,80885A68
+LW	RA,0014 (SP)
+//808859F8:
+ADDIU	AT,R0,0007
+BNE	V1,AT,80885A54	;branch if not mode 7: convert char
+SLL	T8,V1,0x1
+LH	A0,001E (V0)	;A0=controller+1E: conversion char
+ADDIU	AT,R0,FFFF
+LUI	T7,8089
+BEQ	A0,AT,80885A44	;branch if "Special"
+ADDU	T7,T7,A0
+LBU	T7,8610 (T7)	;T7=80888610+offset: 
+BEQ	T7,R0,80885A44
+NOP
+JAL	8009F730
+NOP
+ANDI	A0,V0,00FF
+OR	A1,R0,R0
+JAL	800D1BE4
+ADDIU	A2,R0,0020
+BEQ	R0,R0,80885A68
+LW	RA,0014 (SP)
+//80885A44:
+JAL	800D1A9C
+ADDIU	A0,R0,0036
+BEQ	R0,R0,80885A68
+LW	RA,0014 (SP)
+//80885A54:
+LUI	A0,8089
+ADDU	A0,A0,T8
+JAL	800D1A9C
+LHU	A0,85FC (A0)	;A0=808885FC+offset: 
+//80885A64:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+80885A74	[803BA184]	update cursor.pos for currently set row/column pair
+	accepts: A0=p->type.controller
+LH	V1,0022 (A0)	;V1=controller+22: cursor.row
+LW	V0,0024 (A0)	;V0=controller+24: p->text
+LH	A1,0020 (A0)	;A1=controller+20: cursor.column
+BEQ	V1,R0,80885AD8	;return if on first row
+SH	R0,0016 (A0)	;0->controller+16: init.cursor.pos
+ADDIU	T0,R0,00CD	;T0=0xCD: '\r'
+//80885A8C:	read chars from each row until length
+LH	A3,0018 (A0)	;A3=controller+18: max.column
+OR	A2,R0,R0	;A2=0	init.count
+BLEZL	A3,80885AC8	;branch if invalid maximum column total
+LH	T7,0016 (A0)
+//80885A9C:	find newlines
+LBU	T6,0000 (V0)	;T6=V0+0: char in text
+BNEL	T0,T6,80885AB8	;branch if char isn't a newline
+ADDIU	A2,A2,0001
+ADDIU	V0,V0,0001	;V0++	next char in text
+BEQ	R0,R0,80885AC4
+ADDIU	A2,A2,0001	;A2++	count++
+//80885AB4:	catch linewrap
+ADDIU	A2,A2,0001	;A2++	count++
+SLT	AT,A2,A3	;TRUE if count < max.columns
+BNE	AT,R0,80885A9C
+ADDIU	V0,V0,0001	;V0++	next char in text
+//80885AC4:	loop until row count met
+LH	T7,0016 (A0)	;T7=controller+16: cursor.pos
+ADDIU	V1,V1,FFFF	;V1--	cursor.row--
+ADDU	T8,T7,A2	;T8=cursor.pos+count
+BNE	V1,R0,80885A8C	;loop for each row
+SH	T8,0016 (A0)	;update cursor.pos
+//80885AD8:	update cursor.pos and return
+LH	T9,0016 (A0)	;T9=controller+16: cursor.pos
+ADDU	T1,T9,A1	;T1=cursor.pos+offset.column: updated cursor.pos
+SH	T1,0016 (A0)	;update cursor.pos
+JR	RA
+NOP
+
+80885AEC	[803BA1FC]	set cursor position
+	accepts: A0=p->type controller, A1=column(w/i row), A2=row, A3=text offset to cursor (pos.cursor)
+LW	V0,0024 (A0)	;V0=type.controller+24: p->text
+SH	R0,0000 (A2)	;0->count.row
+OR	V1,R0,R0
+SH	R0,0000 (A1)	;0->count.column
+BLEZ	A3,80885C88	;branch if invalid or empty field
+OR	T0,R0,R0	;T0=0	init.count
+ANDI	T1,A3,0003
+BEQ	T1,R0,80885B68	;branch if already word-aligned
+OR	T2,T1,R0	;T2=count&3: count of non-aligned bytes
+ADDIU	T4,R0,FFFF	;T4= -1: default column count
+ADDIU	T3,R0,00CD
+//80885B18:
+LBU	T6,0000 (V0)	;T6=V0+0: cur char in text
+ADDIU	T0,T0,0001	;T0++	count++
+ADDIU	V0,V0,0001	;V0++	advance to next char
+BEQL	T3,T6,80885B44	;branch if char is '\r'
+LH	T8,0000 (A2)
+LH	T1,0000 (A1)	;T1=count.column
+LH	T7,0018 (A0)	;T7=controller+18: max.columns
+ADDIU	T1,T1,0001	;T1++	column+1
+BNE	T7,T1,80885B5C
+NOP
+//80885B40:	newline found
+LH	T8,0000 (A2)	;T8=count.row
+ADDIU	T9,T8,0001	;row++
+SH	T9,0000 (A2)	;update count.row
+LH	V1,0000 (A1)	;V1=count.column
+SH	T4,0000 (A1)	;update count.column
+LH	T1,0000 (A1)	;T1=count.column
+ADDIU	T1,T1,0001	;T1++	column+1
+//80885B5C:	loop for each byte
+BNE	T2,T0,80885B18	;loop for each non-aligned byte
+SH	T1,0000 (A1)	;update count.column
+BEQ	T0,A3,80885C88	;compensate for final row
+//80885B68:	word-aligned text
+ADDIU	T3,R0,00CD
+ADDIU	T4,R0,FFFF
+//80885B70:
+LBU	T5,0000 (V0)	;T5=V0+0: cur char in text
+ADDIU	T0,T0,0004	;T0+=4	count+=4
+BEQL	T3,T5,80885B98	;branch if char is '\r'
+LH	T7,0000 (A2)	;T7=count.row
+LH	T1,0000 (A1)	;T1=count.column
+LH	T6,0018 (A0)	;T6=controller+18: max.columns
+//80885C88:
+ADDIU	T1,T1,0001	;T1++	column+1
+BNEL	T6,T1,80885BB4	;branch if you haven't hit final column
+SH	T1,0000 (A1)	;update count.column
+//80885C94:
+LH	T7,0000 (A2)	;T7=count.row
+ADDIU	T8,T7,0001	;row++
+SH	T8,0000 (A2)	;update count.row
+LH	V1,0000 (A1)	;V1=count.column
+SH	T4,0000 (A1)	;update count.column
+LH	T1,0000 (A1)	;T1=count.column
+ADDIU	T1,T1,0001	;T1++	column+1
+SH	T1,0000 (A1)	;update count.column
+//80885BB4:
+LBU	T9,0001 (V0)	;T9=V0+0: next char in text
+ADDIU	V0,V0,0001	;V0++	advance to next char
+BEQL	T3,T9,80885BDC	;branch if char is '\r'
+LH	T6,0000 (A2)	;T6=count.row
+LH	T1,0000 (A1)	;T1=count.column
+LH	T5,0018 (A0)	;T5=controller+18: max.columns
+ADDIU	T1,T1,0001	;T1++	column+1
+BNEL	T5,T1,80885BF8
+SH	T1,0000 (A1)	;update count.column
+//80885BD8:
+LH	T6,0000 (A2)	;T6=count.row
+ADDIU	T7,T6,0001	;row++
+SH	T7,0000 (A2)	;update count.row
+LH	V1,0000 (A1)	;V1=count.column
+SH	T4,0000 (A1)	;update count.column
+LH	T1,0000 (A1)	;T1=count.column
+ADDIU	T1,T1,0001	;T1++	column+1
+SH	T1,0000 (A1)	;update count.column
+//80885BF8:
+LBU	T8,0001 (V0)	;T8=V0+0: next char in text
+ADDIU	V0,V0,0001	;V0++	advance to next char
+BEQL	T3,T8,80885C20	;branch if char is '\r'
+LH	T5,0000 (A2)
+LH	T1,0000 (A1)	;T1=count.column
+LH	T9,0018 (A0)	;T9=controller+18: max.columns
+ADDIU	T1,T1,0001	;T1++	column+1
+BNEL	T9,T1,80885C3C
+SH	T1,0000 (A1)	;update count.column
+//80885C1C:
+LH	T5,0000 (A2)	;T5=count.row
+ADDIU	T6,T5,0001	;row++
+SH	T6,0000 (A2)	;update count.row
+LH	V1,0000 (A1)	;V1=count.column
+SH	T4,0000 (A1)	;update count.column
+LH	T1,0000 (A1)	;T1=count.column
+ADDIU	T1,T1,0001	;T1++	column+1
+//80885C38:
+SH	T1,0000 (A1)	;update count.column
+LBU	T7,0001 (V0)	;T7=V0+0: next char in text
+ADDIU	V0,V0,0001
+ADDIU	V0,V0,0001	;V0+=2	advance 2 chars
+BEQL	T3,T7,80885C68	;branch if char is '\r'
+LH	T9,0000 (A2)
+LH	T1,0000 (A1)	;T1=count.column
+LH	T8,0018 (A0)	;T8=controller+18: max.columns
+ADDIU	T1,T1,0001	;T1++	column+1
+BNE	T8,T1,80885C80
+NOP
+//80885C64:	increment row and column count
+LH	T9,0000 (A2)	;T9=count.row
+ADDIU	T5,T9,0001	;T5=row+1
+SH	T5,0000 (A2)	;update count.row
+LH	V1,0000 (A1)	;V1=count.column
+SH	T4,0000 (A1)	;update count.column
+LH	T1,0000 (A1)	;T1=count.column
+ADDIU	T1,T1,0001	;T1++	column+1
+//80885C80:	loop for entire block of text
+BNE	T0,A3,80885B70	;loop for count
+SH	T1,0000 (A1)	;update count.column
+//80885C88:	compensate for final row
+LH	T6,0000 (A1)	;T6=column.count
+BNE	T6,R0,80885CB4	;return if column set
+NOP
+LH	V0,0000 (A2)	;V0=count.row
+LH	T7,001A (A0)	;T7=controller+1A: max.rows
+ADDIU	T9,V1,0001	;T9=column+1
+ADDIU	T8,V0,FFFF	;T8=row-1
+BNE	T7,V0,80885CB4	;update to cursor final if at final row
+NOP
+SH	T8,0000 (A2)	;update count.row
+SH	T9,0000 (A1)	;update count.column
+//80885CB4:	return
+JR	RA
+NOP
+
+80885CBC	[803BA3CC]	V0=length of cur.cursor row
+	accepts: A0=p->type controller
+LW	V0,0024 (A0)	;V0=A0+24: p->text
+LH	V1,001C (A0)	;V1=A0+1C: text.len
+LH	A1,0022 (A0)	;A1=A0+22: cursor pos.row
+LH	A2,0018 (A0)	;A2=A0+18: max columns
+ADDIU	A3,R0,00CD
+//80885CD0:
+BLEZ	A2,80885D14	;branch if max columns is invalid, which it should never be
+OR	A0,R0,R0	;A0=0	init.count
+BLEZL	V1,80885D18	;branch if message length invalid
+ADDIU	A1,A1,FFFF
+//80885CE0:	drop a row if a newline found
+LBU	T6,0000 (V0)	;T6=V0+0: char in string
+BNEL	A3,T6,80885CFC	;branch if not '\r'
+ADDIU	A0,A0,0001
+ADDIU	V0,V0,0001	;V0++	p->next char in string
+BEQ	R0,R0,80885D14	;drop a row and loop
+ADDIU	A0,A0,0001	;A0++	count++
+//80885CF8:	advance to next char until end of line
+ADDIU	A0,A0,0001	;A0++	count++
+SLT	AT,A0,A2	;TRUE if count < max.columns
+BEQ	AT,R0,80885D14
+ADDIU	V0,V0,0001	;V0++	p->next char in string
+SLT	AT,A0,V1	;TRUE if count < text.len
+BNEL	AT,R0,80885CE4	;feed chars until end of line
+LBU	T6,0000 (V0)
+//80885D14:	drop a row and try again
+ADDIU	A1,A1,FFFF	;A1--	row--
+BGEZ	A1,80885CD0	;loop until out of rows
+SUBU	V1,V1,A0	;V1-=A0: total-=count
+//80885D20:	return
+OR	V0,A0,R0	;V0=A0: return count
+JR	RA
+NOP
+
+80885D2C	[803BA43C]	insert char into text
+	accepts: A0=p->type controller
+LH	V1,001C (A0)	;V1=controller+1C: text.len
+LH	A2,0016 (A0)	;A2=controller+16: cursor.pos
+LW	T6,0024 (A0)	;T6=controller+24: p->text
+OR	A1,V1,R0	;A1=text.len
+SLT	AT,A2,V1	;TRUE if cursor.pos < text.len
+BEQ	AT,R0,80885D6C	;append char if already at end
+ADDU	V0,T6,V1	;V0=text+text.len: p->text.end
+//80885D48:	copy text up a space to make room
+LBU	T7,FFFF (V0)	;T7=char from text
+ADDIU	A1,A1,FFFF	;A1--	text.len--
+ADDIU	V0,V0,FFFF	;V0--	text--
+SB	T7,0001 (V0)	;copy char up a space
+LH	A2,0016 (A0)	;A2=controller+16: cursor.pos
+SLT	AT,A2,A1	;TRUE if cursor.pos < cur.len
+BNEL	AT,R0,80885D4C	;loop until cursor met
+LBU	T7,FFFF (V0)
+//80885D68:	insert char, update cursor, and update length
+LH	V1,001C (A0)	;V1=controller+1C: text.len
+LBU	T0,0013 (A0)	;T0=controller+13: insert char
+ADDIU	T8,A2,0001	;T8=cursor.pos+1
+ADDIU	T9,V1,0001	;T9=text.len+1
+SH	T8,0016 (A0)	;update cursor.pos
+SH	T9,001C (A0)	;update text.len
+ADDIU	T1,R0,0001
+SB	T0,0000 (V0)	;T0->text.cursor: insert char at cursor
+SB	T1,0015 (A0)	;1->controller+15: amended
+JR	RA
+NOP
+
+80885D94	add char to single-line message box
+	accepts: A0=p->type.controller
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+LBU	T6,0013 (A0)	;T6=controller+13: append char
+ADDIU	AT,R0,00CD
+BEQL	T6,AT,80885DC8	;return if newline
+LW	RA,0014 (SP)
+LH	T7,0018 (A0)	;T7=controller+18: max.column
+LH	T8,001C (A0)	;T8=controller+1C: text.len
+BEQL	T7,T8,80885DC8	;return if columns match total length
+LW	RA,0014 (SP)
+JAL	80885D2C	;insert char into text
+NOP
+//80885DC4:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+80885DD4	[803BA4E4]	add char to text block
+	accepts: A0=p->type controller
+ADDIU	SP,SP,FF60
+SW	S0,0018 (SP)
+OR	S0,A0,R0	;S0=A0: p->type.controller
+SW	RA,001C (SP)
+LH	T6,0018 (S0)	;T6=controller+18: max.column
+LH	T7,001A (S0)	;T7=controller+1A: max.row
+LH	T8,001C (S0)	;T8=controller+1C: text.len
+ADDIU	T0,SP,003C	;T0=SP+3C: p->buffer
+MULTU	T6,T7
+ADDIU	A2,SP,0026	;A2=SP+26: @cur.row
+MFLO	A1	;A1=max.column * max.row: max.len
+BEQL	A1,T8,80885EB8	;return if reached max length
+LW	RA,001C (SP)
+LH	T9,0016 (S0)	;T9=controller+16: cursor.pos
+LW	A0,0024 (S0)	;A0=controller+24: p->text
+OR	V0,T0,R0	;V0=T0: p->buffer
+BLEZ	T9,80885E40	;branch if at start of message
+OR	V1,R0,R0	;V1=0	init.count
+//80885E1C:	copy text prior to cursor into buffer
+LBU	T1,0000 (A0)	;T1=char in text
+ADDIU	V1,V1,0001	;V1++	count++
+ADDIU	V0,V0,0001	;V1++	buffer++
+SB	T1,FFFF (V0)	;save char to buffer
+LH	T2,0016 (S0)	;T2=controller+16: cursor.pos
+ADDIU	A0,A0,0001	;A0++	text++
+SLT	AT,V1,T2	;TRUE if count < cursor.pos
+BNEL	AT,R0,80885E20	;loop until cursor met
+LBU	T1,0000 (A0)
+//80885E40:	insert char
+LBU	T3,0013 (S0)	;T3=controller+13: append char
+SLT	AT,V1,A1	;TRUE if count < max.len
+ADDIU	V0,V0,0001	;V0++	text++
+BEQ	AT,R0,80885E70	;skip if max size reached
+SB	T3,FFFF (V0)	;char->buffer-1: insert char at cursor
+//80885E54:	copy remaining text to buffer
+LBU	T4,0000 (A0)	;T4=char in text
+ADDIU	V1,V1,0001	;V1++	count++
+SLT	AT,V1,A1	;TRUE if count < max.len
+ADDIU	V0,V0,0001	;V0++	buffer++
+ADDIU	A0,A0,0001	;A0++	text++
+BNE	AT,R0,80885E54	;loop for remaining text
+SB	T4,FFFF (V0)	;save char to buffer
+//80885E70:	get final position and compare to maximums
+LW	T5,0024 (S0)	;T5=controller+24: p->text
+OR	A0,S0,R0	;A0=S0: p->type.controller
+ADDIU	A1,SP,0024	;A1=SP+24: @cur.column
+SW	T5,0030 (SP)	;SP+30=T5: p->text
+LH	A3,001C (S0)	;A3=controller+1C: text.len
+SW	T0,0024 (S0)	;T0->controller+24: p->buffer
+JAL	80885AEC	;set cursor position
+ADDIU	A3,A3,0001	;A3++	text.len++
+LW	T6,0030 (SP)	;T6=p->text
+LH	T8,001A (S0)	;T8=controller+1A: max.row
+SW	T6,0024 (S0)	;T6->controller+24: replace p->text
+LH	T7,0026 (SP)	;T7=cur.row
+SLT	AT,T7,T8	;TRUE if cur.row < max.row
+BEQL	AT,R0,80885EB8	;return if exceeded length
+LW	RA,001C (SP)
+JAL	80885D2C	;insert char into text
+OR	A0,S0,R0	;A0=S0: p->type.controller
+//80885EB4:	return
+LW	RA,001C (SP)
+LW	S0,0018 (SP)
+ADDIU	SP,SP,00A0
+JR	RA
+NOP
+
+80885EC8	move cursor right
+	accepts: A0=p->type controller, A1=allow newline (TRUE/FALSE)
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+LH	V0,0016 (A0)	;V0=controller+16: cursor.pos
+LH	V1,001C (A0)	;V1=controller+1C: text.len
+SLT	AT,V0,V1
+BEQ	AT,R0,80885EFC	;branch if at end of text
+NOP
+BLEZ	V1,80885EFC	;branch if no text
+ADDIU	T6,V0,0001	;T6=cursor.pos+1
+ADDIU	T7,R0,0001
+SH	T6,0016 (A0)	;update cursor.pos
+BEQ	R0,R0,80885F3C
+SB	T7,0015 (A0)	;1->controller+15: amended
+//80885EFC:	add a space if room permits
+BNE	V1,V0,80885F3C	;return if end of text doesn't correspond to cursor.pos
+ADDIU	T8,R0,0020
+BEQ	A1,R0,80885F1C	;branch if a single-line message
+SB	T8,0013 (A0)	;0x20->controller+13: insert ' '
+//80885F0C:	text blocks
+JAL	80885DD4	;add char to text block
+SW	A0,0018 (SP)	;SP+18=A0: p->type.controller
+BEQ	R0,R0,80885F28
+LW	A0,0018 (SP)	;A0=p->type.controller
+//80885F1C:	single-line messages
+JAL	80885D94	;add char to single-line message box
+SW	A0,0018 (SP)	;SP+18=A0: p->type.controller
+LW	A0,0018 (SP)	;A0=p->type.controller
+//80885F28:
+LBU	T9,0015 (A0)	;T9=controller+15: amend flag
+ADDIU	T0,R0,0008
+BEQL	T9,R0,80885F40	;return if not amended
+LW	RA,0014 (SP)
+SB	T0,0011 (A0)	;8->controller+11: mode 8-insert char
+//80885F3C:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+80885F4C	move cursor left
+	accepts: A0=p->type controller
+LH	V0,0016 (A0)	;V0=controller+16: cursor.pos
+ADDIU	T7,R0,0001
+BLEZ	V0,80885F64	;return if at beginning
+ADDIU	T6,V0,FFFF	;T6=cursor.pos-1: backspace 1
+SH	T6,0016 (A0)	;update cursor.pos
+SB	T7,0015 (A0)	;1->controller+15: amended
+//80885F64:	return
+JR	RA
+NOP
+
+80885F6C	[803BA67C]	move cursor up a row
+	accepts: A0=p->type controller
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+LH	V0,0022 (A0)	;V0=controller+22: cursor.row
+BLEZ	V0,80885FBC	;return if at top row
+ADDIU	T6,V0,FFFF	;T6=row-1
+SH	T6,0022 (A0)	;update row
+JAL	80885CBC	;V0=count in cursor's row
+SW	A0,0018 (SP)
+LW	A0,0018 (SP)	;A0=p->type.controller
+ADDIU	T8,V0,FFFF	;T8=count-1: length ignoring newline
+LH	T7,0020 (A0)	;T7=controller+20: cursor.column
+SLT	AT,T7,V0	;TRUE if column count < length
+BNE	AT,R0,80885FA8	;branch if original was shorter
+NOP
+SH	T8,0020 (A0)	;update cursor.column
+//80885FA8:
+JAL	80885A74	;update cursor.pos for currently set row/column pair
+SW	A0,0018 (SP)
+LW	A0,0018 (SP)	;A0=p->type.controller
+ADDIU	T9,R0,0001
+SB	T9,0015 (A0)	;1->controller+15: 
+//80885FBC:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+80885FCC	[803BA6DC]	move cursor down a row
+ADDIU	SP,SP,FFD0
+SW	S0,0018 (SP)
+OR	S0,A0,R0	;S0=A0: p->type.controller
+SW	RA,001C (SP)
+OR	A0,S0,R0	;A0=S0: p->type.controller
+ADDIU	A1,SP,002E	;A1=SP+2E: @column
+ADDIU	A2,SP,002C	;A2=SP+2C: @row
+JAL	80885AEC	;set cursor position
+LH	A3,001C (S0)	;A3=controller+1C: text.len
+LH	V0,0022 (S0)	;V0=controller+22: cursor.row
+LH	T6,002C (SP)	;T6=final.row
+OR	A0,S0,R0	;A0=S0: p->type.controller
+ADDIU	T7,V0,0001	;T7=V0+1: cursor.row+1
+SLT	AT,V0,T6	;TRUE if next row < final row
+BEQL	AT,R0,8088605C	;branch if you're at final row
+LH	T3,001C (S0)
+JAL	80885CBC	;V0=count in cursor's row
+SH	T7,0022 (S0)	;update cursor.row
+LH	T8,0020 (S0)	;T8=cursor.column
+LH	T9,002C (SP)	;T9=final.row
+SLT	AT,T8,V0	;TRUE if cursor preceeds end of row
+BNE	AT,R0,80886044	;update cursor position if TRUE
+NOP
+LH	T0,0022 (S0)	;T0=controller+22: cursor.row
+ADDIU	T1,V0,FFFF	;T1=count-1
+BNEL	T9,T0,80886044	;branch if cursor not on final row
+SH	T1,0020 (S0)
+BEQ	R0,R0,80886044	;update with full count
+SH	V0,0020 (S0)
+//80886040:
+SH	T1,0020 (S0)	;update cursor.column
+//80886044:	update cursor position
+JAL	80885A74	;update cursor.pos for currently set row/column pair
+OR	A0,S0,R0	;A0=S0: p->type.controller
+ADDIU	T2,R0,0001
+BEQ	R0,R0,8088608C
+SB	T2,0015 (S0)	;1->controller+15: mode 1-cursor right
+//80886058:	add a newline if press down at end of message
+LH	T3,001C (S0)	;T3=controller+1C: text.len
+LH	T4,0016 (S0)	;T4=controller+16: cursor.pos
+ADDIU	T5,R0,00CD
+OR	A0,S0,R0	;A0=S0: p->type.controller
+BNEL	T3,T4,80886090	;return if cursor isn't at the end of the text bank
+LW	RA,001C (SP)
+//80886070:	append newline
+JAL	80885DD4	;add char to text block
+SB	T5,0013 (S0)	;CD->controller+13: append '\r'
+LBU	T6,0015 (S0)	;T6=controller+15: amend flag
+ADDIU	T7,R0,0008
+BEQL	T6,R0,80886090	;return if flag isn't set
+LW	RA,001C (SP)
+SB	T7,0011 (S0)	;8->controller+11: mode 8-insert char
+//8088608C:	return
+LW	RA,001C (SP)
+LW	S0,0018 (SP)
+ADDIU	SP,SP,0030
+JR	RA
+NOP
+
+808860A0
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)
+OR	A2,A1,R0
+LW	T6,0018 (SP)
+LUI	T9,0001
+OR	A0,A2,R0
+LW	T7,002C (T6)
+ADDIU	A1,R0,0006
+ADDU	T9,T9,T7
+LW	T9,06B0 (T9)
+JALR	RA,T9
+NOP
+//808860D4:	set amend flag and return
+LW	T0,0018 (SP)
+LUI	T2,0001
+ADDIU	T8,R0,0001
+LW	T1,002C (T0)
+ADDU	T2,T2,T1
+LW	T2,06E0 (T2)	;T2=T2+6E0: p->type.controller
+SB	T8,0015 (T2)	;1->controller+15: amended
+LW	RA,0014 (SP)
+JR	RA
+ADDIU	SP,SP,0018
+
+808860FC	delete previous char
+	accepts: A0=p->type controller
+LH	V0,0016 (A0)	;V0=controller+16: cursor.pos
+ADDIU	T3,R0,0020	;T3= ' '
+ADDIU	T4,R0,0001
+BEQ	V0,R0,80886160	;return if at beginning of message
+ADDIU	T6,V0,FFFF	;T6=cursor.pos-1
+LH	T7,001C (A0)	;T7=controller+1C: text.len
+SH	T6,0016 (A0)	;update cursor.pos
+LH	A1,0016 (A0)	;A1=cursor.pos
+ADDIU	T8,T7,FFFF
+SH	T8,001C (A0)
+LH	T0,001C (A0)
+LW	T9,0024 (A0)
+SLT	AT,A1,T0
+BEQ	AT,R0,80886158
+ADDU	V1,T9,A1
+//80886138:
+LBU	T1,0001 (V1)
+ADDIU	A1,A1,0001
+ADDIU	V1,V1,0001
+SB	T1,FFFF (V1)
+LH	T2,001C (A0)
+SLT	AT,A1,T2
+BNEL	AT,R0,8088613C
+LBU	T1,0001 (V1)
+//80886158:	
+SB	T3,0000 (V1)
+SB	T4,0015 (A0)
+//80886160:	return
+JR	RA
+NOP
+
+80886168	[803BA878]	V0=character conversion for char at cursor
+	accepts: A0=p->type controller
+LH	V0,0016 (A0)	;V0=controller+16: cursor.pos
+BNEL	V0,R0,80886180	;branch if beyond start of message
+LW	T6,0024 (A0)
+JR	RA
+ADDIU	V0,R0,FFFF	;V0=-1	return "Special"
+//8088617C:	
+LW	T6,0024 (A0)	;T6=controller+24: p->text
+LUI	A1,8089
+ADDU	T7,T6,V0	;T7=text+cursor.pos: p->text at cursor
+LBU	V1,FFFF (T7)	;V1=text.cursor-1: previous char
+ADDU	A1,A1,V1
+LBU	A1,8710 (A1)	;A1=80888710+offset: conversion for char at cursor
+BNE	V1,A1,808861A4	;branch if not same char
+OR	V0,A1,R0	;V0=A1: return conversion char
+JR	RA
+ADDIU	V0,R0,FFFF	;V0=-1	return "Special"
+//808861A4:	return conversion char
+JR	RA
+NOP
+
+808861AC	[803BA8BC]	convert current char; V0=TRUE if amended
+	accepts: A0=p->type controller
+LH	V0,001E (A0)	;V0=controller+1E: conversion char
+ADDIU	AT,R0,FFFF
+BEQL	V0,AT,808861D8	;return if "Special" char
+LBU	V0,0015 (A0)
+LW	T7,0024 (A0)	;T7=controller+24: p->text
+LH	T8,0016 (A0)	;T8=controller+16: cursor.pos
+ADDIU	T6,R0,0001
+SB	T6,0015 (A0)	;1->controller+15: amended
+ADDU	T9,T7,T8	;T9=text+cursor.pos: p->text.cursor
+SB	V0,FFFF (T9)	;replace char at cursor with conversion char
+//808861D4:	return
+LBU	V0,0015 (A0)	;V0=controller+15: 
+JR	RA
+NOP
+
+808861E0
+ADDIU	SP,SP,FFE0
+SW	RA,0014 (SP)
+OR	A3,A1,R0
+LW	T6,0038 (A2)
+ADDIU	AT,R0,0003
+BEQL	T6,AT,80886208
+LW	V0,002C (A0)
+BEQ	R0,R0,808862DC
+OR	V0,R0,R0
+LW	V0,002C (A0)
+LUI	AT,0001
+ORI	AT,AT,01A8
+ADDU	V0,V0,AT
+LW	T7,0038 (V0)
+ADDIU	AT,R0,0002
+LW	A1,0024 (A3)
+BNEL	T7,AT,8088625C
+OR	V0,R0,R0
+LW	A0,0040 (V0)
+LH	A2,0018 (A3)
+SW	A3,0024 (SP)
+JAL	80099980
+SW	A1,0018 (SP)
+LW	A1,0018 (SP)
+BNE	V0,R0,80886250
+LW	A3,0024 (SP)
+BEQ	R0,R0,8088625C
+OR	V0,R0,R0
+BEQ	R0,R0,8088625C
+ADDIU	V0,R0,0001
+OR	V0,R0,R0
+BNEL	V0,R0,808862A0
+LH	T9,0018 (A3)
+LH	A0,001C (A3)
+OR	V0,R0,R0
+OR	V1,A1,R0
+BLEZ	A0,8088629C
+ADDIU	A2,R0,0020
+LBU	T8,0000 (V1)
+ADDIU	V0,V0,0001
+SLT	AT,V0,A0
+BEQ	A2,T8,80886294
+NOP
+BEQ	R0,R0,808862DC
+OR	V0,R0,R0
+BNE	AT,R0,80886278
+ADDIU	V1,V1,0001
+LH	T9,0018 (A3)
+OR	V0,R0,R0
+ADDIU	V1,R0,0020
+BLEZL	T9,808862D0
+SH	R0,001C (A3)
+SB	V1,0000 (A1)
+LH	T0,0018 (A3)
+ADDIU	V0,V0,0001
+ADDIU	A1,A1,0001
+SLT	AT,V0,T0
+BNEL	AT,R0,808862B4
+SB	V1,0000 (A1)
+SH	R0,001C (A3)
+SH	R0,0020 (A3)
+SH	R0,0016 (A3)
+ADDIU	V0,R0,0001
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+808862EC	text block: perform operation on text
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+LW	T6,002C (A0)
+LUI	A2,0001
+ADDU	A2,A2,T6
+LW	A2,06E0 (A2)	;A2=A2+6E0: p->type.controller
+LBU	T7,0011 (A2)	;T7=controller+11: mode
+ADDIU	T8,T7,FFFF	;T8=mode-1
+SLTIU	AT,T8,0008
+BEQ	AT,R0,808863A8	;return if invalid mode
+SLL	T8,T8,0x2	;T8*=4: mode->offset
+LUI	AT,8089
+ADDU	AT,AT,T8
+LW	T8,8AA4 (AT)	;T8=80888AA4+offset: p->handler
+JR	T8
+NOP
+//8088632C:	mode 2: cursor left
+JAL	80885F4C	;move cursor left
+OR	A0,A2,R0	;A0=A2: p->type.controller
+BEQ	R0,R0,808863AC
+LW	RA,0014 (SP)
+//8088633C:	mode 4: cursor down
+JAL	80885FCC	;move cursor down a row
+OR	A0,A2,R0	;A0=A2: p->type.controller
+BEQ	R0,R0,808863AC
+LW	RA,0014 (SP)
+//8088634C:	mode 3: cursor up
+JAL	80885F6C	;move cursor up a row
+OR	A0,A2,R0	;A0=A2: p->type.controller
+BEQ	R0,R0,808863AC
+LW	RA,0014 (SP)
+//8088635C:	mode 1: cursor right
+OR	A0,A2,R0	;A0=A2: p->type.controller
+JAL	80885EC8	;move cursor right
+ADDIU	A1,R0,0001	;A1=1: allow newline
+BEQ	R0,R0,808863AC
+LW	RA,0014 (SP)
+//80886370:	mode 5: finished
+JAL	808860A0
+NOP
+BEQ	R0,R0,808863AC
+LW	RA,0014 (SP)
+//80886380:	mode 6: backspace
+JAL	808860FC	;delete previous char
+OR	A0,A2,R0	;A0=A2: p->type.controller
+BEQ	R0,R0,808863AC
+LW	RA,0014 (SP)
+//80886390:	mode 7: convert char
+JAL	808861AC	;convert current char; V0=TRUE if amended
+OR	A0,A2,R0	;A0=A2: p->type.controller
+BEQ	R0,R0,808863AC
+LW	RA,0014 (SP)
+//808863A0:	mode 8: insert char
+JAL	80885DD4	;add char to text block
+OR	A0,A2,R0	;A0=A2: p->type.controller
+//808863A8:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+808863B8	1-line message: perform operation on text
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A1,001C (SP)
+LW	T6,002C (A0)
+LUI	A3,0001
+ADDU	A3,A3,T6
+LW	A3,06E0 (A3)	;A3=A3+6E0: p->type.controller
+LBU	T7,0011 (A3)	;T7=controller+11: mode
+ADDIU	T8,T7,FFFF	;T8=mode-1
+SLTIU	AT,T8,0008
+BEQ	AT,R0,80886480	;return if invalid
+SLL	T8,T8,0x2	;T8=mode->offset
+LUI	AT,8089
+ADDU	AT,AT,T8
+LW	T8,8AC4 (AT)	;T8=80888AC4+offset: p->handler
+JR	T8
+NOP
+//808863FC:	mode 2: cursor left
+JAL	80885F4C	;move cursor left
+OR	A0,A3,R0	;A0=A3: p->type.controller
+BEQ	R0,R0,80886484
+LW	RA,0014 (SP)
+//8088640C:	mode 1: cursor right
+OR	A0,A3,R0	;A0=A3: p->type.controller
+JAL	80885EC8	;move cursor right
+OR	A1,R0,R0	;A1=0: 1-row
+BEQ	R0,R0,80886484
+LW	RA,0014 (SP)
+//80886420:	mode 5: finished
+OR	A1,A3,R0	;A1=A3: p->type.controller
+LW	A2,001C (SP)
+JAL	808861E0
+SW	A0,0018 (SP)
+BEQ	V0,R0,80886448
+LW	A0,0018 (SP)
+//80886438:	
+JAL	800D1A9C
+ADDIU	A0,R0,1003
+BEQ	R0,R0,80886484
+LW	RA,0014 (SP)
+//80886448:	
+JAL	808860A0
+LW	A1,001C (SP)
+BEQ	R0,R0,80886484
+LW	RA,0014 (SP)
+//80886458:	mode 6: backspace
+JAL	808860FC	;delete previous char
+OR	A0,A3,R0	;A0=A3: p->type.controller
+BEQ	R0,R0,80886484
+LW	RA,0014 (SP)
+//80886468:	mode 7: convert char
+JAL	808861AC	;convert current char; V0=TRUE if amended
+OR	A0,A3,R0	;A0=A3: p->type.controller
+BEQ	R0,R0,80886484
+LW	RA,0014 (SP)
+//80886478:	mode 8: insert char
+JAL	80885D94	;add char to single-line message box
+OR	A0,A3,R0	;A0=A3: p->type.controller
+//80886480:	return (mode 3,4)
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+80886490
+ADDIU	SP,SP,FFD8
+SW	RA,0014 (SP)
+SW	A1,002C (SP)
+ADDIU	T1,R0,0001
+LW	V0,002C (A0)
+LUI	AT,0001
+ADDU	V0,V0,AT
+LW	V1,06E4 (V0)
+LW	A2,06E0 (V0)	;A2=A2+6E0: p->type.controller
+LBU	A3,0002 (V1)
+BEQL	T1,A3,8088657C
+LW	RA,0014 (SP)
+LH	T6,0016 (A2)	;T6=controller+16: cursor.pos
+LBU	T7,002F (V1)
+LH	T0,001C (A2)	;T0=controller+1C: text.len
+BNEL	T6,T7,80886518
+LW	A1,002C (SP)
+BNE	A3,R0,808864E8
+ADDIU	A1,R0,0002
+LBU	T8,0011 (A2)	;T8=controller+11: mode
+BEQL	T1,T8,80886508	;branch if mode 1: cursor right
+ADDIU	V0,R0,0001
+BNEL	A1,A3,80886518
+LW	A1,002C (SP)
+LBU	V0,0011 (A2)	;V0=controller+11: mode
+ADDIU	AT,R0,0006
+BEQL	A1,V0,80886508
+ADDIU	V0,R0,0001
+BNE	V0,AT,80886514
+ADDIU	V0,R0,0001
+SB	V0,0002 (V1)
+BEQ	R0,R0,80886578
+SB	V0,0015 (A2)	;1->controller+15: amended
+LW	A1,002C (SP)
+SW	V1,0020 (SP)
+SW	A2,0024 (SP)
+JAL	808863B8	;1-line message: perform operation on text
+SW	T0,001C (SP)
+LW	V1,0020 (SP)
+LW	A2,0024 (SP)
+LW	T0,001C (SP)
+LBU	T9,0002 (V1)
+BNEL	T9,R0,8088657C
+LW	RA,0014 (SP)
+LH	V0,001C (A2)
+SLT	AT,V0,T0
+BEQL	AT,R0,80886564
+SLT	AT,T0,V0
+LBU	T2,002F (V1)
+ADDIU	T3,T2,FFFF
+BEQ	R0,R0,80886578
+SB	T3,002F (V1)
+SLT	AT,T0,V0
+BEQL	AT,R0,8088657C
+LW	RA,0014 (SP)
+LBU	T4,002F (V1)
+ADDIU	T5,T4,0001
+SB	T5,002F (V1)
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0028
+JR	RA
+NOP
+
+80886588
+LBU	V0,0000 (A1)
+BNEL	V0,R0,808865A8
+LBU	V1,0011 (A0)
+LBU	T6,0002 (A1)
+ADDIU	A3,R0,0001
+BEQ	A3,T6,8088666C
+NOP
+LBU	V1,0011 (A0)
+ADDIU	A3,R0,0001
+ADDIU	AT,R0,0003
+BNE	V1,AT,808865C0
+OR	A2,A3,R0
+BEQ	R0,R0,808865D0
+ADDIU	V1,V0,FFFF
+ADDIU	AT,R0,0004
+BNE	V1,AT,8088666C
+OR	A2,R0,R0
+ADDIU	V1,V0,0001
+BLTZ	V1,8088666C
+SLTI	AT,V1,0003
+BEQ	AT,R0,8088666C
+ADDIU	T7,R0,0001
+SB	T7,0015 (A0)
+SLL	T8,V1,0x1
+LUI	T9,8089
+SB	V1,0000 (A1)
+SB	R0,0002 (A1)
+ADDU	T9,T9,T8
+LH	T9,8810 (T9)
+ADDU	T5,A1,V1
+BNE	V1,A3,80886630
+SH	T9,0018 (A0)
+ADDIU	T0,R0,0006
+ADDIU	T1,A1,003C
+SH	T0,001A (A0)
+BNE	A2,A3,80886628
+SW	T1,0024 (A0)
+ADDIU	T2,R0,FFFF
+BEQ	R0,R0,80886650
+SH	T2,0016 (A0)
+BEQ	R0,R0,80886650
+SH	R0,0016 (A0)
+SH	A3,001A (A0)
+BNE	V1,R0,80886648
+SH	R0,0016 (A0)
+ADDIU	T3,A1,0032
+BEQ	R0,R0,80886650
+SW	T3,0024 (A0)
+ADDIU	T4,A1,009C
+SW	T4,0024 (A0)
+LH	T7,0016 (A0)
+LBU	T6,0005 (T5)
+ADDIU	AT,R0,FFFF
+BNE	T7,AT,8088666C
+SH	T6,001C (A0)
+LH	T8,001C (A0)
+SH	T8,0016 (A0)
+JR	RA
+NOP
+
+80886674
+ADDIU	SP,SP,FFD8
+SW	RA,0014 (SP)
+LW	V0,002C (A0)
+LUI	AT,0001
+LUI	T9,8089
+ADDU	V0,V0,AT
+LW	V1,06E4 (V0)
+LBU	A3,0000 (V1)
+SW	V1,0020 (SP)
+LW	A2,06E0 (V0)	;A2=V0+6E0: p->type.controller
+SLL	T6,A3,0x2
+ADDU	T9,T9,T6
+LW	T9,8818 (T9)	;T9=80888818+offset: p->handler
+SW	A3,0024 (SP)
+SW	A2,001C (SP)	;SP+1C=A2: p->type.controller
+JALR	RA,T9
+NOP
+LW	A2,001C (SP)	;A2=p->type.controller
+LW	A1,0020 (SP)
+LW	A3,0024 (SP)
+LH	T7,001C (A2)	;T7=controller+1C: text.len
+ADDU	T8,A1,A3
+SB	T7,0005 (T8)
+LBU	T0,0015 (A2)	;T0=controller+15: amend flag
+BNEL	T0,R0,808866E8	;return if amended
+LW	RA,0014 (SP)
+JAL	80886588
+OR	A0,A2,R0	;A0=A2: p->type.controller
+//808866E4:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0028
+JR	RA
+NOP
+
+808866F4
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+LW	T6,002C (A0)
+LUI	T9,0001
+ADDU	T9,T9,T6
+LW	T9,06A8 (T9)
+JALR	RA,T9
+NOP
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+80886724
+ADDIU	SP,SP,FFE0
+SW	RA,001C (SP)
+SW	S0,0018 (SP)
+SW	A1,0024 (SP)
+LUI	V1,0001
+LW	T6,002C (A0)
+ADDU	T7,T6,V1
+LW	S0,06E0 (T7)	;S0=T7+6E0: p->type.controller
+SB	R0,0015 (S0)	;0->controller+15: reset amend flag
+LW	T8,002C (A0)
+ADDU	V0,T8,V1
+LW	T9,06E8 (V0)
+BEQL	T9,R0,8088679C
+LH	T5,000C (S0)
+LW	T0,0460 (V0)
+ADDIU	AT,R0,0002
+ADDIU	T1,R0,0008
+BNE	T0,AT,80886798
+ADDIU	T2,R0,4000
+ADDIU	T3,R0,000F
+ADDIU	T4,R0,000D
+SB	T1,0000 (S0)	;8->controller+0: default char.lit
+SB	R0,0002 (S0)	;0->controller+2: 
+SB	R0,0011 (S0)	;0->controller+11: mode 0-no action
+SW	T2,0008 (S0)	;4000->controller+8: 
+SB	T3,0010 (S0)	;F->controller+10: 
+SB	T4,000F (S0)	;D->controller+F: 
+BEQ	R0,R0,80886998
+SB	R0,000E (S0)	;0->controller+E: 
+//80886798:	update cursor.blink state
+LH	T5,000C (S0)	;T5=controller+C: cursor.blink
+ADDIU	AT,R0,0014
+ADDIU	T6,T5,0001	;T6=cursor.blink+1
+SH	T6,000C (S0)	;update cursor.blink
+LH	T7,000C (S0)	;T7=cursor.blink
+BNE	T7,AT,808867B8	;reset at 14
+NOP
+SH	R0,000C (S0)	;0->controller+C: cursor.blink
+//808867B8:	detect char page changes
+JAL	808851D8	;control stick interface
+SW	A0,0020 (SP)
+LBU	V0,0003 (S0)	;V0=controller+3: char.spin
+BLEZ	V0,808868D8	;branch if no change required
+NOP
+LBU	T8,0002 (S0)	;T8=controller+2: 
+BEQL	T8,R0,80886894
+ADDIU	T6,V0,FFFF
+LBU	T9,0000 (S0)	;T9=controller+0: char.lit
+ADDIU	AT,R0,0008
+BEQL	T9,AT,80886894	;branch if 8
+ADDIU	T6,V0,FFFF
+LBU	V0,0005 (S0)	;V0=controller+5: char.offset
+ADDIU	A0,R0,0005
+SB	R0,0003 (S0)	;0->controller+3: reset char.spin
+DIV	V0,A0
+OR	V1,V0,R0
+BNE	A0,R0,80886808
+NOP
+BREAK	00001C00
+//80886808:
+ADDIU	AT,R0,FFFF
+BNE	A0,AT,80886820
+LUI	AT,8000
+BNE	V1,AT,80886820
+NOP
+BREAK	00001800
+//80886820:
+MFHI	T0	;T0=char.offset / 5
+BEQ	T0,R0,8088686C	;skip if 0
+ADDIU	T1,V0,0001
+//8088682C:
+ANDI	V0,T1,00FF	;V0=(char) char.offset+1
+DIV	V0,A0
+OR	V1,V0,R0
+MFHI	T2	;T2=(char.offset+1) / 5
+SB	T1,0005 (S0)	;T1->controller+5: update char.spin
+BNE	A0,R0,8088684C
+NOP
+BREAK	00001C00
+//8088684C:
+ADDIU	AT,R0,FFFF
+BNE	A0,AT,80886864
+LUI	AT,8000
+BNE	V1,AT,80886864
+NOP
+BREAK	00001800
+//80886864:
+BNEL	T2,R0,8088682C	;loop if not 0
+ADDIU	T1,V0,0001
+LBU	T3,0004 (S0)	;T3->controller+4: char.set
+LUI	T5,8089
+SLL	T4,T3,0x2
+ADDU	T5,T5,T4
+LW	T5,85B4 (T5)	;T5=808885B4+offset: #entries in char.set
+BNE	V1,T5,808868D8	;skip if not at end
+NOP
+BEQ	R0,R0,808868D8
+SB	R0,0005 (S0)	;0->controller+5: char.offset
+//80886890:
+ADDIU	T6,V0,FFFF	;T6=char.spin-1
+ANDI	T7,T6,00FF	;T7=(char) char.spin
+ADDIU	AT,R0,0001
+BNE	T7,AT,808869AC	;branch if not 1
+SB	T6,0003 (S0)	;T6->controller+3: update char.spin
+LBU	T8,0005 (S0)	;T8=controller+5: char.offset
+LBU	T1,0004 (S0)	;T1=controller+4: char.set
+//808868AC:	increment char.offset by 2 and update
+LUI	T3,8089
+ADDIU	T9,T8,0002	;T9=char.offset+2
+SLL	T2,T1,0x2
+SB	T9,0005 (S0)	;T9->controller+5: update char.offset
+ADDU	T3,T3,T2
+LW	T3,85B4 (T3)	;808885B4+offset: #entries in char.set
+ANDI	T0,T9,00FF
+BNEL	T0,T3,808869B0	;return if not at end
+LW	RA,001C (SP)
+BEQ	R0,R0,808869AC	;return
+SB	R0,0005 (S0)	;0->controller+5: reset char.offset
+//808868D8:
+JAL	808857F8
+LW	A0,0020 (SP)
+LW	A1,0024 (SP)
+LUI	T9,8089
+LW	A0,0020 (SP)
+LW	T4,0038 (A1)
+SLL	T5,T4,0x2
+ADDU	T9,T9,T5
+LW	T9,8824 (T9)
+JALR	RA,T9
+NOP
+//80886904:	swap wheel in subsets
+LH	T6,0006 (S0)	;T6=controller+6: char.subset
+ADDIU	AT,R0,FFFF
+BNEL	T6,AT,8088692C	;branch if not -1
+LBU	V0,0014 (S0)
+LBU	V0,0014 (S0)	;V0=controller+14: wheel type
+BLEZ	V0,8088693C	;branch if normal wheel
+ADDIU	T7,V0,FFFF	;T7=V0-1
+BEQ	R0,R0,8088693C
+SB	T7,0014 (S0)	;update wheel
+//80886928:	alternate between small <-> large wheel
+LBU	V0,0014 (S0)	;V0=controller+14: wheel type
+SLTI	AT,V0,0002
+BEQ	AT,R0,8088693C	;increment if 0 or 1
+ADDIU	T8,V0,0001	;T8=V0+1
+SB	T8,0014 (S0)	;update wheel
+//8088693C:
+LBU	T1,0015 (S0)	;T1=controller+15: amend flag
+BEQL	T1,R0,8088699C	;branch if not amended
+OR	A0,S0,R0
+JAL	8088596C
+LW	A0,0020 (SP)	;A0=SP+20: 
+JAL	80886168
+OR	A0,S0,R0	;A0=S0: p->type.controller
+LBU	V1,0011 (S0)	;V1=controller+11: mode
+ADDIU	AT,R0,0001
+SH	V0,001E (S0)	;V0->controller+1E: save conversion char
+BEQ	V1,AT,80886994	;branch if mode 1: cursor right
+ADDIU	AT,R0,0002
+BEQ	V1,AT,80886994	;branch if mode 2: cursor left
+ADDIU	AT,R0,0003
+BEQ	V1,AT,80886994	;branch if mode 3: cursor up
+ADDIU	AT,R0,0004
+BEQ	V1,AT,80886994	;branch if mode 4: cursor down
+ADDIU	AT,R0,0006
+BEQ	V1,AT,80886994	;branch if mode 6: backspace
+ADDIU	AT,R0,0008
+BNEL	V1,AT,8088699C	;branch if not mode 8: insert char
+OR	A0,S0,R0
+//80886994:	reset blink state
+SH	R0,000C (S0)	;0->controller+C: reset cursor.blink
+//80886998:	update cursor {x,y} position
+OR	A0,S0,R0	;A0=S0: p->type.controller
+ADDIU	A1,S0,0020	;A1=controller+20: @cursor.column
+ADDIU	A2,S0,0022	;A2=controller+22: @cursor.row
+JAL	80885AEC	;set cursor position
+LH	A3,0016 (S0)	;A3=controller+16: cursor.pos
+//808869AC:	return
+LW	RA,001C (SP)
+LW	S0,0018 (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+808869C0
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+LUI	V0,0001
+LW	T6,002C (A0)
+ADDU	T7,T6,V0
+LW	T8,06E0 (T7)	;T8=T7+6E0: p->type.controller
+SH	R0,0020 (T8)	;0->controller+20: cursor.column
+LW	T9,002C (A0)
+ADDU	T0,T9,V0
+LW	T9,06AC (T0)
+JALR	RA,T9
+NOP
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+80886A00
+ADDIU	SP,SP,FFE0
+SW	RA,0014 (SP)
+LW	A1,002C (A0)
+LUI	AT,0001
+ORI	AT,AT,0358
+ADDU	A1,A1,AT
+SW	A1,001C (SP)
+SW	A0,0020 (SP)
+LW	T9,000C (A1)
+JALR	RA,T9
+NOP
+LW	A1,001C (SP)
+LUI	T9,8089
+LW	A0,0020 (SP)
+LW	T6,0004 (A1)
+SLL	T7,T6,0x2
+ADDU	T9,T9,T7
+LW	T9,8838 (T9)
+JALR	RA,T9
+NOP
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+80886A60
+ADDIU	SP,SP,FFE0
+SW	RA,001C (SP)
+SW	S1,0018 (SP)
+SW	S0,0014 (SP)
+LW	T6,0028 (A0)
+LUI	AT,8000
+LUI	S0,8089
+ADDU	T7,T6,AT
+LUI	AT,8014
+SW	T7,58D0 (AT)
+ADDIU	S0,S0,88A8
+OR	S1,R0,R0
+JAL	8009ADA8
+LW	A0,0000 (S0)
+ADDIU	S1,S1,0001
+SLTI	AT,S1,0009
+ADDIU	S0,S0,0004
+BNE	AT,R0,80886A90
+SW	V0,FFFC (S0)
+LUI	S0,8089
+ADDIU	S0,S0,889C
+OR	S1,R0,R0
+JAL	8009ADA8
+LW	A0,0000 (S0)
+ADDIU	S1,S1,0001
+SLTI	AT,S1,0003
+ADDIU	S0,S0,0004
+BNE	AT,R0,80886AB8
+SW	V0,FFFC (S0)
+LUI	S0,8089
+ADDIU	S0,S0,884C
+OR	S1,R0,R0
+JAL	8009ADA8
+LW	A0,0000 (S0)
+ADDIU	S1,S1,0001
+SLTI	AT,S1,0002
+ADDIU	S0,S0,0004
+BNE	AT,R0,80886AE0
+SW	V0,FFFC (S0)
+LUI	S0,8089
+ADDIU	S0,S0,8854
+OR	S1,R0,R0
+JAL	8009ADA8
+LW	A0,0000 (S0)
+ADDIU	S1,S1,0001
+SLTI	AT,S1,0002
+ADDIU	S0,S0,0004
+BNE	AT,R0,80886B08
+SW	V0,FFFC (S0)
+LUI	S0,8089
+ADDIU	S0,S0,8864
+OR	S1,R0,R0
+JAL	8009ADA8
+LW	A0,0000 (S0)
+ADDIU	S1,S1,0001
+SLTI	AT,S1,0002
+ADDIU	S0,S0,0004
+BNE	AT,R0,80886B30
+SW	V0,FFFC (S0)
+LUI	S0,8089
+ADDIU	S0,S0,885C
+OR	S1,R0,R0
+JAL	8009ADA8
+LW	A0,0000 (S0)
+ADDIU	S1,S1,0001
+SLTI	AT,S1,0002
+ADDIU	S0,S0,0004
+BNE	AT,R0,80886B58
+SW	V0,FFFC (S0)
+LUI	S0,8089
+ADDIU	S0,S0,886C
+OR	S1,R0,R0
+JAL	8009ADA8
+LW	A0,0000 (S0)
+ADDIU	S1,S1,0001
+SLTI	AT,S1,0002
+ADDIU	S0,S0,0004
+BNE	AT,R0,80886B80
+SW	V0,FFFC (S0)
+LUI	S0,8089
+ADDIU	S0,S0,8874
+OR	S1,R0,R0
+JAL	8009ADA8
+LW	A0,0000 (S0)
+ADDIU	S1,S1,0001
+SLTI	AT,S1,0002
+ADDIU	S0,S0,0004
+BNE	AT,R0,80886BA8
+SW	V0,FFFC (S0)
+LUI	S0,8089
+ADDIU	S0,S0,887C
+OR	S1,R0,R0
+JAL	8009ADA8
+LW	A0,0000 (S0)
+ADDIU	S1,S1,0001
+SLTI	AT,S1,0002
+ADDIU	S0,S0,0004
+BNE	AT,R0,80886BD0
+SW	V0,FFFC (S0)
+LUI	S0,8089
+ADDIU	S0,S0,8884
+OR	S1,R0,R0
+JAL	8009ADA8
+LW	A0,0000 (S0)
+ADDIU	S1,S1,0001
+SLTI	AT,S1,0002
+ADDIU	S0,S0,0004
+BNE	AT,R0,80886BF8
+SW	V0,FFFC (S0)
+LUI	S0,8089
+ADDIU	S0,S0,888C
+OR	S1,R0,R0
+JAL	8009ADA8
+LW	A0,0000 (S0)
+ADDIU	S1,S1,0001
+SLTI	AT,S1,0002
+ADDIU	S0,S0,0004
+BNE	AT,R0,80886C20
+SW	V0,FFFC (S0)
+LUI	S0,8089
+ADDIU	S0,S0,8894
+OR	S1,R0,R0
+JAL	8009ADA8
+LW	A0,0000 (S0)
+ADDIU	S1,S1,0001
+ADDIU	AT,R0,0002
+ADDIU	S0,S0,0004
+BNE	S1,AT,80886C48
+SW	V0,FFFC (S0)
+LW	RA,001C (SP)
+LW	S0,0014 (SP)
+LW	S1,0018 (SP)
+JR	RA
+ADDIU	SP,SP,0020
+
+80886C78
+LBU	V0,0004 (A0)
+ADDIU	AT,R0,0002
+BEQL	V0,R0,80886C94
+LH	T6,0006 (A0)
+BNE	V0,AT,80886CB4
+NOP
+LH	T6,0006 (A0)
+ADDIU	AT,R0,FFFF
+ADDIU	V0,R0,0001
+BNE	T6,AT,80886CBC
+NOP
+LBU	T7,0000 (A0)
+SLTI	AT,T7,0005
+BNE	AT,R0,80886CBC
+NOP
+JR	RA
+OR	V0,R0,R0
+JR	RA
+NOP
+
+80886CC4
+ADDIU	SP,SP,FEC0
+LUI	AT,4180
+MTC1	AT,F12
+SW	RA,0014 (SP)
+SW	A1,0144 (SP)
+SW	A2,0148 (SP)
+SW	A3,014C (SP)
+LBU	T6,0004 (A0)
+MOV.S	F14,F12
+LUI	A2,3F80
+SW	T6,013C (SP)
+LH	T7,0006 (A0)
+OR	A3,R0,R0
+SW	T7,0138 (SP)
+LBU	T8,0000 (A0)
+SW	T8,0134 (SP)
+LBU	T9,0014 (A0)
+SW	A0,0140 (SP)
+JAL	800E041C
+SW	T9,0130 (SP)
+LWC1	F12,0148 (SP)
+LWC1	F14,014C (SP)
+ADDIU	A2,R0,0000
+JAL	800E0314
+ADDIU	A3,R0,0001
+LW	A0,0144 (SP)
+LW	A2,0298 (A0)
+OR	V1,A2,R0
+LUI	T4,DA38
+ORI	T4,T4,0003
+SW	T4,0000 (V1)
+ADDIU	A2,A2,0008
+SW	A2,0118 (SP)
+JAL	800E13C4
+SW	V1,0110 (SP)
+LW	V1,0110 (SP)
+LW	A2,0118 (SP)
+LUI	A3,DE00
+SW	V0,0004 (V1)
+OR	V0,A2,R0
+LUI	T5,0C00
+ADDIU	T5,T5,0C10
+SW	T5,0004 (V0)
+SW	A3,0000 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+LUI	V1,0C00
+ADDIU	V1,V1,17A0
+SW	V1,0004 (V0)
+SW	A3,0000 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+LUI	T6,0C00
+ADDIU	T6,T6,0E08
+SW	T6,0004 (V0)
+SW	A3,0000 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+LUI	T7,0C00
+ADDIU	T7,T7,17D0
+SW	T7,0004 (V0)
+SW	A3,0000 (V0)
+ADDIU	A2,A2,0008
+SW	V1,001C (SP)
+JAL	80078D78
+SW	A2,0118 (SP)
+ANDI	T8,V0,1000
+LW	A2,0118 (SP)
+BEQ	T8,R0,80886DE4
+LUI	A3,DE00
+BEQ	R0,R0,80886DE8
+ADDIU	A0,R0,0001
+OR	A0,R0,R0
+LUI	T9,DB06
+ORI	T9,T9,0020
+OR	V0,A2,R0
+SLL	V1,A0,0x2
+LUI	T4,8089
+ADDU	T4,T4,V1
+SW	T9,0000 (V0)
+LW	T4,884C (T4)
+ADDIU	A2,A2,0008
+LUI	T5,DB06
+SW	T4,0004 (V0)
+OR	V0,A2,R0
+ORI	T5,T5,0024
+LUI	T6,8089
+ADDU	T6,T6,V1
+SW	T5,0000 (V0)
+LW	T6,8854 (T6)
+ADDIU	A2,A2,0008
+LUI	T7,0C00
+SW	T6,0004 (V0)
+OR	V0,A2,R0
+ADDIU	T7,T7,0CD8
+SW	T7,0004 (V0)
+SW	A3,0000 (V0)
+ADDIU	A2,A2,0008
+JAL	80078D78
+SW	A2,0118 (SP)
+ANDI	T8,V0,4000
+LW	A2,0118 (SP)
+BEQ	T8,R0,80886E6C
+LUI	A3,DE00
+BEQ	R0,R0,80886E70
+ADDIU	A0,R0,0001
+OR	A0,R0,R0
+LUI	T9,DB06
+ORI	T9,T9,0020
+OR	V0,A2,R0
+SLL	V1,A0,0x2
+LUI	T4,8089
+ADDU	T4,T4,V1
+SW	T9,0000 (V0)
+LW	T4,884C (T4)
+ADDIU	A2,A2,0008
+LUI	T5,DB06
+SW	T4,0004 (V0)
+OR	V0,A2,R0
+ORI	T5,T5,0024
+LUI	T6,8089
+ADDU	T6,T6,V1
+SW	T5,0000 (V0)
+LW	T6,885C (T6)
+ADDIU	A2,A2,0008
+LUI	T7,0C00
+SW	T6,0004 (V0)
+OR	V0,A2,R0
+ADDIU	T7,T7,0D70
+SW	T7,0004 (V0)
+SW	A3,0000 (V0)
+ADDIU	A2,A2,0008
+JAL	80078D78
+SW	A2,0118 (SP)
+ANDI	T8,V0,8000
+LW	A2,0118 (SP)
+BEQ	T8,R0,80886EF4
+LUI	A3,DE00
+BEQ	R0,R0,80886EF8
+ADDIU	A0,R0,0001
+OR	A0,R0,R0
+LUI	T9,DB06
+ORI	T9,T9,0020
+OR	V0,A2,R0
+SLL	V1,A0,0x2
+LUI	T4,8089
+ADDU	T4,T4,V1
+SW	T9,0000 (V0)
+LW	T4,884C (T4)
+ADDIU	A2,A2,0008
+LUI	T5,DB06
+SW	T4,0004 (V0)
+OR	V0,A2,R0
+ORI	T5,T5,0024
+LUI	T6,8089
+ADDU	T6,T6,V1
+SW	T5,0000 (V0)
+LW	T6,8864 (T6)
+ADDIU	A2,A2,0008
+LUI	T7,0C00
+SW	T6,0004 (V0)
+OR	V0,A2,R0
+ADDIU	T7,T7,0C40
+SW	T7,0004 (V0)
+SW	A3,0000 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+LUI	T8,0C00
+ADDIU	T8,T8,17B8
+SW	A3,0000 (V0)
+SW	T8,0018 (SP)
+SW	T8,0004 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+LUI	T9,E300
+ORI	T9,T9,0A01
+SW	T9,0000 (V0)
+SW	R0,0004 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+LUI	T4,E200
+LUI	T5,0050
+ORI	T5,T5,4240
+ORI	T4,T4,001C
+SW	T4,0000 (V0)
+SW	T5,0004 (V0)
+ADDIU	A2,A2,0008
+LUI	T2,FA00
+ORI	T2,T2,00FF
+LW	V1,0130 (SP)
+SLL	T6,V1,0x3
+SUBU	T6,T6,V1
+LUI	T7,8089
+ADDIU	T7,T7,88E0
+SLL	T6,T6,0x2
+OR	V0,A2,R0
+SW	T2,0000 (V0)
+ADDU	A1,T6,T7
+LBU	T6,0011 (A1)
+LBU	T9,0010 (A1)
+LBU	T5,0012 (A1)
+SLL	T7,T6,0x10
+SLL	T4,T9,0x18
+OR	T8,T4,T7
+SLL	T6,T5,0x8
+OR	T4,T8,T6
+ORI	T7,T4,00FF
+SW	T7,0004 (V0)
+ADDIU	A2,A2,0008
+LUI	A0,FB00
+OR	V0,A2,R0
+SW	A0,0000 (V0)
+LBU	T4,0015 (A1)
+LBU	T5,0014 (A1)
+LBU	T6,0016 (A1)
+SLL	T7,T4,0x10
+SLL	T8,T5,0x18
+OR	T9,T8,T7
+SLL	T4,T6,0x8
+OR	T8,T9,T4
+ORI	T7,T8,00FF
+SW	T7,0004 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+LUI	T5,0C00
+ADDIU	T5,T5,1110
+SW	T5,0004 (V0)
+SW	A3,0000 (V0)
+ADDIU	A2,A2,0008
+LW	T3,0138 (SP)
+ADDIU	AT,R0,FFFF
+BEQ	T3,AT,808870F8
+LUI	T0,E700
+OR	V0,A2,R0
+SW	T0,0000 (V0)
+SW	R0,0004 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+SW	T2,0000 (V0)
+LBU	T7,0009 (A1)
+LBU	T9,0008 (A1)
+LBU	T8,000A (A1)
+SLL	T5,T7,0x10
+SLL	T4,T9,0x18
+OR	T6,T4,T5
+SLL	T7,T8,0x8
+OR	T4,T6,T7
+ORI	T5,T4,00FF
+SW	T5,0004 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+SW	A0,0000 (V0)
+LBU	T4,000D (A1)
+LBU	T8,000C (A1)
+LBU	T7,000E (A1)
+SLL	T5,T4,0x10
+SLL	T6,T8,0x18
+OR	T9,T6,T5
+SLL	T4,T7,0x8
+OR	T6,T9,T4
+ORI	T5,T6,00FF
+SW	T5,0004 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+LUI	T8,0C00
+ADDIU	T8,T8,10B8
+SW	T8,0004 (V0)
+SW	A3,0000 (V0)
+ADDIU	A2,A2,0008
+LW	T1,013C (SP)
+LUI	T0,E700
+BEQ	T1,R0,8088710C
+ADDIU	AT,R0,0002
+BNE	T1,AT,808871CC
+OR	V0,A2,R0
+SW	T0,0000 (V0)
+SW	R0,0004 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+SW	T2,0000 (V0)
+LBU	T5,0001 (A1)
+LBU	T9,0000 (A1)
+LBU	T6,0002 (A1)
+SLL	T8,T5,0x10
+SLL	T4,T9,0x18
+OR	T7,T4,T8
+SLL	T5,T6,0x8
+OR	T4,T7,T5
+ORI	T8,T4,00FF
+SW	T8,0004 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+SW	A0,0000 (V0)
+LBU	T4,0005 (A1)
+LBU	T6,0004 (A1)
+LBU	T5,0006 (A1)
+SLL	T8,T4,0x10
+SLL	T7,T6,0x18
+OR	T9,T7,T8
+SLL	T4,T5,0x8
+OR	T7,T9,T4
+ORI	T8,T7,00FF
+SW	T8,0004 (V0)
+ADDIU	A2,A2,0008
+LUI	T6,DB06
+ORI	T6,T6,0024
+OR	V0,A2,R0
+SLL	T5,V1,0x2
+LUI	T9,8089
+ADDU	T9,T9,T5
+SW	T6,0000 (V0)
+LW	T9,889C (T9)
+ADDIU	A2,A2,0008
+LUI	T4,0C00
+SW	T9,0004 (V0)
+OR	V0,A2,R0
+ADDIU	T4,T4,1060
+SW	T4,0004 (V0)
+SW	A3,0000 (V0)
+ADDIU	A2,A2,0008
+LUI	T2,FA00
+ORI	T2,T2,00FF
+ADDIU	AT,R0,FFFF
+BNE	T3,AT,80887264
+LUI	V1,0C00
+ADDIU	V1,V1,10B8
+OR	V0,A2,R0
+SW	T0,0000 (V0)
+SW	R0,0004 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+SW	T2,0000 (V0)
+LBU	T9,0009 (A1)
+LBU	T8,0008 (A1)
+LBU	T5,000A (A1)
+SLL	T4,T9,0x10
+SLL	T6,T8,0x18
+OR	T7,T6,T4
+SLL	T9,T5,0x8
+OR	T6,T7,T9
+ORI	T4,T6,00FF
+SW	T4,0004 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+SW	A0,0000 (V0)
+LBU	T6,000D (A1)
+LBU	T5,000C (A1)
+LBU	T9,000E (A1)
+SLL	T4,T6,0x10
+SLL	T7,T5,0x18
+OR	T8,T7,T4
+SLL	T6,T9,0x8
+OR	T7,T8,T6
+ORI	T4,T7,00FF
+SW	T4,0004 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+SW	A3,0000 (V0)
+SW	V1,0004 (V0)
+ADDIU	A2,A2,0008
+LUI	T5,DB06
+ORI	T5,T5,0020
+OR	V1,A2,R0
+SW	T5,0000 (V1)
+ADDIU	A2,A2,0008
+SW	A2,0118 (SP)
+SW	A1,0020 (SP)
+JAL	80078D78
+SW	V1,008C (SP)
+ANDI	T9,V0,0001
+LW	V1,008C (SP)
+LW	A1,0020 (SP)
+LW	A2,0118 (SP)
+BEQ	T9,R0,808872A8
+LUI	A3,DE00
+BEQ	R0,R0,808872AC
+ADDIU	V0,R0,0001
+OR	V0,R0,R0
+SLL	T8,V0,0x2
+LUI	T6,8089
+ADDU	T6,T6,T8
+LW	T6,886C (T6)
+OR	V0,A2,R0
+ADDIU	A2,A2,0008
+SW	T6,0004 (V1)
+LUI	T7,0C00
+ADDIU	T7,T7,0EC0
+SW	T7,0004 (V0)
+SW	A3,0000 (V0)
+LUI	T4,DB06
+ORI	T4,T4,0020
+OR	V1,A2,R0
+SW	T4,0000 (V1)
+ADDIU	A2,A2,0008
+SW	A2,0118 (SP)
+SW	A1,0020 (SP)
+JAL	80078D78
+SW	V1,0084 (SP)
+ANDI	T5,V0,0002
+LW	V1,0084 (SP)
+LW	A1,0020 (SP)
+LW	A2,0118 (SP)
+BEQ	T5,R0,8088731C
+LUI	A3,DE00
+BEQ	R0,R0,80887320
+ADDIU	V0,R0,0001
+OR	V0,R0,R0
+SLL	T9,V0,0x2
+LUI	T8,8089
+ADDU	T8,T8,T9
+LW	T8,8874 (T8)
+OR	V0,A2,R0
+ADDIU	A2,A2,0008
+SW	T8,0004 (V1)
+LUI	T6,0C00
+ADDIU	T6,T6,0F28
+SW	T6,0004 (V0)
+SW	A3,0000 (V0)
+LUI	T7,DB06
+ORI	T7,T7,0020
+OR	V1,A2,R0
+SW	T7,0000 (V1)
+ADDIU	A2,A2,0008
+SW	A2,0118 (SP)
+SW	A1,0020 (SP)
+JAL	80078D78
+SW	V1,007C (SP)
+ANDI	T4,V0,0008
+LW	V1,007C (SP)
+LW	A1,0020 (SP)
+LW	A2,0118 (SP)
+BEQ	T4,R0,80887390
+LUI	A3,DE00
+BEQ	R0,R0,80887394
+ADDIU	V0,R0,0001
+OR	V0,R0,R0
+SLL	T5,V0,0x2
+LUI	T9,8089
+ADDU	T9,T9,T5
+LW	T9,887C (T9)
+OR	V0,A2,R0
+ADDIU	A2,A2,0008
+SW	T9,0004 (V1)
+LUI	T8,0C00
+ADDIU	T8,T8,0F90
+SW	T8,0004 (V0)
+SW	A3,0000 (V0)
+LUI	T6,DB06
+ORI	T6,T6,0020
+OR	V1,A2,R0
+SW	T6,0000 (V1)
+ADDIU	A2,A2,0008
+SW	A2,0118 (SP)
+SW	A1,0020 (SP)
+JAL	80078D78
+SW	V1,0074 (SP)
+ANDI	T7,V0,0004
+LW	V1,0074 (SP)
+LW	A1,0020 (SP)
+LW	A2,0118 (SP)
+BEQ	T7,R0,80887404
+LUI	A3,DE00
+BEQ	R0,R0,80887408
+ADDIU	V0,R0,0001
+OR	V0,R0,R0
+SLL	T4,V0,0x2
+LUI	T5,8089
+ADDU	T5,T5,T4
+LW	T5,8884 (T5)
+OR	V0,A2,R0
+ADDIU	A2,A2,0008
+SW	T5,0004 (V1)
+LUI	T9,0C00
+ADDIU	T9,T9,0FF8
+SW	T9,0004 (V0)
+SW	A3,0000 (V0)
+LUI	T8,DB06
+ORI	T8,T8,0020
+OR	V1,A2,R0
+SW	T8,0000 (V1)
+ADDIU	A2,A2,0008
+SW	A2,0118 (SP)
+SW	A1,0020 (SP)
+JAL	80078D78
+SW	V1,006C (SP)
+ANDI	T6,V0,2000
+LW	V1,006C (SP)
+LW	A1,0020 (SP)
+BEQ	T6,R0,80887474
+LW	A2,0118 (SP)
+BEQ	R0,R0,80887478
+ADDIU	V0,R0,0001
+OR	V0,R0,R0
+SLL	T7,V0,0x2
+LUI	T4,8089
+ADDU	T4,T4,T7
+LW	T4,888C (T4)
+LUI	T5,DB06
+ORI	T5,T5,0024
+SW	T4,0004 (V1)
+OR	V1,A2,R0
+SW	T5,0000 (V1)
+ADDIU	A2,A2,0008
+SW	A2,0118 (SP)
+SW	A1,0020 (SP)
+JAL	80078D78
+SW	V1,0068 (SP)
+ANDI	T9,V0,0010
+LW	V1,0068 (SP)
+LW	A1,0020 (SP)
+LW	A2,0118 (SP)
+BEQ	T9,R0,808874D0
+LUI	A3,DE00
+BEQ	R0,R0,808874D4
+ADDIU	V0,R0,0001
+OR	V0,R0,R0
+SLL	T8,V0,0x2
+LUI	T6,8089
+ADDU	T6,T6,T8
+LW	T6,8894 (T6)
+OR	V0,A2,R0
+ADDIU	A2,A2,0008
+SW	T6,0004 (V1)
+LUI	T7,0C00
+ADDIU	T7,T7,17F8
+SW	T7,0004 (V0)
+SW	A3,0000 (V0)
+LW	A0,0140 (SP)
+SW	A1,0020 (SP)
+JAL	80885690
+SW	A2,0118 (SP)
+ADDIU	AT,R0,FFFF
+LW	A1,0020 (SP)
+LW	A2,0118 (SP)
+BNE	V0,AT,8088753C
+LUI	A3,DE00
+OR	V0,A2,R0
+LUI	T4,0C00
+ADDIU	T4,T4,1660
+SW	T4,0004 (V0)
+SW	A3,0000 (V0)
+ADDIU	A2,A2,0008
+LW	T5,0140 (SP)
+ADDIU	AT,R0,FFFF
+OR	V1,R0,R0
+LH	T9,001E (T5)
+LUI	T5,FA00
+ORI	T5,T5,00FF
+BNE	T9,AT,80887578
+OR	V0,A2,R0
+LUI	T8,0C00
+ADDIU	T8,T8,1730
+SW	T8,0004 (V0)
+SW	A3,0000 (V0)
+ADDIU	A2,A2,0008
+BEQ	R0,R0,808875A8
+OR	V0,A2,R0
+OR	V0,A2,R0
+SW	A3,0000 (V0)
+LW	T6,001C (SP)
+ADDIU	A2,A2,0008
+LUI	T7,0C01
+SW	T6,0004 (V0)
+OR	V0,A2,R0
+ADDIU	T7,T7,6FD0
+SW	T7,0004 (V0)
+SW	A3,0000 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+SW	A3,0000 (V0)
+LW	T4,001C (SP)
+ADDIU	A2,A2,0008
+SW	T4,0004 (V0)
+OR	V0,A2,R0
+SW	T5,0000 (V0)
+LBU	T4,0019 (A1)
+LBU	T8,0018 (A1)
+LBU	T7,001A (A1)
+SLL	T5,T4,0x10
+SLL	T6,T8,0x18
+OR	T9,T6,T5
+SLL	T4,T7,0x8
+OR	T6,T9,T4
+ORI	T5,T6,00FF
+SW	T5,0004 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+LUI	T8,0C00
+ADDIU	T8,T8,16D0
+SW	T8,0004 (V0)
+SW	A3,0000 (V0)
+ADDIU	A2,A2,0008
+OR	V0,A2,R0
+LUI	T7,FA00
+LUI	T9,E12D
+ORI	T9,T9,00FF
+ORI	T7,T7,00FF
+SW	T7,0000 (V0)
+SW	T9,0004 (V0)
+ADDIU	A2,A2,0008
+LW	T0,013C (SP)
+OR	V0,A2,R0
+SLL	T4,T0,0x2
+LUI	T6,8089
+ADDU	T6,T6,T4
+SW	A3,0000 (V0)
+LW	T6,88CC (T6)
+ADDIU	A2,A2,0008
+LUI	T5,FA00
+SW	T6,0004 (V0)
+OR	V0,A2,R0
+LUI	T8,CD87
+ORI	T8,T8,50FF
+ORI	T5,T5,00FF
+SW	T5,0000 (V0)
+SW	T8,0004 (V0)
+ADDIU	A2,A2,0008
+ADDIU	A1,R0,0005
+BEQ	V1,T0,80887694
+SLL	T7,V1,0x2
+LUI	T9,8089
+ADDIU	T9,T9,88CC
+ADDU	A0,T7,T9
+OR	V0,A2,R0
+SW	A3,0000 (V0)
+LW	T4,0000 (A0)
+ADDIU	A2,A2,0008
+SW	T4,0004 (V0)
+ADDIU	V1,V1,0001
+BNE	V1,A1,8088766C
+NOP
+LW	V1,0134 (SP)
+SLTI	AT,V1,0003
+BNE	AT,R0,80887700
+SLTI	AT,V1,0006
+BEQ	AT,R0,80887700
+ADDIU	A0,R0,8000
+ADDIU	A1,R0,0001
+JAL	800E0698
+SW	A2,0118 (SP)
+LW	A2,0118 (SP)
+LUI	T6,DA38
+ORI	T6,T6,0003
+OR	V1,A2,R0
+SW	T6,0000 (V1)
+ADDIU	A2,A2,0008
+SW	A2,0118 (SP)
+SW	V1,0034 (SP)
+JAL	800E13C4
+LW	A0,0144 (SP)
+LW	V1,0034 (SP)
+LW	A2,0118 (SP)
+LUI	A3,DE00
+SW	V0,0004 (V1)
+LW	V1,0134 (SP)
+LUI	T5,DB06
+ORI	T5,T5,0020
+OR	V0,A2,R0
+SLL	T8,V1,0x2
+LUI	T7,8089
+ADDU	T7,T7,T8
+SW	T5,0000 (V0)
+LW	T7,88A8 (T7)
+ADDIU	A2,A2,0008
+LUI	T4,0C00
+SW	T7,0004 (V0)
+OR	V0,A2,R0
+SW	A3,0000 (V0)
+LW	T9,0018 (SP)
+ADDIU	A2,A2,0008
+ADDIU	T4,T4,15F8
+SW	T9,0004 (V0)
+OR	V0,A2,R0
+SW	A3,0000 (V0)
+SW	T4,0004 (V0)
+ADDIU	A2,A2,0008
+LW	T6,0144 (SP)
+SW	A2,0298 (T6)
+LW	RA,0014 (SP)
+JR	RA
+ADDIU	SP,SP,0140
+
+80887768
+ADDIU	SP,SP,FFA0
+SW	RA,003C (SP)
+SW	A2,0068 (SP)
+SW	A3,006C (SP)
+LBU	T6,0000 (A1)
+ADDIU	AT,R0,0020
+LUI	A2,3F80
+BEQ	T6,AT,808877F4
+OR	A3,R0,R0
+LW	T7,0074 (SP)
+LWC1	F4,006C (SP)
+LUI	T9,8089
+ADDIU	T9,T9,8934
+SLL	T8,T7,0x2
+ADDU	V0,T8,T9
+SWC1	F4,0010 (SP)
+LBU	T0,0000 (V0)
+LWC1	F0,0070 (SP)
+ADDIU	T3,R0,00FF
+SW	T0,0014 (SP)
+LBU	T1,0001 (V0)
+ADDIU	A2,R0,0001
+LW	A3,0068 (SP)
+SW	T1,0018 (SP)
+LBU	T2,0002 (V0)
+SW	R0,0034 (SP)
+SW	R0,0028 (SP)
+SW	R0,0024 (SP)
+SW	T3,0020 (SP)
+SWC1	F0,0030 (SP)
+SWC1	F0,002C (SP)
+JAL	80090E98	;print text to screen
+SW	T2,001C (SP)
+BEQ	R0,R0,80887980
+LW	RA,003C (SP)
+LW	V0,0000 (A0)
+LUI	AT,4180
+MTC1	AT,F12
+LW	A1,0298 (V0)
+SW	V0,0058 (SP)
+MOV.S	F14,F12
+JAL	800E041C
+SW	A1,004C (SP)
+LUI	AT,4320
+MTC1	AT,F8
+LUI	AT,42F0
+MTC1	AT,F16
+LWC1	F10,006C (SP)
+LWC1	F6,0068 (SP)
+ADDIU	A2,R0,0000
+SUB.S	F14,F10,F16
+ADDIU	A3,R0,0001
+SUB.S	F12,F6,F8
+JAL	800E0314
+NEG.S	F14,F14
+LW	T4,0078 (SP)
+LW	A1,004C (SP)
+LWC1	F14,0070 (SP)
+BEQ	T4,R0,80887878
+LUI	AT,3F40
+LWC1	F12,0070 (SP)
+LUI	A2,3F80
+ADDIU	A3,R0,0001
+SW	A1,004C (SP)
+JAL	800E041C
+MOV.S	F14,F12
+BEQ	R0,R0,80887894
+LW	A1,004C (SP)
+MTC1	AT,F18
+LUI	A2,3F80
+ADDIU	A3,R0,0001
+MUL.S	F12,F14,F18
+JAL	800E041C
+SW	A1,004C (SP)
+LW	A1,004C (SP)
+LUI	AT,40E0
+MTC1	AT,F12
+LUI	AT,C110
+MTC1	AT,F14
+ADDIU	A2,R0,0000
+ADDIU	A3,R0,0001
+JAL	800E0314
+SW	A1,004C (SP)
+LW	A1,004C (SP)
+LUI	T5,DA38
+ORI	T5,T5,0003
+OR	V1,A1,R0
+SW	T5,0000 (V1)
+ADDIU	A1,A1,0008
+SW	A1,004C (SP)
+SW	V1,0044 (SP)
+JAL	800E13C4
+LW	A0,0058 (SP)
+LW	V1,0044 (SP)
+LW	A1,004C (SP)
+LUI	T6,FA00
+SW	V0,0004 (V1)
+OR	V1,A1,R0
+ORI	T6,T6,00FF
+SW	T6,0000 (V1)
+LW	T7,0074 (SP)
+LUI	T9,8089
+ADDIU	T9,T9,8934
+SLL	T8,T7,0x2
+ADDU	V0,T8,T9
+LBU	T1,0000 (V0)
+LBU	T4,0001 (V0)
+LBU	T8,0002 (V0)
+SLL	T2,T1,0x18
+SLL	T5,T4,0x10
+OR	T6,T2,T5
+SLL	T9,T8,0x8
+OR	T0,T6,T9
+ORI	T1,T0,00FF
+SW	T1,0004 (V1)
+ADDIU	A1,A1,0008
+OR	V0,A1,R0
+LUI	T4,0C01
+ADDIU	T4,T4,6E90
+LUI	T3,DE00
+SW	T3,0000 (V0)
+SW	T4,0004 (V0)
+ADDIU	A1,A1,0008
+OR	V0,A1,R0
+LUI	T2,DA38
+LUI	T5,8011
+ADDIU	T5,T5,FCD0
+ORI	T2,T2,0003
+SW	T2,0000 (V0)
+SW	T5,0004 (V0)
+ADDIU	A1,A1,0008
+LW	T7,0058 (SP)
+SW	A1,0298 (T7)
+LW	RA,003C (SP)
+ADDIU	SP,SP,0060
+JR	RA
+NOP
+
+8088798C
+ADDIU	SP,SP,FF90
+SDC1	F24,0050 (SP)
+SDC1	F22,0048 (SP)
+SW	S3,0064 (SP)
+MTC1	A1,F22
+MTC1	A2,F24
+OR	S3,A0,R0
+SW	RA,006C (SP)
+SW	S4,0068 (SP)
+SW	S2,0060 (SP)
+SW	S1,005C (SP)
+SW	S0,0058 (SP)
+SDC1	F20,0040 (SP)
+LUI	AT,3F60
+LUI	S0,8089
+LUI	S1,8089
+MTC1	AT,F20
+ADDIU	S0,S0,894C
+ADDIU	S1,S1,8964
+OR	S2,R0,R0
+ADDIU	S4,R0,0003
+LWC1	F4,0000 (S0)
+LWC1	F8,0004 (S0)
+ADDIU	T6,R0,00E1
+ADD.S	F6,F4,F22
+ADDIU	T7,R0,0087
+ADDIU	T8,R0,00E1
+SUB.S	F10,F8,F24
+MFC1	A3,F6
+ADDIU	T9,R0,00FF
+SW	T9,0020 (SP)
+SWC1	F10,0010 (SP)
+SW	T8,001C (SP)
+SW	T7,0018 (SP)
+SW	T6,0014 (SP)
+SW	R0,0034 (SP)
+SWC1	F20,0030 (SP)
+SWC1	F20,002C (SP)
+SW	R0,0028 (SP)
+SW	R0,0024 (SP)
+OR	A0,S3,R0
+OR	A1,S1,R0
+JAL	80090E98	;print text to screen
+ADDIU	A2,R0,0001
+ADDIU	S2,S2,0001
+ADDIU	S0,S0,0008
+BNE	S2,S4,808879E0
+ADDIU	S1,S1,0001
+LW	RA,006C (SP)
+LDC1	F20,0040 (SP)
+LDC1	F22,0048 (SP)
+LDC1	F24,0050 (SP)
+LW	S0,0058 (SP)
+LW	S1,005C (SP)
+LW	S2,0060 (SP)
+LW	S3,0064 (SP)
+LW	S4,0068 (SP)
+JR	RA
+ADDIU	SP,SP,0070
+
+80887A78
+ADDIU	SP,SP,FF70
+SDC1	F26,0040 (SP)
+SDC1	F24,0038 (SP)
+SW	S6,0060 (SP)
+SW	S3,0054 (SP)
+MTC1	A2,F24
+MTC1	A3,F26
+OR	S3,A0,R0
+OR	S6,A1,R0
+SW	RA,0064 (SP)
+SW	S5,005C (SP)
+SW	S4,0058 (SP)
+SW	S2,0050 (SP)
+SW	S1,004C (SP)
+SW	S0,0048 (SP)
+SDC1	F22,0030 (SP)
+SDC1	F20,0028 (SP)
+LBU	V0,0003 (S3)
+OR	S0,R0,R0
+ADDIU	S1,SP,0084
+BEQ	V0,R0,80887AE4
+ADDIU	S4,R0,000A
+SLTI	AT,V0,0002
+BNE	AT,R0,80887AF4
+LUI	S2,8089
+SLTI	AT,V0,0003
+BEQ	AT,R0,80887AF4
+LUI	S5,8089
+ADDIU	S5,S5,8968
+BEQ	R0,R0,80887B00
+OR	S2,S5,R0
+LUI	S5,8089
+ADDIU	S5,S5,8968
+ADDIU	S2,S2,89B8
+OR	A0,S3,R0
+LBU	A1,0005 (S3)
+OR	A2,S0,R0
+JAL	80885140
+ADDIU	A3,R0,0001
+ADDIU	S0,S0,0001
+ADDIU	S1,S1,0001
+BNE	S0,S4,80887B00
+SB	V0,FFFF (S1)
+LUI	AT,3F90
+MTC1	AT,F22
+LUI	AT,3F40
+MTC1	AT,F20
+OR	S0,R0,R0
+ADDIU	S1,SP,0084
+LWC1	F2,0004 (S2)
+LWC1	F4,0004 (S5)
+ADDIU	V0,R0,0001
+OR	A0,S6,R0
+C.LT.S	F4,F2
+NOP
+BC1FL	80887B68
+LBU	T6,0000 (S3)
+BEQ	R0,R0,80887B80
+MOV.S	F0,F20
+LBU	T6,0000 (S3)
+MOV.S	F0,F22
+ADDIU	V0,R0,0002
+BNE	S0,T6,80887B80
+NOP
+BEQ	R0,R0,80887B80
+OR	V0,R0,R0
+LWC1	F6,0000 (S2)
+SUB.S	F10,F2,F26
+ADDIU	T7,R0,0001
+SW	T7,0018 (SP)
+ADD.S	F8,F6,F24
+MFC1	A3,F10
+SW	V0,0014 (SP)
+SWC1	F0,0010 (SP)
+MFC1	A2,F8
+JAL	80887768
+OR	A1,S1,R0
+ADDIU	S0,S0,0001
+ADDIU	S1,S1,0001
+BNE	S0,S4,80887B3C
+ADDIU	S2,S2,0008
+LW	RA,0064 (SP)
+LDC1	F20,0028 (SP)
+LDC1	F22,0030 (SP)
+LDC1	F24,0038 (SP)
+LDC1	F26,0040 (SP)
+LW	S0,0048 (SP)
+LW	S1,004C (SP)
+LW	S2,0050 (SP)
+LW	S3,0054 (SP)
+LW	S4,0058 (SP)
+LW	S5,005C (SP)
+LW	S6,0060 (SP)
+JR	RA
+ADDIU	SP,SP,0090
+
+80887BF4
+ADDIU	SP,SP,FF60
+SDC1	F24,0038 (SP)
+SDC1	F22,0030 (SP)
+SW	S5,0054 (SP)
+MTC1	A2,F22
+MTC1	A3,F24
+OR	S5,A0,R0
+SW	RA,0064 (SP)
+SW	S8,0060 (SP)
+SW	S7,005C (SP)
+SW	S6,0058 (SP)
+SW	S4,0050 (SP)
+SW	S3,004C (SP)
+SW	S2,0048 (SP)
+SW	S1,0044 (SP)
+SW	S0,0040 (SP)
+SDC1	F20,0028 (SP)
+SW	A1,00A4 (SP)
+LBU	S8,0014 (S5)
+LUI	AT,8089
+LH	S7,0006 (S5)
+SLL	T8,S8,0x2
+ADDU	AT,AT,T8
+SLL	T6,S8,0x2
+LUI	T7,8089
+LWC1	F20,8A80 (AT)
+ADDU	T6,T6,S8
+SLL	T6,T6,0x3
+ADDIU	T7,T7,8A08
+ADDIU	AT,R0,FFFF
+LBU	S6,0000 (S5)
+BNE	S7,AT,80887C84
+ADDU	S2,T6,T7
+LBU	T9,0005 (S5)
+BEQ	R0,R0,80887C88
+ADDU	S3,T9,S6
+OR	S3,S7,R0
+OR	S0,R0,R0
+ADDIU	S1,SP,0098
+ADDIU	S4,R0,0005
+OR	A0,S5,R0
+OR	A1,S3,R0
+OR	A2,S0,R0
+JAL	80885140
+OR	A3,R0,R0
+ADDIU	S0,S0,0001
+ADDIU	S1,S1,0001
+BNE	S0,S4,80887C94
+SB	V0,FFFF (S1)
+ADDIU	S0,SP,0098
+ADDU	S1,S6,S0
+ADDIU	S3,SP,009D
+BNE	S0,S1,80887CDC
+ADDIU	AT,R0,FFFF
+BEQL	S7,AT,80887CE0
+ADDIU	V0,S8,0003
+BEQ	R0,R0,80887CE0
+OR	V0,R0,R0
+ADDIU	V0,S8,0003
+LWC1	F4,0000 (S2)
+LWC1	F8,0004 (S2)
+ADDIU	T1,R0,0001
+ADD.S	F6,F4,F22
+SW	T1,0018 (SP)
+SW	V0,0014 (SP)
+SUB.S	F10,F8,F24
+MFC1	A2,F6
+SWC1	F20,0010 (SP)
+LW	A0,00A4 (SP)
+MFC1	A3,F10
+JAL	80887768
+OR	A1,S0,R0
+ADDIU	S0,S0,0001
+BNE	S0,S3,80887CC4
+ADDIU	S2,S2,0008
+LW	RA,0064 (SP)
+LDC1	F20,0028 (SP)
+LDC1	F22,0030 (SP)
+LDC1	F24,0038 (SP)
+LW	S0,0040 (SP)
+LW	S1,0044 (SP)
+LW	S2,0048 (SP)
+LW	S3,004C (SP)
+LW	S4,0050 (SP)
+LW	S5,0054 (SP)
+LW	S6,0058 (SP)
+LW	S7,005C (SP)
+LW	S8,0060 (SP)
+JR	RA
+ADDIU	SP,SP,00A0
+
+80887D5C
+ADDIU	SP,SP,FFD0
+SW	A2,0038 (SP)
+OR	A2,A0,R0
+SW	RA,0024 (SP)
+SW	A0,0030 (SP)
+SW	A1,0034 (SP)
+SW	A3,003C (SP)
+LW	T6,002C (A2)
+LUI	A0,0001
+ADDU	A0,A0,T6
+JAL	80885690
+LW	A0,06E0 (A0)	;A0=A0+6E0: p->type.controller
+ADDIU	AT,R0,FFFF
+BEQ	V0,AT,80887DE0
+ADDIU	A1,SP,002B
+LUI	AT,436F
+MTC1	AT,F4
+LUI	AT,4336
+MTC1	AT,F10
+LWC1	F6,0038 (SP)
+LWC1	F16,003C (SP)
+LUI	AT,3F80
+ADD.S	F8,F4,F6
+MTC1	AT,F4
+SB	V0,002B (SP)
+SUB.S	F18,F10,F16
+MFC1	A2,F8
+LW	A0,0034 (SP)
+SW	R0,0014 (SP)
+MFC1	A3,F18
+SW	R0,0018 (SP)
+JAL	80887768
+SWC1	F4,0010 (SP)
+LW	RA,0024 (SP)
+ADDIU	SP,SP,0030
+JR	RA
+NOP
+
+80887DF0
+ADDIU	SP,SP,FFB8
+MTC1	A2,F14
+MTC1	A3,F12
+SW	RA,003C (SP)
+SW	A0,0048 (SP)
+SW	A1,004C (SP)
+LW	T6,0048 (SP)
+ADDIU	AT,R0,FFFF
+ADDIU	A2,R0,0001
+LH	V0,001E (T6)
+ADDIU	T9,R0,00C8
+ADDIU	T0,R0,00C8
+BEQ	V0,AT,80887F38
+ADDIU	T1,R0,00C8
+LUI	AT,3F80
+MTC1	AT,F0
+LUI	AT,4100
+MTC1	AT,F2
+LUI	AT,40C0
+MTC1	AT,F6
+LUI	AT,42F0
+MTC1	AT,F10
+ADD.S	F4,F12,F2
+LUI	AT,424C
+MTC1	AT,F16
+SB	V0,0047 (SP)
+SUB.S	F8,F4,F6
+LUI	AT,4320
+MTC1	AT,F4
+ADD.S	F18,F14,F16
+LH	T8,0016 (T6)
+LW	T7,0024 (T6)
+SUB.S	F12,F10,F8
+ADDIU	T2,R0,00FF
+ADDU	A1,T7,T8
+ADD.S	F14,F18,F4
+ADDIU	A1,A1,FFFF
+SW	T2,0020 (SP)
+SWC1	F12,0010 (SP)
+ADD.S	F6,F14,F2
+SWC1	F14,0050 (SP)
+SWC1	F12,0054 (SP)
+SW	R0,0034 (SP)
+MFC1	A3,F6
+SWC1	F0,0030 (SP)
+SWC1	F0,002C (SP)
+SW	R0,0028 (SP)
+SW	R0,0024 (SP)
+SW	T1,001C (SP)
+SW	T0,0018 (SP)
+SW	T9,0014 (SP)
+JAL	80090E98	;print text to screen
+LW	A0,004C (SP)
+LUI	AT,3F80
+MTC1	AT,F0
+LUI	AT,4190
+LWC1	F14,0050 (SP)
+MTC1	AT,F10
+LUI	AT,4180
+MTC1	AT,F16
+ADD.S	F8,F14,F10
+LWC1	F12,0054 (SP)
+ADDIU	T3,R0,00FF
+ADDIU	T4,R0,00FF
+ADD.S	F18,F8,F16
+ADDIU	T5,R0,00FF
+ADDIU	T6,R0,00FF
+SW	T6,0020 (SP)
+MFC1	A3,F18
+SW	T5,001C (SP)
+SW	T4,0018 (SP)
+SW	T3,0014 (SP)
+LW	A0,004C (SP)
+ADDIU	A1,SP,0047
+ADDIU	A2,R0,0001
+SW	R0,0024 (SP)
+SW	R0,0028 (SP)
+SW	R0,0034 (SP)
+SWC1	F0,002C (SP)
+SWC1	F0,0030 (SP)
+JAL	80090E98	;print text to screen
+SWC1	F12,0010 (SP)
+LW	RA,003C (SP)
+ADDIU	SP,SP,0048
+JR	RA
+NOP
+
+80887F48
+ADDIU	SP,SP,FFD8
+SDC1	F20,0010 (SP)
+SW	S1,0020 (SP)
+SW	S0,001C (SP)
+MTC1	A3,F20
+OR	S0,A2,R0
+OR	S1,A1,R0
+SW	RA,0024 (SP)
+SW	A0,0028 (SP)
+LW	T6,0028 (SP)
+LUI	T9,0001
+LW	A0,0000 (S0)
+LW	T7,002C (T6)
+ADDU	T9,T9,T7
+LW	T9,06B4 (T9)
+JALR	RA,T9
+NOP
+LH	T8,0006 (S1)
+ADDIU	AT,R0,FFFF
+OR	A1,S0,R0
+BNE	T8,AT,80887FB8
+OR	A0,S0,R0
+MFC1	A2,F20
+OR	A0,S1,R0
+JAL	80887A78
+LW	A3,0038 (SP)
+BEQ	R0,R0,80887FC4
+NOP
+MFC1	A1,F20
+JAL	8088798C
+LW	A2,0038 (SP)
+JAL	80886C78
+OR	A0,S1,R0
+BEQ	V0,R0,80887FE4
+OR	A0,S1,R0
+MFC1	A2,F20
+OR	A1,S0,R0
+JAL	80887BF4
+LW	A3,0038 (SP)
+MFC1	A2,F20
+LW	A0,0028 (SP)
+OR	A1,S0,R0
+JAL	80887D5C
+LW	A3,0038 (SP)
+MFC1	A2,F20
+OR	A0,S1,R0
+OR	A1,S0,R0
+JAL	80887DF0
+LW	A3,0038 (SP)
+LW	RA,0024 (SP)
+LDC1	F20,0010 (SP)
+LW	S0,001C (SP)
+LW	S1,0020 (SP)
+JR	RA
+ADDIU	SP,SP,0028
+
+80888024
+ADDIU	SP,SP,FFD0
+SW	S0,0020 (SP)
+OR	S0,A1,R0
+SW	RA,0024 (SP)
+SW	A0,0030 (SP)
+SW	A2,0038 (SP)
+LW	T6,0030 (SP)
+LUI	T8,0001
+LW	T9,0038 (SP)
+LW	T7,002C (T6)
+LUI	AT,8000
+LUI	T4,DB06
+ADDU	T8,T8,T7
+LW	T8,06E0 (T8)	;T8=T8+6E0: p->type.controller
+ORI	T4,T4,0030
+SW	T8,002C (SP)	;SP+2C=T8: p->type.controller
+LW	T0,0000 (T9)
+SW	T0,0028 (SP)
+LW	T1,0028 (S0)
+LW	T3,0028 (SP)
+ADDU	T2,T1,AT
+LUI	AT,8014
+SW	T2,58D0 (AT)
+LW	V1,0298 (T3)
+OR	V0,V1,R0
+SW	T4,0000 (V0)
+LW	T5,0028 (S0)
+ADDIU	V1,V1,0008
+SW	T5,0004 (V0)
+LW	T6,0028 (SP)
+SW	V1,0298 (T6)
+LW	A0,002C (SP)	;A0=SP+2C: p->type.controller
+LW	A1,0028 (SP)
+LW	A2,0018 (S0)
+JAL	80886CC4
+LW	A3,001C (S0)
+LWC1	F4,001C (S0)
+LW	A3,0018 (S0)
+LW	A0,0030 (SP)
+LW	A1,002C (SP)	;A1=SP+2C: p->type.controller
+LW	A2,0038 (SP)
+JAL	80887F48
+SWC1	F4,0010 (SP)
+LW	RA,0024 (SP)
+LW	S0,0020 (SP)
+ADDIU	SP,SP,0030
+JR	RA
+NOP
+
+808880E4
+ADDIU	SP,SP,FFC8
+LUI	AT,4180
+MTC1	AT,F12
+SW	RA,0014 (SP)
+SW	A2,0040 (SP)
+SW	A3,0044 (SP)
+LW	T6,0000 (A1)
+LUI	AT,0001
+ORI	AT,AT,0358
+SW	T6,0034 (SP)
+LW	T7,002C (A0)
+MOV.S	F14,F12
+LUI	A2,3F80
+ADDU	T8,T7,AT
+SW	T8,0030 (SP)
+JAL	800E041C
+OR	A3,R0,R0
+LWC1	F12,0040 (SP)
+LWC1	F14,0044 (SP)
+LUI	A2,430C
+JAL	800E0314
+ADDIU	A3,R0,0001
+LW	A0,0034 (SP)
+LW	V1,0298 (A0)
+LUI	T9,DB06
+ORI	T9,T9,0030
+OR	V0,V1,R0
+SW	T9,0000 (V0)
+LW	T0,0030 (SP)
+ADDIU	V1,V1,0008
+OR	A1,V1,R0
+LW	T1,0028 (T0)
+ADDIU	V1,V1,0008
+LUI	T2,DA38
+SW	T1,0004 (V0)
+ORI	T2,T2,0003
+SW	T2,0000 (A1)
+SW	A1,0018 (SP)
+JAL	800E13C4
+SW	V1,0024 (SP)
+LW	A1,0018 (SP)
+LW	V1,0024 (SP)
+LUI	T3,DE00
+SW	V0,0004 (A1)
+OR	V0,V1,R0
+LUI	T4,0C00
+ADDIU	T4,T4,0040
+SW	T4,0004 (V0)
+SW	T3,0000 (V0)
+ADDIU	V1,V1,0008
+LW	T5,0034 (SP)
+SW	V1,0298 (T5)
+LW	RA,0014 (SP)
+JR	RA
+ADDIU	SP,SP,0038
+
+808881C0
+ADDIU	SP,SP,FFC8
+MTC1	A2,F12
+MTC1	A3,F14
+SW	RA,0034 (SP)
+SW	A1,003C (SP)
+LW	T6,002C (A0)
+LUI	V0,0001
+MFC1	A2,F12
+ADDU	V0,V0,T6
+LW	V0,06E0 (V0)	;V0=V0+6E0: p->type.controller
+MFC1	A3,F14
+LW	A0,003C (SP)
+LH	V1,000C (V0)	;V1=controller+C: cursor.blink
+ADDIU	A1,R0,0002
+ADDIU	T0,R0,00C3
+SLTI	AT,V1,000B	;TRUE if cursor.blink < 0xB
+BNE	AT,R0,80888214	;branch if waning blink state
+ADDIU	T1,R0,0050
+ADDIU	T7,R0,0014
+BEQ	R0,R0,80888218
+SUBU	V0,T7,V1	;V0=14-cursor.blink: waxing blink state
+//80888214:	
+OR	V0,V1,R0	;V0=V1: waning blink state
+//80888218:	convert state to multiplier
+ADDIU	V1,R0,000A
+SUBU	T8,V1,V0	;T8=0xA-state: invert state (0-A -> A-0)
+SLL	T9,T8,0x8
+SUBU	T9,T9,T8	;T9=~state*0xFF
+DIV	T9,V1
+LUI	AT,3F80
+MTC1	AT,F0
+BNE	V1,R0,80888240
+NOP
+BREAK	00001C00
+ADDIU	AT,R0,FFFF
+BNE	V1,AT,80888258
+LUI	AT,8000
+BNE	T9,AT,80888258
+NOP
+BREAK	00001800
+MFLO	V0
+ADDIU	T2,R0,0050
+SW	T2,0018 (SP)
+SW	V0,001C (SP)
+SW	T0,0010 (SP)
+SW	T1,0014 (SP)
+SW	R0,0020 (SP)
+SW	R0,002C (SP)
+SWC1	F0,0024 (SP)
+JAL	800921D0
+SWC1	F0,0028 (SP)
+LW	RA,0034 (SP)
+ADDIU	SP,SP,0038
+JR	RA
+NOP
+
+80888294
+ADDIU	SP,SP,FFE0
+SW	RA,0014 (SP)
+SW	A1,0024 (SP)
+OR	A3,A0,R0
+LW	V0,002C (A3)
+LUI	AT,0001
+ORI	AT,AT,0358
+ADDU	V0,V0,AT
+SW	V0,001C (SP)
+SW	A3,0020 (SP)
+LW	T9,0010 (V0)
+OR	A0,A3,R0
+LW	A1,0024 (SP)
+JALR	RA,T9
+NOP
+LW	A0,0020 (SP)
+LW	A1,001C (SP)
+JAL	80888024
+LW	A2,0024 (SP)
+LW	T6,001C (SP)
+ADDIU	AT,R0,000D
+LW	A3,0020 (SP)
+LW	T7,0008 (T6)
+BNEL	T7,AT,80888348
+LW	RA,0014 (SP)
+LW	T8,002C (A3)
+LUI	A1,0001
+LW	T3,0024 (SP)
+ADDU	T0,T8,A1
+LW	T1,06E8 (T0)
+LW	T2,0194 (T1)
+BEQL	T2,R0,80888348
+LW	RA,0014 (SP)
+LW	A0,0000 (T3)
+LW	V1,0298 (A0)
+LUI	T5,DE00
+ADDIU	T4,V1,0008
+SW	T4,0298 (A0)
+SW	T5,0000 (V1)
+LW	T9,002C (A3)
+ADDU	T6,T9,A1
+LW	T7,06E8 (T6)
+LW	T8,0194 (T7)
+SW	T8,0004 (V1)
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+80888354
+LW	V0,002C (A0)
+LUI	AT,0001
+ORI	AT,AT,0670
+LUI	T6,8088
+LUI	T7,8089
+ADDU	V0,V0,AT
+ADDIU	T6,T6,6A00
+ADDIU	T7,T7,8294
+SW	T6,0000 (V0)
+SW	T7,0004 (V0)
+JR	RA
+NOP
+
+80888384
+ADDIU	SP,SP,FFE0
+SW	RA,0014 (SP)
+OR	A2,A0,R0
+LW	V0,002C (A2)
+LUI	AT,0001
+ORI	AT,AT,0358
+LUI	T9,0001
+ADDU	A0,V0,AT
+SW	A0,001C (SP)
+ADDU	T9,T9,V0
+LW	T9,06B0 (T9)
+ADDIU	A1,R0,0007
+JALR	RA,T9
+NOP
+LW	A0,001C (SP)
+ADDIU	AT,R0,0004
+LW	V0,0038 (A0)
+BEQ	V0,AT,808883E0
+ADDIU	AT,R0,0003
+BEQ	V0,AT,808883E0
+ADDIU	AT,R0,0001
+BNEL	V0,AT,808883EC
+LW	RA,0014 (SP)
+JAL	800D1A9C
+ADDIU	A0,R0,0059
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+808883F8	generate type.controller if not present
+ADDIU	SP,SP,FFD0
+SW	S0,0018 (SP)
+OR	S0,A0,R0
+SW	RA,001C (SP)
+LW	V1,002C (S0)
+LUI	T6,0001
+LUI	AT,0001
+ADDU	T6,T6,V1
+LW	T6,06E0 (T6)	;T6=T6+6E0: p->type.controller
+ORI	AT,AT,0358
+OR	A0,S0,R0
+BNE	T6,R0,80888478	;branch if not NULL
+OR	V0,V1,R0
+ADDU	A3,V1,AT
+LUI	T9,0001
+ADDU	T9,T9,V1
+SW	A3,0020 (SP)
+SW	V1,002C (SP)
+LW	T9,06CC (T9)
+LUI	A2,8089
+ADDIU	A2,A2,8A8C	;A2=80888A8C: 
+JALR	RA,T9
+ADDIU	A1,A3,0028
+LW	V0,002C (SP)
+LUI	T7,8089
+LUI	AT,0001
+LW	A0,0020 (SP)
+ADDIU	T7,T7,8AF0
+ADDU	AT,AT,V0
+JAL	80886A60
+SW	T7,06E0 (AT)	;T7->AT+6E0: save p->type.controller
+LW	V0,002C (SP)
+LUI	AT,0001
+ORI	AT,AT,0358
+ADDU	A1,V0,AT
+JAL	8088587C	;initialize type interface
+OR	A0,S0,R0
+JAL	80888384
+OR	A0,S0,R0
+JAL	80888354
+OR	A0,S0,R0
+LW	T0,002C (S0)
+LUI	T1,0001
+LUI	T8,8089
+ADDU	T1,T1,T0
+LW	T1,06E0 (T1)	;T1=T1+6E0: p->type.controller
+ADDIU	T8,T8,80E4
+LUI	T4,0001
+SW	T8,0028 (T1)	;808880E4->controller+28: 
+LW	T3,002C (S0)
+LUI	T2,8089
+ADDIU	T2,T2,81C0
+ADDU	T4,T4,T3
+LW	T4,06E0 (T4)	;T4=T4+6E0: p->type.controller
+SW	T2,002C (T4)	;808881C0->controller+2C: 
+LW	RA,001C (SP)
+LW	S0,0018 (SP)
+JR	RA
+ADDIU	SP,SP,0030
+
+808884E4	set type.controller to NULL
+LW	T6,002C (A0)
+LUI	AT,0001
+ADDU	AT,AT,T6
+SW	R0,06E0 (AT)	;0->AT+6E0: fry p->type.controller
+JR	RA
+NOP

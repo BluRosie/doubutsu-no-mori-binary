@@ -1,0 +1,314 @@
+Codeword/Size lookup
+based off 800C3E30	look up string# in string_txt's index
+
+800C3E30	723B0	converts string_txt ID to codeword and size
+34070040	ORI	A3,R0,0040
+AFA70014	SW	A3,0014 (SP)
+3C0100D1	LUI	AT,00D1
+34218000	ORI	AT,AT,8000
+AFA10010	SW	AT,0010 (SP)
+3C0101BC	LUI	AT,01BC
+3421E000	ORI	AT,AT,E000
+AFA10018	SW	AT,0018 (SP)
+340707FF	ORI	A3,R0,07FF
+	...leading directly into following code
+
+800C3E54	look up text ID# in generic index
+	accepts: A0=text ID#, A1=@codeword, A2=@strlen, A3=#indices, SP+10=codeword for index, SP+14=max strlen, SP+18=codeword for text
+27BDFFB8	ADDIU	SP,SP,FFB8
+AFB00020	SW	S0,0020 (SP)
+00048025	OR	S0,A0,R0	;S0=ID#
+AFBF0024	SW	RA,0024 (SP)
+AFA5004C	SW	A1,004C (SP)	;SP+4C=A1: @codeword
+AFA60050	SW	A2,0050 (SP)	;SP+50=A2: @strlen
+ACA00000	*SW	R0,0000 (A1)	;0->@codeword: default return
+0207082B	*SLTU	AT,S0,A3
+10200028	BEQ	AT,R0,800C3F4C	;return if index outside range
+ACC00000	*SW	R0,0000 (A2)	;0->@strlen: default return
+//800C3E60:	this section loads the generic values for each scheme
+27A40030	ADDIU	A0,SP,0030	;A0=target: SP+0x30
+8FA50058	*LW	A1,0058 (SP)	;T9=[SP+10 f/caller]: codeword.index
+3C078011	LUI	A3,8011
+24E778E0	ADDIU	A3,A3,78E0	;A3=801178E0: ../m_string.c
+2408003E	ADDIU	T0,R0,003E
+AFA80010	SW	T0,0010 (SP)	;SP+0x10 = 0x3E
+1200000A	*BEQ	S0,R0,800C3ED4	;branch if index 0
+320E0001	ANDI	T6,S0,0001
+11C0000D	BEQ	T6,R0,800C3E9C	;even entries will need to be returned differently
+00107880	SLL	T7,S0,0x2	;T7=index->offset (next entry, actually)
+//	odd entries
+25F8FFFC	ADDIU	T8,T7,FFFC	;T8=offset-4: offset for entry
+03052821	*ADDU	A1,T8,A1	;A1=codeword
+0C009B84	JAL	80026E10	;copy A2 bytes from ROM codeword A1 to A0
+24060008	ADDIU	A2,R0,0008	;A2=size to pull from ROM
+8FA20030	LW	V0,0030 (SP)	;V0=index value (offset to entry in ROM txt table)
+1000000C	BEQ	R0,R0,800C3F0C
+8FA30034	*LW	V1,0034 (SP)	;T1=following index value
+//800C3E9C:	index 0
+0C009B84	JAL	80026E10	;copy A2 bytes from ROM codeword A1 to A0
+24060008	ADDIU	A2,R0,0008	;A2=size 8
+00001025	OR	V0,R0,R0
+10000007	BEQ	R0,R0,800C3F0C
+8FA30030	LW	V1,0030 (SP)	;V1=SP+30: p->size
+//800C3ED4:	even indices
+25F8FFF8	*ADDIU	T8,T7,FFF8	;T4=offset-8: offset to entry
+03052821	*ADDU	A1,T8,A1	;A1=codeword
+0C009B84	JAL	80026E10
+24060010	ADDIU	A2,R0,0010	;A2=size 10
+8FA20034	LW	V0,0034 (SP)	;V0=SP+34: current index
+8FA30038	*LW	V1,0038 (SP)	;T7=SP+38: following index
+//800C3F0C:	retrieve string using ROM address
+00623023	*SUBU	A2,V1,V0	;V1=length
+8FA8005C	*LW	T0,005C (SP)	;T0=[SP+14 f/caller]: max strlen
+00C8082B	*SLTU	AT,A2,T0
+50200001	*BEQL	AT,R0,+1	;return if over strlen limit
+00083025	*OR	A2,T0,R0	;force strlen to max
+8FA8004C	LW	T0,004C (SP)	;T0=SP+4C: @codeword
+8FB80060	*LW	T8,0060 (SP)	;T8=[SP+18 f/caller]: codeword.text
+00582821	*ADDU	A1,V0,T8	;T9=codeword+offset: codeword for text entry
+AD050000	*SW	A1,0000 (T0)	;save codeword
+8FA90050	LW	T1,0050 (SP)	;T1=SP+50: @strlen
+AD260000	SW	A2,0000 (T1)	;save strlen
+//800C3F60:	return
+8FBF0024	LW	RA,0024 (SP)
+8FB00020	LW	S0,0020 (SP)
+27BD0048	ADDIU	SP,SP,0048
+03E00008	JR	RA
+00000000	NOP
+
+Now to make links for each redirect.  Note I'm using hacked sizes and locations.
+Max strlen is always first to allow override
+
+80065528	13AA8	converts select_txt ID to codeword and size
+34070400	ORI	A3,R0,0400
+AFA70014	SW	A3,0014 (SP)
+3C0100D0	LUI	AT,00D0
+34219000	ORI	AT,AT,9000
+AFA10010	SW	AT,0010 (SP)
+3C0101BA	LUI	AT,01BA
+34215000	ORI	AT,AT,5000
+AFA10018	SW	AT,0018 (SP)
+08030F95	J	800C3E54
+3407025F	ORI	A3,R0,025F
+
+800935F8	41B78	converts super_txt ID to codeword and size
+34070018	ORI	A3,R0,0018
+AFA70014	SW	A3,0014 (SP)
+3C0100D1	LUI	AT,00D1
+34212000	ORI	AT,AT,2000
+AFA10010	SW	AT,0010 (SP)
+3C0101BC	LUI	AT,01BC
+34217000	ORI	AT,AT,7000
+AFA10018	SW	AT,0018 (SP)
+08030F95	J	800C3E54
+340703D6	ORI	A3,R0,03D6
+
+80093738	41CB8	converts ps_txt ID to codeword and size
+34070020	ORI	A3,R0,0020
+AFA70014	SW	A3,0014 (SP)
+3C0100D1	LUI	AT,00D1
+34215000	ORI	AT,AT,5000
+AFA10010	SW	AT,0010 (SP)
+3C0101BC	LUI	AT,01BC
+3421A000	ORI	AT,AT,A000
+AFA10018	SW	AT,0018 (SP)
+08030F95	J	800C3E54
+340703D6	ORI	A3,R0,03D6
+
+80093878	41DF8	converts mail_txt ID to codeword and size
+34070068	ORI	A3,R0,0068
+AFA70014	SW	A3,0014 (SP)
+3C0100D1	LUI	AT,00D1
+34210000	ORI	AT,AT,0000	;keep this in case the table moves!
+AFA10010	SW	AT,0010 (SP)
+3C0101BA	LUI	AT,01BA
+34217000	ORI	AT,AT,7000
+AFA10018	SW	AT,0018 (SP)
+08030F95	J	800C3E54
+340703D6	ORI	A3,R0,03D6
+
+8009E388	4C908	converts msg_txt ID to codeword and size
+34070400	ORI	A3,R0,0400
+AFA70014	SW	A3,0014 (SP)
+3C0100CF	LUI	AT,00CF
+34219000	ORI	AT,AT,9000
+AFA10010	SW	AT,0010 (SP)
+3C010191	LUI	AT,0191
+34214000	ORI	AT,AT,4000
+AFA10018	SW	AT,0018 (SP)
+08030F95	J	800C3E54
+34073F94	ORI	A3,R0,3F94
+
+multi-text bank is unique
+npc doesn't use an index (yet)
+
+Theoretical 1xxx item index.  Note it "quatr"s the index, to reduce text.
+For debug use exclusive table, not that given here.
+ROM	codeword
+C98150	014F4000+1DA0
+12CE2C0	01BE6000+770	tack on end of new animal name list, if can't make a new entry
+
+8009E3B0	4C930	converts 1xxx_Item ID to codeword and size
+34070400	ORI	A3,R0,0400
+AFA70014	SW	A3,0014 (SP)
+30840FFF	ANDI	A0,A0,0FFF	;remove type flag
+00042082	SRL	A0,A0,0x2	;one name for every four objects
+3C01010F	LUI	AT,010F
+34214CF8	ORI	AT,AT,4CF8
+AFA10010	SW	AT,0010 (SP)
+3C01010F	LUI	AT,010F
+3421779C	ORI	AT,AT,779C
+AFA10018	SW	AT,0018 (SP)
+08030F95	J	800C3E54
+340703B3	ORI	A3,R0,03B3	;ECC/4
+
+Theoretical 2xxx item index.  All those unique indicies...
+8009E3E0	4C960	converts 2xxx_Item ID to codeword and size
+34070400	ORI	A3,R0,0400	;probably will always be overridden...
+AFA70014	SW	A3,0014 (SP)
+3C01800A	LUI	AT,800A
+00041202	SRL	V0,A0,0x8	;AT=type, used for offset
+00221821	ADDU	V1,AT,V0	;note this is always +20 above actual
+9067E438	LBU	A3,E438 (V1)	;max entries
+00021080	SLL	V0,V0,0x2	;type->offset (note will always be +80 from actual start of entries)
+308400FF	ANDI	A0,A0,00FF	;remove type flag
+00221021	ADDU	V0,AT,V0
+8C41E398	LW	AT,E398 (V0)	;index codeword
+AFA10010	SW	AT,0010 (SP)
+8C41E3E8	LW	AT,E3E8 (V0)	;text codeword
+08030F95	J	800C3E54
+AFA10018	SW	AT,0018 (SP)
+
+Codeword	ROM
+010F4000	C963B0	base address
+010F4008	C963B8	20xx index
+010F4110	C964C0	21xx index
+010F4128	C964D8	22xx index
+010F41C0	C96570	23xx index
+010F4248	C965F8	24xx index
+010F4648	C969F8	25xx index
+010F46C8	C96A78	26xx index
+010F47D0	C96B80	27xx index
+010F48D8	C96C88	28xx index
+010F48F8	C96CA8	29xx index
+010F4928	C96CD8	2Axx index
+010F4A08	C96DB8	2Bxx index
+010F4A10	C96DC0	2Cxx index
+010F4B98	C96F48	2Dxx index
+010F4C20	C96FD0	2Exx index
+010F4C30	C96FE0	2Fxx index
+010F4C48	C96FF8	1xxx index
+----------------------------------
+010F5B18	C97EC8	20xx items
+010F5D98	C98148	21xx items
+010F5DC0	C98170	22xx items
+010F5F78	C98328	23xx items
+010F6064	C98414	24xx items
+010F6B18	C98EC8	25xx items
+010F6C00	C98FB0	26xx items
+010F6E30	C991E0	27xx items
+010F7028	C993D8	28xx items
+010F7050	C99400	29xx items
+010F70C8	C99478	2Axx items
+010F7298	C99648	2Bxx items
+010F72A0	C99650	2Cxx items
+010F74EC	C9989C	2Dxx items
+010F769C	C99A4C	2Exx items
+010F76AC	C99A5C	2Fxx items
+010F76EC	C99A9C	1xxx items
+----------------------------------
+010F9614	C9B914	current endpoint
+	CA1550	start of next file
+
++_+
+
+You yutz!  You need to account for unaligned memory.  Geesh, steal a proper write routine why don'tcha?
+
+Now to rewrite the item puller to accept an index.
+80096740	44CC0	copy item A1's name from ROM to A0
+	accepts: A0=p->target, A1=item ID#
+00053025	OR	A2,A1,R0
+2405000A	ADDIU	A1,R0,000A
+//	custom strlen entry point
+//	accepts: A0=p->target, A1=strlen, A2=item ID#
+24A1004F	+ADDIU	AT,A1,004F	;A2+=3F: to quadword, + 30 for stack
+3021FFF0	+ANDI	AT,AT,FFF0	;A2->quadword
+03A1E823	+SUBU	SP,SP,AT	;fully dynamic buffer!
+//	ADDIU	SP,SP,FF00
+AFBF0024	SW	RA,0024 (SP)
+AFA10028	+SW	AT,0028 (SP)	;SP+24=A2: stack offset
+AFA4002C	*SW	A0,002C (SP)	;SP+18=A0: p->target
+A7A60030	*SH	A2,0030 (SP)	;item code number
+AFA50034	*SW	A1,0034 (SP)	;SP+20=A2: max strlen
+//	initialize strlen chars in buffer
+0C02664B	*JAL	8009992C	;memset(A0,A1,A2)
+34060020	*ORI	A2,R0,0020	;A2=' '
+//	handle item type
+0C02FC43	JAL	800BF10C	;muddles out the different item type correction values
+97A40030	*LHU	A0,0030 (SP)	;A0=item ID#
+3044FFFF	*ANDI	A0,V0,FFFF
+27A50038	*ADDIU	A1,SP,0038	;A1=SP+28: p->codeword
+27A6003C	*ADDIU	A2,SP,003C	;A2=SP+2C: p->strlen
+00041302	*SRL	V0,A0,0xC	;A0=first nibble of code
+24010001	ADDIU	AT,R0,0001
+14410005	BNE	V0,AT,800967E0	;branch if NOT a 1xxx item
+24010002	ADDIU	AT,R0,0002
+//	1xxx codeword
+0C0278ED	*JAL	8009E3B4	;1xxx codeword gen; override strlen mode
+8FA70034	*LW	A3,0034 (SP)	;AT=max strlen
+10000005	*BEQ	R0,R0,+5
+00000000	*NOP
+//8009677C:	2xxx item entries
+14410011	BNE	V0,AT,80096834	;return if not a 2xxx item
+00000000	*NOP
+0C0278F9	*JAL	8009E3E4	;2xxx codeword gen; override strlen mode
+8FA70034	*LW	A3,0034 (SP)	;AT=max strlen
+//	pull from ROM via codeword
+8FA50038	*LW	A1,0038 (SP)	;A1=codeword
+10A0000C	*BEQ	A1,R0,return	;return if invalid codeword
+8FA6003C	*LW	A2,003C (SP)	;A2=strlen
+8FA20034	*LW	V0,0034 (SP)	;AT=max strlen
+00C2082B	*SLTU	AT,A2,V0	;TRUE if strlen < max
+50200001	*BEQL	AT,R0,+1	;set to maximum if strlen exceeds space
+00023025	*OR	A2,V0,R0
+AFA6003C	*SW	A2,003C (SP)	;update strlen
+0C0259C5	*JAL	80096714	;pull from rom (A2=strlen)
+27A40040	ADDIU	A0,SP,0040	;A0=target buffer for string
+8FA4002C	*LW	A0,002C (SP)	;A0=target (sent by caller)
+27A50040	ADDIU	A1,SP,0040	;A1=p->buffer
+0C026630	JAL	800998C0	;copy A2 bytes from A1 to A0
+8FA6003C	*LW	A2,003C (SP)	;A2=strlen
+//8009684C:	return
+8FBF0024	LW	RA,0024 (SP)
+8FA10028	*LW	AT,0028 (SP)
+03A1E821	*ADDU	SP,SP,AT
+03E00008	JR	RA
+00000000	NOP	
+	
+Okay, rewritting this section to account for unaligned ROM transfer
+//	test for invalid string.  aftre thought, remembered that codeword pull already accounts for max strlen
+8FA50038	LW	A1,0038 (SP)	;A1=codeword
+10A0000F	BEQ	A1,R0,return	;return if invalid codeword
+8FA6003C	LW	A2,003C (SP)	;A2=strlen
+10C0000D	*BEQ	A2,R0,return	;return to avoid pointlessly copying nothing
+//	correct for misalignment; hijack SP+34, since it isn't useful anymore
+30A20007	*ANDI	V0,A1,0007	;V0=#non-DW aligned bytes in codeword
+AFA20034	*SW	V0,0034 (SP)	;SP+34=V0: offset to actual string; 
+00A22823	*SUBU	A1,A1,V0	;A1=floor(codeword), to be DW aligned
+24C6000F	*ADDIU	A2,A2,000F
+30C6FFF8	*ANDI	A2,A2,FFF8	;A2=strlen QW aligned.  Basically, since you'd have to account for difference (up to 7) then DW align (+7), might as well quad-align instead
+//	pull from ROM via codeword
+0C0259C5	JAL	80096714	;pull from rom (A2=strlen)
+27A40040	ADDIU	A0,SP,0040	;A0=target buffer for string
+8FA4002C	LW	A0,002C (SP)	;A0=target (sent by caller)
+27A50040	ADDIU	A1,SP,0040	;A1=p->buffer
+8FA60034	*LW	A2,0034 (SP)	;A2=difference in size
+00A62821	*ADDU	A1,A1,A2	;A1=p->actual string data
+0C026630	JAL	800998C0	;copy A2 bytes from A1 to A0
+8FA6003C	LW	A2,003C (SP)	;A2=strlen
+
++_+
+
+oh crap!  need to figure out what happened in Nook's dialog.
+Locked at "Acre ", so must have failed it somehow.
+Those are 7F25/7F26 commands, and only fail under PJ64+cousins.

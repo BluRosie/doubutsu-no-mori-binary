@@ -1,0 +1,245 @@
+primary font drawing routine
+constructs DLs based on selected letter, color, and size.
+
+8009069C	
+	accepts: A0=p->DL output, A1=char#, A2=@imgoff, A3=@linenum, SP+10=@imgoffedge, SP+14=@linebot
+ADDIU	SP,SP,FFE0
+SW	RA,0014 (SP)
+SW	A0,0020 (SP)
+SW	A1,0024 (SP)
+SW	A2,0028 (SP)
+SW	A3,002C (SP)
+LW	T6,0020 (SP)	//T6=A0=pointer to P->DL output	{8014751C}
+LW	V1,0000 (T6)	//V1=DL output address	{8018F988}
+JAL	80090178	//returns V0=address for text char images
+SW	V1,001C (SP)
+//800906C4:	RDP settextureimage command
+LW	V1,001C (SP)	//V1=offset in DL output address (current pos)
+LW	A3,0024 (SP)	//A3=char #
+OR	A0,V1,R0	//A0=curpos
+LUI	T7,FD88
+ORI	T7,T7,005F	//T7=FD88005F	[i 8bit; chunk=0x60 (C*8bits)]
+SW	T7,0000 (A0)
+SW	V0,0004 (A0)	//V0=address for current line of text (16 chars in each line)
+//800906E0:	RDP settile command
+ADDIU	V1,V1,0008	//curpos+=8
+SRA	A1,A3,0x4	//A1/=0x10	(ie. 4B->04)
+SLL	A1,A1,0x4	//A1*=0x10	(ie. 04->40)
+SUBU	A0,A3,A1	//A0=char# & 0xF	(ie. 4B->0B)
+ADDU	AT,A0,R0	//AT=A0
+SLL	A0,A0,0x2	//A0*=4
+SUBU	A0,A0,AT	//(same as A0*=3; ie. 0B->21)
+SLL	A0,A0,0x2	//A0*=4	(same as A0*=C(img offset); ie. 0B->84)
+//80090700:	this line sets width of image-1 (determines edge of img)
+ADDIU	A2,A0,000B	//A2=A0+B	(B=width of image; A2=offset to edge of img)	*****this bugger sets physical width of image
+SUBU	T2,A2,A0	//T2=B+whatever other character widths already are written
+ADDIU	T2,T2,0001	//T2++ (T2=C)
+SRA	T2,T2,0x1	//T2/=2 (T2=6)
+ADDIU	T2,T2,0007	//T2+=7 (T2=D)
+SRA	T2,T2,0x3	//T2/=8	(divided by bytes in image width)
+ANDI	T2,T2,01FF	//T2&=1FF
+OR	V0,V1,R0	//V0=V1=curpos
+SLL	T2,T2,0x9	//T2*=200 (line)
+LUI	AT,F588		//AT=F588****	[i 8bit]
+LUI	T9,070C
+ORI	T9,T9,0300	//T9=070C0300	[tile; clamp-t, mirror-t, clamp-s, mirror-s]
+OR	T8,T2,AT	//T8=line for settile
+SW	T8,0000 (V0)
+SW	T9,0004 (V0)
+//8009073C:	RDP loadsync command
+ADDIU	V1,V1,0008	//curpos+=8
+OR	V0,V1,R0	//V0=V1=curpos
+LUI	T3,E600
+SW	T3,0000 (V0)	//T3=E6000000	->		[loadsync]
+SW	R0,0004 (V0)	//00000000	->	
+//80090750:	RDP loadtile command
+ADDIU	V1,V1,0008	//curpos+=8
+SLL	T4,A0,0x1	//T4=A0*2	[A0=offset to img within strip]
+ANDI	T5,T4,0FFF	//T5=T4 & FFF
+SLL	T6,T5,0xC	//T6=T5*1000
+LUI	AT,F400		//AT=F400****	[loadtile=sets tile dimentions]
+SLL	T9,A2,0x1	//T9=2*(offset to img+B)
+ANDI	T3,T9,0FFF	//T3=T9 & FFF
+OR	T7,T6,AT	//T7=loadtile_uw + uls
+ADDIU	A3,A1,000F	//A3=linenum + F (ie. ID4B = 40+F)
+SLL	T1,A3,0x2	//T1=A3*4
+LUI	AT,0700		//AT=0700****	[loadtile - lower word:	tile]
+SLL	T4,T3,0xC	//T4=T3*1000
+//80090780:
+OR	V0,V1,R0	//V0=curpos
+SLL	T0,A1,0x2	//T0=linenum*4
+ANDI	T0,T0,0FFF	//T0&=FFF
+OR	T5,T4,AT	//T5=loadtile_lw + lrs
+ANDI	T1,T1,0FFF	//T1&=FFF
+OR	T6,T5,T1	//T6=loadtile_lw + lrt
+OR	T8,T7,T0	//T8=loadtile_uw + ult
+SW	T8,0000 (V0)
+SW	T6,0004 (V0)
+//800907A4:	RDP pipesync command
+ADDIU	V1,V1,0008
+OR	V0,V1,R0
+LUI	T7,E700
+SW	T7,0000 (V0)	//T7=E7000000	->		[pipesync]
+SW	R0,0004 (V0)	//00000000	->	
+//800907B8:	RDP settile command
+ADDIU	V1,V1,0008	//V1=curpos+=8
+OR	V0,V1,R0	//V0=curpos
+LUI	AT,F580		//AT=F580****	[settile:	i 4bit]
+LUI	T9,000C
+ORI	T9,T9,0300	//T9=000C0300	[clamp-t, mirror-t, clamp-s, mirror-s]
+OR	T8,T2,AT	//T8=settile_uw + line (0x200)
+SW	T8,0000 (V0)
+SW	T9,0004 (V0)
+//800907D8:	RDP settilesize command
+ADDIU	V1,V1,0008	//V1=curpos+=8
+SLL	T3,A0,0x2	//T3=4*img offset
+ANDI	T4,T3,0FFF	//T4=uls
+SLL	T8,A2,0x2	//T8=4*edge of img
+ANDI	T9,T8,0FFF	//T9=lrs
+SLL	T5,T4,0xC	//T5=T4*1000	[uls]
+OR	V0,V1,R0	//V0=curpos
+LUI	AT,F200		//AT=F200****	[settilesize]
+OR	T6,T5,AT	//T6=settilesize_uw + uls
+SLL	T3,T9,0xC	//T3=T9*1000	[lrs]
+//80090800:
+OR	T4,T3,T1	//T4=settilesize_lw + lrt
+OR	T7,T6,T0	//T7=settilesize_uw + ult
+SW	T7,0000 (V0)
+SW	T4,0004 (V0)
+//80090810:	leave the routine...
+ADDIU	V1,V1,0008
+LW	T5,0020 (SP)
+SW	V1,0000 (T5)	//curpos->8014751C
+LW	T6,0028 (SP)
+SW	A0,0000 (T6)	//imgoff->80147514
+LW	T7,002C (SP)
+SW	A1,0000 (T7)	//linenum->80147510
+LW	T8,0030 (SP)
+SW	A2,0000 (T8)	//imgoffedge->8014750C
+LW	T9,0034 (SP)
+SW	A3,0000 (T9)	//linebot->80147508	(line+F(height); offset to bottom edge of image)
+LW	RA,0014 (SP)
+//80090840:
+JR	RA
+ADDIU	SP,SP,0020
+
+
+-80090178:	subroutine; returns V0=address for text character images
+LUI	V0,8014
+ADDIU	V0,V0,A680	//V0=8013A680
+JR	RA
+NOP
+
+-------------
+sample constructed ASM:
+FD88005F xxxxxxxx	//settextureimage	60byte tile, at given address x
+F5880200 070C0300	//settile		i 8bit; tile, clamp-t, mirror-t, clamp-s, mirror-s
+E6000000 00000000	//loadsync
+F4084100 0708F13C	//loadtile		uls=imgoff, ult=linenum, lrs=imgoff+width, lrt=linenum+height; tile
+E7000000 00000000	//pipesync
+F5800200 000C0300	//settile		i 4bit; clamp-t, mirror-t, clamp-s, mirror-s
+F2084100 0008F13C	//settilesize		uls=imgoff, ult=linenum, lrs=imgoff+width, lrt=linenum+height
+
+set value at 80090700 to alter char image width
+To alter char width...	None of the above is necessary!
+
+80090294	NOP ME!
+Then set the width values in the table.  The table subtracts the values from 12, so just use it to shrink them.
+No fiddling with japanese!  Don't want the patch to break existing stuff.
+
+Actually...  change 0x3E814	(80090294)
+BEQ	A1,R0,800902B4	10A00007
+to
+BNE	A1,R0,800902B4	14A00007
+
+-------------
+-------------
+next call of saved values is after return from above subroutine
+
+//80091294:
+LW	T1,006C (SP)	//T1=imgoff
+LW	T2,008C (SP)	//T2=[C - width]
+NEG.S	F6,F4
+LW	T5,0068 (SP)	//T5=linenum
+LW	T6,0090 (SP)	//T6=[10 - height]
+TRUNC.W.S	F10,F8
+ADDU	T3,T1,T2	//T3=imgoff+C	{this sets render width}
+ADDU	T7,T5,T6	//T7=linenum+10	{this sets render height}
+TRUNC.W.S	F4,F18
+MFC1	A1,F10
+SLL	T4,T3,0x6	//T4=imgoffedge*40
+SLL	T8,T7,0x6	//T8=linenumedge*40
+MFC1	A2,F4
+SLL	A3,T1,0x6	//A3=imgoff*40
+SLL	T0,T5,0x6	//T0=linenum*40
+SWC1	F6,0044 (SP)
+SW	T4,0064 (SP)
+SW	T8,0060 (SP)
+SW	A3,006C (SP)
+SW	T0,0068 (SP)
+SW	T0,0010 (SP)
+OR	A0,S0,R0
+SW	A1,0030 (SP)
+JAL	80090848
+SW	A2,002C (SP)
+//800912F8:
+
+
+
+
+-80090848:
+SH	A1,0000 (A0)	//A1->80188A20	[FA90]
+SH	A2,0002 (A0)	//A2->80188A22	[0380]
+SH	R0,0004 (A0)	//0->80188A24
+SH	R0,0006 (A0)	//0->80188A26
+SH	A3,0008 (A0)	//imgoff*40->80188A28
+LW	T6,0010 (SP)	//T6=linenum*40
+SB	R0,000C (A0)	//0->80188A2C
+SB	R0,000D (A0)	//0->80188A2D
+SB	R0,000E (A0)	//0->80188A2E
+SB	R0,000F (A0)	//0->80188A2F
+SH	T6,000A (A0)	//linenum*40->80188A2A
+JR	RA
+NOP
+
+Render width and height set by this subroutine:
+-8009028C:	[0x3E80C]
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+BEQ	A1,R0,800902B4	//if A1==0, ignore the sizing data	[@8009183C:  LBU A1,0005 (S0); ANDI A1,A1,0001]
+OR	V1,R0,R0
+JAL	80090140
+NOP
+TRUNC.W.S	F4,F0
+MFC1	V1,F4
+BEQ	R0,R0,800902B8
+ADDIU	T7,R0,000C
+//800902B4:
+ADDIU	T7,R0,000C	//default width for text chars
+//800902B8:
+SUBU	V0,T7,V1	//if variable-width, subs value in table from 12
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+-80090140:	this doesn"t usually trip...	variable-width table thingy!
+		returns F0=float version of value subtracted from character width (dif from 12 to real size)
+		to activate it, set the bitflag 01 at S0+5.
+		This is normally set within 80091618...
+BLTZ	A0,80090150	//if char# whitespaced, branch
+SLTI	AT,A0,0100
+BNEZ	AT,8009015C	//if char# not invalid, branch
+LUI	T6,8010
+//80090150:
+MTC1	R0,F0
+JR	RA
+NOP
+//8009015C:
+ADDU	T6,T6,A0	//T6=80106AF4+offset
+LBU	T6,6AF4 (T6)
+MTC1	T6,F4
+NOP
+CVT.S.W	F0,F4
+JR	RA
+NOP

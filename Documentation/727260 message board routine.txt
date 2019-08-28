@@ -1,0 +1,42 @@
+0x19B8	[803B9788]	post number string
+0x19C0	[803B9790]	date string, assembled at runtime
+
+
+--MESSAGE NUM STRING
+0x1048	803B8E18:
+
+//0x105C	803B8E2C:	set message number
+LUI	A0,803C
+ADDIU	A0,A0,9788	//position of string
+ADDIU	A2,R0,0002	//length of string
+OR	A3,R0,R0
+JAL	8009264C	//sets message number
+SW	R0,0010 (SP)
+
+//	803B8E64:
+ADDIU	A1,A1,9788	//offset to string
+LW	A0,0040 (SP)
+ADDIU	A2,R0,0005	//string len
+
+
+--DATE STRING THINGS
+0x10D8	803B8EA8:
+
+	803B8F40:	sets position of date string
+LUI	AT,4188		x position
+MTC1	AT,F10
+
+	803B8F6C:
+ADDIU	A1,A1,9790	()	//Offset to date string
+LW	A0,0040 (SP)
+ADDIU	A2,R0,000A	//number of chars in string
+
+
+---------------
+---------------
+Fixing text:
+0x1063	1	D
+0x109F	1	7
+0x19B8	7	"Post   "
+
+cheap solution - delete the / from the image bank!

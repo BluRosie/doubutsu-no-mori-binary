@@ -1,0 +1,198 @@
+within 744020-747940?
+been a while, so don't remember quite how that works...
+
+803B6DF8	set clock for intro A0
+	accepts: A0=season
+LUI	V1,8013
+ADDIU	V1,V1,6EA0	;V1=80136EA0
+ADDIU	T6,R0,07D1
+SW	R0,012C (V1)	;0->80136FCC: 
+SH	T6,0122 (V1)	;07D1->80136FC2: year
+BEQ	A0,R0,803B6E4C	;return if flag not set
+SB	R0,011D (V1)	;0->80136FBD: minutes
+//803B6E14:	set clock for season in intro
+SLL	T7,A0,0x2
+SUBU	T7,T7,A0
+LUI	T8,803B
+ADDIU	T8,T8,7D94	;T8=803B7D94
+SLL	T7,T7,0x1	;T7=A0*6: offset in seasonal time table
+ADDU	V0,T7,T8	;V0=803B7D94+offset: time for season
+LBU	T9,FFFA (V0)
+LBU	T0,FFFB (V0)
+LBU	T1,FFFC (V0)
+LH	T2,FFFE (V0)
+SB	T9,0121 (V1)	;T9->80136FC1: month
+SB	T0,011F (V1)	;T0->80136FBF: day of month
+SB	T1,011E (V1)	;T1->80136FBE: hours
+SB	T2,056C (V1)	;T2->8013740C: event? (0-3)
+//803B6E4C:	return
+JR	RA
+NOP
+
+intro seasonal times are:
+-- MM DD HH ????
+04 06 0D 00 0003
+06 10 0D 00 0001
+08 01 06 00 0000
+0B 01 10 00 0000
+02 01 02 00 0002
+00 00 00 00 0000
+
+800C9010	
+ADDIU	SP,SP,FFE8
+LUI	V1,8011
+ADDIU	V1,V1,EDD0	;V1=8010EDD0
+SW	RA,0014 (SP)
+ADDIU	V0,R0,0001
+LHU	T6,0000 (V1)	;T6=8010EDD0: set time flag
+LUI	T7,8013
+BNEL	V0,T6,800C907C	;return if T6 not 1
+LW	RA,0014 (SP)
+SH	R0,0000 (V1)	;0->8010EDD0: don't set time again
+LBU	T7,6FCB (T7)	;T7=80136FCB: set when clock not found?
+LUI	A1,8013
+ADDIU	A1,A1,7924	;A1=80137924: p->source.time
+BNE	V0,T7,800C9060	;branch if flag not set
+LUI	A0,8013
+//800C904C:	when clock not present simply copy time
+LUI	A0,8013
+JAL	800D5D6C	;copy dw from A1 to A0
+ADDIU	A0,A0,6FBC	;A0=80136FBC: p->target.time
+BEQ	R0,R0,800C906C
+ADDIU	T8,R0,0001
+//800C9060:	complex time routine
+JAL	800D5090
+ADDIU	A0,A0,6FBC	;A0=80136FBC: p->target.time
+//800C9068:
+ADDIU	T8,R0,0001
+LUI	AT,8013
+JAL	800CA1DC
+SW	T8,6FCC (AT)	;1->80136FCC: 
+//800C9078:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+
+800D5D6C	copy cur.time and date from A1 to A0
+	accepts: A0=p->target, A1=p->source
+LWL	T7,0000 (A1)
+LWR	T7,0003 (A1)
+SWL	T7,0000 (A0)
+SWR	T7,0003 (A0)
+LWL	T6,0004 (A1)
+LWR	T6,0007 (A1)
+SWL	T6,0004 (A0)
+SWR	T6,0007 (A0)
+JR	RA
+NOP
+
+alternate route assumes that 80136EA0+12C (80136FCC) is set
+otherwise, will merely copy from flash using above
+800D5090	
+	accepts: A0=p->target
+ADDIU	SP,SP,FFE0
+LUI	V0,8013
+ADDIU	V0,V0,6EA0
+SW	RA,0014 (SP)
+OR	A2,A0,R0	;A2=A0: p->target
+LW	T6,012C (V0)	;T6=80136FCC: clock flag or time?
+ADDIU	AT,R0,0001
+OR	A0,A2,R0	;A0=A2: p->target
+BNE	T6,AT,800D50EC	;if not 1, blindly copy
+LUI	A1,8013
+LBU	T7,012B (V0)	;T7=80136FCB: 
+BNEZ	T7,800D50EC	;if not zero, blindly copy
+NOP
+//800D50C4:	
+JAL	800D6A10	;V0=p->???
+SW	A2,0020 (SP)	;SP+20=A2: p->target
+LW	A1,0020 (SP)	;A1=SP+20: p->target
+SW	V0,001C (SP)	;SP+1C= V0: p->???
+JAL	800FE220
+OR	A0,V0,R0	;A0=V0: p->result
+JAL	800D6A44
+LW	A0,001C (SP)	;A0=SP+1C: p->???
+BEQ	R0,R0,800D50F8	;return
+LW	RA,0014 (SP)
+//800D50EC:	blindly copy if clock not detected
+JAL	800D5D6C
+ADDIU	A1,A1,6FBC	;A1=80136FBC: p->source
+//800D50F4:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+800D6A10	V0=p->???
+ADDIU	SP,SP,FFE0
+SW	RA,0014 (SP)
+LUI	A0,8011
+LW	A0,F3F0 (A0)	;A0=8010F3F0: p->???
+ADDIU	A1,SP,001C	;A1=SP+1C: &target
+ADDIU	A2,R0,0001	;A2=1
+JAL	8002DFA0
+ADDIU	A0,A0,004C	;A0+=4C: 
+LW	V0,001C (SP)	;V0=SP+1C: p->???
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+800D6A44
+	accepts: A0=p->???
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+OR	A1,A0,R0	;A1=A0: p->???
+LUI	A0,8011
+LW	A0,F3F0 (A0)	;A0=8010F3F0: 
+ADDIU	A2,R0,0001	;A2=1
+JAL	8002DB20
+ADDIU	A0,A0,004C	;A0+=4C: 
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+800FE220
+
+
+
+8025915C	displays random "It's YOU! OMG XOXOXO" lines
+802592DC	displays appropriate Crazy Redd line
+
+80273814	displays text for load errors
+	accepts: A0=unused
+ADDIU	SP,SP,FFE8
+SW	RA,0014 (SP)
+SW	A0,0018 (SP)	;A0->[SP+0]
+LUI	T6,8013
+LBU	T6,791C (T6)	;T6=8013791C: error type
+ADDIU	A0,R0,09D1	;A0=09D1: corrupt town error dialog
+BNEZ	T6,8027383C	;branch if error nonzero
+NOP
+BEQ	R0,R0,8027383C	;error 0: no clock
+ADDIU	A0,R0,09CC	;A0=09CC: no clock error dialog
+//8027383C:
+JAL	8007B5C0	;set string A0
+NOP
+JAL	8007BA1C
+ADDIU	A0,R0,0001
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0018
+JR	RA
+NOP
+
+8028E2A0	display train message appropriately: 7DD:"Welcome new arrival", 966:"Welcome home", 965:"have a nice trip"
+8028E390	display train message appropriately: 831:"Hope you enjoy life here", 7ED:"train isn't leaving for a while", 943:"planning a trip", 95C:"leaving already?"
+8029B9AC	136B: "This statue was erected in blah's honor"
+802CB76C	set by 802CB6A0...
+803B2064	17AE:"love to pick it up" or 17AD:"want to pick it up" if 80136EA1=0
+803BADF4	17B3:"bury it" or 17B2:"drop it" if 80136EA1=0
+803BEA1C	A2C:"caught blah insect" or A4E:"SWEET! finally caught that boom, completing..."
+803C136C	1327:"caught blah fish" or 1349:"finally caught blah, meanning..."
+803C4ABC	17AF:"dug up a blah"
+803CC9F0	17B4:"stung by a bee"
+803CE7DC	17B7:"paid loan" or 17B6:"finished working" if 8013767F=0
+803CEBCC	2B6A:"famicom can't read software"

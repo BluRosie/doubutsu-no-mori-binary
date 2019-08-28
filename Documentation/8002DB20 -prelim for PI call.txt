@@ -1,0 +1,145 @@
+8002DB20	0x	???
+	called via 80026A64
+//8002DB20:
+ADDIU	SP,SP,FFC8
+SW	RA,0024 (SP)
+SW	A0,0038 (SP)	;A0=8003FF60: ???
+SW	A1,003C (SP)	;data on stack: codeword, target, len, ?, 0x364
+SW	A2,0040 (SP)	;A2=1
+SW	S2,0020 (SP)
+SW	S1,001C (SP)
+JAL	80036ED0		;set interrupt expectant; V0=status
+SW	S0,0018 (SP)	;same as A1
+//8002DB44:	
+LW	T6,0038 (SP)	;T6=8003FF60
+OR	S0,V0,R0		;in most cases this will be 1
+LW	T7,0008 (T6)	[0]
+LW	T8,0010 (T6)	[20]
+SLT	AT,T7,T8
+BNEZ	AT,8002DBBC	;likes it when T7<T8 - seems like a range
+NOP	
+//8002DB60:	if it isn't though...
+LW	T9,0040 (SP)
+ADDIU	AT,R0,0001
+BNE	T9,AT,8002DB94
+NOP	
+LUI	T1,8004
+LW	T1,CE30 (T1)
+ADDIU	T0,R0,0008
+SH	T0,0010 (T1)
+LW	A0,0038 (SP)
+JAL	8002F194
+ADDIU	A0,A0,0004
+BEQ	R0,R0,8002DBA4
+NOP
+//8002DB94:	
+JAL	80036F40
+OR	A0,S0,R0
+BEQ	R0,R0,8002DC54
+ADDIU	V0,R0,FFFF
+//8002DBA4:	
+LW	T2,0038 (SP)
+LW	T3,0008 (T2)
+LW	T4,0010 (T2)
+SLT	AT,T3,T4
+BEQ	AT,R0,8002DB60
+NOP
+//8002DBBC:	@
+LW	T5,0038 (SP)	;T5=8003FF60
+LW	T0,003C (SP)	;T0=data on stack [80147800]
+LW	T6,000C (T5)	;offset to actual start of text - 8003FF6C [2]
+LW	T7,0008 (T5)	;start of text - 8003FF68 [0]
+LW	T9,0010 (T5)	;length of string to pull? - 8003FF70 [20]
+LW	T1,0014 (T5)	;??? - p->following pointer clump [8003FF78]
+ADDU	T8,T6,T7		;T8=read from here yo
+DIV	T8,T9		;'start'%length?
+MFHI	S1
+SLL	T2,S1,0x2	;T2=convert to word offset
+ADDU	T3,T1,T2		;T3=[8003FF78]+offset
+SW	T0,0000 (T3)	;store data pointer here [8003FF80]
+LW	T4,0038 (SP)	;T4=8003FF60
+BNEZ	T9,8002DBFC	;better be valid!
+NOP
+BREAK
+//8002DBFC:	
+ADDIU	AT,R0,FFFF
+BNE	T9,AT,8002DC14	;can't be -1 or 0
+LUI	AT,8000
+BNE	T8,AT,8002DC14	;uhm, this test would always fail...
+NOP
+BREAK
+//8002DC14:	
+LW	T6,0008 (T4)
+ADDIU	T7,T6,0001
+SW	T7,0008 (T4)	;8003FF68++
+LW	T8,0038 (SP)	;T8=8003FF60
+LW	T9,0000 (T8)	;T9=[8003FFF8]
+LW	T5,0000 (T9)	;T5=end of current memblock [8003CE30]
+BEQ	T5,R0,8002DC48	;only follow these two jumps with a valid pointer
+NOP
+JAL	8002F2DC		;advance to next data block
+	LW	V0,0000 (A0)	;V0=8003FF60: [8003FFF8]
+	LW	T9,0000 (V0)	;T9=[8003CE20]
+	JR	RA
+	SW	T9,0000 (A0)	;[8003CE20]->8003FF60
+OR	A0,T8,R0
+OR	S2,V0,R0		;S2=[8003FFF8]
+JAL	8003ABD0
+OR	A0,S2,R0
+//8002DC48:	
+JAL	80036F40		;twiddle the status flag; A0=flags, fry T0
+	MFC0	T0,Status
+	OR	T0,T0,A0
+	MTC0	T0,Status
+	NOP
+	NOP
+	JR	RA
+	NOP
+OR	A0,S0,R0
+OR	V0,R0,R0
+//8002DC54:	
+LW	RA,0024 (SP)
+LW	S0,0018 (SP)
+LW	S1,001C (SP)
+LW	S2,0020 (SP)
+JR	RA
+ADDIU	SP,SP,0038
+
++-+
+
+80036ED0:	0x	twiddle status of processor to clear
+LUI	T2,8004
+ADDIU	T2,T2,CE70	;T2=8003CE70
+LW	T3,0000 (T2)	;T3=copy of status
+ANDI	T3,T3,FF00	;in particular, the exception flags
+MFC0	T0,Status	;T0=current status
+ADDIU	AT,R0,FFFE
+AND	T1,T0,AT		;T1=unset bit 1
+MTC0	T1,Status	;send it home
+ANDI	V0,T0,0001	;V0=test if flag was set
+LW	T0,0000 (T2)
+ANDI	T0,T0,FF00	;T0=those flags again
+BEQ	T0,T3,80036F38	;quit if any set
+LUI	T2,8004
+//80036F04:	in the case none are set...
+LUI	T2,8004
+ADDIU	T2,T2,CE30
+LW	T1,0118 (T2)
+ANDI	T2,T1,FF00
+AND	T2,T2,T0
+LUI	AT,FFFF
+ORI	AT,AT,00FF
+AND	T1,T1,AT
+OR	T1,T1,AT
+OR	T1,T1,T2
+ADDIU	AT,R0,FFFE
+AND	T1,T1,AT
+MTC0	T1,Status
+NOP
+NOP
+//80036F38	quit!
+JR	RA
+NOP
+
++-+
+

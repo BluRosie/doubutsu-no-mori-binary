@@ -1,0 +1,1092 @@
+PIF command 6 appears to be a sort of status command.
+device type is 1000	(as in 4000: 16keeprom)
+
+error returns:
+	01	device not present
+	04	I/O error
+	0B	wrong device (not RTC)
+	10	device busy
+	11	(status&1)
+	12	(status&1; status&2)
+	13	(status&3)
+
+Formats:	all used on channel 5
+RTC status	01.03:06;dddd.ss
+RTC read	02.09:07.A0;dddddddddddddddd.ss
+RTC write	0A.01:08.A0.A1A1A1A1A1A1A1A1;ss
+
+specificly:
+RTC Status	returns status of RTC clock; identical to other status types
+	0x0	1	1: write
+	0x1	1	3: read
+	0x2	1	6: command
+	0x3	2	device type, byteswapped; should read 1000 (just as 16k eeprom reads 4000)
+	0x5	1	status; &1 concidered an error, &80 busy
+
+RTC read	reads 8 bytes from clock component
+	0x0	1	2: write
+	0x1	1	9: read
+	0x2	1	7: command
+	0x3	1	RTC time component # (0-2)
+	0x4	8	reserved for data
+	0xC	1	status; &1 concidered an error, &80 busy
+
+RTC write	writes 8 bytes to clock component
+	0x0	1	A: write
+	0x1	1	1: read
+	0x2	1	8: command
+	0x3	1	RTC time component # (0-2)
+	0x4	8	data
+	0xC	1	status; &1 concidered an error, &80 busy
+
+About the clock:
+Component 0: some kind of status register
+	0x0	1	bitflags
+		01	component 1 read-only
+		02	component 2 read-only
+	0x1	1	bitflags
+		02	unknown.  0x6 usually disabled when time accessed
+		04	disable clock?
+  
+Component 2:	all values are stored as decimal numerals, not hex!
+	0x0	1	seconds
+	0x1	1	minutes
+	0x2	1	hours
+	0x3	1	day of month
+	0x4	1	day of week
+	0x5	1	month
+	0x6	1	years: decades and individual
+	0x7	1	years: century; 0 is 1900's, 1 is 2000's, etc
+
++_+
+
+800FE220	+AC7A0	write time from RTC to A1
+	accepts: A0=p->???, A1=p->time
+ADDIU	SP,SP,FFD0
+SW	RA,0014 (SP)
+SW	A0,0030 (SP)	;SP+30=A0: p->???
+SW	A1,0034 (SP)	;SP+34=A1: p->time target
+LW	A0,0030 (SP)
+JAL	800FE480	;set RTC status to A1
+ADDIU	A1,SP,001F	;A1=SP+1F: @status
+SW	V0,0018 (SP)	;SP+18=V0: errors
+LW	T6,0018 (SP)	;T6=errors
+BNE	T6,R0,800FE3F4	;branch if error occurred
+NOP
+//800FE24C:	retrieve time from component 2
+LW	A0,0030 (SP)
+ADDIU	A1,R0,0002	;A1=component 2: time
+JAL	800FEE10	;read data from RTC component to A2
+ADDIU	A2,SP,0020	;A2=SP+20: p->target
+SW	V0,0018 (SP)	;V0->SP+18: errors
+LW	T7,0018 (SP)
+BNE	T7,R0,800FE3F4	;branch if error occurred
+NOP
+//800FE25C:	retrieve time again from component 2
+LW	A0,0030 (SP)
+ADDIU	A1,R0,0002	;A1=component 2: time
+JAL	800FEE10	;read data from RTC component to A2
+ADDIU	A2,SP,0028	;A2=SP+28: p->target
+SW	V0,0018 (SP)	;V0->SP+18: errors
+ADDIU	A0,SP,0020	;A0=SP+20: p->time.1
+ADDIU	A1,SP,0028	;A1=SP+28: p->time.2
+JAL	80035B20	;V0=TRUE if A0 and A1 differ
+ADDIU	A2,R0,0008	;A2=8
+BEQ	V0,R0,800FE2AC	;branch if they match
+NOP
+//800FE298:	if the clock is obviously running, grab it +again+
+LW	A0,0030 (SP)
+ADDIU	A1,R0,0002	;A1=component 2: time
+JAL	800FEE10	;read data from RTC component to A2
+ADDIU	A2,SP,0028	;A2=SP+28: p->target
+SW	V0,0018 (SP)	;SP+18=V0: errors
+//800FE2AC:	convert decimal seconds to hex
+ADDIU	T8,SP,0028	;T8=p->time
+LBU	T9,0000 (T8)	;T9=time[0]: seconds
+LW	T4,0034 (SP)	;T4=SP+38: p->target
+SRA	T0,T9,0x4	;T0=byte/10
+SLL	T1,T0,0x2
+ADDU	T1,T1,T0
+SLL	T1,T1,0x1	;T1=(byte/10)*A
+ANDI	T2,T9,000F	;T2=byte&F
+ADDU	T3,T1,T2	;T3=tens + ones
+SB	T3,0000 (T4)	;T3->target[0]: save seconds
+//800FE2D4:	convert decimal minutes to hex
+ADDIU	T5,SP,0028
+LBU	T6,0001 (T5)	;T6=time[1]: minutes
+LW	T1,0034 (SP)
+SRA	T7,T6,0x4
+SLL	T8,T7,0x2
+ADDU	T8,T8,T7
+SLL	T8,T8,0x1
+ANDI	T0,T6,000F
+ADDU	T9,T8,T0
+SB	T9,0001 (T1)	;T9->target[1]: minutes
+//800FE2FC:	convert decimal hours to hex
+ADDIU	T2,SP,0028
+LBU	T3,0002 (T2)	;T3=time[2]: hours
+LW	T0,0034 (SP)
+ADDIU	T4,T3,FF80
+SRA	T5,T4,0x4
+SLL	T7,T5,0x2
+ADDU	T7,T7,T5
+SLL	T7,T7,0x1
+ANDI	T6,T4,000F
+ADDU	T8,T7,T6
+SB	T8,0002 (T0)	;T8->target[2]: hours
+//800FE328:	convert decimal day of month to hex
+ADDIU	T9,SP,0028
+LBU	T1,0003 (T9)	;T1=time[3]: day of month
+LW	T7,0034 (SP)
+SRA	T2,T1,0x4
+SLL	T3,T2,0x2
+ADDU	T3,T3,T2
+SLL	T3,T3,0x1
+ANDI	T5,T1,000F
+ADDU	T4,T3,T5
+SB	T4,0003 (T7)	;T4->target[3]: day of month
+//800FE350:	copy day of week
+ADDIU	T6,SP,0028
+LBU	T8,0004 (T6)	;T8=time[4]: day of week
+LW	T0,0034 (SP)
+SB	T8,0004 (T0)	;T8->target[4]: day of week
+//800FE360:	convert decimal month to hex
+ADDIU	T9,SP,0028
+LBU	T2,0005 (T9)	;T2=time[5]: month
+LW	T7,0034 (SP)
+SRA	T1,T2,0x4
+SLL	T3,T1,0x2
+ADDU	T3,T3,T1
+SLL	T3,T3,0x1
+ANDI	T5,T2,000F
+ADDU	T4,T3,T5
+SB	T4,0005 (T7)	;T4->target[5]: month
+//800FE388:	convert decimal year to hex
+ADDIU	T6,SP,0028
+LBU	T8,0007 (T6)	;T8=time[7]: 
+BEQ	T8,R0,800FE3C8	;branch if the 1900's
+NOP
+ADDIU	T0,SP,0028
+LBU	T9,0006 (T0)	;T9=time[6]: decade+year
+LW	T7,0034 (SP)
+SRA	T1,T9,0x4
+SLL	T2,T1,0x2
+ADDU	T2,T2,T1
+SLL	T2,T2,0x1
+ANDI	T3,T9,000F
+ADDU	T5,T2,T3
+ADDIU	T4,T5,07D0	;T4=T5+2000: tack on the right century
+BEQ	R0,R0,800FE3F4
+SH	T4,0006 (T7)	;T4->target[6]: year
+//800FE3C8:	handle the 1900's
+ADDIU	T6,SP,0028
+LBU	T8,0006 (T6)	;T8=time[6]: decade+year
+LW	T5,0034 (SP)
+SRA	T0,T8,0x4
+SLL	T1,T0,0x2
+ADDU	T1,T1,T0
+SLL	T1,T1,0x1
+ANDI	T9,T8,000F
+ADDU	T2,T1,T9
+ADDIU	T3,T2,076C	;T3=T2+1900: tack on the right century
+SH	T3,0006 (T5)	;T3->target[6]: year
+//800FE3F4:	grab error return
+BEQ	R0,R0,800FE404
+LW	V0,0018 (SP)	;V0=SP+18: errors
+//800FE3FC:	branch to code immediately following
+BEQ	R0,R0,800FE404
+NOP
+//800FE404:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0030
+JR	RA
+NOP
+
+800FE420	+AC9A0	if present, copies RTC component 1 to A1; V0=errors
+	accepts: A0=, A1=p->target
+ADDIU	SP,SP,FFE0
+SW	RA,0014 (SP)
+SW	A0,0020 (SP)	;SP+20=A0: 
+SW	A1,0024 (SP)	;SP+24=A1: p->target
+LW	A0,0020 (SP)
+JAL	800FE480	;set RTC status to A1
+ADDIU	A1,SP,001F	;A1=SP+1F: @status
+SW	V0,0018 (SP)	;SP+18=V0: errors
+LW	T6,0018 (SP)	;T6=errors
+BNE	T6,R0,800FE460	;return error code if something grumpy happened
+NOP
+//800FE44C:	if present, read RTC
+LW	A0,0020 (SP)	;A0=[A0 f/caller]: 
+ADDIU	A1,R0,0001	;A1=1
+JAL	800FEE10	;read data from RTC component to A2
+LW	A2,0024 (SP)	;A2=[A1 f/caller]: p->target
+SW	V0,0018 (SP)	;SP+18=V0: 
+//800FE460:	return error
+BEQ	R0,R0,800FE470
+LW	V0,0018 (SP)	;V0=SP+18: errors
+//800FE468:	branches to code immediately following
+BEQ	R0,R0,800FE470
+NOP
+//800FE470:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0020
+JR	RA
+NOP
+
+800FE480	+ACA00	set RTC status to A1; read/write PIFcmd 6 to channel 5
+	accepts: A0=, A1=@status
+ADDIU	SP,SP,FFD0
+SW	RA,0014 (SP)
+SW	A0,0030 (SP)	;SP+30=A0: 
+SW	A1,0034 (SP)	;SP+34=A1: 
+SW	R0,002C (SP)	;SP+2C=0
+JAL	8002F890
+NOP
+ADDIU	T6,R0,0001
+LUI	AT,8004
+SW	T6,467C (AT)	;1->8004467C: read PIFram
+LUI	T7,8004
+ADDIU	T7,T7,4640
+SW	T7,0024 (SP)	;SP+24=80044640: p->PIFbuffer
+SW	R0,0028 (SP)	;SP+28=0: init.count
+//800FE4B8:	ignore first four channels
+LW	T8,0024 (SP)	;T8=p->PIFbuffer
+SB	R0,0000 (T8)	;0->PIFbuffer[x]: ignore channel x
+LW	T9,0024 (SP)	;T9=p->PIFbuffer.cur
+ADDIU	T0,T9,0001	;T0=T9+1: p->PIFbuffer[x+1]
+SW	T0,0024 (SP)	;update PIFbuffer.cur
+LW	T1,0028 (SP)	;T1=SP+28: count
+ADDIU	T2,T1,0001	;T2=count+1
+SLTI	AT,T2,0004
+BNE	AT,R0,800FE4B8	;loop four times
+SW	T2,0028 (SP)	;update count
+//800FE4E0:	write PIFcmd 6 to channel 5
+ADDIU	T3,R0,0001
+SB	T3,001C (SP)	;SP+1C=1: #sent
+ADDIU	T4,R0,0003
+SB	T4,001D (SP)	;SP+1D=3: #read
+ADDIU	T5,R0,0006
+SB	T5,001E (SP)	;SP+1E=6: cmd#
+ADDIU	T7,SP,001C	;T7=SP+1C: p->buffer
+LW	AT,0000 (T7)	;AT=cmd f/ buffer
+LW	T6,0024 (SP)	;T6=p->PIFbuffer.cur
+SWL	AT,0000 (T6)
+SWR	AT,0003 (T6)	;AT->PIFbuffer
+LBU	AT,0004 (T7)	;AT=@SP+20: data+1
+SB	AT,0004 (T6)	;AT->PIFbuffer+4
+LBU	T0,0005 (T7)	;T0=@SP+21: data+2
+SB	T0,0005 (T6)	;AT->PIFbuffer+5
+LW	T1,0024 (SP)	;T1=p->PIFbuffer.cur
+ADDIU	T2,T1,0006	;T2=T1+6: update PIFbuffer for cmd.size
+SW	T2,0024 (SP)	;update PIFbuffer
+LW	T4,0024 (SP)	;T4=p->PIFbuffer.cur
+ADDIU	T3,R0,00FE	;T3=FE: PIFcmd:end
+SB	T3,0000 (T4)	;set end command
+//800FE534:	write contents of buffer to PIFram
+LUI	A1,8004
+ADDIU	A1,A1,4640	;A1=80044640: p->PIFbuffer
+JAL	800305B0	;PIF I/O; V0=nonzero if error
+ADDIU	A0,R0,0001	;A0=1: write
+SW	V0,002C (SP)	;SP+2C=errorlevel
+LW	A0,0030 (SP)	;A0=SP+30: 
+OR	A1,R0,R0	;A1=0
+JAL	8002DFA0
+ADDIU	A2,R0,0001	;A2=1
+ADDIU	T5,R0,0006
+LUI	AT,8004
+SB	T5,1A90 (AT)	;6->80041A90: 
+//800FE564:	read result back from PIF
+LUI	A1,8004
+ADDIU	A1,A1,4640	;A1=80044640: p->PIFbuffer
+JAL	800305B0	;PIF I/O; V0=nonzero if error
+OR	A0,R0,R0	;A0=0: read
+SW	V0,002C (SP)	;SP+2C=errorlevel
+LW	A0,0030 (SP)	;A0=SP+30: 
+OR	A1,R0,R0	;A1=0
+JAL	8002DFA0
+ADDIU	A2,R0,0001	;A2=1
+//800FE588:	copy command from PIFbuffer to stack
+LUI	T9,8004
+ADDIU	T9,T9,4640	;T9=80044640: p->PIFbuffer
+ADDIU	T8,T9,0004	;T8=T9+4: p->PIFbuffer.ch5
+SW	T8,0024 (SP)	;SP+24=T8: p->PIFbuffer.ch5
+LW	T7,0024 (SP)	;T7=p->PIFbuffer.ch5
+ADDIU	T6,SP,001C	;T6=SP+1C: p->channel 5 copy
+LWL	AT,0000 (T7)
+LWR	AT,0003 (T7)	;AT=PIFbuffer.ch5[0-3]
+SW	AT,0000 (T6)
+LBU	AT,0004 (T7)	;AT=PIFbuffer.ch5[4]
+SB	AT,0004 (T6)
+LBU	T2,0005 (T7)	;T2=PIFbuffer.ch5[5]
+SB	T2,0005 (T6)	;T2->SP+1C buffer
+//800FE5BC:	check device status
+LBU	T3,001D (SP)	;T3=cmd.r
+ANDI	T4,T3,00C0	;T4=status & C0
+ANDI	T5,T4,00FF	;T5=error flags->byte
+SW	T5,002C (SP)	;SP+2C=T5: PIF.err
+LW	T9,002C (SP)	;T9=PIF.err
+BNE	T9,R0,800FE618	;branch if not present (80) or I/O error (40)
+NOP
+//800FE5D8:	detect device type
+LBU	T8,0020 (SP)	;T8=SP+20: data[1]
+LBU	T0,001F (SP)	;T0=SP+1F: data[0]
+SLL	T1,T8,0x8	;T1=T8*100
+OR	T6,T1,T0	;T6=[T8|T0]: data, byteswapped
+ANDI	T7,T6,FFFF	;T7=data->short
+ANDI	T2,T7,1000
+BNE	T2,R0,800FE604	;if type 1000, grab the state
+NOP
+ADDIU	T3,R0,000B
+BEQ	R0,R0,800FE610
+SW	T3,002C (SP)	;B->SP+2C: wrong device
+//800FE604:	save state to [A1] f/ caller
+LBU	T4,0021 (SP)	;T4=data[2]: state?
+LW	T5,0034 (SP)	;T5=SP+34: [A1 f/caller]
+SB	T4,0000 (T5)	;state->[A1]
+//800FE610:
+BEQ	R0,R0,800FE63C
+NOP
+//800FE618:	determine type of error
+LW	T9,002C (SP)	;T9=SP+2C: PIF.err
+ANDI	T8,T9,0080	;T8= nonzero if device not present
+BEQ	T8,R0,800FE634	;branch if device present
+NOP
+ADDIU	T1,R0,0001
+BEQ	R0,R0,800FE63C
+SW	T1,002C (SP)	;1->SP+2C: I/O error
+//800FE634:	device not present error code
+ADDIU	T0,R0,0004
+SW	T0,002C (SP)	;4->SP+2C: no device
+//800FE63C:
+JAL	8002F8D4
+NOP
+BEQ	R0,R0,800FE654
+LW	V0,002C (SP)	;V0=SP+2C: return value
+//800FE64C:	unused redirect to code immediately following...
+BEQ	R0,R0,800FE654
+NOP
+//800FE654:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0030
+JR	RA
+NOP
+
+800FE670	+ACBF0	convert and write time data A1 to RTC
+	accepts: A0=p->???, A1=p->date data
+ADDIU	SP,SP,FFD0
+SW	RA,0014 (SP)
+SW	A0,0030 (SP)	;SP+30=A0: p->???
+SW	A1,0034 (SP)	;SP+34=A1: 
+LW	A0,0030 (SP)	;A0=SP+30: 
+JAL	800FE480	;read RTC status to A1
+ADDIU	A1,SP,001F	;A1=SP+1F: p->resultant status
+SW	V0,0018 (SP)	;SP+18=V0: error return
+LW	T6,0018 (SP)	;T6=error code
+BNE	T6,R0,800FE8A8	;branch if error occurred
+NOP
+//800FE69C:	read RTC controller value
+LW	A0,0030 (SP)	;A0=SP+30: 
+OR	A1,R0,R0	;A1=0
+JAL	800FEE10	;read data from RTC component to A2
+ADDIU	A2,SP,0020	;A2=SP+20: p->target
+SW	V0,0018 (SP)	;SP+18=V0: errors
+LW	T7,0018 (SP)	;T7=errors
+BNE	T7,R0,800FE8A8	;branch if hardware error occurred
+NOP
+//800FE6BC:	allow altering time
+ADDIU	T8,SP,0020	;T8=SP+20: p->data
+LBU	T9,0000 (T8)	;T9=data[0]
+ADDIU	AT,R0,FFFD
+AND	T0,T9,AT	;T0=unset 0x2 flag in data[0]
+SB	T0,0000 (T8)	;update data[0]
+ADDIU	T1,SP,0020	;T1=SP+20: p->data
+LBU	T2,0001 (T1)	;T2=data[1]
+ORI	T3,T2,0004	;set 0x4 flag in data[1]
+SB	T3,0001 (T1)	;update data[1]
+LW	A0,0030 (SP)
+OR	A1,R0,R0	;A1=component 0
+JAL	800FE8D0	;write data A2 to RTC component A1
+ADDIU	A2,SP,0020	;A2=SP+20: p->data
+SW	V0,0018 (SP)	;SP+18=V0: errors
+LW	T4,0018 (SP)	;T4=errors
+ADDIU	AT,R0,0010
+BNE	T4,AT,800FE8A8	;branch if not busy
+NOP
+//800FE704:	convert seconds to decimal value
+LW	T5,0034 (SP)	;T5=SP+34: p->date
+ADDIU	AT,R0,000A
+ADDIU	T2,SP,0028	;T2=SP+28: p->data buffer
+LBU	T6,0000 (T5)	;T6=date+0: seconds
+DIV	T6,AT
+MFLO	T9
+SLL	T0,T9,0x4
+MFHI	T7
+ADDU	T8,T7,T0	;T8=seconds->decimal
+SB	T8,0000 (T2)	;T8->data+0: (dec.)seconds
+//800FE72C:	convert minutes to decimal value
+LW	T3,0034 (SP)	;T3=SP+34: p->date
+ADDIU	AT,R0,000A
+ADDIU	T7,SP,0028	;T7=SP+28: p->data
+LBU	T1,0001 (T3)	;T6=date+1: minutes
+DIV	T1,AT
+MFLO	T5
+SLL	T6,T5,0x4
+MFHI	T4
+ADDU	T9,T4,T6
+SB	T9,0001 (T7)	;T8->data+1: (dec.)minutes
+//800FE754:	convert hours to decimal value
+LW	T0,0034 (SP)	;T0=SP+34: p->date
+ADDIU	AT,R0,000A
+ADDIU	T4,SP,0028	;T4=SP+28: p->data
+LBU	T8,0002 (T0)	;T8=date+2: hours
+DIV	T8,AT
+MFLO	T3
+SLL	T1,T3,0x4
+MFHI	T2
+ADDU	T5,T2,T1
+SB	T5,0002 (T4)	;T5->data+2: (dec.)hours
+//800FE77C:	convert  to decimal value
+LW	T6,0034 (SP)	;T6=SP+34: p->date
+ADDIU	AT,R0,000A
+ADDIU	T2,SP,0028	;T2=SP+28: p->data
+LBU	T9,0003 (T6)	;T8=date+3: day of month
+DIV	T9,AT
+MFLO	T0
+SLL	T8,T0,0x4
+MFHI	T7
+ADDU	T3,T7,T8
+SB	T3,0003 (T2)	;T3->data+3: (dec.)
+//800FE7A4:	
+LW	T1,0034 (SP)	;T1=SP+34: p->date
+ADDIU	T4,SP,0028	;T4=SP+28: p->data
+LBU	T5,0004 (T1)	;T8=date+4: 
+SB	T5,0004 (T4)	;T5->data+4: (dec.)
+//800FE7B4:	convert month to decimal value
+LW	T6,0034 (SP)	;T6=SP+34: p->date
+ADDIU	AT,R0,000A
+ADDIU	T2,SP,0028	;T2=SP+28: p->data
+LBU	T9,0005 (T6)	;T8=date+5: 
+DIV	T9,AT
+MFLO	T7
+SLL	T8,T7,0x4
+MFHI	T0
+ADDU	T3,T0,T8
+SB	T3,0005 (T2)	;T3->data+5: (dec.)
+//800FE7DC:	convert year to decimal value
+LW	T1,0034 (SP)	;T1=SP+34: p->date
+ADDIU	AT,R0,000A
+ADDIU	T8,SP,0028	;T8=SP+28: p->data
+LHU	T5,0006 (T1)	;T8=date+6: 
+DIV	T5,AT
+MFHI	T4		;T4=year%10: ones place
+ADDIU	AT,R0,0064
+NOP
+DIV	T5,AT
+MFHI	T6		;T6=year%100: everything less than a century
+ADDIU	AT,R0,000A
+NOP
+DIV	T6,AT
+MFLO	T9		;T9=<century / 10: #decades
+SLL	T7,T9,0x4	;T7=T9->tens place
+ADDU	T0,T4,T7	;T0=tens+ones
+SB	T0,0006 (T8)	;T0->data+6: (dec.)year
+//800FE820:	test which century
+LW	T3,0034 (SP)	;T3=SP+34: p->date
+LHU	T2,0006 (T3)	;T2=date+6: year
+SLTI	AT,T2,07D0
+BNE	AT,R0,800FE844	;branch if year < 2000
+NOP
+ADDIU	T1,R0,0001
+ADDIU	T5,SP,0028	;T5=SP+28: p->data
+BEQ	R0,R0,800FE84C
+SB	T1,0007 (T5)	;1->data+7: 2000's
+//800FE844:	1900's are baseline
+ADDIU	T6,SP,0028	;T6=SP+28: p->data
+SB	R0,0007 (T6)	;0->data+7: 1900's
+//800FE84C:	write time to component 2
+LW	A0,0030 (SP)
+ADDIU	A1,R0,0002	;A2=component 2: time
+JAL	800FE8D0	;write data A2 to RTC component A1
+ADDIU	A2,SP,0028	;A2=SP+28: p->data
+SW	V0,0018 (SP)	;SP+18=V0: errors
+LW	T9,0018 (SP)	;T9=errors
+ADDIU	AT,R0,0010
+BNE	T9,AT,800FE8A8	;branch if not busy
+NOP
+//800FE870:	restore the component 0 status
+ADDIU	T4,SP,0020	;T4=SP+20: component 0 data
+LBU	T7,0000 (T4)	;T7=data[0]
+ORI	T0,T7,0002
+SB	T0,0000 (T4)	;set 0x2 flag in data[0]
+ADDIU	T8,SP,0020	;T8=SP+20: component 0 data
+LBU	T3,0001 (T8)	;T3=data[1]
+ADDIU	AT,R0,FFFB
+AND	T2,T3,AT	;unset 0x4 flag in data[1]
+SB	T2,0001 (T8)	;update data[1]
+LW	A0,0030 (SP)
+OR	A1,R0,R0	;A1=component 0
+JAL	800FE8D0	;write data A2 to RTC component A1
+ADDIU	A2,SP,0020	;A2=SP+20: p->data
+SW	V0,0018 (SP)	;SP+18=V0: errors
+BEQ	R0,R0,800FE8B8
+LW	V0,0018 (SP)	;V0=errors
+//800FE8B0:	branch to code immediately following this...
+BEQ	R0,R0,800FE8B8
+NOP
+//800FE8B8:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0030
+JR	RA
+NOP
+
+800FE8D0	+ACE50	write data A2 to RTC component A1
+	accepts: A0=, A1=time component, A2=p->RTC data
+ADDIU	SP,SP,FFC0
+SW	RA,0024 (SP)
+SW	A0,0040 (SP)
+SW	A1,0044 (SP)
+SW	A2,0048 (SP)
+JAL	8002F890
+NOP
+//800FE8EC:	generate PIF 8 command
+LBU	A0,0047 (SP)	;A0=SP+47: component#
+JAL	800FEABC	;set PIF command 8 to PIFbuffer; set RTC component A0 to A1
+LW	A1,0048 (SP)	;A1=SP+48: p->data
+//800FE8F8:	write to PIFram
+LUI	A1,8004
+ADDIU	A1,A1,4640	;A1=80044640: p->PIFbuffer
+JAL	800305B0	;PIF I/O; V0=nonzero if error
+ADDIU	A0,R0,0001	;A0=1: write
+SW	V0,003C (SP)	;SP+3C=V0: errors
+ADDIU	T6,R0,0008
+LUI	AT,8004
+SB	T6,1A90 (AT)	;8->80041A90: set previous PIF cmd to 8
+LW	A0,0040 (SP)
+OR	A1,R0,R0
+JAL	8002DFA0
+ADDIU	A2,R0,0001
+//800FE928:	read result back
+LUI	A1,8004
+ADDIU	A1,A1,4640	;A1=80044640: p->PIFbuffer
+JAL	800305B0	;PIF I/O; V0=nonzero if error
+OR	A0,R0,R0	;A0=0: read
+SW	V0,003C (SP)	;SP+3C=V0: errors
+LUI	T7,8004
+ADDIU	T7,T7,4640	;T7=80044640: p->PIFbuffer
+ADDIU	T8,T7,0004	;T8=T7+4: p->PIFbuffer.ch5
+SW	T8,0038 (SP)	;SP+38=p->PIFbuffer.ch5
+LW	A0,0040 (SP)
+OR	A1,R0,R0
+JAL	8002DFA0
+ADDIU	A2,R0,0001
+//800FE95C:	copy data from PIF to stack
+LW	T0,0038 (SP)	;T0=p->PIFbuffer.ch5
+ADDIU	T9,SP,0028	;T9=SP+28: p->temp
+LWL	AT,0000 (T0)
+LWR	AT,0003 (T0)
+SW	AT,0000 (T9)
+LWL	T3,0004 (T0)
+LWR	T3,0007 (T0)
+SW	T3,0004 (T9)
+LWL	AT,0008 (T0)
+LWR	AT,000B (T0)
+SW	AT,0008 (T9)
+LBU	AT,000C (T0)
+SB	AT,000C (T9)
+//800FE990:	check for hardware errors
+LBU	T4,0029 (SP)	;T4=SP+29: cmd.r
+ANDI	T5,T4,00C0	;T5=cmd.r&C0: nonzero if hardware error occurred
+SRA	T6,T5,0x4	;T6=cmd.err/40: err
+SW	T6,003C (SP)	;SP+3C=errors
+JAL	8002F8D4
+NOP
+//800FE9A8:	allocate memory?
+LUI	T7,8015
+LUI	T2,8015
+ADDIU	T2,T2,24B8	;T2=801524B8
+ADDIU	T7,T7,24A0	;T7=801524A0
+LUI	A0,8015
+ADDIU	T8,R0,0000
+ADDIU	T9,R0,0000
+SW	T9,0014 (SP)	;SP+14=0
+SW	T8,0010 (SP)	;SP+10=0
+ADDIU	A0,A0,2480	;A0=80152480: 
+SW	T7,0018 (SP)	;SP+18=801524A0: 
+SW	T2,001C (SP)	;SP+1C=801524B8: 
+ADDIU	A2,R0,0000	;A2=0
+JAL	800396B0
+ADDIU	A3,R0,36EE	;A3=36EE
+//800FE9E4:	set memory allocation header, I think...
+LUI	A0,8015
+ADDIU	A0,A0,24A0	;A0=801524A0: 
+OR	A1,R0,R0	;A1=0
+JAL	8002DFA0
+ADDIU	A2,R0,0001	;A2=1
+//800FE9F8:	
+LW	T1,003C (SP)	;T1=SP+3C: errors
+BNE	T1,R0,800FEA70	;branch if error occurred
+NOP
+ADDIU	A0,SP,0028	;A0=SP+28: p->PIFbuffer.ch5
+ADDIU	A0,A0,0004	;A0+=4: p->PIFbuffer.ch5.data
+LW	A1,0048 (SP)	;A1=SP+48: [A2 f/caller] - p->target
+JAL	800360E0	;copy A2 bytes from source A0 to target A1
+ADDIU	A2,R0,0008	;A2=strlen 8
+LBU	T0,0034 (SP)	;T0=SP+34: status byte
+ANDI	T3,T0,0001
+BEQ	T3,R0,800FEA34	;branch if 1 flag not set
+NOP
+ADDIU	T4,R0,0011
+BEQ	R0,R0,800FEA68
+SW	T4,003C (SP)	;11->SP+3C: 
+//800FEA34:	test if again for good measure
+LBU	T5,0034 (SP)	;T5=SP+34: status byte
+ANDI	T6,T5,0001
+BEQ	T6,R0,800FEA50	;branch if still not set
+NOP
+ADDIU	T8,R0,0012
+BEQ	R0,R0,800FEA68
+SW	T8,003C (SP)	;12->SP+3C: 
+//800FEA50:
+LBU	T9,0034 (SP)	;T9=SP+34: status byte
+ANDI	T7,T9,0080
+BEQ	T7,R0,800FEA68	;branch if not busy
+NOP
+ADDIU	T2,R0,0010
+SW	T2,003C (SP)	;10->SP+3C: device busy
+//800FEA68:
+BEQ	R0,R0,800FEA94
+NOP
+//800FEA70:	determine type of hardware error
+LW	T1,003C (SP)	;T1=SP+3C: errors
+ANDI	T0,T1,0080
+BEQ	T0,R0,800FEA8C	;branch if device present
+NOP
+ADDIU	T3,R0,0001
+BEQ	R0,R0,800FEA94
+SW	T3,003C (SP)	;1->SP+3C: device not present
+//800FEA8C:	assume I/O error then
+ADDIU	T4,R0,0004
+SW	T4,003C (SP)	;4->SP+3C: I/O error
+//800FEA94:
+JAL	8002F8D4
+NOP
+BEQ	R0,R0,800FEAAC
+LW	V0,003C (SP)	;V0=SP+3C: errors
+//800FEAA4:	extroneous branch to code immediately following
+BEQ	R0,R0,800FEAAC
+NOP
+//800FEAAC:	return
+LW	RA,0024 (SP)
+ADDIU	SP,SP,0040
+JR	RA
+NOP
+
+800FEABC	+AD03C	set PIF command 8 to PIFbuffer; set RTC component A0 to A1
+	accepts: A0=time component#, A1=p->data
+ADDIU	SP,SP,FFE8
+ANDI	A0,A0,00FF	;A0->byte
+LUI	T6,8004
+ADDIU	T6,T6,4640	;T6=80044640: p->PIFbuffer
+SW	T6,0010 (SP)	;SP+10=T6: p->PIFbuffer
+SW	R0,0014 (SP)	;SP+14=0: init.count
+//800FEAD4:	initialize PIFram buffer
+LW	T8,0014 (SP)	;T8=count
+LUI	AT,8004
+ADDIU	T7,R0,00FF
+SLL	T9,T8,0x2	;T9=count->offset
+ADDU	AT,AT,T9
+SW	T7,4640 (AT)	;000000FF->80044640+offset: initialize values
+LW	T0,0014 (SP)	;T0=count
+ADDIU	T1,T0,0001	;T1=count+1
+SLTI	AT,T1,000F
+BNE	AT,R0,800FEAD4	;loop 15 times
+SW	T1,0014 (SP)	;update count
+//800FEB00:	this executes PIFram processing
+ADDIU	T2,R0,0001
+LUI	AT,8004
+SW	T2,467C (AT)	;1->8004467C: set PIFram read
+//800FEB0C:	write command 8 to stack
+ADDIU	T3,R0,000A
+SB	T3,0000 (SP)	; A->SP+0: cmd.w
+ADDIU	T4,R0,0001
+SB	T4,0001 (SP)	; 1->SP+1: cmd.r
+ADDIU	T5,R0,0008
+SB	T5,0002 (SP)	; 8->SP+2: cmd.c
+SB	A0,0003 (SP)	;A0->SP+3: cmd8.t
+SW	R0,0014 (SP)	;SP+14=0: init.count
+//800FEB2C:	copy 8 bytes of data to command
+LW	T8,0014 (SP)	;T8=count
+LBU	T6,0000 (A1)	;T6=A1+offset: time[x]
+ADDIU	A1,A1,0001	;A1++	time+1
+ADDU	T7,SP,T8
+SB	T6,0004 (T7)	;T6->data[x]
+LW	T9,0014 (SP)	;T9=count
+ADDIU	T0,T9,0001	;T0=count+1
+SLTI	AT,T0,0008
+BNE	AT,R0,800FEB2C	;loop 8 times
+SW	T0,0014 (SP)	;update count
+//800FEB54:	initialize count
+SW	R0,0014 (SP)	;SP+14=0: init.count
+//800FEB58:	ignore first four channels
+LW	T1,0010 (SP)	;T1=SP+10: p->PIFbuffer.cur
+SB	R0,0000 (T1)	;0->PIFbuffer.cur[x]: ignore channel x
+LW	T2,0010 (SP)	;T2=SP+10: p->PIFbuffer.cur
+ADDIU	T3,T2,0001	;T3=PIFbuffer+1
+SW	T3,0010 (SP)	;update p->PIFbuffer.cur
+LW	T4,0014 (SP)	;T4=SP+14: count
+ADDIU	T5,T4,0001	;T5=count+1
+SLTI	AT,T5,0004
+BNE	AT,R0,800FEB58	;loop four times
+SW	T5,0014 (SP)	;update count
+//800FEB80:	copy command from stack to buffer
+ADDIU	T8,SP,0000	;T8=SP+0: p->cmd
+LW	AT,0000 (T8)
+LW	T6,0010 (SP)	;T6=SP+10: p->PIFbuffer.cur
+SWL	AT,0000 (T6)
+SWR	AT,0003 (T6)
+LW	T9,0004 (T8)
+SWL	T9,0004 (T6)
+SWR	T9,0007 (T6)
+LW	AT,0008 (T8)
+SWL	AT,0008 (T6)
+SWR	AT,000B (T6)
+LBU	AT,000C (T8)
+SB	AT,000C (T6)
+LW	T0,0010 (SP)	;T0=SP+10: p->PIFbuffer.cur
+ADDIU	T1,T0,000D	;T1=T0+D: size of cmd
+SW	T1,0010 (SP)	;update p->PIFbuffer.cur
+LW	T3,0010 (SP)	;T3=SP+10: p->PIFbuffer.cur
+ADDIU	T2,R0,00FE	;T2=FE: END cmd
+SB	T2,0000 (T3)	;set END cmd
+BEQ	R0,R0,800FEBD4	;needlessly branch
+NOP
+//800FEBD4:	return
+JR	RA
+ADDIU	SP,SP,0018
+
+800FEBE0	+AD160	if present, set RTC component 1 to A1
+	accepts: A0=p->???, A1=p->component 1 data
+ADDIU	SP,SP,FFD8
+SW	RA,0014 (SP)
+SW	A0,0028 (SP)	;SP+28=A0: 
+SW	A1,002C (SP)	;SP+2C=A1: 
+LW	A0,0028 (SP)
+JAL	800FE480	;set RTC status to A1
+ADDIU	A1,SP,001B	;A1=SP+1B: @status
+SW	V0,0024 (SP)	;SP+24=V0: errors
+LW	T6,0024 (SP)	;T6=errors
+BNE	T6,R0,800FECA4	;branch if error occurred
+NOP
+//800FEC0C:	retrieve component 0
+LW	A0,0028 (SP)
+OR	A1,R0,R0	;A1=0
+JAL	800FEE10	;read data from RTC component to A2
+ADDIU	A2,SP,001C	;A2=SP+1C: p->target
+SW	V0,0024 (SP)	;SP+24=V0: errors
+LW	T7,0024 (SP)	;T7=errors
+BNE	T7,R0,800FECA4	;branch if error occurred
+NOP
+//800FEC2C:	allow editting block
+ADDIU	T8,SP,001C	;T8=SP+1C: p->data
+LBU	T9,0000 (T8)	;T9=data[0]
+ADDIU	AT,R0,FFFE
+AND	T0,T9,AT	;T0=unset data[0] 1 flag
+SB	T0,0000 (T8)	;update data[0]
+LW	A0,0028 (SP)
+OR	A1,R0,R0	;A1=component 0
+JAL	800FE8D0	;write data A2 to RTC component A1
+ADDIU	A2,SP,001C	;A2=SP+1C: p->data
+SW	V0,0024 (SP)	;V0=SP+24: errors
+LW	T1,0024 (SP)	;T1=errors
+BNE	T1,R0,800FECA4	;branch if error occurred
+NOP
+//800FEC60:	write @[A1] to component 1
+LW	A0,0028 (SP)
+ADDIU	A1,R0,0001	;A1=component 1
+JAL	800FE8D0	;write data A2 to RTC component A1
+LW	A2,002C (SP)	;A2=SP+2C: [A1 f/ caller]	data
+SW	V0,0024 (SP)	;SP+24=V0: errors
+LW	T2,0024 (SP)	;T2=errors
+BNE	T2,R0,800FECA4	;branch if error occurred
+NOP
+//800FEC80:	reset read-only status
+ADDIU	T3,SP,001C	;T3=SP+1C: p->data
+LBU	T4,0000 (T3)	;T9=data[0]
+ORI	T5,T4,0001
+SB	T5,0000 (T3)	;T0=set data[0] 1 flag
+LW	A0,0028 (SP)
+OR	A1,R0,R0	;A1=component 0
+JAL	800FE8D0	;write data A2 to RTC component A1
+ADDIU	A2,SP,001C	;A2=SP+1C: p->data
+SW	V0,0024 (SP)	;SP+24=V0: errors
+BEQ	R0,R0,800FECB4
+LW	V0,0024 (SP)	;V0=errors
+//800FECAC:	branch to code immediately following
+BEQ	R0,R0,800FECB4
+NOP
+//800FECB4:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0028
+JR	RA
+NOP
+
+800FECD0	+AD250	untoggles data[1]&6 in RTC controller if present
+	accepts: A0=p->???
+ADDIU	SP,SP,FFD8
+SW	RA,0014 (SP)
+SW	A0,0028 (SP)	;SP+28=A0: 
+LW	A0,0028 (SP)
+JAL	800FE480	;set RTC status to A1
+ADDIU	A1,SP,0023	;A1=SP+23: @status
+SW	V0,0024 (SP)	;SP+24=V0: errors
+LW	T6,0024 (SP)	;T6=errors
+BNE	T6,R0,800FEDE4	;branch if error occurred
+NOP
+//800FECF8:	allocate memory if it hasn't been done yet
+LUI	T7,8011
+LW	T7,60C0 (T7)	;T7=801160C0: 
+BNE	T7,R0,800FED2C	;branch if already initialized
+NOP
+LUI	A0,8015
+LUI	A1,8015
+ADDIU	A1,A1,24B8	;A1=801524B8: 
+ADDIU	A0,A0,24A0	;A0=801524A0: 
+JAL	80034D60
+ADDIU	A2,R0,0001	;A2=1
+ADDIU	T8,R0,0001
+LUI	AT,8011
+SW	T8,60C0 (AT)	;1->801160C0: 
+//800FED2C:	
+LBU	T9,0023 (SP)	;T9=status
+ANDI	T0,T9,0080
+BEQ	T0,R0,800FED90	;branch if not busy
+NOP
+LW	A0,0028 (SP)
+OR	A1,R0,R0	;A1=0
+JAL	800FEE10	;read data from RTC component to A2
+ADDIU	A2,SP,0018	;A2=SP+18: p->target
+SW	V0,0024 (SP)	;SP+24=V0: errors
+LW	T1,0024 (SP)	;T1=errors
+BEQ	T1,R0,800FED68	;branch if error-free
+NOP
+ADDIU	AT,R0,0010
+BNE	T1,AT,800FED90	;branch if error not 10: device busy
+NOP
+//800FED68:
+ADDIU	T2,SP,0018	;T2=SP+18: p->data
+LBU	T3,0001 (T2)	;T3=data[1]
+ADDIU	AT,R0,FFF9
+AND	T4,T3,AT	;unset 0x6 flags
+SB	T4,0001 (T2)	;update data[1]
+LW	A0,0028 (SP)
+OR	A1,R0,R0	;A1=component 0
+JAL	800FE8D0	;write data A2 to RTC component A1
+ADDIU	A2,SP,0018	;A2=SP+18: p->data
+SW	V0,0024 (SP)
+//800FED90:	check status for errors
+LBU	T5,0023 (SP)	;T5=status
+ANDI	T6,T5,0001
+BEQ	T6,R0,800FEDCC	;branch if &1 not set
+NOP
+LBU	T7,0023 (SP)	;T7=status
+ANDI	T8,T7,0002
+BEQ	T8,R0,800FEDBC	;branch if &2 not set
+NOP
+ADDIU	T9,R0,0013
+BEQ	R0,R0,800FEDC4
+SW	T9,0024 (SP)	;13->SP=24: 
+//800FEDBC:
+ADDIU	T0,R0,0011
+SW	T0,0024 (SP)	;11->SP+24: 
+//800FEDC4:	redirect toward return
+BEQ	R0,R0,800FEDE4
+NOP
+//800FEDCC:
+LBU	T1,0023 (SP)	;T1=status
+ANDI	T3,T1,0002
+BEQ	T3,R0,800FEDE4	;branch if status&2 not set
+NOP
+ADDIU	T4,R0,0012
+SW	T4,0024 (SP)	;12->SP+24: 
+//800FEDE4:	grab return value
+BEQ	R0,R0,800FEDF4
+LW	V0,0024 (SP)	;V0=SP+24: errors
+//800FEDEC:	branch to code immediately following
+BEQ	R0,R0,800FEDF4
+NOP
+//800FEDF4:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0028
+JR	RA
+NOP
+
+800FEE10	+AD390	copy RTC component A1 to pointer A2
+	accepts: A0=, A1=component#, A2=p->buffer for data
+ADDIU	SP,SP,FFD0
+SW	RA,0014 (SP)
+SW	A0,0030 (SP)	;SP+30=A0: 
+SW	A1,0034 (SP)	;SP+34=A1: value sent to PIF
+SW	A2,0038 (SP)	;SP+38=A2: p->string target
+JAL	8002F890
+NOP
+JAL	800FEF9C	;set PIF 7 command to PIFbuffer
+LBU	A0,0037 (SP)	;A0=SP+37: 
+//800FEE34:	write PIF 7 command
+ADDIU	T6,R0,0007
+LUI	AT,8004
+SB	T6,1A90 (AT)	;7->80041A90: previous PIF cmd
+LUI	A1,8004
+ADDIU	A1,A1,4640	;A1=80044640: p->PIFbuffer
+JAL	800305B0	;PIF I/O; V0=nonzero if error
+ADDIU	A0,R0,0001	;A0=1: write
+SW	V0,002C (SP)	;SP+2C=V0: errors
+LW	A0,0030 (SP)	;A0=SP+30: 
+OR	A1,R0,R0	;A1=0
+JAL	8002DFA0
+ADDIU	A2,R0,0001	;A2=1
+//800FEE64:	read result back
+LUI	A1,8004
+ADDIU	A1,A1,4640	;A1=80044640: p->PIFbuffer
+JAL	800305B0	;PIF I/O; V0=nonzero if error
+OR	A0,R0,R0	;A0=0: read
+SW	V0,002C (SP)	;SP+2C=V0: errors
+LW	A0,0030 (SP)	;A0=SP+30: 
+OR	A1,R0,R0	;A1=0
+JAL	8002DFA0
+ADDIU	A2,R0,0001	;A2=1
+//800FEE88:	
+LUI	T7,8004
+ADDIU	T7,T7,4640	;T7=80044640: p->PIFbuffer
+ADDIU	T8,T7,0004	;T8=p->PIFbuffer.ch5
+SW	T8,0028 (SP)	;SP+28=T8: p->PIFbuffer.ch5
+LW	T0,0028 (SP)	;T0=p->PIFbuffer.ch5
+ADDIU	T9,SP,0018	;T9=SP+18: buffer on stack
+LWL	AT,0000 (T0)
+LWR	AT,0003 (T0)
+SW	AT,0000 (T9)
+LWL	T3,0004 (T0)
+LWR	T3,0007 (T0)
+SW	T3,0004 (T9)
+LWL	AT,0008 (T0)
+LWR	AT,000B (T0)
+SW	AT,0008 (T9)
+LBU	AT,000C (T0)
+SB	AT,000C (T9)
+//800FEECC:	check for hardware errors
+LBU	T4,0019 (SP)	;T4=cmd.r
+ANDI	T5,T4,00C0	;T5=cmd&C0: nonzero if error occurred
+SW	T5,002C (SP)	;T5->SP+2C: errors
+LW	T6,002C (SP)	;T6=errors
+BNE	T6,R0,800FEF50	;branch if a hardware error occurs
+NOP
+//800FEEE4:	copy returned data to @A1
+ADDIU	A0,SP,0018	;A0=SP+18: PIF 7 f/ stack
+ADDIU	A0,A0,0004	;A0=p->channel 5 data
+LW	A1,0038 (SP)	;A1=SP+38: p->target
+JAL	800360E0	;copy A2 bytes from source A0 to target A1
+ADDIU	A2,R0,0008	;A2=strlen 8
+LBU	T7,0024 (SP)	;T7=data[8]
+ANDI	T8,T7,0001
+BEQ	T8,R0,800FEF14	;branch if 0x1 flag not set
+NOP
+//800FEF08:
+ADDIU	T2,R0,0011
+BEQ	R0,R0,800FEF48
+SW	T2,002C (SP)	;11->SP+2C
+//800FEF14:	double check it, for some reason
+LBU	T1,0024 (SP)	;T1=data[8]
+ANDI	T9,T1,0001
+BEQ	T9,R0,800FEF30	;branch if 0x1 flag not set
+NOP
+ADDIU	T0,R0,0012
+BEQ	R0,R0,800FEF48
+SW	T0,002C (SP)	;12->SP+2C
+//800FEF30:	test if device busy
+LBU	T3,0024 (SP)	;T3=data[8]
+ANDI	T4,T3,0080
+BEQ	T4,R0,800FEF48	;branch if device ready
+NOP
+ADDIU	T5,R0,0010
+SW	T5,002C (SP)	;10->SP+2C: busy
+//800FEF48:
+BEQ	R0,R0,800FEF74
+NOP
+//800FEF50:	handle hardware errors
+LW	T6,002C (SP)	;T6=SP+2C: errors
+ANDI	T7,T6,0080
+BEQ	T7,R0,800FEF6C	;branch if I/O error
+NOP
+ADDIU	T8,R0,0001
+BEQ	R0,R0,800FEF74
+SW	T8,002C (SP)	;1->SP+2C: device not present
+//800FEF6C:	hardware I/O error
+ADDIU	T2,R0,0004
+SW	T2,002C (SP)	;4->SP+2C: I/O error
+//800FEF74:
+JAL	8002F8D4
+NOP
+BEQ	R0,R0,800FEF8C
+LW	V0,002C (SP)	;V0=SP+2C: errors
+//800FEF84:	branch to code immediately following
+BEQ	R0,R0,800FEF8C
+NOP
+//800FEF8C:	return
+LW	RA,0014 (SP)
+ADDIU	SP,SP,0030
+JR	RA
+NOP
+
+800FEF9C	+AD51C	set PIF 7 command to PIFbuffer; read RTC component A0 to A1
+	accepts: A0=value
+ADDIU	SP,SP,FFE8
+ANDI	A0,A0,00FF	;A0->byte
+LUI	T6,8004
+ADDIU	T6,T6,4640	;T6=80044640: p->PIFbuffer
+SW	T6,0014 (SP)	;SP+14=p->PIFbuffer
+ADDIU	T7,R0,0001
+LUI	AT,8004
+SW	T7,467C (AT)	;1->8004467C: read PIFram
+ADDIU	T8,R0,0002
+SB	T8,0000 (SP)	;2 ->SP+0
+ADDIU	T9,R0,0009
+SB	T9,0001 (SP)	;9 ->SP+1
+ADDIU	T0,R0,0007
+SB	T0,0002 (SP)	;7 ->SP+2
+SB	A0,0003 (SP)	;A0->SP+3
+SW	R0,0010 (SP)	;SP+10=0	init.count
+//800FEFDC:	loop for first four channels
+LW	T1,0014 (SP)	;T1=SP+14: p->PIFbuffer.cur
+SB	R0,0000 (T1)	;0->PIFbuffer.ch
+LW	T2,0014 (SP)	;T2=SP+14: p->PIFbuffer.cur
+ADDIU	T3,T2,0001	;T3=buffer+1
+SW	T3,0014 (SP)	;update PIFbuffer.cur
+LW	T4,0010 (SP)	;T4=count
+ADDIU	T5,T4,0001	;T5=count+1
+SLTI	AT,T5,0004
+BNE	AT,R0,800FEFDC	;loop for four channels
+SW	T5,0010 (SP)	;update count
+//800FF004:	copy from stack to buffer
+ADDIU	T7,SP,0000	;T7=SP+0
+LW	AT,0000 (T7)
+LW	T6,0014 (SP)
+SWL	AT,0000 (T6)
+SWR	AT,0003 (T6)
+LW	T9,0004 (T7)
+SWL	T9,0004 (T6)
+SWR	T9,0007 (T6)
+LW	AT,0008 (T7)
+SWL	AT,0008 (T6)
+SWR	AT,000B (T6)
+LBU	AT,000C (T7)
+SB	AT,000C (T6)
+LW	T0,0014 (SP)	;T0=p->PIFbuffer.cur
+ADDIU	T1,T0,000D
+SW	T1,0014 (SP)	;buffer+D: update PIFbuffer.cur
+LW	T3,0014 (SP)	;T3=p->PIFbuffer.cur
+ADDIU	T2,R0,00FE
+SB	T2,0000 (T3)	;FE->PIFbuffer.cur: set END command
+BEQ	R0,R0,800FF058
+NOP
+//800FF058:	return
+JR	RA
+ADDIU	SP,SP,0018
