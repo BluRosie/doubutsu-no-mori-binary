@@ -10,261 +10,288 @@
 /*#define NO_NUM*/
 
 /*this global variable is used to keep from displaying error messages repeatedly*/
-struct bit_field{
-       int NoErrors   :1;
-       int over7Fcap  :1;
-       int NoteBad7F  :1;
-       int bin7F      :1;
-       int over80cap  :1;
-       int NoteBad80  :1;
-       int bin80      :1;
-       int TextOut    :1;
-       int CommandOut :1;
-       int LineNum    :1;
-       int StrLength  :1;
-       int Quiet      :1;
-       int IgnoreAC   :1;
-       int WriteCom   :1;
-       int KillJtxt   :1;
-       int AllowNew   :1;
-       }errflag;
+struct bit_field {
+  int NoErrors   :1;
+  int over7Fcap  :1;
+  int NoteBad7F  :1;
+  int bin7F      :1;
+  int over80cap  :1;
+  int NoteBad80  :1;
+  int bin80      :1;
+  int TextOut    :1;
+  int CommandOut :1;
+  int LineNum    :1;
+  int StrLength  :1;
+  int Quiet      :1;
+  int IgnoreAC   :1;
+  int WriteCom   :1;
+  int KillJtxt   :1;
+  int AllowNew   :1;
+}
+errflag;
 
 /*standard 32bit byteswapping*/
 unsigned long byteswap(unsigned long w)
-{return (w >> 24) | ((w >> 8) & 0x0000ff00) | ((w << 8) & 0x00ff0000) | (w << 24);
+{
+  return (w >> 24) | ((w >> 8) & 0x0000ff00) | ((w << 8) & 0x00ff0000) | (w << 24);
 }    
 
 /*standard 16bit byteswapping*/
 unsigned short int shortswap(unsigned short int w)
-{return (w >> 8) | (w << 8);
+{
+  return (w >> 8) | (w << 8);
 }
 
 /*converts binary value for character into text and saves it
   this !does not! handle 7F,80*/
-int transfer(unsigned char x, FILE *out)
-{unsigned char buf[30]; /*hopefully no strings will be over this*/
+int transfer (unsigned char x, FILE *out)
+{
+  unsigned char buf[30]; /*hopefully no strings will be over this*/
+  
+  buf[0] = x;
+  buf[1] = 0;
 
- buf[0]=x; buf[1]=0;
-if(errflag.KillJtxt){if(x<0x20) strcpy(buf,"\0");
-                     if(x==0x23 || x==0x24 || x==0x5B || x==0x5D || x==0x5E || x==0x60) strcpy(buf,"\0");
-                     if(x>0x7A) strcpy(buf,"\0");
-                     }
-else switch(x){
-    /*now hana and kata*/
-    case 0x00:	strcpy(buf,"[h-a]\0"); break;
-    case 0x01:	strcpy(buf,"[h-i]\0"); break;
-    case 0x02:	strcpy(buf,"[h-u]\0"); break;
-    case 0x03:	strcpy(buf,"[h-e]\0"); break;
-    case 0x04:	strcpy(buf,"[h-o]\0"); break;
-    case 0x05:	strcpy(buf,"[h-ka]\0"); break;
-    case 0x06:	strcpy(buf,"[h-ki]\0"); break;
-    case 0x07:	strcpy(buf,"[h-ku]\0"); break;
-    case 0x08:	strcpy(buf,"[h-ke]\0"); break;
-    case 0x09:	strcpy(buf,"[h-ko]\0"); break;
-    case 0x0A:	strcpy(buf,"[h-sa]\0"); break;
-    case 0x0B:	strcpy(buf,"[h-shi]\0"); break;
-    case 0x0C:	strcpy(buf,"[h-tsu]\0"); break;
-    case 0x0D:	strcpy(buf,"[h-se]\0"); break;
-    case 0x0E:	strcpy(buf,"[h-so]\0"); break;
-    case 0x0F:	strcpy(buf,"[h-ta]\0"); break;
-    case 0x10:	strcpy(buf,"[h-ti]\0"); break;
-    case 0x11:	strcpy(buf,"[h-tu]\0"); break;
-    case 0x12:	strcpy(buf,"[h-te]\0"); break;
-    case 0x13:	strcpy(buf,"[h-to]\0"); break;
-    case 0x14:	strcpy(buf,"[h-na]\0"); break;
-    case 0x15:	strcpy(buf,"[h-ni]\0"); break;
-    case 0x16:	strcpy(buf,"[h-nu]\0"); break;
-    case 0x17:	strcpy(buf,"[h-ne]\0"); break;
-    case 0x18:	strcpy(buf,"[h-no]\0"); break;
-    case 0x19:	strcpy(buf,"[h-ha]\0"); break;
-    case 0x1A:	strcpy(buf,"[h-hi]\0"); break;
-    case 0x1B:	strcpy(buf,"[h-hu]\0"); break;
-    case 0x1C:	strcpy(buf,"[h-he]\0"); break;
-    case 0x1D:	strcpy(buf,"[h-ho]\0"); break;
-    case 0x1E:	strcpy(buf,"[h-ma]\0"); break;
-    case 0x1F:	strcpy(buf,"[h-mi]\0"); break;
-    case 0x23:	strcpy(buf,"[h-mu]\0"); break;
-    case 0x24:	strcpy(buf,"[h-me]\0"); break;
-    case 0x5B:	strcpy(buf,"[h-mo]\0"); break;
-    case 0x5D:	strcpy(buf,"[h-ya]\0"); break;
-    case 0x5E:	strcpy(buf,"[h-yu]\0"); break;
-    case 0x60:	strcpy(buf,"[h-yo]\0"); break;
-    case 0x7B:	strcpy(buf,"[h-ra]\0"); break;
-    case 0x7C:	strcpy(buf,"[h-ri]\0"); break;
-    case 0x7D:	strcpy(buf,"[h-ru]\0"); break;
-    case 0x7E:	strcpy(buf,"[h-re]\0"); break;
-    case 0x86:	strcpy(buf,"[k-wo]\0"); break;
-    case 0x87:	strcpy(buf,"[ks-a]\0"); break;
-    case 0x88:	strcpy(buf,"[ks-i]\0"); break;
-    case 0x89:	strcpy(buf,"[ks-u]\0"); break;
-    case 0x8A:	strcpy(buf,"[ks-e]\0"); break;
-    case 0x8B:	strcpy(buf,"[ks-o]\0"); break;
-    case 0x8C:	strcpy(buf,"[ks-ya]\0"); break;
-    case 0x8D:	strcpy(buf,"[ks-yu]\0"); break;
-    case 0x8E:	strcpy(buf,"[ks-yo]\0"); break;
-    case 0x8F:	strcpy(buf,"[ks-tu]\0"); break;
-    case 0x91:	strcpy(buf,"[k-a]\0"); break;
-    case 0x92:	strcpy(buf,"[k-i]\0"); break;
-    case 0x93:	strcpy(buf,"[k-u]\0"); break;
-    case 0x94:	strcpy(buf,"[k-e]\0"); break;
-    case 0x95:	strcpy(buf,"[k-o]\0"); break;
-    case 0x96:	strcpy(buf,"[k-ka]\0"); break;
-    case 0x97:	strcpy(buf,"[k-ki]\0"); break;
-    case 0x98:	strcpy(buf,"[k-ku]\0"); break;
-    case 0x99:	strcpy(buf,"[k-ke]\0"); break;
-    case 0x9A:	strcpy(buf,"[k-ko]\0"); break;
-    case 0x9B:	strcpy(buf,"[k-sa]\0"); break;
-    case 0x9C:	strcpy(buf,"[k-si]\0"); break;
-    case 0x9D:	strcpy(buf,"[k-su]\0"); break;
-    case 0x9E:	strcpy(buf,"[k-se]\0"); break;
-    case 0x9F:	strcpy(buf,"[k-so]\0"); break;
-    case 0xA0:	strcpy(buf,"[k-ta]\0"); break;
-    case 0xA1:	strcpy(buf,"[k-chi]\0"); break;
-    case 0xA2:	strcpy(buf,"[k-tu]\0"); break;
-    case 0xA3:	strcpy(buf,"[k-te]\0"); break;
-    case 0xA4:	strcpy(buf,"[k-to]\0"); break;
-    case 0xA5:	strcpy(buf,"[k-na]\0"); break;
-    case 0xA6:	strcpy(buf,"[k-ni]\0"); break;
-    case 0xA7:	strcpy(buf,"[k-nu]\0"); break;
-    case 0xA8:	strcpy(buf,"[k-ne]\0"); break;
-    case 0xA9:	strcpy(buf,"[k-no]\0"); break;
-    case 0xAA:	strcpy(buf,"[k-ha]\0"); break;
-    case 0xAB:	strcpy(buf,"[k-hi]\0"); break;
-    case 0xAC:	strcpy(buf,"[k-hu]\0"); break;
-    case 0xAD:	strcpy(buf,"[k-he]\0"); break;
-    case 0xAE:	strcpy(buf,"[k-ho]\0"); break;
-    case 0xAF:	strcpy(buf,"[k-ma]\0"); break;
-    case 0xB0:	strcpy(buf,"[k-mi]\0"); break;
-    case 0xB1:	strcpy(buf,"[k-mu]\0"); break;
-    case 0xB2:	strcpy(buf,"[k-me]\0"); break;
-    case 0xB3:	strcpy(buf,"[k-mo]\0"); break;
-    case 0xB4:	strcpy(buf,"[k-ya]\0"); break;
-    case 0xB5:	strcpy(buf,"[k-yu]\0"); break;
-    case 0xB6:	strcpy(buf,"[k-yo]\0"); break;
-    case 0xB7:	strcpy(buf,"[k-ra]\0"); break;
-    case 0xB8:	strcpy(buf,"[k-ri]\0"); break;
-    case 0xB9:	strcpy(buf,"[k-ru]\0"); break;
-    case 0xBA:	strcpy(buf,"[k-re]\0"); break;
-    case 0xBB:	strcpy(buf,"[k-ro]\0"); break;
-    case 0xBC:	strcpy(buf,"[k-wa]\0"); break;
-    case 0xBD:	strcpy(buf,"[k-n]\0"); break;
-    case 0xBE:	strcpy(buf,"[k-vu]\0"); break;
-    case 0xC0:	strcpy(buf,"[h-ro]\0"); break;
-    case 0xC1:	strcpy(buf,"[h-wa]\0"); break;
-    case 0xC2:	strcpy(buf,"[h-wo]\0"); break;
-    case 0xC3:	strcpy(buf,"[h-n]\0"); break;
-    case 0xC4:	strcpy(buf,"[hs-a]\0"); break;
-    case 0xC5:	strcpy(buf,"[hs-i]\0"); break;
-    case 0xC6:	strcpy(buf,"[hs-u]\0"); break;
-    case 0xC7:	strcpy(buf,"[hs-e]\0"); break;
-    case 0xC8:	strcpy(buf,"[hs-o]\0"); break;
-    case 0xC9:	strcpy(buf,"[hs-ya]\0"); break;
-    case 0xCA:	strcpy(buf,"[hs-yu]\0"); break;
-    case 0xCB:	strcpy(buf,"[hs-yo]\0"); break;
-    case 0xCC:	strcpy(buf,"[hs-su]\0"); break;
-    case 0xCE:	strcpy(buf,"[k-ga]\0"); break;
-    case 0xCF:	strcpy(buf,"[k-gi]\0"); break;
-    case 0xD0:	strcpy(buf,"[k-gu]\0"); break;
-    case 0xD1:	strcpy(buf,"[k-ge]\0"); break;
-    case 0xD2:	strcpy(buf,"[k-go]\0"); break;
-    case 0xD3:	strcpy(buf,"[k-za]\0"); break;
-    case 0xD4:	strcpy(buf,"[k-zi]\0"); break;
-    case 0xD5:	strcpy(buf,"[k-zu]\0"); break;
-    case 0xD6:	strcpy(buf,"[k-ze]\0"); break;
-    case 0xD7:	strcpy(buf,"[k-zo]\0"); break;
-    case 0xD8:	strcpy(buf,"[k-da]\0"); break;
-    case 0xD9:	strcpy(buf,"[k-di]\0"); break;
-    case 0xDA:	strcpy(buf,"[k-du]\0"); break;
-    case 0xDB:	strcpy(buf,"[k-de]\0"); break;
-    case 0xDC:	strcpy(buf,"[k-do]\0"); break;
-    case 0xDD:	strcpy(buf,"[k-ba]\0"); break;
-    case 0xDE:	strcpy(buf,"[k-bi]\0"); break;
-    case 0xDF:	strcpy(buf,"[k-bu]\0"); break;
-    case 0xE0:	strcpy(buf,"[k-be]\0"); break;
-    case 0xE1:	strcpy(buf,"[k-bo]\0"); break;
-    case 0xE2:	strcpy(buf,"[k-pa]\0"); break;
-    case 0xE3:	strcpy(buf,"[k-pi]\0"); break;
-    case 0xE4:	strcpy(buf,"[k-pu]\0"); break;
-    case 0xE5:	strcpy(buf,"[k-pe]\0"); break;
-    case 0xE6:	strcpy(buf,"[k-po]\0"); break;
-    case 0xE7:	strcpy(buf,"[h-ga]\0"); break;
-    case 0xE8:	strcpy(buf,"[h-gi]\0"); break;
-    case 0xE9:	strcpy(buf,"[h-gu]\0"); break;
-    case 0xEA:	strcpy(buf,"[h-ge]\0"); break;
-    case 0xEB:	strcpy(buf,"[h-go]\0"); break;
-    case 0xEC:	strcpy(buf,"[h-za]\0"); break;
-    case 0xED:	strcpy(buf,"[h-zi]\0"); break;
-    case 0xEE:	strcpy(buf,"[h-zu]\0"); break;
-    case 0xEF:	strcpy(buf,"[h-ze]\0"); break;
-    case 0xF0:	strcpy(buf,"[h-zo]\0"); break;
-    case 0xF1:	strcpy(buf,"[h-da]\0"); break;
-    case 0xF2:	strcpy(buf,"[h-di]\0"); break;
-    case 0xF3:	strcpy(buf,"[h-du]\0"); break;
-    case 0xF4:	strcpy(buf,"[h-de]\0"); break;
-    case 0xF5:	strcpy(buf,"[h-do]\0"); break;
-    case 0xF6:	strcpy(buf,"[h-ba]\0"); break;
-    case 0xF7:	strcpy(buf,"[h-bi]\0"); break;
-    case 0xF8:	strcpy(buf,"[h-bu]\0"); break;
-    case 0xF9:	strcpy(buf,"[h-be]\0"); break;
-    case 0xFA:	strcpy(buf,"[h-bo]\0"); break;
-    case 0xFB:	strcpy(buf,"[h-pa]\0"); break;
-    case 0xFC:	strcpy(buf,"[h-pi]\0"); break;
-    case 0xFD:	strcpy(buf,"[h-pu]\0"); break;
-    case 0xFE:	strcpy(buf,"[h-pe]\0"); break;
-    case 0xFF:	strcpy(buf,"[h-po]\0"); break;
+  if (errflag.KillJtxt)
+  {
+    if (x < 0x20) 
+      strcpy(buf, "\0");
+
+    if(x == 0x23 || x == 0x24 || x == 0x5B || x == 0x5D || x == 0x5E || x == 0x60) 
+      strcpy(buf,"\0");
+    
+    if(x>0x7A) 
+      strcpy(buf,"\0");
+  }
+  else 
+    switch (x) 
+    {
+      /*now hana and kata*/
+      // actually decided to keep it this way because it looks the mots readable this way
+      case 0x00:	strcpy(buf, "[h-a]\0"); break;
+      case 0x01:	strcpy(buf, "[h-i]\0"); break;
+      case 0x02:	strcpy(buf, "[h-u]\0"); break;
+      case 0x03:	strcpy(buf, "[h-e]\0"); break;
+      case 0x04:	strcpy(buf, "[h-o]\0"); break;
+      case 0x05:	strcpy(buf, "[h-ka]\0"); break;
+      case 0x06:	strcpy(buf, "[h-ki]\0"); break;
+      case 0x07:	strcpy(buf, "[h-ku]\0"); break;
+      case 0x08:	strcpy(buf, "[h-ke]\0"); break;
+      case 0x09:	strcpy(buf, "[h-ko]\0"); break;
+      case 0x0A:	strcpy(buf, "[h-sa]\0"); break;
+      case 0x0B:	strcpy(buf, "[h-shi]\0"); break;
+      case 0x0C:	strcpy(buf, "[h-tsu]\0"); break;
+      case 0x0D:	strcpy(buf, "[h-se]\0"); break;
+      case 0x0E:	strcpy(buf, "[h-so]\0"); break;
+      case 0x0F:	strcpy(buf, "[h-ta]\0"); break;
+      case 0x10:	strcpy(buf, "[h-ti]\0"); break;
+      case 0x11:	strcpy(buf, "[h-tu]\0"); break;
+      case 0x12:	strcpy(buf, "[h-te]\0"); break;
+      case 0x13:	strcpy(buf, "[h-to]\0"); break;
+      case 0x14:	strcpy(buf, "[h-na]\0"); break;
+      case 0x15:	strcpy(buf, "[h-ni]\0"); break;
+      case 0x16:	strcpy(buf, "[h-nu]\0"); break;
+      case 0x17:	strcpy(buf, "[h-ne]\0"); break;
+      case 0x18:	strcpy(buf, "[h-no]\0"); break;
+      case 0x19:	strcpy(buf, "[h-ha]\0"); break;
+      case 0x1A:	strcpy(buf, "[h-hi]\0"); break;
+      case 0x1B:	strcpy(buf, "[h-hu]\0"); break;
+      case 0x1C:	strcpy(buf, "[h-he]\0"); break;
+      case 0x1D:	strcpy(buf, "[h-ho]\0"); break;
+      case 0x1E:	strcpy(buf, "[h-ma]\0"); break;
+      case 0x1F:	strcpy(buf, "[h-mi]\0"); break;
+      case 0x23:	strcpy(buf, "[h-mu]\0"); break;
+      case 0x24:	strcpy(buf, "[h-me]\0"); break;
+      case 0x5B:	strcpy(buf, "[h-mo]\0"); break;
+      case 0x5D:	strcpy(buf, "[h-ya]\0"); break;
+      case 0x5E:	strcpy(buf, "[h-yu]\0"); break;
+      case 0x60:	strcpy(buf, "[h-yo]\0"); break;
+      case 0x7B:	strcpy(buf, "[h-ra]\0"); break;
+      case 0x7C:	strcpy(buf, "[h-ri]\0"); break;
+      case 0x7D:	strcpy(buf, "[h-ru]\0"); break;
+      case 0x7E:	strcpy(buf, "[h-re]\0"); break;
+      case 0x86:	strcpy(buf, "[k-wo]\0"); break;
+      case 0x87:	strcpy(buf, "[ks-a]\0"); break;
+      case 0x88:	strcpy(buf, "[ks-i]\0"); break;
+      case 0x89:	strcpy(buf, "[ks-u]\0"); break;
+      case 0x8A:	strcpy(buf, "[ks-e]\0"); break;
+      case 0x8B:	strcpy(buf, "[ks-o]\0"); break;
+      case 0x8C:	strcpy(buf, "[ks-ya]\0"); break;
+      case 0x8D:	strcpy(buf, "[ks-yu]\0"); break;
+      case 0x8E:	strcpy(buf, "[ks-yo]\0"); break;
+      case 0x8F:	strcpy(buf, "[ks-tu]\0"); break;
+      case 0x91:	strcpy(buf, "[k-a]\0"); break;
+      case 0x92:	strcpy(buf, "[k-i]\0"); break;
+      case 0x93:	strcpy(buf, "[k-u]\0"); break;
+      case 0x94:	strcpy(buf, "[k-e]\0"); break;
+      case 0x95:	strcpy(buf, "[k-o]\0"); break;
+      case 0x96:	strcpy(buf, "[k-ka]\0"); break;
+      case 0x97:	strcpy(buf, "[k-ki]\0"); break;
+      case 0x98:	strcpy(buf, "[k-ku]\0"); break;
+      case 0x99:	strcpy(buf, "[k-ke]\0"); break;
+      case 0x9A:	strcpy(buf, "[k-ko]\0"); break;
+      case 0x9B:	strcpy(buf, "[k-sa]\0"); break;
+      case 0x9C:	strcpy(buf, "[k-si]\0"); break;
+      case 0x9D:	strcpy(buf, "[k-su]\0"); break;
+      case 0x9E:	strcpy(buf, "[k-se]\0"); break;
+      case 0x9F:	strcpy(buf, "[k-so]\0"); break;
+      case 0xA0:	strcpy(buf, "[k-ta]\0"); break;
+      case 0xA1:	strcpy(buf, "[k-chi]\0"); break;
+      case 0xA2:	strcpy(buf, "[k-tu]\0"); break;
+      case 0xA3:	strcpy(buf, "[k-te]\0"); break;
+      case 0xA4:	strcpy(buf, "[k-to]\0"); break;
+      case 0xA5:	strcpy(buf, "[k-na]\0"); break;
+      case 0xA6:	strcpy(buf, "[k-ni]\0"); break;
+      case 0xA7:	strcpy(buf, "[k-nu]\0"); break;
+      case 0xA8:	strcpy(buf, "[k-ne]\0"); break;
+      case 0xA9:	strcpy(buf, "[k-no]\0"); break;
+      case 0xAA:	strcpy(buf, "[k-ha]\0"); break;
+      case 0xAB:	strcpy(buf, "[k-hi]\0"); break;
+      case 0xAC:	strcpy(buf, "[k-hu]\0"); break;
+      case 0xAD:	strcpy(buf, "[k-he]\0"); break;
+      case 0xAE:	strcpy(buf, "[k-ho]\0"); break;
+      case 0xAF:	strcpy(buf, "[k-ma]\0"); break;
+      case 0xB0:	strcpy(buf, "[k-mi]\0"); break;
+      case 0xB1:	strcpy(buf, "[k-mu]\0"); break;
+      case 0xB2:	strcpy(buf, "[k-me]\0"); break;
+      case 0xB3:	strcpy(buf, "[k-mo]\0"); break;
+      case 0xB4:	strcpy(buf, "[k-ya]\0"); break;
+      case 0xB5:	strcpy(buf, "[k-yu]\0"); break;
+      case 0xB6:	strcpy(buf, "[k-yo]\0"); break;
+      case 0xB7:	strcpy(buf, "[k-ra]\0"); break;
+      case 0xB8:	strcpy(buf, "[k-ri]\0"); break;
+      case 0xB9:	strcpy(buf, "[k-ru]\0"); break;
+      case 0xBA:	strcpy(buf, "[k-re]\0"); break;
+      case 0xBB:	strcpy(buf, "[k-ro]\0"); break;
+      case 0xBC:	strcpy(buf, "[k-wa]\0"); break;
+      case 0xBD:	strcpy(buf, "[k-n]\0"); break;
+      case 0xBE:	strcpy(buf, "[k-vu]\0"); break;
+      case 0xC0:	strcpy(buf, "[h-ro]\0"); break;
+      case 0xC1:	strcpy(buf, "[h-wa]\0"); break;
+      case 0xC2:	strcpy(buf, "[h-wo]\0"); break;
+      case 0xC3:	strcpy(buf, "[h-n]\0"); break;
+      case 0xC4:	strcpy(buf, "[hs-a]\0"); break;
+      case 0xC5:	strcpy(buf, "[hs-i]\0"); break;
+      case 0xC6:	strcpy(buf, "[hs-u]\0"); break;
+      case 0xC7:	strcpy(buf, "[hs-e]\0"); break;
+      case 0xC8:	strcpy(buf, "[hs-o]\0"); break;
+      case 0xC9:	strcpy(buf, "[hs-ya]\0"); break;
+      case 0xCA:	strcpy(buf, "[hs-yu]\0"); break;
+      case 0xCB:	strcpy(buf, "[hs-yo]\0"); break;
+      case 0xCC:	strcpy(buf, "[hs-su]\0"); break;
+      case 0xCE:	strcpy(buf, "[k-ga]\0"); break;
+      case 0xCF:	strcpy(buf, "[k-gi]\0"); break;
+      case 0xD0:	strcpy(buf, "[k-gu]\0"); break;
+      case 0xD1:	strcpy(buf, "[k-ge]\0"); break;
+      case 0xD2:	strcpy(buf, "[k-go]\0"); break;
+      case 0xD3:	strcpy(buf, "[k-za]\0"); break;
+      case 0xD4:	strcpy(buf, "[k-zi]\0"); break;
+      case 0xD5:	strcpy(buf, "[k-zu]\0"); break;
+      case 0xD6:	strcpy(buf, "[k-ze]\0"); break;
+      case 0xD7:	strcpy(buf, "[k-zo]\0"); break;
+      case 0xD8:	strcpy(buf, "[k-da]\0"); break;
+      case 0xD9:	strcpy(buf, "[k-di]\0"); break;
+      case 0xDA:	strcpy(buf, "[k-du]\0"); break;
+      case 0xDB:	strcpy(buf, "[k-de]\0"); break;
+      case 0xDC:	strcpy(buf, "[k-do]\0"); break;
+      case 0xDD:	strcpy(buf, "[k-ba]\0"); break;
+      case 0xDE:	strcpy(buf, "[k-bi]\0"); break;
+      case 0xDF:	strcpy(buf, "[k-bu]\0"); break;
+      case 0xE0:	strcpy(buf, "[k-be]\0"); break;
+      case 0xE1:	strcpy(buf, "[k-bo]\0"); break;
+      case 0xE2:	strcpy(buf, "[k-pa]\0"); break;
+      case 0xE3:	strcpy(buf, "[k-pi]\0"); break;
+      case 0xE4:	strcpy(buf, "[k-pu]\0"); break;
+      case 0xE5:	strcpy(buf, "[k-pe]\0"); break;
+      case 0xE6:	strcpy(buf, "[k-po]\0"); break;
+      case 0xE7:	strcpy(buf, "[h-ga]\0"); break;
+      case 0xE8:	strcpy(buf, "[h-gi]\0"); break;
+      case 0xE9:	strcpy(buf, "[h-gu]\0"); break;
+      case 0xEA:	strcpy(buf, "[h-ge]\0"); break;
+      case 0xEB:	strcpy(buf, "[h-go]\0"); break;
+      case 0xEC:	strcpy(buf, "[h-za]\0"); break;
+      case 0xED:	strcpy(buf, "[h-zi]\0"); break;
+      case 0xEE:	strcpy(buf, "[h-zu]\0"); break;
+      case 0xEF:	strcpy(buf, "[h-ze]\0"); break;
+      case 0xF0:	strcpy(buf, "[h-zo]\0"); break;
+      case 0xF1:	strcpy(buf, "[h-da]\0"); break;
+      case 0xF2:	strcpy(buf, "[h-di]\0"); break;
+      case 0xF3:	strcpy(buf, "[h-du]\0"); break;
+      case 0xF4:	strcpy(buf, "[h-de]\0"); break;
+      case 0xF5:	strcpy(buf, "[h-do]\0"); break;
+      case 0xF6:	strcpy(buf, "[h-ba]\0"); break;
+      case 0xF7:	strcpy(buf, "[h-bi]\0"); break;
+      case 0xF8:	strcpy(buf, "[h-bu]\0"); break;
+      case 0xF9:	strcpy(buf, "[h-be]\0"); break;
+      case 0xFA:	strcpy(buf, "[h-bo]\0"); break;
+      case 0xFB:	strcpy(buf, "[h-pa]\0"); break;
+      case 0xFC:	strcpy(buf, "[h-pi]\0"); break;
+      case 0xFD:	strcpy(buf, "[h-pu]\0"); break;
+      case 0xFE:	strcpy(buf, "[h-pe]\0"); break;
+      case 0xFF:	strcpy(buf, "[h-po]\0"); break;
     }
 
- switch(x){
-    /*first, lets do the aliased ones*/
-    case 0x2A: strcpy(buf,"~\0"); break;
-    case 0x5C: strcpy(buf,"+\0"); break;
-    case 0x82: if(!errflag.KillJtxt) strcpy(buf,"{\0"); break;
-    case 0x83: if(!errflag.KillJtxt) strcpy(buf,"}\0"); break;
-    case 0x85: if(!errflag.KillJtxt) strcpy(buf,"*\0"); break;
+    switch(x)
+    {
+      /*first, lets do the aliased ones*/
+      case 0x2A: strcpy(buf,"~\0"); break;
+      case 0x5C: strcpy(buf,"+\0"); break;
+      case 0x82: if(!errflag.KillJtxt) strcpy(buf,"{\0"); break;
+      case 0x83: if(!errflag.KillJtxt) strcpy(buf,"}\0"); break;
+      case 0x85: if(!errflag.KillJtxt) strcpy(buf,"*\0"); break;
 
-    /*special aliased characters*/
-    case 0x22: strcpy(buf,"$q\0"); break;
-    case 0x2B: strcpy(buf,"$h\0"); break;
-    case 0x2F: strcpy(buf,"$n\0"); break;
-    case 0x3B: strcpy(buf,"$d\0"); break;
-    case 0x81: if(!errflag.KillJtxt) strcpy(buf,"$o\0"); break;
-    case 0x84: if(!errflag.KillJtxt) strcpy(buf,"$.\0"); break;
-    case 0x90: if(!errflag.KillJtxt) strcpy(buf,"$-\0"); break;
-    case 0xBF: strcpy(buf,"$s\0"); break;
-    case 0xCD: strcpy(buf,"\\r\0"); break;
-}
+      /*special aliased characters*/
+      case 0x22: strcpy(buf,"$q\0"); break;
+      case 0x2B: strcpy(buf,"$h\0"); break;
+      case 0x2F: strcpy(buf,"$n\0"); break;
+      case 0x3B: strcpy(buf,"$d\0"); break;
+      case 0x81: if(!errflag.KillJtxt) strcpy(buf,"$o\0"); break;
+      case 0x84: if(!errflag.KillJtxt) strcpy(buf,"$.\0"); break;
+      case 0x90: if(!errflag.KillJtxt) strcpy(buf,"$-\0"); break;
+      case 0xBF: strcpy(buf,"$s\0"); break;
+      case 0xCD: strcpy(buf,"\\r\0"); break;
+    }
 
-return fprintf(out,"%s",buf);
-}
+    return fprintf(out,"%s",buf);
+  }
 
 /*I don't want an external table and don't know how 
   to embed one in here and still reference it...
   So, this returns the sizes of the 7F commands
   most common size (and therefore default) is 2*/
 int sizeof7F(unsigned int x)
-{if(!errflag.Quiet){
-if(x==0x6F || x==0x70 || x==0x74 || x==0x75 || x==0x76) {
-           if(!errflag.AllowNew){          /*this allows new hacked types*/
-             if(errflag.over7Fcap) {
-               printf("\nThis text contains some AC-only commands, either the tolower(7F74), capitalize (7F75), or AM/PM (7F76) commands.");
-               printf("\nI'm %s them in your output.%s\n\tPress -enter- to continue.", errflag.IgnoreAC ? "ignoring":"writting",errflag.IgnoreAC ? "":"\nUse the -A command-line switch to ignore them on output.");
-               getchar();
-               errflag.over7Fcap=0;
-               }
-             if(!errflag.IgnoreAC) errflag.NoteBad7F=1;
-             if(errflag.IgnoreAC) errflag.WriteCom=0;
-             }
-           }
-else if(x>0x60) {if(errflag.over7Fcap) {
-                printf("\nNormally 7F60 is the largest.  The script contains a 7F%02X.",x);
-                printf("\nThat might even be correct, but some of these output sizes are unknown.");
-                printf("\nAll these will be in the error log, so no use pestering you about any more of them.\n\tPress -enter- to continue.");
-                getchar();
-                errflag.over7Fcap=0;
-                }
-            errflag.NoteBad7F=1;
-            }
-}
+{
+  if(!errflag.Quiet)
+  {
+    if(x == 0x6F || x == 0x70 || x == 0x74 || x == 0x75 || x == 0x76) 
+    {
+      if(!errflag.AllowNew)
+      {          /*this allows new hacked types*/
+        if(errflag.over7Fcap) 
+        {
+          printf("\nThis text contains some AC-only commands, either the tolower(7F74), capitalize (7F75), or AM/PM (7F76) commands.");
+          printf("\nI'm %s them in your output.%s\n\tPress -enter- to continue.", errflag.IgnoreAC ? "ignoring":"writting",errflag.IgnoreAC ? "":"\nUse the -A command-line switch to ignore them on output.");
+          getchar();
+          errflag.over7Fcap = 0;
+        }
+        if(!errflag.IgnoreAC) 
+          errflag.NoteBad7F = 1;
+        if(errflag.IgnoreAC) 
+          errflag.WriteCom = 0;
+      }
+    }
+    else if (x > 0x60) 
+    {
+      if (errflag.over7Fcap) 
+      {
+        printf("\nNormally 7F60 is the largest.  The script contains a 7F%02X.",x);
+        printf("\nThat might even be correct, but some of these output sizes are unknown.");
+        printf("\nAll these will be in the error log, so no use pestering you about any more of them.\n\tPress -enter- to continue.");
+        getchar();
+        errflag.over7Fcap=0;
+      }
+      errflag.NoteBad7F=1;
+    }
+  }
 
 switch(x)
        {case 0x03: case 0x51: case 0x52: case 0x53: case 0x54: case 0x58: case 0x59: case 0x5A: case 0x67:
