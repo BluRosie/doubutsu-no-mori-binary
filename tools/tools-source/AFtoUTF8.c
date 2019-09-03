@@ -10,29 +10,32 @@
 /*#define NO_NUM*/
 
 /*this global variable is used to keep from displaying error messages repeatedly*/
-struct bit_field{
-       int NoErrors   :1;
-       int over7Fcap  :1;
-       int NoteBad7F  :1;
-       int bin7F      :1;
-       int over80cap  :1;
-       int NoteBad80  :1;
-       int bin80      :1;
-       int TextOut    :1;
-       int CommandOut :1;
-       int LineNum    :1;
-       int StrLength  :1;    /*removed temporarily*/
-       int Quiet      :1;
-       int IgnoreAC   :1;
-       int WriteCom   :1;
-       int KillJtxt   :1;
-       int AllowNew   :1;
-       }errflag;
+struct bit_field
+{
+    int NoErrors   :1;
+    int over7Fcap  :1;
+    int NoteBad7F  :1;
+    int bin7F      :1;
+    int over80cap  :1;
+    int NoteBad80  :1;
+    int bin80      :1;
+    int TextOut    :1;
+    int CommandOut :1;
+    int LineNum    :1;
+    int StrLength  :1;    /*removed temporarily*/
+    int Quiet      :1;
+    int IgnoreAC   :1;
+    int WriteCom   :1;
+    int KillJtxt   :1;
+    int AllowNew   :1;
+}
+errflag;
 
 /*standard 32bit byteswapping*/
 unsigned long byteswap(unsigned long w)
-{return (w >> 24) | ((w >> 8) & 0x0000ff00) | ((w << 8) & 0x00ff0000) | (w << 24);
-}    
+{
+    return (w >> 24) | ((w >> 8) & 0x0000ff00) | ((w << 8) & 0x00ff0000) | (w << 24);
+}
 
 /*standard 16bit byteswapping*/
 unsigned short int shortswap(unsigned short int w)
@@ -240,7 +243,7 @@ else {buf[0]=0xE3; buf[1]=0x81; buf[3]=0;
 return fprintf(out,"%s",buf);
 }
 
-/*I don't want an external table and don't know how 
+/*I don't want an external table and don't know how
   to embed one in here and still reference it...
   So, this returns the sizes of the 7F commands
   most common size (and therefore default) is 2*/
@@ -274,13 +277,13 @@ switch(x)
              x=3; break;
        case 0x0E: case 0x0F: case 0x10: case 0x11: case 0x12: case 0x56: case 0x57: case 0x6F: case 0x77: case 0x78:
              x=4; break;
-       case 0x05: case 0x08: case 0x09: case 0x0A: case 0x0B: case 0x0C: 
+       case 0x05: case 0x08: case 0x09: case 0x0A: case 0x0B: case 0x0C:
              x=5; break;
        case 0x13: case 0x16: case 0x50: case 0x63: case 0x6A:
              x=6; break;
-       case 0x14: case 0x17: 
+       case 0x14: case 0x17:
              x=8; break;
-       case 0x15: case 0x18: 
+       case 0x15: case 0x18:
              x=10; break;
        case 0x79:
              x=12; break;
@@ -301,14 +304,14 @@ fseek(in,pos,SEEK_SET); /*type byte*/
 x=fgetc(in);
 
 switch(x){
-        case 0x00: fprintf(out,"[close]"); break; 
+        case 0x00: fprintf(out,"[close]"); break;
         case 0x01: fprintf(out,"[open]"); break;
         case 0x02: fprintf(out,"[CLS]"); break;
         case 0x03: x=fgetc(in); fprintf(out,"[pause %i]",x); break;
         case 0x04: fprintf(out,"[wait]"); break;
         case 0x05: fread(buf.c,1,3,in);
                    fprintf(out,"[color %i %i %i]",buf.c[0],buf.c[1],buf.c[2]); break;
-        case 0x06: 
+        case 0x06:
         case 0x07: fprintf(out,"[quick %s]", x==6 ? "on":"off"); break;
 
         case 0x0E: fread(buf.s,2,1,in);
@@ -349,7 +352,7 @@ switch(x){
                    buf.s[0]=shortswap(buf.s[0]);
                    buf.s[1]=shortswap(buf.s[1]);
                    buf.s[2]=shortswap(buf.s[2]);
-                   fprintf(out,"[menu %04X %04X %04X]",buf.s[0],buf.s[1],buf.s[2]); break;  
+                   fprintf(out,"[menu %04X %04X %04X]",buf.s[0],buf.s[1],buf.s[2]); break;
         case 0x18: fread(buf.s,2,4,in);
                    buf.s[0]=shortswap(buf.s[0]);
                    buf.s[1]=shortswap(buf.s[1]);
@@ -367,40 +370,40 @@ switch(x){
         case 0x21: fprintf(out,"[hours]"); break;
         case 0x22: fprintf(out,"[mins]"); break;
         case 0x23: fprintf(out,"[secs]"); break;
-        case 0x24: 
-        case 0x25: 
-        case 0x26: 
-        case 0x27: 
-        case 0x28: 
-        case 0x29: 
-        case 0x2A: 
-        case 0x2B: 
-        case 0x2C: 
+        case 0x24:
+        case 0x25:
+        case 0x26:
+        case 0x27:
+        case 0x28:
+        case 0x29:
+        case 0x2A:
+        case 0x2B:
+        case 0x2C:
         case 0x2D: fprintf(out,"[string %d]",x-0x23); break;
         case 0x2E: fprintf(out,"[recall]"); break;
         case 0x2F: fprintf(out,"[town]"); break;
         case 0x30: fprintf(out,"[number]"); break;
-        case 0x31: 
-        case 0x32: 
-        case 0x33: 
-        case 0x34: 
+        case 0x31:
+        case 0x32:
+        case 0x33:
+        case 0x34:
         case 0x35: fprintf(out,"[string %d]",x-28); break;
-        case 0x36: 
-        case 0x37: 
-        case 0x38: 
-        case 0x39: 
-        case 0x3A: 
-        case 0x3B: 
-        case 0x3C: 
-        case 0x3D: 
-        case 0x3E: 
+        case 0x36:
+        case 0x37:
+        case 0x38:
+        case 0x39:
+        case 0x3A:
+        case 0x3B:
+        case 0x3C:
+        case 0x3D:
+        case 0x3E:
         case 0x3F: fprintf(out,"[string %d]",x-43); break;
         case 0x40: fprintf(out,"[message]"); break;
 
         case 0x50: fread(buf.c,1,4,in);
                    fprintf(out,"[color #%i %i %i %i]",buf.c[3],buf.c[0],buf.c[1],buf.c[2]); break;
         case 0x51: x=fgetc(in); fprintf(out,"[whisper %s]",x ? "off":"on"); break;
-        
+
         case 0x54: x=fgetc(in); fprintf(out,"[size1 %i]",x); break;
 /*        case 0x55: fprintf(out,"[type]"); break;*/
 
@@ -409,40 +412,40 @@ switch(x){
 /*        case 0x5B: fprintf(out,"[dialog]"); break;*/
 
         case 0x5E: fprintf(out,"[default]"); break;
-        
+
         /*these are invented or from AC*/
 /*        case 0x62: fprintf(out,"[`default2]",x); break;*/
         case 0x63: fread(buf.s,2,2,in);
                    buf.s[0]=shortswap(buf.s[0]);
                    buf.s[1]=shortswap(buf.s[1]);
-                   fprintf(out,"[`range %04X %04X]",buf.s[0],buf.s[1]); break;  
+                   fprintf(out,"[`range %04X %04X]",buf.s[0],buf.s[1]); break;
 
         case 0x6A: fread(buf.s,2,2,in);
                    buf.s[0]=shortswap(buf.s[0]);
                    buf.s[1]=shortswap(buf.s[1]);
-                   fprintf(out,"[`interject %04X %04X]",buf.s[0],buf.s[1]); break;  
+                   fprintf(out,"[`interject %04X %04X]",buf.s[0],buf.s[1]); break;
         case 0x6B: fread(buf.s,2,3,in);     /*presumed command - so might not even exist!*/
                    buf.s[0]=shortswap(buf.s[0]);
                    buf.s[1]=shortswap(buf.s[1]);
                    buf.s[2]=shortswap(buf.s[2]);
-                   fprintf(out,"[`interject %04X %04X %04X]",buf.s[0],buf.s[1],buf.s[2]); break;  
+                   fprintf(out,"[`interject %04X %04X %04X]",buf.s[0],buf.s[1],buf.s[2]); break;
         case 0x6C: fread(buf.s,2,4,in);     /*presumed command - so might not even exist!*/
                    buf.s[0]=shortswap(buf.s[0]);
                    buf.s[1]=shortswap(buf.s[1]);
                    buf.s[2]=shortswap(buf.s[2]);
                    buf.s[3]=shortswap(buf.s[3]);
                    fprintf(out,"[`interject %04X %04X %04X %04X]",buf.s[0],buf.s[1],buf.s[2],buf.s[3]); break;
-        
+
         case 0x6F: fread(buf.s,2,1,in);                     /*hacked in - not from AC!*/
                    buf.s[0]=shortswap(buf.s[0]);
                    fprintf(out,"[TEXT %04X]",buf.s[0]); break;
         case 0x70: fprintf(out,"[CAPS]"); break;            /*hacked in - not from AC!*/
         case 0x71: fprintf(out,"[`isle]"); break;
         case 0x72: fprintf(out,"[`else]"); break;
-        case 0x73: fprintf(out,"[`if]"); break;        
+        case 0x73: fprintf(out,"[`if]"); break;
         case 0x74: fprintf(out,"[lowercase]"); break;       /*hacked in*/
         case 0x75: fprintf(out,"[capitalize]"); break;      /*hacked in*/
-        case 0x76: fprintf(out,"[am/pm]"); break;           /*hacked in*/        
+        case 0x76: fprintf(out,"[am/pm]"); break;           /*hacked in*/
         case 0x77: fread(buf.s,2,1,in);
                    buf.s[0]=shortswap(buf.s[0]);
                    fprintf(out,"[`selected5 %04X]",buf.s[0]); break;
@@ -453,7 +456,7 @@ switch(x){
                    buf.s[0]=shortswap(buf.s[0]);
                    buf.s[1]=shortswap(buf.s[1]);
                    buf.s[2]=shortswap(buf.s[2]);
-                   fprintf(out,"[menu %04X %04X %04X",buf.s[0],buf.s[1],buf.s[2]); break;  
+                   fprintf(out,"[menu %04X %04X %04X",buf.s[0],buf.s[1],buf.s[2]); break;
                    fread(buf.s,2,3,in);
                    buf.s[0]=shortswap(buf.s[0]);
                    buf.s[1]=shortswap(buf.s[1]);
@@ -462,7 +465,7 @@ switch(x){
                    buf.s[0]=shortswap(buf.s[0]);
                    buf.s[1]=shortswap(buf.s[1]);
                    buf.s[2]=shortswap(buf.s[2]);
-                   fprintf(out,"[menu %04X %04X %04X",buf.s[0],buf.s[1],buf.s[2]); break;  
+                   fprintf(out,"[menu %04X %04X %04X",buf.s[0],buf.s[1],buf.s[2]); break;
                    fread(buf.s,2,3,in);
                    buf.s[0]=shortswap(buf.s[0]);
                    buf.s[1]=shortswap(buf.s[1]);
@@ -580,14 +583,14 @@ for(x=1;x<argc;x++)
                   printf("\n  /8 or -8\t+\tto be implemented");
                   printf("\n  /H, /?, -H, or -?\tdisplay this help message");
                   printf("\n\n\tPress -enter- to quit"); getchar(); return 0;
-              }    
+              }
       }
     else strcpy(filename,argv[x]);
     }
 
 while (!(txt = fopen(filename, "rb"))) {
 	printf("\ntext binary file? ");
-	strcpy(filename,"\0");	
+	strcpy(filename,"\0");
 	gets(filename);
     }
 
@@ -595,7 +598,7 @@ while (!(txt = fopen(filename, "rb"))) {
     strcat(filename, ".tbl");
 while (!(tbl = fopen(filename, "rb"))) {
 	printf("\ntable for file? ");
-	strcpy(filename,"\0");	
+	strcpy(filename,"\0");
 	gets(filename);
     }
 
@@ -603,7 +606,7 @@ while (!(tbl = fopen(filename, "rb"))) {
     strcat(filename, ".txt");
 while (!(out = fopen(filename, "wt"))) {
 	printf("\noutput filename (.txt)? ");
-	strcpy(filename,"\0");	
+	strcpy(filename,"\0");
 	gets(filename);
     }
 
@@ -641,7 +644,7 @@ if(errflag.LineNum) fprintf(out,"%04X\t",pos/4);
           }
         /*80 commands aren't really handled yet.  PLACEHOLDER*/
         else if(x==0x80){
-          x=getc(txt); y=sizeof80(x); cur+=y; 
+          x=getc(txt); y=sizeof80(x); cur+=y;
           if(errflag.CommandOut){/*test if output occurs, then handle each variety*/
             if(errflag.WriteCom){/*disables a single command output*/
                if(errflag.bin80){/*straight binary feed*/
@@ -656,9 +659,9 @@ if(errflag.LineNum) fprintf(out,"%04X\t",pos/4);
           errflag.WriteCom=1;
           cur--;    /*since you increment in main loop - no dropped bytes!*/
           }
-        
+
         else {if(errflag.TextOut) transfer(x,out);}
-        
+
         }
    /*terminate your string, then print sizes and inline-error messages*/
    fprintf(out,"\n");
