@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "../../include/text_commands.h"
+
 /*disables control characters 7F/80 from output*/
 /*#define NO_CTRLCHARS*/
 /*disables normal text output, probably so you only have control characters*/
@@ -59,15 +61,15 @@ int transfer (unsigned char x, FILE *out)
         if(x == 0x23 || x == 0x24 || x == 0x5B || x == 0x5D || x == 0x5E || x == 0x60)
             strcpy(buf,"\0");
 
-        if(x>0x7A)
+        if(x > 0x7A)
         strcpy(buf,"\0");
     }
     else
     {
         switch (x)
         {
-        /*now hana and kata*/
-        // actually decided to keep it this way because it looks the mots readable this way
+        //now hana and kata
+        // actually decided to keep it this way because it looks the most readable this way
             case 0x00:	strcpy(buf, "[h-a]\0"); break;
             case 0x01:	strcpy(buf, "[h-i]\0"); break;
             case 0x02:	strcpy(buf, "[h-u]\0"); break;
@@ -256,10 +258,6 @@ int transfer (unsigned char x, FILE *out)
     return fprintf(out,"%s",buf);
 }
 
-/*I don't want an external table and don't know how
-  to embed one in here and still reference it...
-  So, this returns the sizes of the 7F commands
-  most common size (and therefore default) is 2*/
 int sizeof7F(unsigned int x)
 {
     if(!errflag.Quiet)
@@ -299,91 +297,55 @@ int sizeof7F(unsigned int x)
 
     switch(x) // match each command with its size
     {
-        case 0x03: case 0x51: case 0x52: case 0x53: case 0x54: case 0x58: case 0x59: case 0x5A: case 0x67:
-            x=3; break;
-        case 0x0E: case 0x0F: case 0x10: case 0x11: case 0x12: case 0x56: case 0x57: case 0x6F: case 0x77: case 0x78:
-            x=4; break;
-        case 0x05: case 0x08: case 0x09: case 0x0A: case 0x0B: case 0x0C:
-            x=5; break;
-        case 0x13: case 0x16: case 0x50: case 0x63: case 0x6A:
-            x=6; break;
-        case 0x14: case 0x17:
-            x=8; break;
-        case 0x15: case 0x18:
-            x=10; break;
-        case 0x79:
-            x=12; break;
-        case 0x7A:
-            x=14; break;
+        case CMD_PAUSE:
+        case CMD_WHISPER:
+        case CMD_52:
+        case CMD_53:
+        case CMD_SIZE1:
+        case CMD_58:
+        case CMD_SOUND:
+        case CMD_SIZE:
+        case CMD_67:
+            x = 3; break;
+        case CMD_JUMP:
+        case CMD_SELECTED1:
+        case CMD_SELECTED2:
+        case CMD_SELECTED3:
+        case CMD_SELECTED4:
+        case CMD_56:
+        case CMD_57:
+        case CMD_TEXT:
+        case CMD_SELECTED5:
+        case CMD_SELECTED6:
+            x = 4; break;
+        case CMD_COLOR_RGB:
+        case CMD_8:
+        case CMD_9:
+        case CMD_A:
+        case CMD_B:
+        case CMD_C:
+            x = 5; break;
+        case CMD_RAND2:
+        case CMD_MENU2:
+        case CMD_NUMBERED_COLOR_RGB:
+        case CMD_DEFAULT2:
+        case CMD_INTERJECT2:
+            x = 6; break;
+        case CMD_RAND3:
+        case CMD_MENU3:
+            x = 8; break;
+        case CMD_RAND4:
+        case CMD_MENU4:
+            x = 10; break;
+        case CMD_WEIRD_MENU2:
+            x = 12; break;
+        case CMD_WEIRD_MENU3:
+            x = 14; break;
         default:
-            x=2;
+            x = 2;
     }
     return x;
 }
-
-#define CMD_CLOSE 0
-#define CMD_OPEN 1
-#define CMD_CLS 2
-#define CMD_PAUSE_X 3
-#define CMD_WAIT 4
-#define CMD_COLOR_RGB 5
-#define CMD_TOGGLE_QUICK_ON 6
-#define CMD_TOGGLE_QUICK_OFF 7
-#define CMD_JUMP 0xE
-#define CMD_SELECTED1 0xF
-#define CMD_SELECTED2 0x10
-#define CMD_SELECTED3 0x11
-#define CMD_SELECTED4 0x12
-#define CMD_RAND2 0x13
-#define CMD_RAND3 0x14
-#define CMD_RAND4 0x15
-#define CMD_MENU2 0x16
-#define CMD_MENU3 0x17
-#define CMD_MENU4 0x18
-#define CMD_JUMP_TO_SELECTION 0x19
-#define CMD_PLAYER 0x1A
-#define CMD_SPEAKER 0x1B
-#define CMD_NICKNAME 0x1C
-#define CMD_YEAR 0x1D
-#define CMD_MONTH 0x1E
-#define CMD_WEEKDAY 0x1F
-#define CMD_DATE 0x20
-#define CMD_HOURS 0x21
-#define CMD_MINS 0x22
-#define CMD_SECONDS 0x23
-#define BUFFER_STRING_CMDS 0x24 ... 0x2D:
-#define CMD_RECALL 0x2E
-#define CMD_TOWN 0x2F
-#define CMD_NUMBER 0x30
-#define BUFFER_STRING_CMDS_2 0x31 ... 0x35:
-#define BUFFER_STRING_CMDS_3 0x36 ... 0x3F:
-#define CMD_MESSAGE 0x40
-
-#define CMD_NUMBERED_COLOR_RGB 0x50
-#define CMD_WHISPER 0x51
-#define CMD_SIZE1 0x54
-#define CMD_TYPE 0x55 //?
-#define CMD_SOUND 0x59
-#define CMD_SIZE 0x5A
-#define CMD_DIALOGUE 0x5B
-#define CMD_DEFAULT 0x5E
-#define CMD_DEFAULT2 0x63
-#define CMD_RANGE 0x64
-#define CMD_INTERJECT2 0x6A
-#define CMD_INTERJECT3 0x6B
-#define CMD_INTERJECT4 0x6C
-#define CMD_TEXT 0x6F
-#define CMD_CAPS 0x70
-#define CMD_ISLE 0x71
-#define CMD_ELSE 0x72
-#define CMD_IF 0x73
-#define CMD_LOWERCASE 0x74
-#define CMD_CAPITALIZE 0x75
-#define CMD_AMPM 0x76
-#define CMD_SELECTED5 0x77
-#define CMD_SELECTED6 0x78
-#define CMD_WEIRD_MENU2 0x79
-#define CMD_WEIRD_MENU3 0x7A
 
 //make happy 7F command output in []
 //not yet implemented on conversion, so don't expect it to work right
@@ -412,7 +374,7 @@ int happy7F(FILE *in, int size, unsigned long pos, FILE *out)
         case CMD_CLS:
             fprintf(out,"[CLS]");
             break;
-        case CMD_PAUSE_X:
+        case CMD_PAUSE:
             x = fgetc(in);
             fprintf(out, "[pause %i]", x);
             break;
