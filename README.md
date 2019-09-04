@@ -1,4 +1,4 @@
 # doubutsu-no-mori
 zoinkity's animal forest distro
 
-the goal is to streamline this & just build straight from text files and put those suckers in the rom :)
+this is literally the distro except now its source files have been tidied up so as to actually be readable
