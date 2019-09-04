@@ -41,9 +41,9 @@
 #define CMD_RECALL 0x2E
 #define CMD_TOWN 0x2F
 #define CMD_NUMBER 0x30
-#define BUFFER_STRING_CMDS_2 0x31 ... 0x35:
+#define BUFFER_STRING_CMDS_2 0x31 ... 0x35: //
 #define BUFFER_STRING_CMDS_3 0x36 ... 0x3F:
-#define CMD_MESSAGE 0x40 // AWAY_MESSAGE
+#define CMD_AWAY_MESSAGE 0x40 // AWAY_MESSAGE
 #define CMD_41 0x41
 #define CMD_42 0x42
 #define CMD_43 0x43

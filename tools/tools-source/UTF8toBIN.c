@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "../../include/text_commands.h"
 
@@ -1171,7 +1172,7 @@ unsigned long alias(FILE *in, unsigned long ipos, unsigned long epos, unsigned l
         count = 1;
     }
     // ブ
-    else if(!strcっmp(token, "k-bu"))
+    else if(!strcmp(token, "k-bu"))
     {
         vert[0] = 0xDF;
         fwrite(vert, 1, 1, out);
@@ -1403,18 +1404,18 @@ unsigned long alias(FILE *in, unsigned long ipos, unsigned long epos, unsigned l
     }
     // あ
     else if(!strcmp(token, "h-a"))
-
-         {vert[ 0 ]=0x0;
-          fwrite(ver t, 1, 1,out);
-          cou n t=1;
-      }
+    {
+        vert[0] = 0x0;
+        fwrite(vert, 1, 1, out);
+        count = 1;
+    }
     // い
     else if(!strcmp(token, "h-i"))
-
-         {vert[ 0 ]=0x1;
-          fwrite(ver t, 1, 1,out);
-          cou n t=1;
-      }
+    {
+        vert[0] = 0x1;
+        fwrite(vert, 1, 1, out);
+        count = 1;
+    }
     // う
     else if(!strcmp(token, "h-u"))
     {
@@ -1700,7 +1701,7 @@ unsigned long alias(FILE *in, unsigned long ipos, unsigned long epos, unsigned l
             }
         }
 
-        if(token=strtok(NULL," ]")) // optional option 6 - menu only
+        if(token = strtok(NULL, " ]")) // optional option 6 - menu only
         {
             if(vert[1] == CMD_WEIRD_MENU2)
             {
@@ -1716,473 +1717,688 @@ unsigned long alias(FILE *in, unsigned long ipos, unsigned long epos, unsigned l
         fwrite(vert, count, 1, out);
     }
     else if(!strcmp(token, "jump2sel"))
-      {vert[0]=0x7F; vert[1]=0x19;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_JUMP_TO_SELECTION;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "player"))
-      {vert[0]=0x7F; vert[1]=0x1A;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_PLAYER;
+        fwrite(vert, 2, 1, out);
+        count=2;
+    }
     else if(!strcmp(token, "speaker"))
-      {vert[0]=0x7F; vert[1]=0x1B;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_SPEAKER;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "nickname"))
-      {vert[0]=0x7F; vert[1]=0x1C;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_NICKNAME;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "year"))
-      {vert[0]=0x7F; vert[1]=0x1D;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_YEAR;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "month"))
-      {vert[0]=0x7F; vert[1]=0x1E;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_MONTH;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "day") || !strcmp(token, "weekday"))
-      {vert[0]=0x7F; vert[1]=0x1F;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_WEEKDAY;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "day#") || !strcmp(token, "date"))
-      {vert[0]=0x7F; vert[1]=0x20;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_DATE;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "hours"))
-      {vert[0]=0x7F; vert[1]=0x21;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_HOURS;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "mins"))
-      {vert[0]=0x7F; vert[1]=0x22;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_MINS;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "secs"))
-      {vert[0]=0x7F; vert[1]=0x23;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
-    else if(!strcmp(token, "name"))
-      {vert[0]=0x7F; vert[1]=0x24;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_SECONDS;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
+    else if(!strcmp(token, "name")) // the first buffer string cmd is the name?
+    {
+        vert[0] = 0x7F;
+        vert[1] = 0x24;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     /*all the string # types
       That's 24-2D, then 31-3F*/
     else if(!strcmp(token, "string"))
-      {if(!(token=strtok(NULL," ]"))) {erratta(36,0); x=0;}
-      x=strtol(token,NULL,10);
-      if(x<0) x=0-x;          /*cheaper than abs()*/
-      if(x>25)  {erratta(36,0); x=25;}
-      vert[0]=0x7F; vert[1]=0x23+x;
-      if(x>10) vert[1]+=8;
-      if(x>20) vert[1]-=15;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        if(!(token=strtok(NULL, " ]"))) // if no parameter there for loading whichever
+        {
+            erratta(36, 0);
+            x = 0;
+        }
+        x = strtol(token, NULL, 10);
 
+        if(x < 0)
+            x = 0 - x; // apparently abs wasn't used for "a good reason"
+
+        if(x > 25) // so string 1 is the name?
+        {
+            erratta(36, 0);
+            x = 25;
+        }
+
+        vert[0] = 0x7F;
+        vert[1] = 0x23 + x; // augment string cmd numbers, for whatever reason 0-indexing doesn't exist in a lot of this
+
+        if(x > 10) // adjust for where the actual command iss
+            vert[1] += 8;
+        if(x > 20)
+            vert[1] -= 15;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "recall"))
-      {vert[0]=0x7F; vert[1]=0x2E;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_RECALL;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "town"))
-      {vert[0]=0x7F; vert[1]=0x2F;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_TOWN;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "number"))
-      {vert[0]=0x7F; vert[1]=0x30;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
-    else if(!strcmp(token, "item"))  /*old value name - same as string 21*/
-      {vert[0]=0x7F; vert[1]=0x31;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_NUMBER;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
+    else if(!strcmp(token, "item"))  // old value name - same as string 21
+    {
+        vert[0] = 0x7F;
+        vert[1] = 0x31;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "message"))
-      {vert[0]=0x7F; vert[1]=0x40;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
-    /*Omitron, the lost transformer*/
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_AWAY_MESSAGE;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "whisper"))
-      {vert[0]=0x7F; vert[1]=0x51; x=0;
-      if(!(token=strtok(NULL," ]"))) {erratta(0x51,0); x=0;}
-      if(!strcmp(token,"off")) x=1;
-      vert[2]=x;
-      fwrite(vert,3,1,out);
-      count=3;}
-    /*couple more...*/
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_WHISPER;
+        x = 0;
+
+        if(!(token = strtok(NULL, " ]")))
+        {
+            erratta(0x51,0);
+            x=0;
+        }
+
+        if(!strcmp(token, "off"))
+            x = 1;
+
+        vert[2] = x;
+        fwrite(vert, 3, 1, out);
+        count = 3;
+    }
     else if(!strcmp(token, "size1"))
-      {vert[0]=0x7F; vert[1]=0x54;
-      if(!(token=strtok(NULL," ]"))) {erratta(0x54,0); x=0;}
-      else x=strtol(token,NULL,10);
-      vert[2]=x%256;
-      fwrite(vert,3,1,out);
-      count=3;}
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_SIZE1;
+
+        if(!(token = strtok(NULL, " ]")))
+        {
+            erratta(0x54, 0);
+            x = 0;
+        }
+        else
+            x = strtol(token, NULL, 10);
+
+        vert[2] = x % 256;
+        fwrite(vert, 3, 1, out);
+        count = 3;
+    }
     else if(!strcmp(token, "sound"))
-      {vert[0]=0x7F; vert[1]=0x59;
-      if(!(token=strtok(NULL," ]"))) {erratta(0x59,0); x=0;}
-      else x=strtol(token,NULL,10);
-      vert[2]=x%256;
-      fwrite(vert,3,1,out);
-      count=3;}
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_SOUND;
+
+        if(!(token = strtok(NULL, " ]")))
+        {
+            erratta(0x59, 0);
+            x = 0;
+        }
+        else
+            x = strtol(token, NULL, 10);
+
+        vert[2] = x % 256;
+        fwrite(vert, 3, 1, out);
+        count = 3;
+    }
     else if(!strcmp(token, "size"))
-      {vert[0]=0x7F; vert[1]=0x5A;
-      if(!(token=strtok(NULL," ]"))) {erratta(0x5A,0); x=0;}
-      else x=strtol(token,NULL,10);
-      vert[2]=x%256;
-      fwrite(vert,3,1,out);
-      count=3;}
-    /*and some more...*/
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_SIZE;
+
+        if(!(token = strtok(NULL, " ]")))
+        {
+            erratta(0x5A,0);
+            x = 0;
+        }
+        else
+            x = strtol(token, NULL, 10);
+
+        vert[2] = x % 256;
+        fwrite(vert, 3, 1, out);
+        count = 3;
+    }
     else if(!strcmp(token, "default"))
-      {vert[0]=0x7F; vert[1]=0x5E;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
-    /*these double-up common erroneously-written commands*/
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_DEFAULT;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
+    /*
+    these double-up common erroneously-written commands
+    */
     else if(!strcmp(token, "stress") || !strcmp(token, "anger") || !strcmp(token, "+"))
-      {vert[0]=0x5C;
-      fwrite(vert,1,1,out);
-      count=1;
-      }
+    {
+        vert[0] = 0x5C;
+        fwrite(vert, 1, 1, out);
+        count = 1;
+    }
     else if(!strcmp(token, "quote") || !strcmp(token, "q"))
-      {vert[0]=0x22;
-      fwrite(vert,1,1,out);
-      count=1;
-      }
+    {
+        vert[0] = 0x22;
+        fwrite(vert, 1, 1, out);
+        count = 1;
+    }
     else if(!strcmp(token, "heart") || !strcmp(token, "h"))
-      {vert[0]=0x2B;
-      fwrite(vert,1,1,out);
-      count=1;
-      }
+    {
+        vert[0] = 0x2B;
+        fwrite(vert, 1, 1, out);
+        count = 1;
+    }
     else if(!strcmp(token, "note") || !strcmp(token, "eighth") || !strcmp(token, "n") || !strcmp(token, "8"))
-      {vert[0]=0x2F;
-      fwrite(vert,1,1,out);
-      count=1;
-      }
+    {
+        vert[0] = 0x2F;
+        fwrite(vert, 1, 1, out);
+        count = 1;
+    }
     else if(!strcmp(token, "sweat") || !strcmp(token, "drop") || !strcmp(token, "tear") || !strcmp(token, "teardrop")  || !strcmp(token, "s"))
-      {vert[0]=0x3B;
-      fwrite(vert,1,1,out);
-      count=1;
-      }
+    {
+        vert[0] = 0x3B;
+        fwrite(vert, 1, 1, out);
+        count = 1;
+    }
     else if(!strcmp(token, "o"))
-      {vert[0]=0x81;
-      fwrite(vert,1,1,out);
-      count=1;
-      }
+    {
+        vert[0] = 0x81;
+        fwrite(vert, 1, 1, out);
+        count = 1;
+    }
     else if(!strcmp(token, "."))
-      {vert[0]=0x84;
-      fwrite(vert,1,1,out);
-      count=1;
-      }
+    {
+        vert[0] = 0x84;
+        fwrite(vert, 1, 1, out);
+        count = 1;
+    }
     else if(!strcmp(token, "-"))
-      {vert[0]=0x90;
-      fwrite(vert,1,1,out);
-      count=1;
-      }
+    {
+        vert[0] = 0x90;
+        fwrite(vert, 1, 1, out);
+        count = 1;
+    }
     else if(!strcmp(token, "smile") || !strcmp(token, "s"))
-      {vert[0]=0xBF;
-      fwrite(vert,1,1,out);
-      count=1;
-      }
+    {
+        vert[0] = 0xBF;
+        fwrite(vert, 1, 1, out);
+        count = 1;
+    }
     else if(!strcmp(token, "r") || !strcmp(token, "\\r") || !strcmp(token, "\\n") || !strcmp(token, "line")  || !strcmp(token, "newline")  || !strcmp(token, "return"))
-      {vert[0]=0xCD;
-      fwrite(vert,1,1,out);
-      count=1;
-      }
-
-    /*these are hacked types*/
+    {
+        vert[0] = 0xCD;
+        fwrite(vert, 1, 1, out);
+        count = 1;
+    }
+    /*
+    hacked in
+    */
     else if(!strcmp(token, "TEXT") || !strcmp(token, "`TEXT") || !strcmp(token, "text") || !strcmp(token, "`text"))
-      {if(!(token=strtok(NULL, " ]"))) {erratta(0x6F, 0); x = 0;}
-      x=strtol(token,NULL,16);
-      x=x%0x10000;
-      vert[0]=0x7F; vert[1]=0x6F;
-      vert[2]=x/256; vert[3]=x%256;
-      fwrite(vert,4,1,out);
-      count=4;
-      }
-    else if(!strcmp(token, "`CAPS") || !strcmp(token, "CAPS") || !strcmp(token, "caps") || !strcmp(token, "`caps") || !strcmp(token, "uppercase") || !strcmp(token, "`uppercase") || !strcmp(token, "upper") || !strcmp(token, "`upper") || !strcmp(token, "toupper") || !strcmp(token, "`toupper"))
-      {vert[0]=0x7F; vert[1]=0x70;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        if(!(token = strtok(NULL, " ]")))
+        {
+            erratta(0x6F, 0);
+            x = 0;
+        }
 
+        x = strtol(token, NULL, 16);
+        x = x % 0x10000;
+        vert[0] = 0x7F;
+        vert[1] = CMD_TEXT;
+        vert[2] = x / 256;
+        vert[3] = x % 256;
+        fwrite(vert, 4, 1, out);
+        count = 4;
+    }
+    else if(!strcmp(token, "`CAPS") || !strcmp(token, "CAPS") || !strcmp(token, "caps") || !strcmp(token, "`caps") || !strcmp(token, "uppercase") || !strcmp(token, "`uppercase") || !strcmp(token, "upper") || !strcmp(token, "`upper") || !strcmp(token, "toupper") || !strcmp(token, "`toupper"))
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_CAPS;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "`lowercase") || !strcmp(token, "lowercase") || !strcmp(token, "lower") || !strcmp(token, "`lower") || !strcmp(token, "tolower") || !strcmp(token, "`tolower"))
-      {vert[0]=0x7F; vert[1]=0x74;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_LOWERCASE;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "`capitalize") || !strcmp(token, "capitalize"))
-      {vert[0]=0x7F; vert[1]=0x75;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_CAPITALIZE;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "`am/pm") || !strcmp(token, "am/pm"))
-      {vert[0]=0x7F; vert[1]=0x76;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_AMPM;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
 
     /*AC only, except the larger menus*/
     else if(!strcmp(token, "`range") || !strcmp(token, "range"))
-      {vert[0]=0x7F; vert[1]=0x63;
-      x=0;
-      if(token=strtok(NULL," ]")) {
-        x=strtol(token,NULL,16);
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_RANGE - 1;
+        x = 0;
+
+        if(token = strtok(NULL, " ]"))
+        {
+            x = strtol(token, NULL, 16);
         }
-      x=x%0x10000;
-      vert[2]=x/256; vert[3]=x%256;
-      if(token=strtok(NULL," ]")) {
-        x=strtol(token,NULL,16);
+
+        x = x % 0x10000;
+        vert[2] = x / 256;
+        vert[3] = x % 256;
+
+        if(token = strtok(NULL, " ]"))
+        {
+            x = strtol(token, NULL, 16);
         }
-      else {erratta(99,0); x=0;}
-      x=x%0x10000;
-      vert[4]=x/256; vert[5]=x%256;
-      fwrite(vert,6,1,out);
-      count=6;
+        else
+        {
+            erratta(CMD_RANGE - 1, 0);
+            x = 0;
+        }
+
+        x = x % 0x10000;
+        vert[4] = x / 256;
+        vert[5] = x % 256;
+        fwrite(vert, 6, 1, out);
+        count = 6;
       }
     else if(!strcmp(token, "`isle"))
-      {vert[0]=0x7F; vert[1]=0x71;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_ISLE;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "else") || !strcmp(token, "`else"))
-      {vert[0]=0x7F; vert[1]=0x72;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_ELSE;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
     else if(!strcmp(token, "if") || !strcmp(token, "`if"))
-      {vert[0]=0x7F; vert[1]=0x73;
-      fwrite(vert,2,1,out);
-      count=2;
-      }
+    {
+        vert[0] = 0x7F;
+        vert[1] = CMD_IF;
+        fwrite(vert, 2, 1, out);
+        count = 2;
+    }
 
 
-/*macro string types*/
-else if(!strcmp(token,"TIME"))
-  {x=0x7F3A217F; fwrite(&x,1,4,out);  /*stupid intel...*/
-  x=0x767F2022; fwrite(&x,1,4,out);
-  x=0x206E6F20; fwrite(&x,1,4,out);
-  x=0x7FCD1E7F; fwrite(&x,1,4,out);
-  x=0x7F202C20; fwrite(&x,1,4,out);
-  vert[0]=0x1D; fwrite(vert,1,1,out);
-  count=21;
-  }
+    /*macro string types*/
+    else if(!strcmp(token,"TIME"))
+    {
+        x=0x7F3A217F; fwrite(&x, 1, 4, out);
+        x=0x767F2022; fwrite(&x, 1, 4, out);
+        x=0x206E6F20; fwrite(&x, 1, 4, out);
+        x=0x7FCD1E7F; fwrite(&x, 1, 4, out);
+        x=0x7F202C20; fwrite(&x, 1, 4, out);
+        vert[0] = 0x1D; fwrite(vert, 1, 1, out);
+        count = 21;
+    }
 
-return count;}
+    return count;
+}
 
 /*finds the start of following entry, either terminating with semicolon or newline*/
 unsigned long next(FILE *in, unsigned long pos)
-{unsigned char x=1;
-do{
-   fseek(in,pos,SEEK_SET);
-   pos++;
-   switch(x=fgetc(in))
-     {/*this may look cryptic, but I've gotten a few text files from people where the newlines are 0A 0D, not 0D 0A*/
-     case 0xA: while(fgetc(in)==0xD) {pos++;}
-     case 0x9: break;
-     default: x=0;
-     }
-   }while(x==0);
-return pos;
+{
+    unsigned char x = 1;
+
+    do
+    {
+        fseek(in, pos, SEEK_SET);
+        pos++;
+
+        switch(x = fgetc(in))
+        {/*this may look cryptic, but I've gotten a few text files from people where the newlines are 0A 0D, not 0D 0A*/
+            case 0xA:
+                while(fgetc(in) == 0xD)
+                {
+                    pos++;
+                }
+            case 0x9:
+                break;
+            default:
+                x = 0;
+        }
+    }
+    while (x == 0);
+
+    return pos;
 }
 
-/*fun fun fun!  hopefully will return long equal to value at command*/
+// fun fun fun!  hopefully will return long equal to value at command
 long nab(FILE *in, unsigned long pos)
-{long val,max;
-unsigned char buf[12];
+{
+    long val, max;
+    unsigned char buf[12];
 
-memset(buf,0,12);
+    memset(buf, 0, 12);
 
-max=next(in,pos);
-max=max-pos-1;   /*max=#characters to lift now*/
-fseek(in,pos,SEEK_SET);
-fread(buf,1,max,in);
-#ifdef DEBUGGERY
-printf("\nconverting snagged string %s",buf);
-#endif
-val=strtol(buf,NULL,10);
-#ifdef DEBUGGERY
-printf("\nconverted value\t",val);
-#endif
+    max = next(in, pos);
+    max = max - pos - 1; // max=#characters to lift now
+    fseek(in, pos, SEEK_SET);
+    fread(buf, 1, max, in);
+    #ifdef DEBUGGERY
+    printf("\nconverting snagged string %s", buf);
+    #endif
+    val = strtol(buf, NULL, 10);
+    #ifdef DEBUGGERY
+    printf("\nconverted value\t", val);
+    #endif
 
-return val;}
+    return val;
+}
 
 /*process a string, pushing it into the binary file
   returns the length of the string*/
-long process(FILE *in,unsigned long ipos,FILE *out,unsigned long opos)
-{long count,end,x;      /*count keeps track of the real strlen; len is size*/
-unsigned char buf[2],y; /*buf used to convert hex values*/
+long process(FILE *in, unsigned long ipos, FILE *out, unsigned long opos)
+{
+    long count, end, x; // count keeps track of the real strlen; len is size
+    unsigned char buf[2], y; // buf used to convert hex values
 
+    // find the end - must start at first quote
+    end = next(in, ipos);
 
-/*find the end - must start at first quote*/
-end=next(in,ipos);
+    // now that you know the start and length, iterate yo!
+    for(count = 0; ipos < end; ipos++)
+    {
+        fseek(in, ipos, SEEK_SET);
+        y = fgetc(in);
+        #ifdef LOOKSEE
+        printf("\n\tcur: %X end: %X\tcharacter: %X %c",ipos,end,y,y);
+        #endif
+        // straight #hex#, for unaliased commands more often then not
+        if(y == '#')
+        {
+            do
+            {
+                ipos++;
+                fseek(in, ipos, SEEK_SET);
+                y = fgetc(in);
 
-/*now that you know the start and length, iterate yo!*/
-for(count=0;ipos<end;ipos++)
-   {fseek(in,ipos,SEEK_SET);
-   y=fgetc(in);
-#ifdef LOOKSEE
-printf("\n\tcur: %X end: %X\tcharacter: %X %c",ipos,end,y,y);
-#endif
-/*straight #hex#, for unaliased commands more often then not*/
-   if(y=='#') {do{ipos++;
-                 fseek(in,ipos,SEEK_SET);
-                 y=fgetc(in);
-                 if(y=='#') continue;
-                 if(isxdigit(y))          /*catches only hex bytes - ignore whitespace*/
-                   {buf[0]=y;
-                   buf[1]=fgetc(in);      /*this is your byte*/
-                   buf[2]=0;
-                   y=(unsigned char) strtol(buf,NULL,16);    /*value would absolutely range b/w 0-255*/
-#ifdef LOOKSEE
-printf("\n\tcur: %X\tstring vs character: %s %X",ipos,buf,y); getchar();
-#endif
-                   fseek(out,opos+count,SEEK_SET);
-                   fputc(y,out);
-                   count++;
-                   ipos++; /*this makes for a 2-byte increment*/
-                   y=0;    /*otherwise, if 23 was used you'd break the command!  The horror!*/
-                   }
-                 }while(y!='#');
-              /*that should end ready to strip the next character*/
-              }
-/*special [codewords] wrapped in brackets*/
-   else if(y=='[') {
-                   x=ipos;
-                   do{x++;
-                      fseek(in,x,SEEK_SET);
-                      }while(fgetc(in)!=']');
-                   count+=alias(in,ipos+1,x,opos+count,out);
-                   ipos=x;
-                   }
-/*major addition: UTF-8 japanese text support*/
-   else if(y>0xE0) {buf[0]=fgetc(in);
-                    buf[1]=fgetc(in);
-                    ipos+=2;      /*EX for bank, then wchar value*/
-                    y=UTF8(buf[0],buf[1]);
-                    if(y!=0x80){
-                      fseek(out,opos+count,SEEK_SET);
-                      fputc(y,out);
-                      count++;      /*one char to binary*/
-                      }
-                    }
+                if(y == '#')
+                    continue;
 
-/*ANSI text - 0x7F and below*/
-   else {buf[0]=y;          /*ascii and alias*/
-        buf[1]=fgetc(in);
-        y=ascii(buf[0],buf[1]);
-        if(y){
-          fseek(out,opos+count,SEEK_SET);
-          fputc(y,out);
-          if(buf[0]=='$' || buf[0]=='\\') ipos++;       /*add another to ipos when an alias used*/
-          count++;
-          }
+                if(isxdigit(y)) // catches only hex bytes - ignore whitespace
+                {
+                    buf[0] = y;
+                    buf[1] = fgetc(in); // this is your byte
+                    buf[2] = 0;
+                    y = (unsigned char) strtol(buf, NULL, 16); // value would absolutely range b/w 0-255
+                    #ifdef LOOKSEE
+                    printf("\n\tcur: %X\tstring vs character: %s %X", ipos, buf, y);
+                    getchar();
+                    #endif
+                    fseek(out, opos + count, SEEK_SET);
+                    fputc(y, out);
+                    count++;
+                    ipos++; // this makes for a 2-byte increment
+                    y = 0; // otherwise, if 23 was used you'd break the command!  The horror!
+                }
+            }
+            while(y != '#');
+            // that should end ready to strip the next character*/
         }
-   }
+        // special [codewords] wrapped in brackets
+        else if(y == '[')
+        {
+            x=ipos;
+
+            do
+            {
+                x++;
+                fseek(in,x,SEEK_SET);
+            }
+            while(fgetc(in) != ']');
+
+            count += alias(in, ipos + 1, x, opos + count, out);
+            ipos = x;
+        }
+        // major addition: UTF-8 japanese text support
+        else if(y > 0xE0)
+        {
+            buf[0] = fgetc(in);
+            buf[1] = fgetc(in);
+            ipos += 2; // EX for bank, then wchar value
+            y = UTF8(buf[0], buf[1]);
+            if(y != 0x80)
+            {
+                fseek(out,opos+count,SEEK_SET);
+                fputc(y,out);
+                count++; // pne char to binary
+            }
+        }
+
+        // ANSI text - 0x7F and below
+        else
+        {
+            buf[0] = y; //ascii and alias
+            buf[1] = fgetc(in);
+            y = ascii(buf[0], buf[1]);
+
+            if(y)
+            {
+                fseek(out, opos + count, SEEK_SET);
+                fputc(y, out);
+
+                if(buf[0] == '$' || buf[0] == '\\')
+                    ipos++; // add another to ipos when an alias used
+
+                count++;
+            }
+        }
+    }
 
 return count;}
 
 /*the head honcho*/
 int main(int argc, char *argv[])
-{char buf[1024];    /*buffer is the max size of N64 buffer. take that overruns!*/
-FILE *tbl,*txt,*bin;
+{
+    char buf[1024]; // buffer is the max size of N64 buffer. take that overruns!
+    FILE *tbl, *txt, *bin;
 
-unsigned long in=0,pos=0,tab=0,y;     /*pos in infile, pos in bin, cur in tbl*/
-unsigned char x,opt=7;
+    unsigned long in = 0, pos = 0, tab = 0, y; // pos in infile, pos in bin, cur in tbl
+    unsigned char x, opt = 7;
 
-for(x=1;x<argc;x++)
-    {if(argv[x][0]=='-' || argv[x][0]=='/')
-      {switch(argv[x][1])
-             {case 'O': case 'o': opt^=2;  break;
-              case 'L': case 'l': opt^=1;  break;
-              case 'Q': case 'q': opt^=4;  break;
-              case 'H': case 'h': case '?':
-                  printf("\nConverts UTF-8 text dump to Animal Forest/Crossing bin+offset file");
-                  printf("\n\t/o or -o\tcreate offset file, not table");
-                  printf("\n\t/L or -L\tignore line numbers (numeral followed by tab)");
-                  printf("\n\t/Q or -Q\tdon't complain if file lacks BOM");
-                  printf("\n\t/H, /?, -H, or -?\tdisplay this help message");
-                  printf("\npress enter to quit"); getchar(); return 0;
-              }
-      }
-    else strcpy(buf,argv[x]);
+    for(x = 1; x < argc; x++)
+    {
+        if(argv[x][0] == '-' || argv[x][0] == '/')
+        {
+            switch(argv[x][1])
+            {
+                case 'O': case 'o':
+                    opt^=2;
+                    break;
+                case 'L': case 'l':
+                    opt^=1;
+                    break;
+                case 'Q': case 'q':
+                    opt^=4;
+                    break;
+                case 'H': case 'h': case '?':
+                    printf("\nConverts UTF-8 text dump to Animal Forest/Crossing bin+offset file");
+                    printf("\n\t/o or -o\tcreate offset file, not table");
+                    printf("\n\t/L or -L\tignore line numbers (numeral followed by tab)");
+                    printf("\n\t/Q or -Q\tdon't complain if file lacks BOM");
+                    printf("\n\t/H, /?, -H, or -?\tdisplay this help message");
+                    printf("\npress enter to quit");
+                    getchar();
+                    return 0;
+            }
+        }
+        else
+            strcpy(buf, argv[x]);
     }
 
-while (!(txt = fopen(buf, "rb"))) {
-	printf("\nUTF-8 text file? ");
-	strcpy(buf,"\0");
-	gets(buf);
+    while (!(txt = fopen(buf, "rb")))
+    {
+        printf("\nUTF-8 text file? ");
+        strcpy(buf,"\0");
+        gets(buf);
     }
 
-    strtok(buf,".");
-    if(opt&2) strcat(buf, ".tbl");
-    else strcat(buf, ".off");
-while (!(tbl = fopen(buf, "wb+"))) {
-	printf("\noutput %s file? ", opt&2 ? "offset":"table");
-	strcpy(buf,"\0");
-	gets(buf);
+    strtok(buf, ".");
+    if(opt & 2)
+        strcat(buf, ".tbl");
+    else
+        strcat(buf, ".off");
+
+    while (!(tbl = fopen(buf, "wb+")))
+    {
+        printf("\noutput %s file? ", opt&2 ? "offset":"table");
+        strcpy(buf, "\0");
+        gets(buf);
     }
 
     strtok(buf,".");
     strcat(buf, ".bin");
-while (!(bin = fopen(buf, "wb"))) {
-	printf("\noutput binary? ");
-	strcpy(buf,"\0");
-	gets(buf);
+
+    while (!(bin = fopen(buf, "wb")))
+    {
+        printf("\noutput binary? ");
+        strcpy(buf, "\0");
+        gets(buf);
     }
 
-/*Confirm if the file has a BOM (a sort of 3-byte header)
-  it should read EF BB BF.  Otherwise, prompt abort or assume valid UTF-8 no BOM*/
-x=fgetc(txt);
-if(x==0xEF) in=3;
-else if(opt&4) {printf("\n\aThis file doesn't have a UTF-8 BOM.\nIf it is straight ANSI text or a UTF-8 file that doesn't have a BOM, it will still work.\n\nType 'Y' to continue anyway, or any other phrase to quit.");
-               x=getchar();
-               if(islower(x)) x=toupper(x);
-               if(x!='Y') return 1;
-               }
+    /*Confirm if the file has a BOM (a sort of 3-byte header)
+      it should read EF BB BF.  Otherwise, prompt abort or assume valid UTF-8 no BOM*/
+    x = fgetc(txt);
 
-/*Read for start of string when entry numbers are present
-  if present, must always be followed by tabs
-  entries end with newline*/
-do{fseek(txt,in,SEEK_SET);
-  if(opt&1) in=next(txt,in);
-#ifdef DEBUGGERY
-printf("\nposition: %X",in);
-#endif
+    if(x == 0xEF)
+        in=3;
+    else if(opt & 4)
+    {
+        printf("\n\aThis file doesn't have a UTF-8 BOM.\nIf it is straight ANSI text or a UTF-8 file that doesn't have a BOM, it will still work.\n\nType 'Y' to continue anyway, or any other phrase to quit.");
+        x = getchar();
+        if(islower(x))
+            x = toupper(x);
+        if(x != 'Y')
+            return 1;
+    }
 
-/*feed in text and output the line*/
-  y=process(txt,in,bin,pos);
-  pos+=y;
-  fseek(tbl,tab,SEEK_SET);
-  y=byteswap(y);
-  fwrite(&y,4,1,tbl);
+    /*Read for start of string when entry numbers are present
+      if present, must always be followed by tabs
+      entries end with newline*/
+    do
+    {
+        fseek(txt, in, SEEK_SET);
+        if(opt & 1)
+            in = next(txt, in);
 
-in=next(txt,in);
-#ifdef DEBUGGERY
-printf("\tnext at: %X",in);
-printf("\n\tprinted %i bytes spanning %X - %X\n\tstrlen at %X, entry %X",y,pos-y,pos,tab,tab/4);
-#endif
-tab+=4;
+        #ifdef DEBUGGERY
+        printf("\nposition: %X", in);
+        #endif
 
-}while(!feof(txt));      /*quit at eof*/
+        // feed in text and output the line
+        y = process(txt, in, bin, pos);
+        pos += y;
+        fseek(tbl, tab, SEEK_SET);
+        y = byteswap(y);
+        fwrite(&y, 4, 1, tbl);
 
-/*if you didn't disable it, converts the offset table into a table, ready for insertion*/
-if(opt&2) Off2Tbl(tbl,tbl);
+        in = next(txt, in);
+        #ifdef DEBUGGERY
+        printf("\tnext at: %X", in);
+        printf("\n\tprinted %i bytes spanning %X - %X\n\tstrlen at %X, entry %X", y, pos - y, pos, tab, tab / 4);
+        #endif
+        tab += 4;
 
-fclose(tbl);
-fclose(txt);
-fclose(bin);
+    }
+    while(!feof(txt)); // quit at end of file
 
-return 0;}
+    // if you didn't disable it, converts the offset table into a table, ready for insertion
+    if(opt & 2)
+        Off2Tbl(tbl, tbl);
+
+    fclose(tbl);
+    fclose(txt);
+    fclose(bin);
+
+    return 0;
+}

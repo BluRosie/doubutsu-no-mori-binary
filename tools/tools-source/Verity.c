@@ -117,9 +117,9 @@ int difference(unsigned int x)
             else
                 x = 14;
             break;
-        case CMD_MESSAGE:
-            x = 94;
-            break;     /*guessing at size of away message*/
+        case CMD_AWAY_MESSAGE:
+            x = 94; // guessing at size of away message
+            break;
         /*case 0x6F:
                x=???; break;  /*highly variable size-4*/
         default:

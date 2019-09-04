@@ -507,7 +507,7 @@ int happy7F(FILE *in, int size, unsigned long pos, FILE *out)
         case BUFFER_STRING_CMDS_3 // ranges 0xB - 0x14
             fprintf(out, "[string %d]", x - 0x2B);
             break;
-        case CMD_MESSAGE:
+        case CMD_AWAY_MESSAGE:
             fprintf(out, "[message]");
             break;
         case CMD_NUMBERED_COLOR_RGB:
