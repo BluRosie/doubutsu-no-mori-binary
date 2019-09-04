@@ -29,7 +29,6 @@ int main(int argc, char *argv[])
 
     while (!(in = fopen(filename, "rb")))
     {
-	    printf("\nN64 ROM? ");
 	    strcpy(filename,"\0");
 	    gets(filename);
     }
@@ -39,7 +38,6 @@ int main(int argc, char *argv[])
 
     while (!(out = fopen(filename, "wb")))
     {
-        printf("\nextended filename? ");
         strcpy(filename,"\0");
         gets(filename);
     }
@@ -65,14 +63,11 @@ int main(int argc, char *argv[])
 
     if (y > 1)
     {
-        printf("\a\nThe bugger is %sbit byteswapped.\nShould I straighten it out? (Y/N)\t", y > 2 ? "32":"16");
-        x = getchar();
-        if (x !='Y' && x != 'y')
-            y=1;
+        printf("\a\nThe ROM's endianness is messed up.\nWill straighten it out.\n");
     }
 
     /*copy file and byteswap when necessary*/
-    printf("\n\tCopying file...    ");
+    printf("\nCopying file...\n");
     for (x = 0; x < size; x += 4)
     {
         fseek(in, x, SEEK_SET);
@@ -101,21 +96,17 @@ int main(int argc, char *argv[])
     x = size >> 17;     /*convert size to Mb*/
 
     if(x > 0x100)
-        printf("\a\n512Mb is the normal maximum rom size.\nDo you want to kick it up from %iMb to %iMb? (Y/N)\t", x, x<<1);
+        printf("\a\n512Mb is the normal maximum rom size. No extension necessary.\n");
     else
-        printf("\a\nShould I extend the rom from %iMb to %iMb? (Y/N)\t", x, x<<1);
-
-    y = getchar();
-
-    if(y == 'Y' || y == 'y')
     {
-        buf=0; fseek(out,0,SEEK_END);
-        printf("\nExtending file...    ");
+        printf("\a\nExtending the rom from %iMb to %iMb...\n", x, x << 1);
+        buf = 0;
+        fseek(out, 0, SEEK_END);
         for(x = 0; x < size; x += 4)
-            fwrite(&buf, 4, 1, out);
+        fwrite(&buf, 4, 1, out);
     }
     /*end extendo*/
-
+-
     /*clean up and exit*/
     fclose(in);
     fclose(out);
