@@ -5,13 +5,13 @@
 /*#define DEBUGGERY     /*general debug messages*/
 /*#define UTF_CODE      /*allows you to see the 2-byte UTF code used for lookup*/
 /*#define LOOKSEE       /*lets you see the characters in the string as they are output*/
-/*reads in UTF-8 script, pumps out tlb+bin*/
-  
+/*reads in UTF-8 script, pumps out tbl+bin*/
+
 
 /*standard 32bit byteswapping*/
 unsigned long byteswap(unsigned long w)
 {return (w >> 24) | ((w >> 8) & 0x0000ff00) | ((w << 8) & 0x00ff0000) | (w << 24);
-}    
+}
 
 /*converts offsets to tables, and can even do it to the same exact file!*/
 unsigned long Off2Tbl(FILE *tbl, FILE *off)
@@ -43,7 +43,7 @@ unsigned char ascii(unsigned char x, unsigned char y)
 
 /*return, tab, linefeed, etc.*/
     if(x<0x20) return 0;
-    
+
 /*special cases to alias certain characters - they'll be noted below*/
     if(x==0x7E) return 0x2A;           /*alias wave dash with tilde*/
     if(x==0x2B) return 0x5C;           /*alias stress with plus sign*/
@@ -56,7 +56,7 @@ unsigned char ascii(unsigned char x, unsigned char y)
                 if(y==0x72 || y==0x52 || y==0x6E || y==0x4E) return 0xCD;}
 
 /*indirect alias - $X characters*/
-    if(x==0x24) 
+    if(x==0x24)
       {switch(y)
              {case 'q': return 0x22;     /*$q quotation marks*/
               case 'h': return 0x2B;     /*$h heart*/
@@ -69,7 +69,7 @@ unsigned char ascii(unsigned char x, unsigned char y)
               case 'r': return 0xCD;     /*$r just in case they write returns stupidly*/
               }
       }
-    
+
     return x;
     }
 
@@ -1136,7 +1136,7 @@ else if(!strcmp(token,"wait"))
   }
 else if(!strcmp(token,"color"))
   {count=5;
-  vert[0]=0x7F; vert[1]=5; 
+  vert[0]=0x7F; vert[1]=5;
   if(token=strtok(NULL," ]")){
     if(token[0]=='#')/*!strncmp(token,"#",1))     this is for numerical type*/
       {x=strlen(token);
@@ -1157,7 +1157,7 @@ else if(!strcmp(token,"color"))
     x=strtol(token,NULL,10);
     vert[4]=x%256;}
   else erratta(5,0);
-   
+
   fwrite(vert,count,1,out);
   }
 else if(!strcmp(token,"quick"))
@@ -1188,7 +1188,7 @@ else if(!strcmp(token,"selected") || !strcmp(token,"select") || !strcmp(token,"`
     }
   if(token=strtok(NULL," ]")) {
     x=strtol(token,NULL,16);
-    x=x%0x10000;    
+    x=x%0x10000;
     }
   else {erratta(15,0); vert[1]=0x0F; x=0;}
   vert[2]=x/256; vert[3]=x%256;
@@ -1201,7 +1201,7 @@ else if(!strcmp(token,"selected") || !strcmp(token,"select") || !strcmp(token,"`
   interject 6A-6C   AC-only*/
 else if(!strcmp(token,"rand") || !strcmp(token,"menu") || !strcmp(token,"`menu") || !strcmp(token,"`interject") || !strcmp(token,"interject"))
   {count=2;
-  vert[0]=0x7F; vert[1]=0x13; 
+  vert[0]=0x7F; vert[1]=0x13;
   if(!strcmp(token,"menu") || !strcmp(token,"`menu")) vert[1]=0x16;
   if(!strcmp(token,"`interject") || !strcmp(token,"interject")) vert[1]=0x6A;
   if(token=strtok(NULL," ]")){
@@ -1246,7 +1246,7 @@ else if(!strcmp(token,"rand") || !strcmp(token,"menu") || !strcmp(token,"`menu")
      vert[count]=x/0x100;
      vert[count+1]=x%0x100; count+=2; vert[1]=vert[1]+1;}
   }
-   
+
   fwrite(vert,count,1,out);
   }
 else if(!strcmp(token,"jump2sel"))
@@ -1348,7 +1348,7 @@ else if(!strcmp(token,"message"))
   fwrite(vert,2,1,out);
   count=2;
   }
-/*Omitron, the lost transformer*/  
+/*Omitron, the lost transformer*/
 else if(!strcmp(token,"whisper"))
   {vert[0]=0x7F; vert[1]=0x51; x=0;
   if(!(token=strtok(NULL," ]"))) {erratta(0x51,0); x=0;}
@@ -1474,7 +1474,7 @@ else if(!strcmp(token,"`range") || !strcmp(token,"range"))
   x=0;
   if(token=strtok(NULL," ]")) {
     x=strtol(token,NULL,16);
-    } 
+    }
   x=x%0x10000;
   vert[2]=x/256; vert[3]=x%256;
   if(token=strtok(NULL," ]")) {
@@ -1513,7 +1513,7 @@ else if(!strcmp(token,"TIME"))
   vert[0]=0x1D; fwrite(vert,1,1,out);
   count=21;
   }
-         
+
 return count;}
 
 /*finds the start of following entry, either terminating with semicolon or newline*/
@@ -1649,14 +1649,14 @@ for(x=1;x<argc;x++)
                   printf("\n\t/Q or -Q\tdon't complain if file lacks BOM");
                   printf("\n\t/H, /?, -H, or -?\tdisplay this help message");
                   printf("\npress enter to quit"); getchar(); return 0;
-              }    
+              }
       }
     else strcpy(buf,argv[x]);
     }
 
 while (!(txt = fopen(buf, "rb"))) {
 	printf("\nUTF-8 text file? ");
-	strcpy(buf,"\0");	
+	strcpy(buf,"\0");
 	gets(buf);
     }
 
@@ -1665,7 +1665,7 @@ while (!(txt = fopen(buf, "rb"))) {
     else strcat(buf, ".off");
 while (!(tbl = fopen(buf, "wb+"))) {
 	printf("\noutput %s file? ", opt&2 ? "offset":"table");
-	strcpy(buf,"\0");	
+	strcpy(buf,"\0");
 	gets(buf);
     }
 
@@ -1673,7 +1673,7 @@ while (!(tbl = fopen(buf, "wb+"))) {
     strcat(buf, ".bin");
 while (!(bin = fopen(buf, "wb"))) {
 	printf("\noutput binary? ");
-	strcpy(buf,"\0");	
+	strcpy(buf,"\0");
 	gets(buf);
     }
 
