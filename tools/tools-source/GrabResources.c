@@ -3,6 +3,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "../../include/table_types.h"
+
 /*standard 32bit byteswapping*/
 unsigned long byteswap(unsigned long w)
 {
@@ -30,7 +32,7 @@ int verify(FILE *in)
     return 3;
 }
 
-/*finds hit for codeword in index, returning either ROM offset or 0*/
+//finds hit for codeword in index, returning either ROM offset or 0
 int codeword(FILE *in, unsigned long code, unsigned long *start, unsigned long *end)
 {
     unsigned long x,y;
@@ -66,7 +68,7 @@ int itemhax(FILE *in)
     if(codeword(in, 0x010F4000, &start, &end))
         return 0;
 
-    start+=8;
+    start += 8;
     fseek(in, start, SEEK_SET);
     fread(&end, 4, 1, in);
     end = byteswap(end);
@@ -84,43 +86,43 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
 
     switch(type)
     {
-        case 0:  /*message_data*/
+        case TBL_MESSAGE_DATA:
             if(codeword(in, 0x00CF9000, &ptbl, &etbl))
                 break;
             if(codeword(in, 0x00BD4000, &pbin, &ebin))
                 codeword(in, 0x01914000, &pbin, &ebin);
             break;
-        case 1:   /*select_data */
+        case TBL_SELECT_DATA:
             if(codeword(in, 0x00D06000, &ptbl, &etbl))
                 codeword(in, 0x00D09000, &ptbl, &etbl);
             if(codeword(in, 0x00D05000, &pbin, &ebin))
                 codeword(in, 0x01BA5000, &pbin, &ebin);
             break;
-        case 2:   /*mail_data   */
+        case TBL_MAIL_DATA:
             if(codeword(in, 0x00D10000, &ptbl, &etbl))
                 break;
             if(codeword(in, 0x00D07000, &pbin, &ebin))
                 codeword(in, 0x01BA7000, &pbin, &ebin);
             break;
-        case 3:   /*super_data  */
+        case TBL_SUPER_DATA:
             if(codeword(in, 0x00D12000, &ptbl, &etbl))
                 break;
             if(codeword(in, 0x00D11000, &pbin, &ebin))
                 codeword(in, 0x01BC7000, &pbin, &ebin);
             break;
-        case 4:   /*ps_data     */
+        case TBL_PS_DATA:
             if(codeword(in, 0x00D15000, &ptbl, &etbl))
                 break;
             if(codeword(in, 0x00D13000, &pbin, &ebin))
                 codeword(in, 0x01BCA000, &pbin, &ebin);
             break;
-        case 5:   /*string_data */
+        case TBL_STRING_DATA:
             if(codeword(in, 0x00D18000, &ptbl, &etbl))
                 break;
             if(codeword(in, 0x00D16000, &pbin, &ebin))
                 codeword(in, 0x01BCE000, &pbin, &ebin);
             break;
-        case 6:   /*maila_data  */
+        case TBL_MAILA_DATA:
             if(!codeword(in,0x00D1A000,&pbin,&ebin))
             {
                 ptbl = pbin + 0x8B20;
@@ -134,7 +136,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
                 ebin = pbin + 0x5000;
             }
             break;
-        case 7:   /*mailb_data  */
+        case TBL_MAILB_DATA:
             if(!codeword(in, 0x00D1A000, &pbin, &ebin))
             {
                 ptbl = pbin + 0x9130;
@@ -150,7 +152,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
                 pbin += 0x5000;
             }
             break;
-        case 8:   /*mailc_data  */
+        case TBL_MAILC_DATA:
             if(!codeword(in, 0x00D1A000, &pbin, &ebin))
             {
                 ptbl = pbin + 0x9740;
@@ -166,7 +168,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
                 pbin += 0xC000;
             }
             break;
-        case 9:   /*psz_data    */
+        case TBL_PSZ_DATA:
             if(!codeword(in, 0x00D1A000, &pbin, &ebin))
             {
                 ptbl = pbin + 0x9D50;
@@ -182,7 +184,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
                 pbin += 0xF000;
             }
             break;
-        case 10:  /*superz_data */
+        case TBL_SUPERZ_DATA:
             if(!codeword(in, 0x00D1A000, &pbin, &ebin))
             {
                 ptbl = pbin + 0xA360;
@@ -198,14 +200,14 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
                 pbin += 0x10000;
             }
             break;
-        case 11:  /*npc_name_str*/
+        case TBL_NPC_NAME_STR:
             if(!codeword(in, 0x00E04000, &pbin, &ebin))
                 y = 6;
             else if(!codeword(in, 0x01BE6000, &pbin, &ebin))
                 y = 8;
             pbin += 8;
             break;
-        case 12:  /*20xxItems   */
+        case TBL_20XX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -221,7 +223,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
                 pbin += 8;
             }
             break;
-        case 13:  /*21xxItems   */
+        case TBL_21XX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -236,7 +238,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
                 pbin += 0x288;
             }
             break;
-        case 14:  /*22xxItems   */
+        case TBL_22XX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -252,7 +254,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
                 pbin += 0x2B0;
             }
             break;
-        case 15:  /*23xxItems   */
+        case TBL_23XX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -268,7 +270,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
 	            pbin += 0x418;
             }
             break;
-        case 16:  /*24xxItems   */
+        case TBL_24XX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -284,7 +286,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
 	            pbin += 0x558;
             }
             break;
-        case 17:  /*25xxItems   */
+        case TBL_25XX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -300,7 +302,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
 	           pbin += 0xF50;
             }
             break;
-        case 18:  /*26xxItems   */
+        case TBL_26XX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -316,7 +318,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
 	            pbin += 0x107C;
             }
             break;
-        case 19:  /*27xxItems   */
+        case TBL_27XX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -332,7 +334,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
 	            pbin += 0x12FC;
             }
             break;
-        case 20:  /*28xxItems   */
+        case TBL_28XX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -348,7 +350,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
 	            pbin += 0x157C;
             }
             break;
-        case 21:  /*29xxItems   */
+        case TBL_29XX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -364,7 +366,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
 	            pbin += 0x15C4;
             }
             break;
-        case 22:  /*2AxxItems   */
+        case TBL_2AXX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -380,7 +382,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
 	            pbin += 0x1628;
             }
             break;
-        case 23:  /*2BxxItems   */
+        case TBL_2BXX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -396,7 +398,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
 	            pbin += 0x1850;
             }
             break;
-        case 24:  /*2CxxItems   */
+        case TBL_2CXX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -412,7 +414,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
 	            pbin += 0x185C;
             }
             break;
-        case 25:  /*2DxxItems   */
+        case TBL_2DXX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -428,7 +430,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
 	            pbin += 0x1C1C;
             }
             break;
-        case 26:  /*2ExxItems   */
+        case TBL_2EXX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -444,7 +446,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
 	            pbin += 0x1D5C;
             }
             break;
-        case 27:  /*2FxxItems   */
+        case TBL_2FXX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
@@ -460,7 +462,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
 	            pbin += 0x1D70;
             }
             break;
-        case 28:  /*1xxxItems   */
+        case TBL_1XXX_ITEMS:
             if(codeword(in, 0x010F4000, &pbin, &ebin))
                 break;
             if(mods)
