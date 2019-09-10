@@ -395,8 +395,13 @@ static void decode_stream(FILE * stream)
         address = hex_to_u32(addrtok);
         opcode = hex_to_u32(optok);
 
-        decode(outbuf, 64, address, opcode);
-        printf("%08x:\t%08x\t%s\n", address, opcode, outbuf);
+        if (!opcode)
+            printf("/* %08x:\t%08x */\tnop\n", address, opcode);
+        else
+        {
+            decode(outbuf, 64, address, opcode);
+            printf("/* %08x:\t%08x */\t%s\n", address, opcode, outbuf);
+        }
     }
 
     free(lineptr);

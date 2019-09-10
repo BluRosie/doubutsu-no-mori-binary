@@ -8,6 +8,113 @@
  * See codegen/cgen.rb for C specific information.
  */
 
+static char* format_register(uint32_t re)
+{
+    char* reg;
+
+    switch (re)
+    {
+        case 0:
+            reg = "$zero";
+            break;
+        case 1:
+            reg = "at";
+            break;
+        case 2:
+            reg = "v0";
+            break;
+        case 3:
+            reg = "v1";
+            break;
+        case 4:
+            reg = "a0";
+            break;
+        case 5:
+            reg = "a1";
+            break;
+        case 6:
+            reg = "a2";
+            break;
+        case 7:
+            reg = "a3";
+            break;
+        case 8:
+            reg = "t0";
+            break;
+        case 9:
+            reg = "t1";
+            break;
+        case 10:
+            reg = "t2";
+            break;
+        case 11:
+            reg = "t3";
+            break;
+        case 12:
+            reg = "t4";
+            break;
+        case 13:
+            reg = "t5";
+            break;
+        case 14:
+            reg = "t6";
+            break;
+        case 15:
+            reg = "t7";
+            break;
+        case 16:
+            reg = "s0";
+            break;
+        case 17:
+            reg = "s1";
+            break;
+        case 18:
+            reg = "s2";
+            break;
+        case 19:
+            reg = "s3";
+            break;
+        case 20:
+            reg = "s4";
+            break;
+        case 21:
+            reg = "s5";
+            break;
+        case 22:
+            reg = "s6";
+            break;
+        case 23:
+            reg = "s7";
+            break;
+        case 24:
+            reg = "t8";
+            break;
+        case 25:
+            reg = "t9";
+            break;
+        case 26:
+            reg = "k0";
+            break;
+        case 27:
+            reg = "k1";
+            break;
+        case 28:
+            reg = "gp";
+            break;
+        case 29:
+            reg = "sp";
+            break;
+        case 30:
+            reg = "fp";
+            break;
+        case 31:
+            reg = "ra";
+            break;
+    }
+
+    return reg;
+}
+
 static void decode_j(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     snprintf(outbuf,n,"j 0x%x",gettarget(pc,op));
@@ -20,12 +127,12 @@ static void decode_jal(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
 static void decode_beq(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"beq $%d,$%d,0x%x",getrs(op),getrt(op),getbroff(pc,op));
+    snprintf(outbuf,n,"beq %s, %s, 0x%x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
 }
 
 static void decode_bne(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"bne $%d,$%d,0x%x",getrs(op),getrt(op),getbroff(pc,op));
+    snprintf(outbuf,n,"bne %s, %s, 0x%x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
 }
 
 static void decode_blez(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -36,7 +143,7 @@ static void decode_blez(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"blez $%d,0x%x",getrs(op),getbroff(pc,op));
+    snprintf(outbuf,n,"blez %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bgtz(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -47,42 +154,44 @@ static void decode_bgtz(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"bgtz $%d,0x%x",getrs(op),getbroff(pc,op));
+    snprintf(outbuf,n,"bgtz %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_addi(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"addi $%d,$%d,%d",getrt(op),getrs(op),getsimm(op));
+    snprintf(outbuf,n,"addi %s, %s, %d",format_register(getrt(op)),format_register(getrs(op)),getsimm(op));
 }
 
 static void decode_addiu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"addiu $%d,$%d,%d",getrt(op),getrs(op),getsimm(op));
+    snprintf(outbuf,n,"addiu %s, %s, %d",format_register(getrt(op)),format_register(getrs(op)),getsimm(op));
 }
 
 static void decode_slti(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"slti $%d,$%d,%d",getrt(op),getrs(op),getsimm(op));
+    snprintf(outbuf,n,"slti %s, %s, %d",format_register(getrt(op)),format_register(getrs(op)),getsimm(op));
 }
+
+
 
 static void decode_sltiu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"sltiu $%d,$%d,%d",getrt(op),getrs(op),getsimm(op));
+    snprintf(outbuf,n,"sltiu %s, %s, %d",format_register(getrt(op)),format_register(getrs(op)),getsimm(op));
 }
 
 static void decode_andi(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"andi $%d,$%d,0x%x",getrt(op),getrs(op),getimm(op));
+    snprintf(outbuf,n,"andi %s, %s, 0x%x",format_register(getrt(op)),format_register(getrs(op)),getimm(op));
 }
 
 static void decode_ori(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"ori $%d,$%d,0x%x",getrt(op),getrs(op),getimm(op));
+    snprintf(outbuf,n,"ori %s, %s, 0x%x",format_register(getrt(op)),format_register(getrs(op)),getimm(op));
 }
 
 static void decode_xori(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"xori $%d,$%d,0x%x",getrt(op),getrs(op),getimm(op));
+    snprintf(outbuf,n,"xori %s, %s, 0x%x",format_register(getrt(op)),format_register(getrs(op)),getimm(op));
 }
 
 static void decode_lui(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -93,17 +202,17 @@ static void decode_lui(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"lui $%d,0x%x",getrt(op),getimm(op));
+    snprintf(outbuf,n,"lui %s, 0x%x",format_register(getrt(op)),getimm(op));
 }
 
 static void decode_beql(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"beql $%d,$%d,0x%x",getrs(op),getrt(op),getbroff(pc,op));
+    snprintf(outbuf,n,"beql %s, %s, 0x%x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
 }
 
 static void decode_bnel(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"bnel $%d,$%d,0x%x",getrs(op),getrt(op),getbroff(pc,op));
+    snprintf(outbuf,n,"bnel %s, %s, 0x%x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
 }
 
 static void decode_blezl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -114,7 +223,7 @@ static void decode_blezl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"blezl $%d,0x%x",getrs(op),getbroff(pc,op));
+    snprintf(outbuf,n,"blezl %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bgtzl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -125,87 +234,87 @@ static void decode_bgtzl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"bgtzl $%d,0x%x",getrs(op),getbroff(pc,op));
+    snprintf(outbuf,n,"bgtzl %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_lb(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"lb $%d,%d($%d)",getrt(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"lb %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_lh(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"lh $%d,%d($%d)",getrt(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"lh %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_lwl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"lwl $%d,%d($%d)",getrt(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"lwl %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_lw(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"lw $%d,%d($%d)",getrt(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"lw %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_lbu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"lbu $%d,%d($%d)",getrt(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"lbu %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_lhu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"lhu $%d,%d($%d)",getrt(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"lhu %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_lwr(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"lwr $%d,%d($%d)",getrt(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"lwr %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_sb(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"sb $%d,%d($%d)",getrt(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"sb %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_sh(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"sh $%d,%d($%d)",getrt(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"sh %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_swl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"swl $%d,%d($%d)",getrt(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"swl %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_sw(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"sw $%d,%d($%d)",getrt(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"sw %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_swr(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"swr $%d,%d($%d)",getrt(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"swr %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_cache(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"cache 0x%x,%d($%d)",getcacheop(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"cache 0x%x, %d(%s)",getcacheop(op),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_ll(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"ll $%d,%d($%d)",getrt(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"ll %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_pref(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"pref 0x%x,%d($%d)",getprefhint(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"pref 0x%x, %d(%s)",getprefhint(op),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_sc(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"sc $%d,%d($%d)",getrt(op),getoffset(op),getbase(op));
+    snprintf(outbuf,n,"sc %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_sll(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -216,7 +325,7 @@ static void decode_sll(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"sll $%d,$%d,0x%x",getrd(op),getrt(op),getsa(op));
+    snprintf(outbuf,n,"sll %s, %s, 0x%x",format_register(getrd(op)),format_register(getrt(op)),getsa(op));
 }
 
 static void decode_srl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -227,7 +336,7 @@ static void decode_srl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"srl $%d,$%d,0x%x",getrd(op),getrt(op),getsa(op));
+    snprintf(outbuf,n,"srl %s, %s, 0x%x",format_register(getrd(op)),format_register(getrt(op)),getsa(op));
 }
 
 static void decode_sra(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -238,7 +347,7 @@ static void decode_sra(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"sra $%d,$%d,0x%x",getrd(op),getrt(op),getsa(op));
+    snprintf(outbuf,n,"sra %s, %s, 0x%x",format_register(getrd(op)),format_register(getrt(op)),getsa(op));
 }
 
 static void decode_sllv(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -249,7 +358,7 @@ static void decode_sllv(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"sllv $%d,$%d,$%d",getrd(op),getrt(op),getrs(op));
+    snprintf(outbuf,n,"sllv %s, %s, %s",format_register(getrd(op)),format_register(getrt(op)),format_register(getrs(op)));
 }
 
 static void decode_srlv(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -260,7 +369,7 @@ static void decode_srlv(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"srlv $%d,$%d,$%d",getrd(op),getrt(op),getrs(op));
+    snprintf(outbuf,n,"srlv %s, %s, %s",format_register(getrd(op)),format_register(getrt(op)),format_register(getrs(op)));
 }
 
 static void decode_srav(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -271,7 +380,7 @@ static void decode_srav(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"srav $%d,$%d,$%d",getrd(op),getrt(op),getrs(op));
+    snprintf(outbuf,n,"srav %s, %s, %s",format_register(getrd(op)),format_register(getrt(op)),format_register(getrs(op)));
 }
 
 static void decode_jr(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -282,7 +391,7 @@ static void decode_jr(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"jr $%d",getrs(op));
+    snprintf(outbuf,n,"jr %s",format_register(getrs(op)));
 }
 
 static void decode_jalr(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -293,7 +402,7 @@ static void decode_jalr(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"jalr $%d,$%d",getrd(op),getrs(op));
+    snprintf(outbuf,n,"jalr %s, %s",format_register(getrd(op)),format_register(getrs(op)));
 }
 
 static void decode_movz(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -304,7 +413,7 @@ static void decode_movz(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"movz $%d,$%d,$%d",getrd(op),getrs(op),getrt(op));
+    snprintf(outbuf,n,"movz %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_movn(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -315,7 +424,7 @@ static void decode_movn(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"movn $%d,$%d,$%d",getrd(op),getrs(op),getrt(op));
+    snprintf(outbuf,n,"movn %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_syscall(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -325,7 +434,7 @@ static void decode_syscall(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
 static void decode_break(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"break 0x%x,0x%x",getbc1(op),getbc2(op));
+    snprintf(outbuf,n,"break 0x%x, 0x%x",getbc1(op),getbc2(op));
 }
 
 static void decode_sync(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -347,7 +456,7 @@ static void decode_mfhi(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"mfhi $%d",getrd(op));
+    snprintf(outbuf,n,"mfhi %s",format_register(getrd(op)));
 }
 
 static void decode_mthi(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -358,7 +467,7 @@ static void decode_mthi(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"mthi $%d",getrs(op));
+    snprintf(outbuf,n,"mthi %s",format_register(getrs(op)));
 }
 
 static void decode_mflo(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -369,7 +478,7 @@ static void decode_mflo(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"mflo $%d",getrd(op));
+    snprintf(outbuf,n,"mflo %s",format_register(getrd(op)));
 }
 
 static void decode_mtlo(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -380,7 +489,7 @@ static void decode_mtlo(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"mtlo $%d",getrs(op));
+    snprintf(outbuf,n,"mtlo %s",format_register(getrs(op)));
 }
 
 static void decode_mult(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -391,7 +500,7 @@ static void decode_mult(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"mult $%d,$%d",getrs(op),getrt(op));
+    snprintf(outbuf,n,"mult %s, %s",format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_multu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -402,7 +511,7 @@ static void decode_multu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"multu $%d,$%d",getrs(op),getrt(op));
+    snprintf(outbuf,n,"multu %s, %s",format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_div(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -413,7 +522,7 @@ static void decode_div(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"div $%d,$%d",getrs(op),getrt(op));
+    snprintf(outbuf,n,"div %s, %s",format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_divu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -424,7 +533,7 @@ static void decode_divu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"divu $%d,$%d",getrs(op),getrt(op));
+    snprintf(outbuf,n,"divu %s, %s",format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_add(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -435,7 +544,7 @@ static void decode_add(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"add $%d,$%d,$%d",getrd(op),getrs(op),getrt(op));
+    snprintf(outbuf,n,"add %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_addu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -446,7 +555,7 @@ static void decode_addu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"addu $%d,$%d,$%d",getrd(op),getrs(op),getrt(op));
+    snprintf(outbuf,n,"addu %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_sub(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -457,7 +566,7 @@ static void decode_sub(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"sub $%d,$%d,$%d",getrd(op),getrs(op),getrt(op));
+    snprintf(outbuf,n,"sub %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_subu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -468,7 +577,7 @@ static void decode_subu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"subu $%d,$%d,$%d",getrd(op),getrs(op),getrt(op));
+    snprintf(outbuf,n,"subu %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_and(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -479,7 +588,7 @@ static void decode_and(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"and $%d,$%d,$%d",getrd(op),getrs(op),getrt(op));
+    snprintf(outbuf,n,"and %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_or(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -490,7 +599,7 @@ static void decode_or(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"or $%d,$%d,$%d",getrd(op),getrs(op),getrt(op));
+    snprintf(outbuf,n,"or %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_xor(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -501,7 +610,7 @@ static void decode_xor(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"xor $%d,$%d,$%d",getrd(op),getrs(op),getrt(op));
+    snprintf(outbuf,n,"xor %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_nor(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -512,7 +621,7 @@ static void decode_nor(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"nor $%d,$%d,$%d",getrd(op),getrs(op),getrt(op));
+    snprintf(outbuf,n,"nor %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_slt(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -523,7 +632,7 @@ static void decode_slt(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"slt $%d,$%d,$%d",getrd(op),getrs(op),getrt(op));
+    snprintf(outbuf,n,"slt %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_sltu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -534,37 +643,37 @@ static void decode_sltu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"sltu $%d,$%d,$%d",getrd(op),getrs(op),getrt(op));
+    snprintf(outbuf,n,"sltu %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_tge(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"tge $%d,$%d,0x%x",getrs(op),getrt(op),gettrapcode(op));
+    snprintf(outbuf,n,"tge %s, %s, 0x%x",format_register(getrs(op)),format_register(getrt(op)),gettrapcode(op));
 }
 
 static void decode_tgeu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"tgeu $%d,$%d,0x%x",getrs(op),getrt(op),gettrapcode(op));
+    snprintf(outbuf,n,"tgeu %s, %s, 0x%x",format_register(getrs(op)),format_register(getrt(op)),gettrapcode(op));
 }
 
 static void decode_tlt(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"tlt $%d,$%d,0x%x",getrs(op),getrt(op),gettrapcode(op));
+    snprintf(outbuf,n,"tlt %s, %s, 0x%x",format_register(getrs(op)),format_register(getrt(op)),gettrapcode(op));
 }
 
 static void decode_tltu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"tltu $%d,$%d,0x%x",getrs(op),getrt(op),gettrapcode(op));
+    snprintf(outbuf,n,"tltu %s, %s, 0x%x",format_register(getrs(op)),format_register(getrt(op)),gettrapcode(op));
 }
 
 static void decode_teq(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"teq $%d,$%d,0x%x",getrs(op),getrt(op),gettrapcode(op));
+    snprintf(outbuf,n,"teq %s, %s, 0x%x",format_register(getrs(op)),format_register(getrt(op)),gettrapcode(op));
 }
 
 static void decode_tne(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"tne $%d,$%d,0x%x",getrs(op),getrt(op),gettrapcode(op));
+    snprintf(outbuf,n,"tne %s, %s, 0x%x",format_register(getrs(op)),format_register(getrt(op)),gettrapcode(op));
 }
 
 static void decode_madd(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -575,7 +684,7 @@ static void decode_madd(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"madd $%d,$%d",getrs(op),getrt(op));
+    snprintf(outbuf,n,"madd %s, %s",format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_maddu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -586,7 +695,7 @@ static void decode_maddu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"maddu $%d,$%d",getrs(op),getrt(op));
+    snprintf(outbuf,n,"maddu %s, %s",format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_mul(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -597,7 +706,7 @@ static void decode_mul(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"mul $%d,$%d,$%d",getrd(op),getrs(op),getrt(op));
+    snprintf(outbuf,n,"mul %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_msub(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -608,7 +717,7 @@ static void decode_msub(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"msub $%d,$%d",getrs(op),getrt(op));
+    snprintf(outbuf,n,"msub %s, %s",format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_msubu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -619,7 +728,7 @@ static void decode_msubu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"msubu $%d,$%d",getrs(op),getrt(op));
+    snprintf(outbuf,n,"msubu %s, %s",format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_clz(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -630,7 +739,7 @@ static void decode_clz(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"clz $%d,$%d",getrd(op),getrs(op));
+    snprintf(outbuf,n,"clz %s, %s",format_register(getrd(op)),format_register(getrs(op)));
 }
 
 static void decode_clo(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -641,7 +750,7 @@ static void decode_clo(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"clo $%d,$%d",getrd(op),getrs(op));
+    snprintf(outbuf,n,"clo %s, %s",format_register(getrd(op)),format_register(getrs(op)));
 }
 
 static void decode_sdbbp(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -651,72 +760,72 @@ static void decode_sdbbp(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
 static void decode_bltz(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"bltz $%d,0x%x",getrs(op),getbroff(pc,op));
+    snprintf(outbuf,n,"bltz %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bgez(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"bgez $%d,0x%x",getrs(op),getbroff(pc,op));
+    snprintf(outbuf,n,"bgez %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bltzl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"bltzl $%d,0x%x",getrs(op),getbroff(pc,op));
+    snprintf(outbuf,n,"bltzl %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bgezl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"bgezl $%d,0x%x",getrs(op),getbroff(pc,op));
+    snprintf(outbuf,n,"bgezl %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_tgei(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"tgei $%d,%d",getrs(op),getsimm(op));
+    snprintf(outbuf,n,"tgei %s, %d",format_register(getrs(op)),getsimm(op));
 }
 
 static void decode_tgeiu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"tgeiu $%d,%d",getrs(op),getsimm(op));
+    snprintf(outbuf,n,"tgeiu %s, %d",format_register(getrs(op)),getsimm(op));
 }
 
 static void decode_tlti(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"tlti $%d,%d",getrs(op),getsimm(op));
+    snprintf(outbuf,n,"tlti %s, %d",format_register(getrs(op)),getsimm(op));
 }
 
 static void decode_tltiu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"tltiu $%d,%d",getrs(op),getsimm(op));
+    snprintf(outbuf,n,"tltiu %s, %d",format_register(getrs(op)),getsimm(op));
 }
 
 static void decode_teqi(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"teqi $%d,%d",getrs(op),getsimm(op));
+    snprintf(outbuf,n,"teqi %s, %d",format_register(getrs(op)),getsimm(op));
 }
 
 static void decode_tnei(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"tnei $%d,%d",getrs(op),getsimm(op));
+    snprintf(outbuf,n,"tnei %s, %d",format_register(getrs(op)),getsimm(op));
 }
 
 static void decode_bltzal(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"bltzal $%d,0x%x",getrs(op),getbroff(pc,op));
+    snprintf(outbuf,n,"bltzal %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bgezal(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"bgezal $%d,0x%x",getrs(op),getbroff(pc,op));
+    snprintf(outbuf,n,"bgezal %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bltzall(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"bltzall $%d,0x%x",getrs(op),getbroff(pc,op));
+    snprintf(outbuf,n,"bltzall %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bgezall(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"bgezall $%d,0x%x",getrs(op),getbroff(pc,op));
+    snprintf(outbuf,n,"bgezall %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_mfc0(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -727,7 +836,7 @@ static void decode_mfc0(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"mfc0 $%d,$%d,%d",getrt(op),getrd(op),getsel(op));
+    snprintf(outbuf,n,"mfc0 %s, %s, %d",format_register(getrt(op)),format_register(getrd(op)),getsel(op));
 }
 
 static void decode_mtc0(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -738,7 +847,7 @@ static void decode_mtc0(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"mtc0 $%d,$%d,%d",getrt(op),getrd(op),getsel(op));
+    snprintf(outbuf,n,"mtc0 %s, %s, %d",format_register(getrt(op)),format_register(getrd(op)),getsel(op));
 }
 
 static void decode_tlbr(char *outbuf, size_t n, uint32_t pc, uint32_t op)
