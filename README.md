@@ -12,6 +12,13 @@ shevious: yaz0 extracter/decoder
 
 loadzero: base mipsdis
 
+# dependencies
+the executables themselves don't really require anything special
+
+just have mingw installed.
+
+have xxd for mipsdis to have proper output.  i may edit this to not be necessary later
+
 # some basic usage stuff
 now before i get this in a more streamlined fashion (makefile?  bat?)
 
