@@ -377,6 +377,8 @@ static void decode_stream(FILE * stream)
     uint32_t address = 0;
     uint32_t opcode = 0;
 
+    printf(".n64\n\n");
+
     while (1) {
         rn = getline(&lineptr, &n, stream);
 
