@@ -20,3 +20,5 @@ basic usage of mipsdis is as follows:
 xxd -o 0x80000000 -c 4 -g 4 input.dat | awk '{print $1,$2}' | ./mipsdis >output.txt -
 
 so when we eventually make a python script or something for this, it'll follow this format
+
+note that the most of what mipsdis outputs on larger files (i.e. those that aren't entirely asm) will not automatically be compatible with armips; it's supposed to be used for smaller routines
