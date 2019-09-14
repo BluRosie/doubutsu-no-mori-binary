@@ -434,7 +434,7 @@ static void decode_syscall(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
 static void decode_break(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"break 0x%x, 0x%x",getbc1(op),getbc2(op));
+    snprintf(outbuf,n,"break 0x%x",getsyscode(op));
 }
 
 static void decode_sync(char *outbuf, size_t n, uint32_t pc, uint32_t op)

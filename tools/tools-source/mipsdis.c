@@ -261,7 +261,7 @@ static uint32_t getwaitcode(uint32_t op)
 static void decode_illegal(char *outbuf, size_t n, uint32_t addr,
                            uint32_t opcode)
 {
-    sprintf(outbuf, "illegal");
+    sprintf(outbuf, "/*illegal*/ .word 0x%08x", opcode);
 }
 
 static void decode_unusable(char *outbuf, size_t n, uint32_t addr,
