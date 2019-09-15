@@ -407,24 +407,24 @@ static void decode_jalr(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
 static void decode_movz(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    if (!(check_opcode(op, 0xfc0007ff, 0x0000000a)))
-    {
+    //if (!(check_opcode(op, 0xfc0007ff, 0x0000000a)))
+    //{
         decode_illegal(outbuf, n, pc, op);
-        return;
-    }
+    //    return;
+    //}
 
-    snprintf(outbuf,n,"movz %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
+    //snprintf(outbuf,n,"movz %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_movn(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    if (!(check_opcode(op, 0xfc0007ff, 0x0000000b)))
-    {
+    //if (!(check_opcode(op, 0xfc0007ff, 0x0000000b)))
+    //{
         decode_illegal(outbuf, n, pc, op);
-        return;
-    }
+    //    return;
+    //}
 
-    snprintf(outbuf,n,"movn %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
+    //snprintf(outbuf,n,"movn %s, %s, %s",format_register(getrd(op)),format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_syscall(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -445,7 +445,7 @@ static void decode_sync(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"sync 0x%x",getstype(op));
+    snprintf(outbuf,n,"sync");
 }
 
 static void decode_mfhi(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -678,24 +678,24 @@ static void decode_tne(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
 static void decode_madd(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    if (!(check_opcode(op, 0xfc00ffff, 0x70000000)))
-    {
+    //if (!(check_opcode(op, 0xfc00ffff, 0x70000000)))
+    //{
         decode_illegal(outbuf, n, pc, op);
-        return;
-    }
+    //    return;
+    //}
 
-    snprintf(outbuf,n,"madd %s, %s",format_register(getrs(op)),format_register(getrt(op)));
+    //snprintf(outbuf,n,"madd %s, %s",format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_maddu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    if (!(check_opcode(op, 0xfc00ffff, 0x70000001)))
-    {
+    //if (!(check_opcode(op, 0xfc00ffff, 0x70000001)))
+    //{
         decode_illegal(outbuf, n, pc, op);
-        return;
-    }
+    //    return;
+    //}
 
-    snprintf(outbuf,n,"maddu %s, %s",format_register(getrs(op)),format_register(getrt(op)));
+    //snprintf(outbuf,n,"maddu %s, %s",format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_mul(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -711,24 +711,24 @@ static void decode_mul(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
 static void decode_msub(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    if (!(check_opcode(op, 0xfc00ffff, 0x70000004)))
-    {
+    //if (!(check_opcode(op, 0xfc00ffff, 0x70000004)))
+    //{
         decode_illegal(outbuf, n, pc, op);
-        return;
-    }
+    //    return;
+    //}
 
-    snprintf(outbuf,n,"msub %s, %s",format_register(getrs(op)),format_register(getrt(op)));
+    //snprintf(outbuf,n,"msub %s, %s",format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_msubu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    if (!(check_opcode(op, 0xfc00ffff, 0x70000005)))
-    {
+    //if (!(check_opcode(op, 0xfc00ffff, 0x70000005)))
+    //{
         decode_illegal(outbuf, n, pc, op);
-        return;
-    }
+    //    return;
+    //}
 
-    snprintf(outbuf,n,"msubu %s, %s",format_register(getrs(op)),format_register(getrt(op)));
+    //snprintf(outbuf,n,"msubu %s, %s",format_register(getrs(op)),format_register(getrt(op)));
 }
 
 static void decode_clz(char *outbuf, size_t n, uint32_t pc, uint32_t op)

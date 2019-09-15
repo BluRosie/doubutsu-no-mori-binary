@@ -377,7 +377,7 @@ static void decode_stream(FILE * stream)
     uint32_t address = 0;
     uint32_t opcode = 0;
 
-    printf(".n64\n\n");
+    printf(".n64\n.create \"output.bin\", 0\n\n");
 
     while (1) {
         rn = getline(&lineptr, &n, stream);
@@ -405,6 +405,8 @@ static void decode_stream(FILE * stream)
             printf("/* %08x:\t%08x */\t%s\n", address, opcode, outbuf);
         }
     }
+
+    printf("\n.close\n");
 
     free(lineptr);
 }
