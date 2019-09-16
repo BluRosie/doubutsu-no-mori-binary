@@ -309,7 +309,9 @@ static void decode_ll(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
 static void decode_pref(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"pref 0x%x, %d(%s)",getprefhint(op),getoffset(op),format_register(getbase(op)));
+    decode_illegal(outbuf, n, pc, op);
+
+    // snprintf(outbuf,n,"pref 0x%x, %d(%s)",getprefhint(op),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_sc(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -402,7 +404,7 @@ static void decode_jalr(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"jalr %s, %s",format_register(getrd(op)),format_register(getrs(op)));
+    snprintf(outbuf,n,"jalr %s, %s", format_register(getrs(op)), format_register(getrd(op)));
 }
 
 static void decode_movz(char *outbuf, size_t n, uint32_t pc, uint32_t op)
