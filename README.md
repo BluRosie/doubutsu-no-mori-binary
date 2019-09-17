@@ -22,9 +22,9 @@ have xxd for mipsdis to have proper output.  i may edit this to not be necessary
 # some basic usage stuff
 now before i get this in a more streamlined fashion (makefile?  bat?)
 
-basic usage of mipsdis is as follows:
+disassembling all the dat files was done like so:
 
-xxd -o 0x00000000 -c 4 -g 4 input.dat | awk '{print $1,$2}' | ./mipsdis >output.txt -
+for file in dump/jap/*.DAT; do xxd -o 4 -g 4 "dump/jap/$(basename "$file")" | awk '{print $1,$2}' | ./tools/mipsdis >"src/asm/$(basename "$file" .DAT).asm" -;done
 
 so when we eventually make a python script or something for this, it'll follow this format
 
