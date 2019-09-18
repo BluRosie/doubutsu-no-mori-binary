@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EAD3A0.bin", 0
+.create "build/jap/EAD3A0.bin", 0
 
 /* 00000000:	8464ffff */	lh a0, -1(v1)
 /* 00000004:	e101ec0d */	sc at, -5107(t0)

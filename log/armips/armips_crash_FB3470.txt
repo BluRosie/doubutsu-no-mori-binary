@@ -1,0 +1,9 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB3470.asm(30) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB3470.asm(34) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB3470.asm(38) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB3470.asm(39) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB3470.asm(43) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB3470.asm(47) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB3470.asm(56) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB3470.asm(107) error: This instruction can't be in a delay slot
+Aborting.

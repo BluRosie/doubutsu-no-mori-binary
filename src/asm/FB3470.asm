@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FB3470.bin", 0
+.create "build/jap/FB3470.bin", 0
 
 /* 00000000:	10001110 */	beq $zero, $zero, 0x4444
 /* 00000004:	00100000 */	sll $zero, s0, 0x0

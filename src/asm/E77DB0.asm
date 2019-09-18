@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E77DB0.bin", 0
+.create "build/jap/E77DB0.bin", 0
 
 /* 00000000:	50c9614d */	beql a2, t1, 0x18538
 /* 00000004:	8993a213 */	lwl s3, -24045(t4)

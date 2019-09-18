@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CACE20.bin", 0
+.create "build/jap/CACE20.bin", 0
 
 /* 00000000:	0071ffff */	/*illegal*/ .word 0x0071ffff
 /* 00000004:	fb500000 */	/*illegal*/ .word 0xfb500000

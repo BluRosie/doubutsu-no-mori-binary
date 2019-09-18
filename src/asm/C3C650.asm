@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C3C650.bin", 0
+.create "build/jap/C3C650.bin", 0
 
 /* 00000000:	ea2fa9c1 */	/*illegal*/ .word 0xea2fa9c1
 /* 00000004:	e1c1fd81 */	sc at, -639(t6)

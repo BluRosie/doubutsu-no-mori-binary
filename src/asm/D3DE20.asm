@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D3DE20.bin", 0
+.create "build/jap/D3DE20.bin", 0
 
 /* 00000000:	03e80c80 */	/*illegal*/ .word 0x03e80c80
 /* 00000004:	07d00000 */	bltzal fp, 0x8

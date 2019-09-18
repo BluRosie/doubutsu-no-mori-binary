@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D49040.bin", 0
+.create "build/jap/D49040.bin", 0
 
 /* 00000000:	01ff2020 */	add a0, t7, ra
 /* 00000004:	fffe2020 */	/*illegal*/ .word 0xfffe2020

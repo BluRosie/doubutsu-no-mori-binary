@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C82BF0.bin", 0
+.create "build/jap/C82BF0.bin", 0
 
 /* 00000000:	ffffbef9 */	/*illegal*/ .word 0xffffbef9
 /* 00000004:	95f174eb */	lhu s1, 29931(t7)

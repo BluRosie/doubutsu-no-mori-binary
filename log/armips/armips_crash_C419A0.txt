@@ -1,0 +1,10 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C419A0.asm(30) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C419A0.asm(33) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C419A0.asm(222) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C419A0.asm(225) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C419A0.asm(286) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C419A0.asm(289) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C419A0.asm(926) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C419A0.asm(928) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C419A0.asm(1411) error: MIPS parameter failure
+Aborting.

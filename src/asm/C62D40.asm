@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C62D40.bin", 0
+.create "build/jap/C62D40.bin", 0
 
 /* 00000000:	078cfb57 */	teqi gp, -1193
 /* 00000004:	02450000 */	/*illegal*/ .word 0x02450000

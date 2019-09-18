@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/7617F0.bin", 0
+.create "build/jap/7617F0.bin", 0
 
 /* 00000000:	10c00048 */	beq a2, $zero, 0x124
 /* 00000004:	30c20001 */	andi v0, a2, 0x1

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C80400.bin", 0
+.create "build/jap/C80400.bin", 0
 
 /* 00000000:	bc572109 */	cache 0x17, 8457(v0)
 /* 00000004:	e55dffff */	/*illegal*/ .word 0xe55dffff

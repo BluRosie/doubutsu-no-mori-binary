@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D2CC00.bin", 0
+.create "build/jap/D2CC00.bin", 0
 
 /* 00000000:	2a340320 */	slti s4, s1, 800
 /* 00000004:	21690000 */	addi t1, t3, 0

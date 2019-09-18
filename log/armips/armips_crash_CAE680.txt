@@ -1,0 +1,17 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(9) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(13) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(21) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(25) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(37) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(40) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(49) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(53) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(96) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(100) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(134) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(136) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(151) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(181) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(252) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CAE680.asm(259) error: This instruction can't be in a delay slot
+Aborting.

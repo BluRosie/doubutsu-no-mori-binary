@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CCD260.bin", 0
+.create "build/jap/CCD260.bin", 0
 
 /* 00000000:	20040c80 */	addi a0, $zero, 3200
 /* 00000004:	09e40000 */	j 0x7900000

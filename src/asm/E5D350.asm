@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E5D350.bin", 0
+.create "build/jap/E5D350.bin", 0
 
 /* 00000000:	28814101 */	slti at, a0, 16641
 /* 00000004:	61817a41 */	/*illegal*/ .word 0x61817a41

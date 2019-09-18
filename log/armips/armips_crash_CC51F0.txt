@@ -1,0 +1,10 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CC51F0.asm(1754) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CC51F0.asm(2936) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CC51F0.asm(3826) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CC51F0.asm(4085) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CC51F0.asm(4862) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CC51F0.asm(5121) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CC51F0.asm(5785) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CC51F0.asm(6157) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CC51F0.asm(34981) error: MIPS parameter failure
+Aborting.

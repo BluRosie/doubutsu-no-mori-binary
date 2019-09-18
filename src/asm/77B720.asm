@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/77B720.bin", 0
+.create "build/jap/77B720.bin", 0
 
 /* 00000000:	240200ff */	addiu v0, $zero, 255
 /* 00000004:	240effff */	addiu t6, $zero, -1

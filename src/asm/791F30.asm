@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/791F30.bin", 0
+.create "build/jap/791F30.bin", 0
 
 /* 00000000:	27bdffe8 */	addiu sp, sp, -24
 /* 00000004:	3c028013 */	lui v0, 0x8013

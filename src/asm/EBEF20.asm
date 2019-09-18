@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EBEF20.bin", 0
+.create "build/jap/EBEF20.bin", 0
 
 /* 00000000:	62925b19 */	/*illegal*/ .word 0x62925b19
 /* 00000004:	18c97c21 */	/*illegal*/ .word 0x18c97c21

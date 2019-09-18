@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CEF920.bin", 0
+.create "build/jap/CEF920.bin", 0
 
 /* 00000000:	23c90320 */	addi t1, fp, 800
 /* 00000004:	17830000 */	bne gp, v1, 0x8

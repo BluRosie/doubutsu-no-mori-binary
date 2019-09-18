@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DC0150.bin", 0
+.create "build/jap/DC0150.bin", 0
 
 /* 00000000:	40816901 */	/*illegal*/ .word 0x40816901
 /* 00000004:	99c1d281 */	lwr at, -11647(t6)

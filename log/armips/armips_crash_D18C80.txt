@@ -1,0 +1,3 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D18C80.asm(182) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D18C80.asm(190) error: MIPS parameter failure
+Aborting.

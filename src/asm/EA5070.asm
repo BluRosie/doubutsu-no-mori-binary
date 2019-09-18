@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EA5070.bin", 0
+.create "build/jap/EA5070.bin", 0
 
 /* 00000000:	28c14101 */	slti at, a2, 16641
 /* 00000004:	61819241 */	/*illegal*/ .word 0x61819241

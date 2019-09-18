@@ -1,0 +1,7 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7773F0.asm(3148) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7773F0.asm(3149) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7773F0.asm(3154) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7773F0.asm(3164) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7773F0.asm(3172) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7773F0.asm(3176) error: MIPS parameter failure
+Aborting.

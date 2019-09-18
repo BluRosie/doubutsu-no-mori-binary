@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E138F0.bin", 0
+.create "build/jap/E138F0.bin", 0
 
 /* 00000000:	60819141 */	/*illegal*/ .word 0x60819141
 /* 00000004:	c243fc07 */	ll v1, -1017(s2)

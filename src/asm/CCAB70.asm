@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CCAB70.bin", 0
+.create "build/jap/CCAB70.bin", 0
 
 /* 00000000:	26012602 */	addiu at, s0, 9730
 /* 00000004:	2608260a */	addiu t0, s0, 9738

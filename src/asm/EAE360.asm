@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EAE360.bin", 0
+.create "build/jap/EAE360.bin", 0
 
 /* 00000000:	383cfffb */	xori gp, at, 0xfffb
 /* 00000004:	cebb94ad */	/*illegal*/ .word 0xcebb94ad

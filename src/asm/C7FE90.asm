@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C7FE90.bin", 0
+.create "build/jap/C7FE90.bin", 0
 
 /* 00000000:	ad6b2109 */	sw t3, 8457(t3)
 /* 00000004:	343fffff */	ori ra, at, 0xffff

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C4A2E0.bin", 0
+.create "build/jap/C4A2E0.bin", 0
 
 /* 00000000:	05510409 */	bgezal t2, 0x1028
 /* 00000004:	6941fc49 */	/*illegal*/ .word 0x6941fc49

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D1A440.bin", 0
+.create "build/jap/D1A440.bin", 0
 
 /* 00000000:	227b0c80 */	addi k1, s3, 3200
 /* 00000004:	24ea0000 */	addiu t2, a3, 0

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E6D7F0.bin", 0
+.create "build/jap/E6D7F0.bin", 0
 
 /* 00000000:	aa07c34b */	swl a3, -15541(s0)
 /* 00000004:	e415fd61 */	/*illegal*/ .word 0xe415fd61

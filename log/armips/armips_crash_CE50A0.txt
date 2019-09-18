@@ -1,0 +1,6 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CE50A0.asm(186) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CE50A0.asm(194) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CE50A0.asm(266) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CE50A0.asm(274) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CE50A0.asm(366) error: MIPS parameter failure
+Aborting.

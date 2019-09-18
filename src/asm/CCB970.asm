@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CCB970.bin", 0
+.create "build/jap/CCB970.bin", 0
 
 /* 00000000:	01f40190 */	/*illegal*/ .word 0x01f40190
 /* 00000004:	01f401f4 */	teq t7, s4, 0x7

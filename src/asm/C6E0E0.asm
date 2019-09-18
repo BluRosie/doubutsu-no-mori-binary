@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C6E0E0.bin", 0
+.create "build/jap/C6E0E0.bin", 0
 
 /* 00000000:	ffffd469 */	/*illegal*/ .word 0xffffd469
 /* 00000004:	a29d8219 */	sb sp, -32231(s4)

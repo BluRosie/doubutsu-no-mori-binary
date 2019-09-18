@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C2D960.bin", 0
+.create "build/jap/C2D960.bin", 0
 
 /* 00000000:	0805ffff */	j 0x17fffc
 /* 00000004:	a4ad5219 */	sh t5, 21017(a1)

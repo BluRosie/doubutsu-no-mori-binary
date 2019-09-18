@@ -1,0 +1,3 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/EBC5A0.asm(248) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/EBC5A0.asm(285) error: MIPS parameter failure
+Aborting.

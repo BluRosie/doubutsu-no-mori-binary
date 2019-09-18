@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DE8900.bin", 0
+.create "build/jap/DE8900.bin", 0
 
 /* 00000000:	5a8e12d7 */	/*illegal*/ .word 0x5a8e12d7
 /* 00000004:	33df44a1 */	andi ra, fp, 0x44a1

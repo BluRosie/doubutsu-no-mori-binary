@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E720F0.bin", 0
+.create "build/jap/E720F0.bin", 0
 
 /* 00000000:	00c701cb */	/*illegal*/ .word 0x00c701cb
 /* 00000004:	12913b57 */	beq s4, s1, 0xed64

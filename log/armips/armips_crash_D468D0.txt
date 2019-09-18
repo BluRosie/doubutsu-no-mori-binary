@@ -1,0 +1,7 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D468D0.asm(54) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D468D0.asm(346) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D468D0.asm(390) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D468D0.asm(510) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D468D0.asm(534) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D468D0.asm(622) error: MIPS parameter failure
+Aborting.

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C73460.bin", 0
+.create "build/jap/C73460.bin", 0
 
 /* 00000000:	03e99eff */	/*illegal*/ .word 0x03e99eff
 /* 00000004:	ffff4db5 */	/*illegal*/ .word 0xffff4db5

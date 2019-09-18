@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E22DD0.bin", 0
+.create "build/jap/E22DD0.bin", 0
 
 /* 00000000:	3ad43ad5 */	xori s4, s6, 0x3ad5
 /* 00000004:	21d1cf35 */	addi s1, t6, -12491

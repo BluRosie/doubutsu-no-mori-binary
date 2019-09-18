@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CA4190.bin", 0
+.create "build/jap/CA4190.bin", 0
 
 /* 00000000:	fe70fc91 */	/*illegal*/ .word 0xfe70fc91
 /* 00000004:	05f30000 */	bgezall t7, 0x8

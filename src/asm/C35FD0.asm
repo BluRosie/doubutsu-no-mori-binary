@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C35FD0.bin", 0
+.create "build/jap/C35FD0.bin", 0
 
 /* 00000000:	ffff9639 */	/*illegal*/ .word 0xffff9639
 /* 00000004:	2d37e313 */	sltiu s7, t1, -7405

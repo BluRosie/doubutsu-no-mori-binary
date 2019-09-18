@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DC4E10.bin", 0
+.create "build/jap/DC4E10.bin", 0
 
 /* 00000000:	bda7e6f1 */	cache 0x7, -6415(t5)
 /* 00000004:	f777fffb */	/*illegal*/ .word 0xf777fffb

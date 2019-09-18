@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CCBA70.bin", 0
+.create "build/jap/CCBA70.bin", 0
 
 /* 00000000:	00040004 */	sllv $zero, a0, $zero
 /* 00000004:	00040004 */	sllv $zero, a0, $zero

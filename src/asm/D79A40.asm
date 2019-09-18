@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D79A40.bin", 0
+.create "build/jap/D79A40.bin", 0
 
 /* 00000000:	11300320 */	beq t1, s0, 0xc84
 /* 00000004:	17700000 */	bne k1, s0, 0x8

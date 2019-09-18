@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C65100.bin", 0
+.create "build/jap/C65100.bin", 0
 
 /* 00000000:	05eefee3 */	tnei t7, -285
 /* 00000004:	05330000 */	bgezall t1, 0x8

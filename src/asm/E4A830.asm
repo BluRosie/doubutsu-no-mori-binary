@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E4A830.bin", 0
+.create "build/jap/E4A830.bin", 0
 
 /* 00000000:	dcd1bb89 */	/*illegal*/ .word 0xdcd1bb89
 /* 00000004:	ab018241 */	swl at, -32191(t8)

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C266A0.bin", 0
+.create "build/jap/C266A0.bin", 0
 
 /* 00000000:	84270001 */	lh a3, 1(at)
 /* 00000004:	a393f501 */	sb s3, -2815(gp)

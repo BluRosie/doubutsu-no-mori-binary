@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FB28F0.bin", 0
+.create "build/jap/FB28F0.bin", 0
 
 /* 00000000:	31111111 */	andi s1, t0, 0x1111
 /* 00000004:	13333000 */	beq t9, s3, 0xc008

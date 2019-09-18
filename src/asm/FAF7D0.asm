@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FAF7D0.bin", 0
+.create "build/jap/FAF7D0.bin", 0
 
 /* 00000000:	01222222 */	/*illegal*/ .word 0x01222222
 /* 00000004:	111b6011 */	beq t0, k1, 0x1804c

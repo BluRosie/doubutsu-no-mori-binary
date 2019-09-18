@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E77460.bin", 0
+.create "build/jap/E77460.bin", 0
 
 /* 00000000:	50c57151 */	beql a2, a1, 0x1c548
 /* 00000004:	91ddba65 */	lbu sp, -17819(t6)

@@ -1,0 +1,5 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CE4580.asm(74) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CE4580.asm(138) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CE4580.asm(146) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CE4580.asm(290) error: MIPS parameter failure
+Aborting.

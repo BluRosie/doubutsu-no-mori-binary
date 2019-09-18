@@ -1,0 +1,3 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D2CC00.asm(538) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D2CC00.asm(754) error: MIPS parameter failure
+Aborting.

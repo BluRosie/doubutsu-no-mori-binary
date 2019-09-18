@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E91980.bin", 0
+.create "build/jap/E91980.bin", 0
 
 /* 00000000:	211202ef */	addi s2, t0, 751
 /* 00000004:	29974219 */	slti s7, t4, 16921

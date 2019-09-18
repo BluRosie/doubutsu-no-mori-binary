@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CF15E0.bin", 0
+.create "build/jap/CF15E0.bin", 0
 
 /* 00000000:	09960320 */	j 0x6580c80
 /* 00000004:	0f860000 */	jal 0xe180000

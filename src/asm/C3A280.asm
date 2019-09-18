@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C3A280.bin", 0
+.create "build/jap/C3A280.bin", 0
 
 /* 00000000:	25b7ffff */	addiu s7, t5, -1
 /* 00000004:	0001242d */	/*illegal*/ .word 0x0001242d

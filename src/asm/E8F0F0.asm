@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E8F0F0.bin", 0
+.create "build/jap/E8F0F0.bin", 0
 
 /* 00000000:	398c2909 */	xori t4, t4, 0x2909
 /* 00000004:	41cf62d5 */	/*illegal*/ .word 0x41cf62d5

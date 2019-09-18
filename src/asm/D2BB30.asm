@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D2BB30.bin", 0
+.create "build/jap/D2BB30.bin", 0
 
 /* 00000000:	21f60320 */	addi s6, t7, 800
 /* 00000004:	30410000 */	andi at, v0, 0x0

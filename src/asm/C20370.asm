@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C20370.bin", 0
+.create "build/jap/C20370.bin", 0
 
 /* 00000000:	ffffcd79 */	/*illegal*/ .word 0xffffcd79
 /* 00000004:	9b3172a5 */	lwr s1, 29349(t9)

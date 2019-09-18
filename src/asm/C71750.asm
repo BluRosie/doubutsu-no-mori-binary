@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C71750.bin", 0
+.create "build/jap/C71750.bin", 0
 
 /* 00000000:	ffffc5f9 */	/*illegal*/ .word 0xffffc5f9
 /* 00000004:	93f37aed */	lbu s3, 31469(ra)

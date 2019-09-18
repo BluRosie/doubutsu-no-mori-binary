@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/71DCE0.bin", 0
+.create "build/jap/71DCE0.bin", 0
 
 /* 00000000:	94ae0000 */	lhu t6, 0(a1)
 /* 00000004:	25cf07d0 */	addiu t7, t6, 2000

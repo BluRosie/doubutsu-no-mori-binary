@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FAD610.bin", 0
+.create "build/jap/FAD610.bin", 0
 
 /* 00000000:	33223333 */	andi v0, t9, 0x3333
 /* 00000004:	33333333 */	andi s3, t9, 0x3333

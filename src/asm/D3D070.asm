@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D3D070.bin", 0
+.create "build/jap/D3D070.bin", 0
 
 /* 00000000:	28a01f40 */	slti $zero, a1, 8000
 /* 00000004:	1f400000 */	bgtz k0, 0x8

@@ -1,0 +1,3 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/750D50.asm(760) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/750D50.asm(762) error: MIPS parameter failure
+Aborting.

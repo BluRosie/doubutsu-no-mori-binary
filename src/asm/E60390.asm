@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E60390.bin", 0
+.create "build/jap/E60390.bin", 0
 
 /* 00000000:	18095055 */	/*illegal*/ .word 0x18095055
 /* 00000004:	8917ca61 */	lwl s7, -13727(t0)

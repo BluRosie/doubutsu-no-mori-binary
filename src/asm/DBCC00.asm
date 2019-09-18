@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DBCC00.bin", 0
+.create "build/jap/DBCC00.bin", 0
 
 /* 00000000:	824f7a0d */	lb t7, 31245(s2)
 /* 00000004:	69cb698b */	/*illegal*/ .word 0x69cb698b

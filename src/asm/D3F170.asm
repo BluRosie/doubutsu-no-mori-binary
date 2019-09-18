@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D3F170.bin", 0
+.create "build/jap/D3F170.bin", 0
 
 /* 00000000:	320015e0 */	andi $zero, s0, 0x15e0
 /* 00000004:	2d500000 */	sltiu s0, t2, 0

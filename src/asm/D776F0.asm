@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D776F0.bin", 0
+.create "build/jap/D776F0.bin", 0
 
 /* 00000000:	17f50320 */	bne ra, s5, 0xc84
 /* 00000004:	28a00000 */	slti $zero, a1, 0

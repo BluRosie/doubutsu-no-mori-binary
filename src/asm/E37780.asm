@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E37780.bin", 0
+.create "build/jap/E37780.bin", 0
 
 /* 00000000:	38015841 */	xori at, $zero, 0x5841
 /* 00000004:	8101b9c1 */	lb at, -17983(t0)

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E431D0.bin", 0
+.create "build/jap/E431D0.bin", 0
 
 /* 00000000:	421418c9 */	/*illegal*/ .word 0x421418c9
 /* 00000004:	39d35adb */	xori s3, t6, 0x5adb

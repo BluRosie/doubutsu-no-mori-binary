@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CCB3A0.bin", 0
+.create "build/jap/CCB3A0.bin", 0
 
 /* 00000000:	a1180a00 */	sb t8, 2560(t0)
 /* 00000004:	078004b0 */	bltz gp, 0x12c8

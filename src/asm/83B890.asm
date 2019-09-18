@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/83B890.bin", 0
+.create "build/jap/83B890.bin", 0
 
 /* 00000000:	060010f0 */	bltz s0, 0x43c4
 /* 00000004:	060008f8 */	bltz s0, 0x23e8

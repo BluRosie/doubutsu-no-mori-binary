@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E39C70.bin", 0
+.create "build/jap/E39C70.bin", 0
 
 /* 00000000:	3b5a435b */	xori k0, k0, 0x435b
 /* 00000004:	3297218f */	andi s7, s4, 0x218f

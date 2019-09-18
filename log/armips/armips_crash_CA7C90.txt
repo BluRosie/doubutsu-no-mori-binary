@@ -1,0 +1,13 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CA7C90.asm(7) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CA7C90.asm(43) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CA7C90.asm(79) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CA7C90.asm(91) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CA7C90.asm(99) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CA7C90.asm(111) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CA7C90.asm(191) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CA7C90.asm(203) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CA7C90.asm(211) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CA7C90.asm(223) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CA7C90.asm(227) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CA7C90.asm(235) error: Invalid MIPS opcode 'sdbbp'
+Aborting.

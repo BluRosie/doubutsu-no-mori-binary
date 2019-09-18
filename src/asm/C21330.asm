@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C21330.bin", 0
+.create "build/jap/C21330.bin", 0
 
 /* 00000000:	2901ff6d */	slti at, t0, -147
 /* 00000004:	0001e5df */	/*illegal*/ .word 0x0001e5df

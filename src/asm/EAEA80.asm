@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EAEA80.bin", 0
+.create "build/jap/EAEA80.bin", 0
 
 /* 00000000:	383c7327 */	xori gp, at, 0x7327
 /* 00000004:	499b28d1 */	/*illegal*/ .word 0x499b28d1

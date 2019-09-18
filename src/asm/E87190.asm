@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E87190.bin", 0
+.create "build/jap/E87190.bin", 0
 
 /* 00000000:	99c1ca81 */	lwr at, -13695(t6)
 /* 00000004:	fb41fc81 */	/*illegal*/ .word 0xfb41fc81

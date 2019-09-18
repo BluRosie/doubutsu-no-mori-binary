@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C6DA80.bin", 0
+.create "build/jap/C6DA80.bin", 0
 
 /* 00000000:	ffffaeeb */	/*illegal*/ .word 0xffffaeeb
 /* 00000004:	85db6cdb */	lh k1, 27867(t6)

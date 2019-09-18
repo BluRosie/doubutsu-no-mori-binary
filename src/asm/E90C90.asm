@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E90C90.bin", 0
+.create "build/jap/E90C90.bin", 0
 
 /* 00000000:	28c6ed93 */	slti a2, a2, -4717
 /* 00000004:	ef3d51d1 */	/*illegal*/ .word 0xef3d51d1

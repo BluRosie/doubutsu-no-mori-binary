@@ -1,0 +1,5 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8A270.asm(139) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8A270.asm(151) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8A270.asm(211) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8A270.asm(227) error: Invalid MIPS opcode 'sdbbp'
+Aborting.

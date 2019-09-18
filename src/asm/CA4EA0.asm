@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CA4EA0.bin", 0
+.create "build/jap/CA4EA0.bin", 0
 
 /* 00000000:	fea701e4 */	/*illegal*/ .word 0xfea701e4
 /* 00000004:	00010000 */	sll $zero, at, 0x0

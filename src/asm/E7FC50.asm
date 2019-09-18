@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E7FC50.bin", 0
+.create "build/jap/E7FC50.bin", 0
 
 /* 00000000:	655f3c13 */	/*illegal*/ .word 0x655f3c13
 /* 00000004:	2acb11c5 */	slti t3, s6, 4549

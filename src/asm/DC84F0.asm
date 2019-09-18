@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DC84F0.bin", 0
+.create "build/jap/DC84F0.bin", 0
 
 /* 00000000:	81055081 */	lb a1, 20609(t0)
 /* 00000004:	3001b9c7 */	andi at, $zero, 0xb9c7

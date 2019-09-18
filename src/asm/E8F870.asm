@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E8F870.bin", 0
+.create "build/jap/E8F870.bin", 0
 
 /* 00000000:	20825981 */	addi v0, a0, 22913
 /* 00000004:	8ac7ac07 */	lwl a3, -21497(s6)

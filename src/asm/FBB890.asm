@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FBB890.bin", 0
+.create "build/jap/FBB890.bin", 0
 
 /* 00000000:	09000100 */	j 0x4000400
 /* 00000004:	00000000 */	nop

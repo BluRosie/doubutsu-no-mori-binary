@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E26590.bin", 0
+.create "build/jap/E26590.bin", 0
 
 /* 00000000:	2a5ad7bb */	slti k0, s2, -10309
 /* 00000004:	df71dee3 */	/*illegal*/ .word 0xdf71dee3

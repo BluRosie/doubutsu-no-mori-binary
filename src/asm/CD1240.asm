@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CD1240.bin", 0
+.create "build/jap/CD1240.bin", 0
 
 /* 00000000:	0c4f0320 */	jal 0x13c0c80
 /* 00000004:	057e0000 */	/*illegal*/ .word 0x057e0000

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DD7E30.bin", 0
+.create "build/jap/DD7E30.bin", 0
 
 /* 00000000:	5294ce69 */	beql s4, s4, 0xffff39a8
 /* 00000004:	a94b8001 */	swl t3, -32767(t2)

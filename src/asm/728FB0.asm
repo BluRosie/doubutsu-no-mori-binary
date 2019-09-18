@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/728FB0.bin", 0
+.create "build/jap/728FB0.bin", 0
 
 /* 00000000:	3c013f80 */	lui at, 0x3f80
 /* 00000004:	44811000 */	/*illegal*/ .word 0x44811000

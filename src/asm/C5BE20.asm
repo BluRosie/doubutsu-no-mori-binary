@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C5BE20.bin", 0
+.create "build/jap/C5BE20.bin", 0
 
 /* 00000000:	089201cc */	j 0x2480730
 /* 00000004:	fcb90000 */	/*illegal*/ .word 0xfcb90000

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/6EF1A0.bin", 0
+.create "build/jap/6EF1A0.bin", 0
 
 /* 00000000:	3c038013 */	lui v1, 0x8013
 /* 00000004:	24636ea0 */	addiu v1, v1, 28320

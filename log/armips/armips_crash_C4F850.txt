@@ -1,0 +1,7 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C4F850.asm(427) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C4F850.asm(491) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C4F850.asm(559) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C4F850.asm(747) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C4F850.asm(807) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C4F850.asm(1210) error: MIPS parameter failure
+Aborting.

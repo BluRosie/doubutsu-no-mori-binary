@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D3B650.bin", 0
+.create "build/jap/D3B650.bin", 0
 
 /* 00000000:	23280c80 */	addi t0, t9, 3200
 /* 00000004:	30700000 */	andi s0, v1, 0x0

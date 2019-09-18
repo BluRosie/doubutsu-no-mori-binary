@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E3BA90.bin", 0
+.create "build/jap/E3BA90.bin", 0
 
 /* 00000000:	69418181 */	/*illegal*/ .word 0x69418181
 /* 00000004:	9a01b281 */	lwr at, -19839(s0)

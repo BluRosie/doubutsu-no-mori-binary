@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FB15B0.bin", 0
+.create "build/jap/FB15B0.bin", 0
 
 /* 00000000:	11112222 */	beq t0, s1, 0x888c
 /* 00000004:	21122222 */	addi s2, t0, 8738

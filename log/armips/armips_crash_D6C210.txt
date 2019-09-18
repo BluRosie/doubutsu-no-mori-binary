@@ -1,0 +1,3 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D6C210.asm(2723) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D6C210.asm(2747) error: MIPS parameter failure
+Aborting.

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FB2070.bin", 0
+.create "build/jap/FB2070.bin", 0
 
 /* 00000000:	c35ba297 */	ll k1, -23913(k0)
 /* 00000004:	821369d1 */	lb s3, 27089(s0)

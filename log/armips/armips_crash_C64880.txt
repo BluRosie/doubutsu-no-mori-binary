@@ -1,0 +1,12 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(15) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(79) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(143) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(207) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(271) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(335) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(399) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(463) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(911) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1050) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1103) error: MIPS parameter failure
+Aborting.

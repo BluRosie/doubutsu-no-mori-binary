@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CD1B10.bin", 0
+.create "build/jap/CD1B10.bin", 0
 
 /* 00000000:	19fa0c80 */	/*illegal*/ .word 0x19fa0c80
 /* 00000004:	21c80000 */	addi t0, t6, 0

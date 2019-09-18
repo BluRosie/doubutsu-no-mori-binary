@@ -1,0 +1,2 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/EC1440.asm(326) error: MIPS parameter failure
+Aborting.

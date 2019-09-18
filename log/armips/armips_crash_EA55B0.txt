@@ -1,0 +1,2 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/EA55B0.asm(371) error: MIPS parameter failure
+Aborting.

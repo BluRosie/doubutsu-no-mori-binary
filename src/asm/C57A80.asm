@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C57A80.bin", 0
+.create "build/jap/C57A80.bin", 0
 
 /* 00000000:	531ff1ab */	beql t8, ra, 0xffffc6b0
 /* 00000004:	8011d4c1 */	lb s1, -11071($zero)

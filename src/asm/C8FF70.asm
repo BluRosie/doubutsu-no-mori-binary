@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C8FF70.bin", 0
+.create "build/jap/C8FF70.bin", 0
 
 /* 00000000:	a2c113d3 */	sb at, 5075(s6)
 /* 00000004:	021174b1 */	tgeu s0, s1, 0x1d2

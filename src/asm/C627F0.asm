@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C627F0.bin", 0
+.create "build/jap/C627F0.bin", 0
 
 /* 00000000:	ec450000 */	/*illegal*/ .word 0xec450000
 /* 00000004:	1091ad7d */	beq a0, s1, 0xfffeb5fc

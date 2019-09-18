@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/750D50.bin", 0
+.create "build/jap/750D50.bin", 0
 
 /* 00000000:	27bdff90 */	addiu sp, sp, -112
 /* 00000004:	afb40028 */	sw s4, 40(sp)

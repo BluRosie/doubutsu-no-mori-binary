@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C935B0.bin", 0
+.create "build/jap/C935B0.bin", 0
 
 /* 00000000:	ffff0001 */	/*illegal*/ .word 0xffff0001
 /* 00000004:	84215295 */	lh at, 21141(at)

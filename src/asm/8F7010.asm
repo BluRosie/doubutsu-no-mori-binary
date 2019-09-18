@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/8F7010.bin", 0
+.create "build/jap/8F7010.bin", 0
 
 /* 00000000:	00460004 */	sllv $zero, a2, v0
 /* 00000004:	00000000 */	nop

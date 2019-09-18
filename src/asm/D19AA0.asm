@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D19AA0.bin", 0
+.create "build/jap/D19AA0.bin", 0
 
 /* 00000000:	19d60320 */	/*illegal*/ .word 0x19d60320
 /* 00000004:	28bc0000 */	slti gp, a1, 0

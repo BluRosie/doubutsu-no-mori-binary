@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CCB2D0.bin", 0
+.create "build/jap/CCB2D0.bin", 0
 
 /* 00000000:	27002703 */	addiu $zero, t8, 9987
 /* 00000004:	2707270b */	addiu a3, t8, 9995

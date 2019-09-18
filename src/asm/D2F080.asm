@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D2F080.bin", 0
+.create "build/jap/D2F080.bin", 0
 
 /* 00000000:	26a60320 */	addiu a2, s5, 800
 /* 00000004:	2fc80000 */	sltiu t0, fp, 0

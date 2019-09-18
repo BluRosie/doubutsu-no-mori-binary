@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C75690.bin", 0
+.create "build/jap/C75690.bin", 0
 
 /* 00000000:	bc59ffff */	cache 0x19, -1(v0)
 /* 00000004:	feedb5ad */	/*illegal*/ .word 0xfeedb5ad

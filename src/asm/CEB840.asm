@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CEB840.bin", 0
+.create "build/jap/CEB840.bin", 0
 
 /* 00000000:	08830320 */	j 0x20c0c80
 /* 00000004:	11100000 */	beq t0, s0, 0x8

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C4CB10.bin", 0
+.create "build/jap/C4CB10.bin", 0
 
 /* 00000000:	1345fc31 */	beq k0, a1, 0xfffff0c8
 /* 00000004:	34bfc263 */	ori ra, a1, 0xc263

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CEA410.bin", 0
+.create "build/jap/CEA410.bin", 0
 
 /* 00000000:	08c10c80 */	j 0x3043200
 /* 00000004:	21ae0000 */	addi t6, t5, 0

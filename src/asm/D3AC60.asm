@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D3AC60.bin", 0
+.create "build/jap/D3AC60.bin", 0
 
 /* 00000000:	25800c80 */	addiu $zero, t4, 3200
 /* 00000004:	00000000 */	nop

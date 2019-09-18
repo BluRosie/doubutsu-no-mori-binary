@@ -1,0 +1,6 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D58750.asm(122) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D58750.asm(130) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D58750.asm(298) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D58750.asm(386) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D58750.asm(678) error: MIPS parameter failure
+Aborting.

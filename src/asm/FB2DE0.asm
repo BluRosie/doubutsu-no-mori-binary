@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FB2DE0.bin", 0
+.create "build/jap/FB2DE0.bin", 0
 
 /* 00000000:	e0e0e0e0 */	sc $zero, -7968(a3)
 /* 00000004:	e0e0e0e0 */	sc $zero, -7968(a3)

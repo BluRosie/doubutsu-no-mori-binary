@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E816C0.bin", 0
+.create "build/jap/E816C0.bin", 0
 
 /* 00000000:	2d2f1ba7 */	sltiu t7, t1, 7079
 /* 00000004:	121b010f */	beq s0, k1, 0x444

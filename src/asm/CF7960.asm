@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CF7960.bin", 0
+.create "build/jap/CF7960.bin", 0
 
 /* 00000000:	2f590c80 */	sltiu t9, k0, 3200
 /* 00000004:	1c4a0000 */	/*illegal*/ .word 0x1c4a0000

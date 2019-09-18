@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DBDB30.bin", 0
+.create "build/jap/DBDB30.bin", 0
 
 /* 00000000:	ab8b8ac3 */	swl t3, -30013(gp)
 /* 00000004:	41416a01 */	/*illegal*/ .word 0x41416a01

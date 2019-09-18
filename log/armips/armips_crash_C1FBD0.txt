@@ -1,0 +1,3 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C1FBD0.asm(1295) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C1FBD0.asm(1330) error: MIPS parameter failure
+Aborting.

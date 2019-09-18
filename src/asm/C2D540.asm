@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C2D540.bin", 0
+.create "build/jap/C2D540.bin", 0
 
 /* 00000000:	0001917f */	/*illegal*/ .word 0x0001917f
 /* 00000004:	a23fb33f */	sb ra, -19649(s1)

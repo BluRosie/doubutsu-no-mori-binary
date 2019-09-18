@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CCBE40.bin", 0
+.create "build/jap/CCBE40.bin", 0
 
 /* 00000000:	07d007d0 */	bltzal fp, 0x1f44
 /* 00000004:	00000000 */	nop

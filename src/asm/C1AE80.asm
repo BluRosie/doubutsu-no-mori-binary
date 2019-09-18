@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C1AE80.bin", 0
+.create "build/jap/C1AE80.bin", 0
 
 /* 00000000:	ee670001 */	/*illegal*/ .word 0xee670001
 /* 00000004:	ab9161c7 */	swl s1, 25031(gp)

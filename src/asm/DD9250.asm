@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DD9250.bin", 0
+.create "build/jap/DD9250.bin", 0
 
 /* 00000000:	298b7c1f */	slti t3, t4, 31775
 /* 00000004:	a56fce75 */	sh t7, -12683(t3)

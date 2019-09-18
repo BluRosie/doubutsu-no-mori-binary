@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/80E090.bin", 0
+.create "build/jap/80E090.bin", 0
 
 /* 00000000:	8482017e */	lh v0, 382(a0)
 /* 00000004:	24010001 */	addiu at, $zero, 1

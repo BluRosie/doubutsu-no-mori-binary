@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C8D420.bin", 0
+.create "build/jap/C8D420.bin", 0
 
 /* 00000000:	b519b903 */	/*illegal*/ .word 0xb519b903
 /* 00000004:	8bcfd295 */	lwl t7, -11627(fp)

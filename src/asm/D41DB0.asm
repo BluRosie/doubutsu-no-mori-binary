@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D41DB0.bin", 0
+.create "build/jap/D41DB0.bin", 0
 
 /* 00000000:	20d00320 */	addi s0, a2, 800
 /* 00000004:	28a00000 */	slti $zero, a1, 0

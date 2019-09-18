@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CE8100.bin", 0
+.create "build/jap/CE8100.bin", 0
 
 /* 00000000:	20980c80 */	addi t8, a0, 3200
 /* 00000004:	1fa70000 */	/*illegal*/ .word 0x1fa70000

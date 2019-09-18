@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E95100.bin", 0
+.create "build/jap/E95100.bin", 0
 
 /* 00000000:	310020c7 */	andi $zero, t0, 0x20c7
 /* 00000004:	3101418b */	andi at, t0, 0x418b

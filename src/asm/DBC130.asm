@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DBC130.bin", 0
+.create "build/jap/DBC130.bin", 0
 
 /* 00000000:	8420ffff */	lh $zero, -1(at)
 /* 00000004:	cef3b62d */	/*illegal*/ .word 0xcef3b62d

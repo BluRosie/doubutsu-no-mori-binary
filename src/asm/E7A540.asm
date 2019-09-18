@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E7A540.bin", 0
+.create "build/jap/E7A540.bin", 0
 
 /* 00000000:	ace573c1 */	sw a1, 29633(a3)
 /* 00000004:	52c13a01 */	beql s6, at, 0xe80c

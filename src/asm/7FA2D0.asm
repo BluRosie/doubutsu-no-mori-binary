@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/7FA2D0.bin", 0
+.create "build/jap/7FA2D0.bin", 0
 
 /* 00000000:	27bdffa0 */	addiu sp, sp, -96
 /* 00000004:	44800000 */	/*illegal*/ .word 0x44800000

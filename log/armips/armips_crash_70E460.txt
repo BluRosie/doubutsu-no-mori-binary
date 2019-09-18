@@ -1,0 +1,2 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/70E460.asm(2982) error: MIPS parameter failure
+Aborting.

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CCB8D0.bin", 0
+.create "build/jap/CCB8D0.bin", 0
 
 /* 00000000:	07a80834 */	tgei sp, 2100
 /* 00000004:	04600320 */	bltz v1, 0xc88

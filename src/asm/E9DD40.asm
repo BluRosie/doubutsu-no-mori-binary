@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E9DD40.bin", 0
+.create "build/jap/E9DD40.bin", 0
 
 /* 00000000:	4cf26b4f */	/*illegal*/ .word 0x4cf26b4f
 /* 00000004:	9455bdd9 */	lhu s5, -16935(v0)

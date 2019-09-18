@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C453C0.bin", 0
+.create "build/jap/C453C0.bin", 0
 
 /* 00000000:	fd016001 */	/*illegal*/ .word 0xfd016001
 /* 00000004:	30010001 */	andi at, $zero, 0x1

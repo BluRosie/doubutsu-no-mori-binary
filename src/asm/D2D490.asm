@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D2D490.bin", 0
+.create "build/jap/D2D490.bin", 0
 
 /* 00000000:	25800320 */	addiu $zero, t4, 800
 /* 00000004:	0c800000 */	jal 0x2000000

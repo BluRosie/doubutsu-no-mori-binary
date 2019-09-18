@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E943D0.bin", 0
+.create "build/jap/E943D0.bin", 0
 
 /* 00000000:	494a3003 */	/*illegal*/ .word 0x494a3003
 /* 00000004:	50477989 */	beql v0, a3, 0x1e62c

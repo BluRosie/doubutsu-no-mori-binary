@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/84C5F0.bin", 0
+.create "build/jap/84C5F0.bin", 0
 
 /* 00000000:	00852021 */	addu a0, a0, a1
 /* 00000004:	00a01025 */	or v0, a1, $zero

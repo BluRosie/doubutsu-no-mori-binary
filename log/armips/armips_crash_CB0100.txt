@@ -1,0 +1,4 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CB0100.asm(4044) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CB0100.asm(4541) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CB0100.asm(4561) error: Invalid MIPS opcode 'sdbbp'
+Aborting.

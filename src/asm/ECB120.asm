@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/ECB120.bin", 0
+.create "build/jap/ECB120.bin", 0
 
 /* 00000000:	856cf7ff */	lh t4, -2049(t3)
 /* 00000004:	cf7bb6f9 */	/*illegal*/ .word 0xcf7bb6f9

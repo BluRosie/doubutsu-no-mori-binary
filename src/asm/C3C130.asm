@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C3C130.bin", 0
+.create "build/jap/C3C130.bin", 0
 
 /* 00000000:	0409a601 */	tgeiu $zero, -23039
 /* 00000004:	4d05f491 */	/*illegal*/ .word 0x4d05f491

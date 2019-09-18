@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C29F60.bin", 0
+.create "build/jap/C29F60.bin", 0
 
 /* 00000000:	bb0bffff */	swr t3, -1(t8)
 /* 00000004:	104189c5 */	beq v0, at, 0xfffe271c

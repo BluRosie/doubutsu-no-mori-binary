@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E92730.bin", 0
+.create "build/jap/E92730.bin", 0
 
 /* 00000000:	50408841 */	beql v0, $zero, 0xfffe2108
 /* 00000004:	b901e201 */	swr at, -7679(t0)

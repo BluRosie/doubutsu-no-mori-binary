@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E59080.bin", 0
+.create "build/jap/E59080.bin", 0
 
 /* 00000000:	081928a5 */	j 0x64a294
 /* 00000004:	90ed412d */	lbu t5, 16685(a3)

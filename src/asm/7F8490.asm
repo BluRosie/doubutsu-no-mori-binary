@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/7F8490.bin", 0
+.create "build/jap/7F8490.bin", 0
 
 /* 00000000:	240e0046 */	addiu t6, $zero, 70
 /* 00000004:	240fffff */	addiu t7, $zero, -1

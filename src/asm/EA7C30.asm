@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EA7C30.bin", 0
+.create "build/jap/EA7C30.bin", 0
 
 /* 00000000:	f000f001 */	/*illegal*/ .word 0xf000f001
 /* 00000004:	a0016801 */	sb at, 26625($zero)

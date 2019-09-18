@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EA3CC0.bin", 0
+.create "build/jap/EA3CC0.bin", 0
 
 /* 00000000:	bcd7dde1 */	cache 0x17, -8735(a2)
 /* 00000004:	f72dffb5 */	/*illegal*/ .word 0xf72dffb5

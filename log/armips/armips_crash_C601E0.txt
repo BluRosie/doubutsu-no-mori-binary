@@ -1,0 +1,6 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C601E0.asm(75) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C601E0.asm(327) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C601E0.asm(395) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C601E0.asm(511) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C601E0.asm(762) error: MIPS parameter failure
+Aborting.

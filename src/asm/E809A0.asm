@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E809A0.bin", 0
+.create "build/jap/E809A0.bin", 0
 
 /* 00000000:	a33b7233 */	sb k1, 29235(t9)
 /* 00000004:	50eb3861 */	beql a3, t3, 0xe18c

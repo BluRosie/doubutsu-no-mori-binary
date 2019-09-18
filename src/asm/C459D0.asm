@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C459D0.bin", 0
+.create "build/jap/C459D0.bin", 0
 
 /* 00000000:	ffff631f */	/*illegal*/ .word 0xffff631f
 /* 00000004:	bdf194a9 */	cache 0x11, -27479(t7)

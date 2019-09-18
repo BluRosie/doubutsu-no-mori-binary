@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CD4580.bin", 0
+.create "build/jap/CD4580.bin", 0
 
 /* 00000000:	1bee0320 */	/*illegal*/ .word 0x1bee0320
 /* 00000004:	25b20000 */	addiu s2, t5, 0

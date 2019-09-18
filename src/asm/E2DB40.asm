@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E2DB40.bin", 0
+.create "build/jap/E2DB40.bin", 0
 
 /* 00000000:	98009801 */	lwr $zero, -26623($zero)
 /* 00000004:	d001e0c7 */	/*illegal*/ .word 0xd001e0c7

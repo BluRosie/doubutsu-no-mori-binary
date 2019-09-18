@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/7A1CC0.bin", 0
+.create "build/jap/7A1CC0.bin", 0
 
 /* 00000000:	00001880 */	sll v1, $zero, 0x2
 /* 00000004:	000001f0 */	tge $zero, $zero, 0x7

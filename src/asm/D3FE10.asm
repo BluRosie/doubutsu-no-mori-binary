@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D3FE10.bin", 0
+.create "build/jap/D3FE10.bin", 0
 
 /* 00000000:	138b0320 */	beq gp, t3, 0xc84
 /* 00000004:	0afc0000 */	j 0xbf00000

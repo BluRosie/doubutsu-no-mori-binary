@@ -1,0 +1,8 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D12DD0.asm(2815) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D12DD0.asm(2939) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D12DD0.asm(2975) error: Invalid MIPS opcode 'wait'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D12DD0.asm(3015) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D12DD0.asm(3167) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D12DD0.asm(3803) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D12DD0.asm(3807) error: MIPS parameter failure
+Aborting.

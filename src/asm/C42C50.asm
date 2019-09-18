@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C42C50.bin", 0
+.create "build/jap/C42C50.bin", 0
 
 /* 00000000:	abd5ffff */	swl s5, -1(fp)
 /* 00000004:	cd218acd */	/*illegal*/ .word 0xcd218acd

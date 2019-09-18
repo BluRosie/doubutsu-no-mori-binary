@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C3BC60.bin", 0
+.create "build/jap/C3BC60.bin", 0
 
 /* 00000000:	c401a9c1 */	/*illegal*/ .word 0xc401a9c1
 /* 00000004:	e1c1ec41 */	sc at, -5055(t6)

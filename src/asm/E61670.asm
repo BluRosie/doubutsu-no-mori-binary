@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E61670.bin", 0
+.create "build/jap/E61670.bin", 0
 
 /* 00000000:	8401a501 */	lh at, -23295($zero)
 /* 00000004:	ae01c6cd */	sw at, -14643(s0)

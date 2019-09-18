@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EB1010.bin", 0
+.create "build/jap/EB1010.bin", 0
 
 /* 00000000:	29903a19 */	slti s0, t4, 14873
 /* 00000004:	2993190f */	slti s3, t4, 6415

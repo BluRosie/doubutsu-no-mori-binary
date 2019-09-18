@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C21700.bin", 0
+.create "build/jap/C21700.bin", 0
 
 /* 00000000:	c1a5fff1 */	ll a1, -15(t5)
 /* 00000004:	000151cd */	break 0x547

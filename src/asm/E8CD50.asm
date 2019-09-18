@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E8CD50.bin", 0
+.create "build/jap/E8CD50.bin", 0
 
 /* 00000000:	63180001 */	/*illegal*/ .word 0x63180001
 /* 00000004:	294bcef7 */	slti t3, t2, -12553

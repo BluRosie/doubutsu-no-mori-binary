@@ -1,0 +1,6 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D70990.asm(1959) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D70990.asm(1974) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D70990.asm(2021) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D70990.asm(2025) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D70990.asm(2029) error: MIPS parameter failure
+Aborting.

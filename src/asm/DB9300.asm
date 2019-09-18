@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DB9300.bin", 0
+.create "build/jap/DB9300.bin", 0
 
 /* 00000000:	21c8cfe9 */	addi t0, t6, -12311
 /* 00000004:	86d76e09 */	lh s7, 28169(s6)

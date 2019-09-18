@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E15680.bin", 0
+.create "build/jap/E15680.bin", 0
 
 /* 00000000:	010d11d5 */	/*illegal*/ .word 0x010d11d5
 /* 00000004:	23214469 */	addi at, t9, 17513

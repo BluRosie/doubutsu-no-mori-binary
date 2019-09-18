@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DDE540.bin", 0
+.create "build/jap/DDE540.bin", 0
 
 /* 00000000:	49817a41 */	/*illegal*/ .word 0x49817a41
 /* 00000004:	ab41b801 */	swl at, -18431(k0)

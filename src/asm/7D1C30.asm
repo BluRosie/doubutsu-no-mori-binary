@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/7D1C30.bin", 0
+.create "build/jap/7D1C30.bin", 0
 
 /* 00000000:	000039e0 */	/*illegal*/ .word 0x000039e0
 /* 00000004:	00000810 */	mfhi at

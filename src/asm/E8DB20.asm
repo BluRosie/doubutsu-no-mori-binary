@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E8DB20.bin", 0
+.create "build/jap/E8DB20.bin", 0
 
 /* 00000000:	0ac21bc5 */	j 0xb086f14
 /* 00000004:	554ffbe9 */	bnel t2, t7, 0xffffefac

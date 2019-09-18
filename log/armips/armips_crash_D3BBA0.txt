@@ -1,0 +1,7 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D3BBA0.asm(1058) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D3BBA0.asm(1130) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D3BBA0.asm(1138) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D3BBA0.asm(1178) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D3BBA0.asm(1182) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D3BBA0.asm(1194) error: MIPS parameter failure
+Aborting.

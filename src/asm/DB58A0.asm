@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DB58A0.bin", 0
+.create "build/jap/DB58A0.bin", 0
 
 /* 00000000:	f44c8103 */	/*illegal*/ .word 0xf44c8103
 /* 00000004:	9983a143 */	lwr v1, -24253(t4)

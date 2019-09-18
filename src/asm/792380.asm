@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/792380.bin", 0
+.create "build/jap/792380.bin", 0
 
 /* 00000000:	afa40000 */	sw a0, 0(sp)
 /* 00000004:	3084ffff */	andi a0, a0, 0xffff

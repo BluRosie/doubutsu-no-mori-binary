@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E50820.bin", 0
+.create "build/jap/E50820.bin", 0
 
 /* 00000000:	29cd42d3 */	slti t5, t6, 17107
 /* 00000004:	539b8569 */	beql gp, k1, 0xfffe15ac

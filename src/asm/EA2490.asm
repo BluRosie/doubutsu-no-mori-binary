@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EA2490.bin", 0
+.create "build/jap/EA2490.bin", 0
 
 /* 00000000:	51818a81 */	beql t4, at, 0xfffe2a08
 /* 00000004:	bbc1ed47 */	swr at, -4793(fp)

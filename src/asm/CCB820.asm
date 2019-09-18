@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CCB820.bin", 0
+.create "build/jap/CCB820.bin", 0
 
 /* 00000000:	087008fc */	j 0x1c023f0
 /* 00000004:	06900320 */	bltzal s4, 0xc88

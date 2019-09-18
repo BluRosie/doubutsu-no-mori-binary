@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E3F2F0.bin", 0
+.create "build/jap/E3F2F0.bin", 0
 
 /* 00000000:	aa46a207 */	swl a2, -24057(s2)
 /* 00000004:	c30bd40d */	ll t3, -11251(t8)

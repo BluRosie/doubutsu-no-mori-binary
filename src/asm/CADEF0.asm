@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CADEF0.bin", 0
+.create "build/jap/CADEF0.bin", 0
 
 /* 00000000:	fc18fc18 */	/*illegal*/ .word 0xfc18fc18
 /* 00000004:	00000000 */	nop

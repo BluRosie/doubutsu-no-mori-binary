@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CEAE20.bin", 0
+.create "build/jap/CEAE20.bin", 0
 
 /* 00000000:	1fdd0c80 */	/*illegal*/ .word 0x1fdd0c80
 /* 00000004:	2b7b0000 */	slti k1, k1, 0

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DB98D0.bin", 0
+.create "build/jap/DB98D0.bin", 0
 
 /* 00000000:	a561ffff */	sh at, -1(t3)
 /* 00000004:	fff7ef73 */	/*illegal*/ .word 0xfff7ef73

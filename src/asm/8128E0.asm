@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/8128E0.bin", 0
+.create "build/jap/8128E0.bin", 0
 
 /* 00000000:	afa40000 */	sw a0, 0(sp)
 /* 00000004:	afa50004 */	sw a1, 4(sp)

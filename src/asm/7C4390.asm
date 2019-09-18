@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/7C4390.bin", 0
+.create "build/jap/7C4390.bin", 0
 
 /* 00000000:	00000cd0 */	/*illegal*/ .word 0x00000cd0
 /* 00000004:	00000130 */	tge $zero, $zero, 0x4

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E145A0.bin", 0
+.create "build/jap/E145A0.bin", 0
 
 /* 00000000:	1182e76b */	beq t4, v0, 0xffff9db0
 /* 00000004:	a6976cc9 */	sh s7, 27849(s4)

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E7CA20.bin", 0
+.create "build/jap/E7CA20.bin", 0
 
 /* 00000000:	ffffd77b */	/*illegal*/ .word 0xffffd77b
 /* 00000004:	aeb785b3 */	sw s7, -31309(s5)

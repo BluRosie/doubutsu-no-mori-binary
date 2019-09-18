@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E48F20.bin", 0
+.create "build/jap/E48F20.bin", 0
 
 /* 00000000:	43e4d309 */	/*illegal*/ .word 0x43e4d309
 /* 00000004:	aa833297 */	swl v1, 12951(s4)

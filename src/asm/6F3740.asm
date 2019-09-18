@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/6F3740.bin", 0
+.create "build/jap/6F3740.bin", 0
 
 /* 00000000:	27bdff70 */	addiu sp, sp, -144
 /* 00000004:	3c0f8083 */	lui t7, 0x8083

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DC1450.bin", 0
+.create "build/jap/DC1450.bin", 0
 
 /* 00000000:	414169c1 */	/*illegal*/ .word 0x414169c1
 /* 00000004:	9ac1d441 */	lwr at, -11199(s6)

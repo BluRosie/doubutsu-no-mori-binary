@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C4E330.bin", 0
+.create "build/jap/C4E330.bin", 0
 
 /* 00000000:	a2c14210 */	sb at, 16912(s6)
 /* 00000004:	1089b5bb */	beq a0, t1, 0xfffed6f4

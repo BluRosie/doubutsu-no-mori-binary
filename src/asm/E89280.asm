@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E89280.bin", 0
+.create "build/jap/E89280.bin", 0
 
 /* 00000000:	318c4189 */	andi t4, t4, 0x4189
 /* 00000004:	ff0762d5 */	/*illegal*/ .word 0xff0762d5

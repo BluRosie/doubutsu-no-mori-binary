@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CE8B40.bin", 0
+.create "build/jap/CE8B40.bin", 0
 
 /* 00000000:	19360823 */	/*illegal*/ .word 0x19360823
 /* 00000004:	121a0000 */	beq s0, k0, 0x8

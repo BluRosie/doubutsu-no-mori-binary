@@ -1,0 +1,82 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(175643) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(175652) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(175658) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(175681) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(176310) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(176311) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(176313) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(176314) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(176315) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(176316) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(176319) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(176321) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(177742) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(177748) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(177751) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(177755) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(177762) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(177766) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(177768) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(177769) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(177803) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178101) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178106) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178110) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178114) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178117) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178118) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178706) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178708) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178710) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178712) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178713) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178715) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178717) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178719) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178727) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(178754) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(182477) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(182639) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(182648) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(183295) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(184090) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(185339) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(188787) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(192720) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(194174) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(197132) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(197440) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(197452) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(201374) error: Invalid MIPS opcode 'wait'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(201392) error: Invalid MIPS opcode 'wait'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(202301) error: Invalid MIPS opcode 'wait'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(202303) error: Invalid MIPS opcode 'wait'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(202305) error: Invalid MIPS opcode 'wait'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(202306) error: Invalid MIPS opcode 'wait'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204803) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204809) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204812) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204816) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204823) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204827) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204829) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204830) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204861) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204913) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204918) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204922) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204926) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204929) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(204930) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(205770) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(205772) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(205774) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(205776) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(205777) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(205779) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(205781) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(205783) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(205791) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(205818) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/675720.asm(206574) error: MIPS parameter failure
+Aborting.

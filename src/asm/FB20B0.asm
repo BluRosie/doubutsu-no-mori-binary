@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FB20B0.bin", 0
+.create "build/jap/FB20B0.bin", 0
 
 /* 00000000:	360f1d93 */	ori t7, s0, 0x1d93
 /* 00000004:	1d5d03d3 */	/*illegal*/ .word 0x1d5d03d3

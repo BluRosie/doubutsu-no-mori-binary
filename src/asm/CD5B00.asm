@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CD5B00.bin", 0
+.create "build/jap/CD5B00.bin", 0
 
 /* 00000000:	0c870c80 */	jal 0x21c3200
 /* 00000004:	28020000 */	slti v0, $zero, 0

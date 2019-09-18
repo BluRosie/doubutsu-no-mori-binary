@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FBB6A0.bin", 0
+.create "build/jap/FBB6A0.bin", 0
 
 /* 00000000:	09000000 */	j 0x4000000
 /* 00000004:	00000000 */	nop

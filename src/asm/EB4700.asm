@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EB4700.bin", 0
+.create "build/jap/EB4700.bin", 0
 
 /* 00000000:	83002580 */	lb $zero, 9600(t8)
 /* 00000004:	03010c01 */	/*illegal*/ .word 0x03010c01

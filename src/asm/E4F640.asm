@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E4F640.bin", 0
+.create "build/jap/E4F640.bin", 0
 
 /* 00000000:	30596927 */	andi t9, v0, 0x6927
 /* 00000004:	aa35e53d */	swl s5, -6851(s1)

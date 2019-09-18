@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DEB0B0.bin", 0
+.create "build/jap/DEB0B0.bin", 0
 
 /* 00000000:	72406181 */	/*illegal*/ .word 0x72406181
 /* 00000004:	8a41b2c3 */	lwl at, -19773(s2)

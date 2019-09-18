@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CAC710.bin", 0
+.create "build/jap/CAC710.bin", 0
 
 /* 00000000:	38070700 */	xori a3, $zero, 0x700
 /* 00000004:	00020002 */	srl $zero, v0, 0x0

@@ -1,0 +1,10 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8F4660.asm(2128) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8F4660.asm(2805) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8F4660.asm(4769) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8F4660.asm(4797) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8F4660.asm(4986) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8F4660.asm(4997) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8F4660.asm(5005) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8F4660.asm(5111) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8F4660.asm(6881) error: Invalid MIPS opcode 'wait'
+Aborting.

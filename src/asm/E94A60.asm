@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E94A60.bin", 0
+.create "build/jap/E94A60.bin", 0
 
 /* 00000000:	394628c3 */	xori a2, t2, 0x28c3
 /* 00000004:	928b4189 */	lbu t3, 16777(s4)

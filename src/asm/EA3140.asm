@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EA3140.bin", 0
+.create "build/jap/EA3140.bin", 0
 
 /* 00000000:	30816141 */	andi at, a0, 0x6141
 /* 00000004:	9a41d3c3 */	lwr at, -11325(s2)

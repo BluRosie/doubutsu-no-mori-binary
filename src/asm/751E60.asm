@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/751E60.bin", 0
+.create "build/jap/751E60.bin", 0
 
 /* 00000000:	00000740 */	sll $zero, $zero, 0x1d
 /* 00000004:	00000020 */	add $zero, $zero, $zero

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EA9CA0.bin", 0
+.create "build/jap/EA9CA0.bin", 0
 
 /* 00000000:	0013115b */	/*illegal*/ .word 0x0013115b
 /* 00000004:	22678001 */	addi a3, s3, -32767

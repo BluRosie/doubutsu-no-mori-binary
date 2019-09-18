@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D40FA0.bin", 0
+.create "build/jap/D40FA0.bin", 0
 
 /* 00000000:	19640320 */	/*illegal*/ .word 0x19640320
 /* 00000004:	27100000 */	addiu s0, t8, 0

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CCAAC0.bin", 0
+.create "build/jap/CCAAC0.bin", 0
 
 /* 00000000:	20002003 */	addi $zero, $zero, 8195
 /* 00000004:	2007200a */	addi a3, $zero, 8202

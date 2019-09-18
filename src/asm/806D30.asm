@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/806D30.bin", 0
+.create "build/jap/806D30.bin", 0
 
 /* 00000000:	27bdffb0 */	addiu sp, sp, -80
 /* 00000004:	afbf0034 */	sw ra, 52(sp)

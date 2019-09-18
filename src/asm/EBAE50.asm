@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EBAE50.bin", 0
+.create "build/jap/EBAE50.bin", 0
 
 /* 00000000:	4147f841 */	/*illegal*/ .word 0x4147f841
 /* 00000004:	5295cc97 */	beql s4, s5, 0xffff3264

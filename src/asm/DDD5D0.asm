@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DDD5D0.bin", 0
+.create "build/jap/DDD5D0.bin", 0
 
 /* 00000000:	50019001 */	beql $zero, at, 0xfffe4008
 /* 00000004:	d801fa09 */	/*illegal*/ .word 0xd801fa09

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/82BFD0.bin", 0
+.create "build/jap/82BFD0.bin", 0
 
 /* 00000000:	000001f0 */	tge $zero, $zero, 0x7
 /* 00000004:	00000040 */	sll $zero, $zero, 0x1

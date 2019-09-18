@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E846D0.bin", 0
+.create "build/jap/E846D0.bin", 0
 
 /* 00000000:	01531a19 */	/*illegal*/ .word 0x01531a19
 /* 00000004:	22e12bed */	addi at, s7, 11245

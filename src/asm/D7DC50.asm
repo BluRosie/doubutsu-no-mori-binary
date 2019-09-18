@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D7DC50.bin", 0
+.create "build/jap/D7DC50.bin", 0
 
 /* 00000000:	06a1007d */	bgez s5, 0x1f8
 /* 00000004:	00000000 */	nop

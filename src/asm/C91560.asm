@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C91560.bin", 0
+.create "build/jap/C91560.bin", 0
 
 /* 00000000:	ff137181 */	/*illegal*/ .word 0xff137181
 /* 00000004:	aac1e54b */	swl at, -6837(s6)

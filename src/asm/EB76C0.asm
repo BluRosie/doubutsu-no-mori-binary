@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EB76C0.bin", 0
+.create "build/jap/EB76C0.bin", 0
 
 /* 00000000:	09aa0ab7 */	j 0x6a82adc
 /* 00000004:	0a3109ab */	j 0x8c426ac

@@ -1,0 +1,2 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/D381C0.asm(354) error: MIPS parameter failure
+Aborting.

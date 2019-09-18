@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EBA540.bin", 0
+.create "build/jap/EBA540.bin", 0
 
 /* 00000000:	30836d7b */	andi v1, a0, 0x6d7b
 /* 00000004:	5ad73433 */	/*illegal*/ .word 0x5ad73433

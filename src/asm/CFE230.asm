@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CFE230.bin", 0
+.create "build/jap/CFE230.bin", 0
 
 /* 00000000:	1adb0c80 */	/*illegal*/ .word 0x1adb0c80
 /* 00000004:	2bbd0000 */	slti sp, sp, 0

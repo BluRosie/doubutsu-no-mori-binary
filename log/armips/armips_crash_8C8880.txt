@@ -1,0 +1,9 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8C8880.asm(8335) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8C8880.asm(8444) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8C8880.asm(8697) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8C8880.asm(8739) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8C8880.asm(8854) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8C8880.asm(8931) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8C8880.asm(9104) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8C8880.asm(9807) error: MIPS parameter failure
+Aborting.

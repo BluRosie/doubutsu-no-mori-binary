@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E9EA00.bin", 0
+.create "build/jap/E9EA00.bin", 0
 
 /* 00000000:	0aac7109 */	j 0xab1c424
 /* 00000004:	998dd251 */	lwr t5, -11695(t4)

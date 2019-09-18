@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C773A0.bin", 0
+.create "build/jap/C773A0.bin", 0
 
 /* 00000000:	ffff8cad */	/*illegal*/ .word 0xffff8cad
 /* 00000004:	2197fe41 */	addi s7, t4, -447

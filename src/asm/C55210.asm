@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C55210.bin", 0
+.create "build/jap/C55210.bin", 0
 
 /* 00000000:	09574369 */	j 0x55d0da4
 /* 00000004:	adf50001 */	sw s5, 1(t7)

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FACF40.bin", 0
+.create "build/jap/FACF40.bin", 0
 
 /* 00000000:	33333333 */	andi s3, t9, 0x3333
 /* 00000004:	33333333 */	andi s3, t9, 0x3333

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FB0410.bin", 0
+.create "build/jap/FB0410.bin", 0
 
 /* 00000000:	33333331 */	andi s3, t9, 0x3331
 /* 00000004:	33333133 */	andi s3, t9, 0x3133

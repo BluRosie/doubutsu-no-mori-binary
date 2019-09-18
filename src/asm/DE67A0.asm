@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DE67A0.bin", 0
+.create "build/jap/DE67A0.bin", 0
 
 /* 00000000:	61426245 */	/*illegal*/ .word 0x61426245
 /* 00000004:	8309a3c9 */	lb t1, -23607(t8)

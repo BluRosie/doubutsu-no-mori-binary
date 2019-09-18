@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E57F70.bin", 0
+.create "build/jap/E57F70.bin", 0
 
 /* 00000000:	404d718d */	/*illegal*/ .word 0x404d718d
 /* 00000004:	9251b2d3 */	lbu s1, -19757(s2)

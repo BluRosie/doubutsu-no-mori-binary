@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D4FDB0.bin", 0
+.create "build/jap/D4FDB0.bin", 0
 
 /* 00000000:	21340320 */	addi s4, t1, 800
 /* 00000004:	22600000 */	addi $zero, s3, 0

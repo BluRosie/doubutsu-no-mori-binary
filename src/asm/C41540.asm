@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C41540.bin", 0
+.create "build/jap/C41540.bin", 0
 
 /* 00000000:	ffffd73d */	/*illegal*/ .word 0xffffd73d
 /* 00000004:	adf38ceb */	sw s3, -29461(t7)

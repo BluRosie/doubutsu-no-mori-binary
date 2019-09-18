@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D08250.bin", 0
+.create "build/jap/D08250.bin", 0
 
 /* 00000000:	286a0c80 */	slti t2, v1, 3200
 /* 00000004:	15b60000 */	bne t5, s6, 0x8

@@ -1,0 +1,1 @@
+build/jap/C40D50.bin dump/jap/C40D50.DAT differ: byte 72, line 1

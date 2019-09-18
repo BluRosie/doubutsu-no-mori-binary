@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DB6B90.bin", 0
+.create "build/jap/DB6B90.bin", 0
 
 /* 00000000:	00000000 */	nop
 /* 00000004:	00000000 */	nop

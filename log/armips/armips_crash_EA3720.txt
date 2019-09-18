@@ -1,0 +1,7 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/EA3720.asm(543) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/EA3720.asm(547) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/EA3720.asm(551) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/EA3720.asm(555) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/EA3720.asm(639) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/EA3720.asm(643) error: Invalid MIPS opcode 'sdbbp'
+Aborting.

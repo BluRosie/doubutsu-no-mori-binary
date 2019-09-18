@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FB1C80.bin", 0
+.create "build/jap/FB1C80.bin", 0
 
 /* 00000000:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00000004:	99996699 */	lwr t9, 26265(t4)

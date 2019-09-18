@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D283A0.bin", 0
+.create "build/jap/D283A0.bin", 0
 
 /* 00000000:	19ec0320 */	/*illegal*/ .word 0x19ec0320
 /* 00000004:	24370000 */	addiu s7, at, 0

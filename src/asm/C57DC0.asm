@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C57DC0.bin", 0
+.create "build/jap/C57DC0.bin", 0
 
 /* 00000000:	c38bf1ab */	ll t3, -3669(gp)
 /* 00000004:	8011fea9 */	lb s1, -343($zero)

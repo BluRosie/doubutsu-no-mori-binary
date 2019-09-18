@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C63C10.bin", 0
+.create "build/jap/C63C10.bin", 0
 
 /* 00000000:	6a2f963f */	/*illegal*/ .word 0x6a2f963f
 /* 00000004:	8a03fb6f */	lwl v1, -1169(s0)

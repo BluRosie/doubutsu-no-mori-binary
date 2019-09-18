@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E14DA0.bin", 0
+.create "build/jap/E14DA0.bin", 0
 
 /* 00000000:	00c511cd */	break 0x31447
 /* 00000004:	23133c1b */	addi s3, t8, 15387

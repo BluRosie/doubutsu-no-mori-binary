@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C28A70.bin", 0
+.create "build/jap/C28A70.bin", 0
 
 /* 00000000:	ec45ad2d */	/*illegal*/ .word 0xec45ad2d
 /* 00000004:	1091ad7d */	beq a0, s1, 0xfffeb5fc

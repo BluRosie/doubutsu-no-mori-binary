@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CFF720.bin", 0
+.create "build/jap/CFF720.bin", 0
 
 /* 00000000:	032a0320 */	/*illegal*/ .word 0x032a0320
 /* 00000004:	0c770000 */	jal 0x1dc0000

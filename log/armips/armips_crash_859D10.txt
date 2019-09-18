@@ -1,0 +1,4 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/859D10.asm(377) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/859D10.asm(381) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/859D10.asm(382) error: This instruction can't be in a delay slot
+Aborting.

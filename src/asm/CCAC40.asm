@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CCAC40.bin", 0
+.create "build/jap/CCAC40.bin", 0
 
 /* 00000000:	24002403 */	addiu $zero, $zero, 9219
 /* 00000004:	240c2437 */	addiu t4, $zero, 9271

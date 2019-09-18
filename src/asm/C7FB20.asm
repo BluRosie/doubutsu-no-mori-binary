@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C7FB20.bin", 0
+.create "build/jap/C7FB20.bin", 0
 
 /* 00000000:	bde10001 */	cache 0x1, 1(t7)
 /* 00000004:	ffff8417 */	/*illegal*/ .word 0xffff8417

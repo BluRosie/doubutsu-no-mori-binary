@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C19CD0.bin", 0
+.create "build/jap/C19CD0.bin", 0
 
 /* 00000000:	08ac0000 */	j 0x2b00000
 /* 00000004:	05010000 */	bgez t0, 0x8

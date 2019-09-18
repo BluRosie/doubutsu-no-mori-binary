@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/77CAF0.bin", 0
+.create "build/jap/77CAF0.bin", 0
 
 /* 00000000:	27bdff40 */	addiu sp, sp, -192
 /* 00000004:	afb20020 */	sw s2, 32(sp)

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/810380.bin", 0
+.create "build/jap/810380.bin", 0
 
 /* 00000000:	0142c000 */	/*illegal*/ .word 0x0142c000
 /* 00000004:	0142ceb0 */	tge t2, v0, 0x33a

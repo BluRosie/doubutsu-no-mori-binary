@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DC4860.bin", 0
+.create "build/jap/DC4860.bin", 0
 
 /* 00000000:	b7bb0001 */	/*illegal*/ .word 0xb7bb0001
 /* 00000004:	304148c1 */	andi at, v0, 0x48c1

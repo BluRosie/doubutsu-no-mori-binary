@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D07990.bin", 0
+.create "build/jap/D07990.bin", 0
 
 /* 00000000:	15780320 */	bne t3, t8, 0xc84
 /* 00000004:	30830000 */	andi v1, a0, 0x0

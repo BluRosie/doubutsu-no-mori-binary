@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EA49B0.bin", 0
+.create "build/jap/EA49B0.bin", 0
 
 /* 00000000:	39e44281 */	xori a0, t7, 0x4281
 /* 00000004:	950100f9 */	lhu at, 249(t0)

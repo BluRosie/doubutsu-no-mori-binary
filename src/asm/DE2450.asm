@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DE2450.bin", 0
+.create "build/jap/DE2450.bin", 0
 
 /* 00000000:	10c7214b */	beq a2, a3, 0x8530
 /* 00000004:	3a1301d3 */	xori s3, s0, 0x1d3

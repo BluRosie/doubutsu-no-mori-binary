@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EB3230.bin", 0
+.create "build/jap/EB3230.bin", 0
 
 /* 00000000:	bda6f7bd */	cache 0x6, -2115(t5)
 /* 00000004:	f779deb1 */	/*illegal*/ .word 0xf779deb1

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D3D670.bin", 0
+.create "build/jap/D3D670.bin", 0
 
 /* 00000000:	258015e0 */	addiu $zero, t4, 5600
 /* 00000004:	32000000 */	andi $zero, s0, 0x0

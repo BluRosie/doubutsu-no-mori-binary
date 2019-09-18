@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/7F6630.bin", 0
+.create "build/jap/7F6630.bin", 0
 
 /* 00000000:	afa50004 */	sw a1, 4(sp)
 /* 00000004:	afa7000c */	sw a3, 12(sp)

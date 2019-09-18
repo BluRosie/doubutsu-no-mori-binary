@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D43F10.bin", 0
+.create "build/jap/D43F10.bin", 0
 
 /* 00000000:	2a300320 */	slti s0, s1, 800
 /* 00000004:	20d00000 */	addi s0, a2, 0

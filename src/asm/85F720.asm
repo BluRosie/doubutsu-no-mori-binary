@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/85F720.bin", 0
+.create "build/jap/85F720.bin", 0
 
 /* 00000000:	27bdff38 */	addiu sp, sp, -200
 /* 00000004:	afbf0044 */	sw ra, 68(sp)

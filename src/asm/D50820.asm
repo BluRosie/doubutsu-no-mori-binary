@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D50820.bin", 0
+.create "build/jap/D50820.bin", 0
 
 /* 00000000:	2c0e0320 */	sltiu t6, $zero, 800
 /* 00000004:	22440000 */	addi a0, s2, 0

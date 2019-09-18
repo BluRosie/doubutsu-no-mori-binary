@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DD0830.bin", 0
+.create "build/jap/DD0830.bin", 0
 
 /* 00000000:	deb30000 */	/*illegal*/ .word 0xdeb30000
 /* 00000004:	304148c1 */	andi at, v0, 0x48c1

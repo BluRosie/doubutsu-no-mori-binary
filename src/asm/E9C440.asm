@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E9C440.bin", 0
+.create "build/jap/E9C440.bin", 0
 
 /* 00000000:	4cf2328b */	/*illegal*/ .word 0x4cf2328b
 /* 00000004:	540d74cb */	bnel $zero, t5, 0x1d334

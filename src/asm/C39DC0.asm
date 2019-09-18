@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C39DC0.bin", 0
+.create "build/jap/C39DC0.bin", 0
 
 /* 00000000:	933dffff */	lbu sp, -1(t9)
 /* 00000004:	10c971f5 */	beq a2, t1, 0x1c7dc

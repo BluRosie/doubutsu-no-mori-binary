@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EC6320.bin", 0
+.create "build/jap/EC6320.bin", 0
 
 /* 00000000:	00003043 */	sra a2, $zero, 0x1
 /* 00000004:	30850001 */	andi a1, a0, 0x1

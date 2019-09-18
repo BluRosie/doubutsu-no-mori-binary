@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D0ADA0.bin", 0
+.create "build/jap/D0ADA0.bin", 0
 
 /* 00000000:	0fa00320 */	jal 0xe800c80
 /* 00000004:	1f400000 */	bgtz k0, 0x8

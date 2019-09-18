@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E90610.bin", 0
+.create "build/jap/E90610.bin", 0
 
 /* 00000000:	28802881 */	slti $zero, a0, 10369
 /* 00000004:	40c35149 */	/*illegal*/ .word 0x40c35149

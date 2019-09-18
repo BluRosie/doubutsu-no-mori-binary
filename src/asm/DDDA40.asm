@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DDDA40.bin", 0
+.create "build/jap/DDDA40.bin", 0
 
 /* 00000000:	531801d5 */	beql t8, t8, 0x758
 /* 00000004:	22dd3ba3 */	addi sp, s6, 15267

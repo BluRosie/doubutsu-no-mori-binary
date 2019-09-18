@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E31330.bin", 0
+.create "build/jap/E31330.bin", 0
 
 /* 00000000:	29522953 */	slti s2, t2, 10579
 /* 00000004:	529d7be7 */	beql s4, sp, 0x1efa4

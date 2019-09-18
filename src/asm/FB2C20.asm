@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FB2C20.bin", 0
+.create "build/jap/FB2C20.bin", 0
 
 /* 00000000:	08080808 */	j 0x202020
 /* 00000004:	08080808 */	j 0x202020

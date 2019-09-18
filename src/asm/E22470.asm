@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E22470.bin", 0
+.create "build/jap/E22470.bin", 0
 
 /* 00000000:	32860000 */	andi a2, s4, 0x0
 /* 00000004:	32874b4b */	andi a3, s4, 0x4b4b

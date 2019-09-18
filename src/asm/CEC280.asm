@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CEC280.bin", 0
+.create "build/jap/CEC280.bin", 0
 
 /* 00000000:	2de70c80 */	sltiu a3, t7, 3200
 /* 00000004:	14d50000 */	bne a2, s5, 0x8

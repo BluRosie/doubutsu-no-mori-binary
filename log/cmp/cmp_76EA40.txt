@@ -1,0 +1,1 @@
+build/jap/76EA40.bin dump/jap/76EA40.DAT differ: byte 19, line 1

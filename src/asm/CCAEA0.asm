@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CCAEA0.bin", 0
+.create "build/jap/CCAEA0.bin", 0
 
 /* 00000000:	1008102c */	beq $zero, t0, 0x40b4
 /* 00000004:	10301044 */	beq at, s0, 0x4118

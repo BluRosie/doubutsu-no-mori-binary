@@ -1,0 +1,3 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/E08600.asm(637) error: Invalid MIPS opcode 'sdbbp'
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/E08600.asm(693) error: Invalid MIPS opcode 'sdbbp'
+Aborting.

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D3F370.bin", 0
+.create "build/jap/D3F370.bin", 0
 
 /* 00000000:	051415e0 */	/*illegal*/ .word 0x051415e0
 /* 00000004:	2fa80000 */	sltiu t0, sp, 0

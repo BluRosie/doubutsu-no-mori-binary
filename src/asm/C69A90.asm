@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C69A90.bin", 0
+.create "build/jap/C69A90.bin", 0
 
 /* 00000000:	a2c10469 */	sb at, 1129(s6)
 /* 00000004:	021974b1 */	tgeu s0, t9, 0x1d2

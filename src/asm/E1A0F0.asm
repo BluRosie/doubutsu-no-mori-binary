@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E1A0F0.bin", 0
+.create "build/jap/E1A0F0.bin", 0
 
 /* 00000000:	129b2ba3 */	beq s4, k1, 0xae90
 /* 00000004:	356f9689 */	ori t7, t3, 0x9689

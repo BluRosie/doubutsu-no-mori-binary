@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CEEF80.bin", 0
+.create "build/jap/CEEF80.bin", 0
 
 /* 00000000:	0b400320 */	j 0xd000c80
 /* 00000004:	1d520000 */	/*illegal*/ .word 0x1d520000

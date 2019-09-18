@@ -1,0 +1,21 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(37) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(73) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(1011) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(1097) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(1403) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(1701) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(2633) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(2713) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(2733) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(2991) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(3341) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(3369) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(3639) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(3641) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(3957) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(4189) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(4277) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(4575) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(4601) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/923BF0.asm(4889) error: MIPS parameter failure
+Aborting.

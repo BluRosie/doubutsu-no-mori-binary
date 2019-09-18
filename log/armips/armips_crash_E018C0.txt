@@ -1,0 +1,5 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/E018C0.asm(16) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/E018C0.asm(17) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/E018C0.asm(18) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/E018C0.asm(19) error: MIPS parameter failure
+Aborting.

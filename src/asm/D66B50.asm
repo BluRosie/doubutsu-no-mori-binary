@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D66B50.bin", 0
+.create "build/jap/D66B50.bin", 0
 
 /* 00000000:	0c800320 */	jal 0x2000c80
 /* 00000004:	15e00000 */	bne t7, $zero, 0x8

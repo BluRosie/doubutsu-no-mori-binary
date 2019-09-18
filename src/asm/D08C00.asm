@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D08C00.bin", 0
+.create "build/jap/D08C00.bin", 0
 
 /* 00000000:	28a00320 */	slti $zero, a1, 800
 /* 00000004:	00000000 */	nop

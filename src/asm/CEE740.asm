@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CEE740.bin", 0
+.create "build/jap/CEE740.bin", 0
 
 /* 00000000:	1c200320 */	bgtz at, 0xc84
 /* 00000004:	15e00000 */	bne t7, $zero, 0x8

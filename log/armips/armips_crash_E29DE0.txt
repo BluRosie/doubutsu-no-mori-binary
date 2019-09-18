@@ -1,0 +1,2 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/E29DE0.asm(211) error: MIPS parameter failure
+Aborting.

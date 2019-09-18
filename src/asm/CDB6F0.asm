@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CDB6F0.bin", 0
+.create "build/jap/CDB6F0.bin", 0
 
 /* 00000000:	21d00c80 */	addi s0, t6, 3200
 /* 00000004:	132b0000 */	beq t9, t3, 0x8

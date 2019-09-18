@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D3F590.bin", 0
+.create "build/jap/D3F590.bin", 0
 
 /* 00000000:	09600320 */	j 0x5800c80
 /* 00000004:	16440000 */	bne s2, a0, 0x8

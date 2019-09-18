@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/8011E0.bin", 0
+.create "build/jap/8011E0.bin", 0
 
 /* 00000000:	27bdffb8 */	addiu sp, sp, -72
 /* 00000004:	afa40048 */	sw a0, 72(sp)

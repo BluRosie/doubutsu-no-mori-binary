@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DB8DD0.bin", 0
+.create "build/jap/DB8DD0.bin", 0
 
 /* 00000000:	21c8cfe9 */	addi t0, t6, -12311
 /* 00000004:	afc96e09 */	sw t1, 28169(fp)

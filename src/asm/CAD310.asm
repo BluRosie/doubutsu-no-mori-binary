@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CAD310.bin", 0
+.create "build/jap/CAD310.bin", 0
 
 /* 00000000:	ff7e004b */	/*illegal*/ .word 0xff7e004b
 /* 00000004:	fc180000 */	/*illegal*/ .word 0xfc180000

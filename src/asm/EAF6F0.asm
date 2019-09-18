@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EAF6F0.bin", 0
+.create "build/jap/EAF6F0.bin", 0
 
 /* 00000000:	a880f689 */	swl $zero, -2423(a0)
 /* 00000004:	acc169c2 */	sw at, 27074(a2)

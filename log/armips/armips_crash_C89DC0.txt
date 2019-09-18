@@ -1,0 +1,8 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C89DC0.asm(180) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C89DC0.asm(184) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C89DC0.asm(302) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C89DC0.asm(542) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C89DC0.asm(554) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C89DC0.asm(562) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C89DC0.asm(721) error: This instruction can't be in a delay slot
+Aborting.

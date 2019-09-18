@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DC7B60.bin", 0
+.create "build/jap/DC7B60.bin", 0
 
 /* 00000000:	8c1dbda7 */	lw sp, -16985($zero)
 /* 00000004:	e6f1f777 */	/*illegal*/ .word 0xe6f1f777

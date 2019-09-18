@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E7D1B0.bin", 0
+.create "build/jap/E7D1B0.bin", 0
 
 /* 00000000:	ffffe7bd */	/*illegal*/ .word 0xffffe7bd
 /* 00000004:	bef59e2b */	cache 0x15, -25045(s7)

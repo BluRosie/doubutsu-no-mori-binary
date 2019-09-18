@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C39890.bin", 0
+.create "build/jap/C39890.bin", 0
 
 /* 00000000:	5941ffff */	/*illegal*/ .word 0x5941ffff
 /* 00000004:	2cf53081 */	sltiu s5, a3, 12417

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C3CB80.bin", 0
+.create "build/jap/C3CB80.bin", 0
 
 /* 00000000:	ffff973b */	/*illegal*/ .word 0xffff973b
 /* 00000004:	25f31c67 */	addiu s3, t7, 7271

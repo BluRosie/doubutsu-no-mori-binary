@@ -1,0 +1,3 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CEC280.asm(1058) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/CEC280.asm(1182) error: MIPS parameter failure
+Aborting.

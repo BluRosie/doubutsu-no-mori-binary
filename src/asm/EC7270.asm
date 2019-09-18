@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EC7270.bin", 0
+.create "build/jap/EC7270.bin", 0
 
 /* 00000000:	00001001 */	/*illegal*/ .word 0x00001001
 /* 00000004:	38458ce1 */	xori a1, v0, 0x8ce1

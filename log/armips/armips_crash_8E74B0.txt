@@ -1,0 +1,4 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8E74B0.asm(1558) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8E74B0.asm(2155) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/8E74B0.asm(2712) error: MIPS parameter failure
+Aborting.

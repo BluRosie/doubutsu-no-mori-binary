@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CF8F20.bin", 0
+.create "build/jap/CF8F20.bin", 0
 
 /* 00000000:	1fbd0c80 */	/*illegal*/ .word 0x1fbd0c80
 /* 00000004:	28210000 */	slti at, at, 0

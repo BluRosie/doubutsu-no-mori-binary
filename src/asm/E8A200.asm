@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E8A200.bin", 0
+.create "build/jap/E8A200.bin", 0
 
 /* 00000000:	29482107 */	slti t0, t2, 8455
 /* 00000004:	530fd541 */	beql t8, t7, 0xffff550c

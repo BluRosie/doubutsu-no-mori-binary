@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CD7BC0.bin", 0
+.create "build/jap/CD7BC0.bin", 0
 
 /* 00000000:	32000c80 */	andi $zero, s0, 0xc80
 /* 00000004:	32000000 */	andi $zero, s0, 0x0

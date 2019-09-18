@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D2B2B0.bin", 0
+.create "build/jap/D2B2B0.bin", 0
 
 /* 00000000:	00000320 */	/*illegal*/ .word 0x00000320
 /* 00000004:	19000000 */	blez t0, 0x8

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E6E090.bin", 0
+.create "build/jap/E6E090.bin", 0
 
 /* 00000000:	b98fc295 */	swr t7, -15723(t4)
 /* 00000004:	e39dfce7 */	sc sp, -793(gp)

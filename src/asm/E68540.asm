@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E68540.bin", 0
+.create "build/jap/E68540.bin", 0
 
 /* 00000000:	f7f9c72d */	/*illegal*/ .word 0xf7f9c72d
 /* 00000004:	851d5b93 */	lh sp, 23443(t0)

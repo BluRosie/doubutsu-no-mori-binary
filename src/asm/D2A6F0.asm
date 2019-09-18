@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D2A6F0.bin", 0
+.create "build/jap/D2A6F0.bin", 0
 
 /* 00000000:	296e0320 */	slti t6, t3, 800
 /* 00000004:	10be0000 */	beq a1, fp, 0x8

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C35810.bin", 0
+.create "build/jap/C35810.bin", 0
 
 /* 00000000:	ffbbcf2f */	/*illegal*/ .word 0xffbbcf2f
 /* 00000004:	a65f851b */	sh ra, -31461(s2)

@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C7E7B0.bin", 0
+.create "build/jap/C7E7B0.bin", 0
 
 /* 00000000:	fd0173a5 */	/*illegal*/ .word 0xfd0173a5
 /* 00000004:	294f6841 */	slti t7, t2, 26689

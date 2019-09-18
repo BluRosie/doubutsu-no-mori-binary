@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CF2980.bin", 0
+.create "build/jap/CF2980.bin", 0
 
 /* 00000000:	19980320 */	/*illegal*/ .word 0x19980320
 /* 00000004:	23460000 */	addi a2, k0, 0

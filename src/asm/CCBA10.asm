@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CCBA10.bin", 0
+.create "build/jap/CCBA10.bin", 0
 
 /* 00000000:	01e004b0 */	tge t7, $zero, 0x12
 /* 00000004:	04b01f40 */	bltzal a1, 0x7d08

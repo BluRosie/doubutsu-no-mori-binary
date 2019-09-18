@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C4A810.bin", 0
+.create "build/jap/C4A810.bin", 0
 
 /* 00000000:	c38bfdd9 */	ll t3, -551(gp)
 /* 00000004:	91c1a283 */	lbu at, -23933(t6)

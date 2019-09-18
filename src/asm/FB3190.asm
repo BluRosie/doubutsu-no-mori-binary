@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FB3190.bin", 0
+.create "build/jap/FB3190.bin", 0
 
 /* 00000000:	080828aa */	j 0x20a2a8
 /* 00000004:	08080808 */	j 0x202020

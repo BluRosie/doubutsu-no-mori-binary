@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C2A760.bin", 0
+.create "build/jap/C2A760.bin", 0
 
 /* 00000000:	ffffdced */	/*illegal*/ .word 0xffffdced
 /* 00000004:	ba5b9217 */	swr k1, -28137(s2)

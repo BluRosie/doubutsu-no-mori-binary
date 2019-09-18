@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FAB0E0.bin", 0
+.create "build/jap/FAB0E0.bin", 0
 
 /* 00000000:	00070703 */	sra $zero, a3, 0x1c
 /* 00000004:	0008000c */	syscall 0x2000

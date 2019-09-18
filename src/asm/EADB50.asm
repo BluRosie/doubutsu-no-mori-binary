@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EADB50.bin", 0
+.create "build/jap/EADB50.bin", 0
 
 /* 00000000:	69821003 */	/*illegal*/ .word 0x69821003
 /* 00000004:	3909614f */	xori t1, t0, 0x614f

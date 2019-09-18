@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CF83E0.bin", 0
+.create "build/jap/CF83E0.bin", 0
 
 /* 00000000:	259b0320 */	addiu k1, t4, 800
 /* 00000004:	28600000 */	slti $zero, v1, 0

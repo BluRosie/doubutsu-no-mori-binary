@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C4BDE0.bin", 0
+.create "build/jap/C4BDE0.bin", 0
 
 /* 00000000:	2c9941cf */	sltiu t9, a0, 16847
 /* 00000004:	8c618b51 */	lw at, -29871(v1)

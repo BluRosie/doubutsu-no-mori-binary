@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EB6940.bin", 0
+.create "build/jap/EB6940.bin", 0
 
 /* 00000000:	ffffceb7 */	/*illegal*/ .word 0xffffceb7
 /* 00000004:	8ca7635d */	lw a3, 25437(a1)

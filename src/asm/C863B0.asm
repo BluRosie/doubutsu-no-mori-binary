@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C863B0.bin", 0
+.create "build/jap/C863B0.bin", 0
 
 /* 00000000:	63a229d5 */	/*illegal*/ .word 0x63a229d5
 /* 00000004:	21931951 */	addi s3, t4, 6481

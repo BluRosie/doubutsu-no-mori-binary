@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/C58FB0.bin", 0
+.create "build/jap/C58FB0.bin", 0
 
 /* 00000000:	ffffbcb5 */	/*illegal*/ .word 0xffffbcb5
 /* 00000004:	a36f82e5 */	sb t7, -32027(k1)

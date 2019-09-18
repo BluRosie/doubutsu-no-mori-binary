@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/FB0A60.bin", 0
+.create "build/jap/FB0A60.bin", 0
 
 /* 00000000:	00000330 */	tge $zero, $zero, 0xc
 /* 00000004:	00000000 */	nop

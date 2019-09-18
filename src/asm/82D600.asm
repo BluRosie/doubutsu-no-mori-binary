@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/82D600.bin", 0
+.create "build/jap/82D600.bin", 0
 
 /* 00000000:	060010a8 */	bltz s0, 0x42a4
 /* 00000004:	060008d0 */	bltz s0, 0x2348

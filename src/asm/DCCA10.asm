@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/DCCA10.bin", 0
+.create "build/jap/DCCA10.bin", 0
 
 /* 00000000:	fffffefd */	/*illegal*/ .word 0xfffffefd
 /* 00000004:	fdb9fc31 */	/*illegal*/ .word 0xfdb9fc31

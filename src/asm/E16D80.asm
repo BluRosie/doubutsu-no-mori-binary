@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/E16D80.bin", 0
+.create "build/jap/E16D80.bin", 0
 
 /* 00000000:	52017b03 */	beql s0, at, 0x1ec10
 /* 00000004:	9c09cd95 */	/*illegal*/ .word 0x9c09cd95

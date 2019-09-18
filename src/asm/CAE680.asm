@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/CAE680.bin", 0
+.create "build/jap/CAE680.bin", 0
 
 /* 00000000:	ff95008f */	/*illegal*/ .word 0xff95008f
 /* 00000004:	12ca0000 */	beq s6, t2, 0x8

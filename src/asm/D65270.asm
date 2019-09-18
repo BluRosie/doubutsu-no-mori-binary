@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D65270.bin", 0
+.create "build/jap/D65270.bin", 0
 
 /* 00000000:	058e0320 */	tnei t4, 800
 /* 00000004:	27b70000 */	addiu s7, sp, 0

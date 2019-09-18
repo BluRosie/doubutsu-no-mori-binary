@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/EAF250.bin", 0
+.create "build/jap/EAF250.bin", 0
 
 /* 00000000:	b801f0c1 */	swr at, -3903($zero)
 /* 00000004:	000149cd */	break 0x527

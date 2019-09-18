@@ -1,5 +1,5 @@
 .n64
-.create "../../build/jap/D0FDF0.bin", 0
+.create "build/jap/D0FDF0.bin", 0
 
 /* 00000000:	01012020 */	add a0, t0, at
 /* 00000004:	00002040 */	sll a0, $zero, 0x1

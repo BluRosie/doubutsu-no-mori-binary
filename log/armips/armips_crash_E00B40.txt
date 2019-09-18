@@ -1,0 +1,2 @@
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/E00B40.asm(597) error: Invalid MIPS opcode 'sdbbp'
+Aborting.
