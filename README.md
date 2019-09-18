@@ -2,6 +2,7 @@
 my attempt at setting up a sort of disassembly to animal forest for the n64 to allow for easier translation
 
 of the 3299 yaz0 files, 1150 currently disassemble
+
 of those that disassemble, there are 6 that don't build back properly
 
 progress:  1144/3299
