@@ -1,9 +1,11 @@
 # doubutsu-no-mori
 my attempt at setting up a sort of disassembly to animal forest for the n64 to allow for easier translation
 
-of the 3299 yaz0 files, 1150 currently disassemble (mipsdis fixes)
+of the 3299 yaz0 files, all disassemble.
 
-of those that disassemble, there are 6 that don't build back properly (armips fixes that will probably still be fixed through mipsdis)
+1150 currently assemble back (mipsdis produces bad output)
+
+of those that assemble back, there are 6 that don't do so properly (armips fixes that will probably still be fixed through mipsdis)
 
 progress:  1144/3299
 
