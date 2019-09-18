@@ -42,9 +42,9 @@ building everything (while dumping an error log for each individual failed file)
 
 now in cmd prompt, navigate to the log folder where all the crash reports are:
 
-```for /r %F in (*) do @if %~zF==0 echo "%F" >>no_crash.txt
+```for /r %F in (*) do @if %~zF==0 echo "%F" >>no_crash.txt```
 
-for /r %F in (*) do @if %~zF==0 del "%F"```
+```for /r %F in (*) do @if %~zF==0 del "%F"```
 
 back in cygwin, in the root directory of the repository:
 
@@ -52,6 +52,6 @@ back in cygwin, in the root directory of the repository:
 
 back in cmd in log/cmp:
 
-```for /r %F in (*) do @if %~zF==0 echo "%F" >>no_diff.txt
+```for /r %F in (*) do @if %~zF==0 echo "%F" >>no_diff.txt```
 
-for /r %F in (*) do @if %~zF==0 del "%F"```
+```for /r %F in (*) do @if %~zF==0 del "%F"```
