@@ -1346,7 +1346,7 @@
 /* 000014f8:	0004efff */	/*illegal*/ .word 0x0004efff
 /* 000014fc:	50000000 */	beql $zero, $zero, 0x1500
 /* 00001500:	36200000 */	ori $zero, s1, 0x0
-/* 00001504:	000003cf */	sync
+/* 00001504:	000003cf */	/*illegal*/ .word 0x000003cf
 /* 00001508:	f200004f */	/*illegal*/ .word 0xf200004f
 /* 0000150c:	ffff8000 */	/*illegal*/ .word 0xffff8000
 /* 00001510:	008ffe6f */	/*illegal*/ .word 0x008ffe6f
@@ -2766,7 +2766,7 @@
 /* 00002b28:	004ef6af */	/*illegal*/ .word 0x004ef6af
 /* 00002b2c:	f700009f */	/*illegal*/ .word 0xf700009f
 /* 00002b30:	fffffe30 */	/*illegal*/ .word 0xfffffe30
-/* 00002b34:	0000008f */	sync
+/* 00002b34:	0000008f */	/*illegal*/ .word 0x0000008f
 /* 00002b38:	60000000 */	/*illegal*/ .word 0x60000000
 /* 00002b3c:	00000000 */	nop
 /* 00002b40:	0003a26f */	/*illegal*/ .word 0x0003a26f

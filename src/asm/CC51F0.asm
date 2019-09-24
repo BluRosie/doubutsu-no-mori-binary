@@ -32764,7 +32764,7 @@
 /* 0001ffe0:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 0001ffe4:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 0001ffe8:	ffff0000 */	/*illegal*/ .word 0xffff0000
-/* 0001ffec:	0000014f */	sync
+/* 0001ffec:	0000014f */	/*illegal*/ .word 0x0000014f
 /* 0001fff0:	fffefffe */	/*illegal*/ .word 0xfffefffe
 /* 0001fff4:	fffefffe */	/*illegal*/ .word 0xfffefffe
 /* 0001fff8:	fffefffe */	/*illegal*/ .word 0xfffefffe

@@ -443,7 +443,7 @@
 /* 000006dc:	ffc40000 */	/*illegal*/ .word 0xffc40000
 /* 000006e0:	00000cff */	/*illegal*/ .word 0x00000cff
 /* 000006e4:	fc600000 */	/*illegal*/ .word 0xfc600000
-/* 000006e8:	000006cf */	sync
+/* 000006e8:	000006cf */	/*illegal*/ .word 0x000006cf
 /* 000006ec:	ffc00000 */	/*illegal*/ .word 0xffc00000
 /* 000006f0:	000004cc */	syscall 0x13
 /* 000006f4:	cd400000 */	/*illegal*/ .word 0xcd400000
@@ -606,7 +606,7 @@
 /* 00000968:	0000000f */	sync
 /* 0000096c:	f0000000 */	/*illegal*/ .word 0xf0000000
 /* 00000970:	f8000000 */	/*illegal*/ .word 0xf8000000
-/* 00000974:	0000008f */	sync
+/* 00000974:	0000008f */	/*illegal*/ .word 0x0000008f
 /* 00000978:	000000ff */	/*illegal*/ .word 0x000000ff
 /* 0000097c:	ff000000 */	/*illegal*/ .word 0xff000000
 /* 00000980:	ff000000 */	/*illegal*/ .word 0xff000000

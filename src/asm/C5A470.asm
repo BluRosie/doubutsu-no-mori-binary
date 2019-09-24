@@ -65,7 +65,7 @@
 /* 000000f4:	68f004ff */	/*illegal*/ .word 0x68f004ff
 /* 000000f8:	ff400f86 */	/*illegal*/ .word 0xff400f86
 /* 000000fc:	8f000000 */	lw $zero, 0(t8)
-/* 00000100:	0000004f */	sync
+/* 00000100:	0000004f */	/*illegal*/ .word 0x0000004f
 /* 00000104:	ff4003ff */	/*illegal*/ .word 0xff4003ff
 /* 00000108:	ff3004ff */	/*illegal*/ .word 0xff3004ff
 /* 0000010c:	f4000000 */	/*illegal*/ .word 0xf4000000
@@ -129,7 +129,7 @@
 /* 000001f4:	68f004ff */	/*illegal*/ .word 0x68f004ff
 /* 000001f8:	ff400f86 */	/*illegal*/ .word 0xff400f86
 /* 000001fc:	8f000000 */	lw $zero, 0(t8)
-/* 00000200:	0000004f */	sync
+/* 00000200:	0000004f */	/*illegal*/ .word 0x0000004f
 /* 00000204:	ff4003ff */	/*illegal*/ .word 0xff4003ff
 /* 00000208:	ff3004ff */	/*illegal*/ .word 0xff3004ff
 /* 0000020c:	f4000000 */	/*illegal*/ .word 0xf4000000
@@ -257,7 +257,7 @@
 /* 000003f4:	686114ff */	/*illegal*/ .word 0x686114ff
 /* 000003f8:	ff411686 */	/*illegal*/ .word 0xff411686
 /* 000003fc:	8f000000 */	lw $zero, 0(t8)
-/* 00000400:	0000004f */	sync
+/* 00000400:	0000004f */	/*illegal*/ .word 0x0000004f
 /* 00000404:	ff0003ff */	/*illegal*/ .word 0xff0003ff
 /* 00000408:	ff3000ff */	/*illegal*/ .word 0xff3000ff
 /* 0000040c:	f4000000 */	/*illegal*/ .word 0xf4000000
@@ -321,7 +321,7 @@
 /* 000004f4:	68f004ff */	/*illegal*/ .word 0x68f004ff
 /* 000004f8:	ff400f86 */	/*illegal*/ .word 0xff400f86
 /* 000004fc:	8f000000 */	lw $zero, 0(t8)
-/* 00000500:	0000004f */	sync
+/* 00000500:	0000004f */	/*illegal*/ .word 0x0000004f
 /* 00000504:	ff4003ff */	/*illegal*/ .word 0xff4003ff
 /* 00000508:	ff3004ff */	/*illegal*/ .word 0xff3004ff
 /* 0000050c:	f4000000 */	/*illegal*/ .word 0xf4000000
@@ -449,7 +449,7 @@
 /* 000006f4:	68f004ff */	/*illegal*/ .word 0x68f004ff
 /* 000006f8:	ff400f86 */	/*illegal*/ .word 0xff400f86
 /* 000006fc:	8f000000 */	lw $zero, 0(t8)
-/* 00000700:	0000004f */	sync
+/* 00000700:	0000004f */	/*illegal*/ .word 0x0000004f
 /* 00000704:	ff4003ff */	/*illegal*/ .word 0xff4003ff
 /* 00000708:	ff3004ff */	/*illegal*/ .word 0xff3004ff
 /* 0000070c:	f4000000 */	/*illegal*/ .word 0xf4000000
@@ -657,7 +657,7 @@
 /* 00000a34:	000000f8 */	/*illegal*/ .word 0x000000f8
 /* 00000a38:	8f000000 */	lw $zero, 0(t8)
 /* 00000a3c:	ff400f86 */	/*illegal*/ .word 0xff400f86
-/* 00000a40:	0000004f */	sync
+/* 00000a40:	0000004f */	/*illegal*/ .word 0x0000004f
 /* 00000a44:	ff4003ff */	/*illegal*/ .word 0xff4003ff
 /* 00000a48:	ff3004ff */	/*illegal*/ .word 0xff3004ff
 /* 00000a4c:	f4000000 */	/*illegal*/ .word 0xf4000000

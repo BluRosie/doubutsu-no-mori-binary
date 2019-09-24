@@ -1171,7 +1171,7 @@
 /* 0000123c:	118beeff */	beq t4, t3, 0xffffce3c
 /* 00001240:	021bff4c */	syscall 0x86ffd
 /* 00001244:	00340000 */	/*illegal*/ .word 0x00340000
-/* 00001248:	0000008f */	sync
+/* 00001248:	0000008f */	/*illegal*/ .word 0x0000008f
 /* 0000124c:	118beeff */	beq t4, t3, 0xffffce4c
 /* 00001250:	0259003c */	/*illegal*/ .word 0x0259003c
 /* 00001254:	00ef0000 */	/*illegal*/ .word 0x00ef0000
@@ -1371,7 +1371,7 @@
 /* 0000155c:	1175eeff */	beq t3, s5, 0xffffd15c
 /* 00001560:	021b00b4 */	teq s0, k1, 0x2
 /* 00001564:	00340000 */	/*illegal*/ .word 0x00340000
-/* 00001568:	0000008f */	sync
+/* 00001568:	0000008f */	/*illegal*/ .word 0x0000008f
 /* 0000156c:	1175eeff */	beq t3, s5, 0xffffd16c
 /* 00001570:	0259ffc4 */	/*illegal*/ .word 0x0259ffc4
 /* 00001574:	00ef0000 */	/*illegal*/ .word 0x00ef0000

@@ -7093,7 +7093,7 @@
 /* 00006ec4:	f4000000 */	/*illegal*/ .word 0xf4000000
 /* 00006ec8:	0000002f */	/*illegal*/ .word 0x0000002f
 /* 00006ecc:	e0000000 */	sc $zero, 0($zero)
-/* 00006ed0:	0000008f */	sync
+/* 00006ed0:	0000008f */	/*illegal*/ .word 0x0000008f
 /* 00006ed4:	b0000000 */	/*illegal*/ .word 0xb0000000
 /* 00006ed8:	000000df */	/*illegal*/ .word 0x000000df
 /* 00006edc:	60000000 */	/*illegal*/ .word 0x60000000

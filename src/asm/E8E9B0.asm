@@ -41,7 +41,7 @@
 /* 00000094:	c86ca494 */	/*illegal*/ .word 0xc86ca494
 /* 00000098:	a688caa4 */	sh t0, -13660(s4)
 /* 0000009c:	0000006b */	/*illegal*/ .word 0x0000006b
-/* 000000a0:	0000008f */	sync
+/* 000000a0:	0000008f */	/*illegal*/ .word 0x0000008f
 /* 000000a4:	d6c68c2a */	/*illegal*/ .word 0xd6c68c2a
 /* 000000a8:	fdcc898a */	/*illegal*/ .word 0xfdcc898a
 /* 000000ac:	0000068c */	syscall 0x1a

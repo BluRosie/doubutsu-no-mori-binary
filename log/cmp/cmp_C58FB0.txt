@@ -1,1 +1,0 @@
-build/jap/C58FB0.bin dump/jap/C58FB0.DAT differ: byte 124, line 1

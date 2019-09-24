@@ -683,7 +683,7 @@
 /* 00000a9c:	5454f9ff */	bnel v0, s4, 0xfffff29c
 /* 00000aa0:	fa050fc5 */	/*illegal*/ .word 0xfa050fc5
 /* 00000aa4:	fb1b0000 */	/*illegal*/ .word 0xfb1b0000
-/* 00000aa8:	000003cf */	sync
+/* 00000aa8:	000003cf */	/*illegal*/ .word 0x000003cf
 /* 00000aac:	ac54f9ff */	sw s4, -1537(v0)
 /* 00000ab0:	fa050d52 */	/*illegal*/ .word 0xfa050d52
 /* 00000ab4:	fcd20000 */	/*illegal*/ .word 0xfcd20000

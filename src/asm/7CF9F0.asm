@@ -4058,7 +4058,7 @@
 /* 00003f58:	000005a2 */	/*illegal*/ .word 0x000005a2
 /* 00003f5c:	000005b1 */	tgeu $zero, $zero, 0x16
 /* 00003f60:	000005c0 */	sll $zero, $zero, 0x17
-/* 00003f64:	000005cf */	sync
+/* 00003f64:	000005cf */	/*illegal*/ .word 0x000005cf
 /* 00003f68:	00000064 */	/*illegal*/ .word 0x00000064
 /* 00003f6c:	000003e8 */	/*illegal*/ .word 0x000003e8
 /* 00003f70:	00002710 */	/*illegal*/ .word 0x00002710

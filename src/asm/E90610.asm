@@ -562,7 +562,7 @@
 /* 000008b8:	00000021 */	addu $zero, $zero, $zero
 /* 000008bc:	fff10000 */	/*illegal*/ .word 0xfff10000
 /* 000008c0:	007dfff1 */	tgeu v1, sp, 0x3ff
-/* 000008c4:	0000008f */	sync
+/* 000008c4:	0000008f */	/*illegal*/ .word 0x0000008f
 /* 000008c8:	00000000 */	nop
 /* 000008cc:	00c10000 */	/*illegal*/ .word 0x00c10000
 /* 000008d0:	00000001 */	/*illegal*/ .word 0x00000001

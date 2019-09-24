@@ -441,7 +441,8 @@ static void decode_break(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
 static void decode_sync(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    if (!(check_opcode(op, 0xfffff83f, 0x0000000f)))
+    if (!(check_opcode(op, 0xfffff83f, 0x0000000f))
+     || (op & 0xfffffff0)) // if anything but the last 4 bits is filled, the sync cmd is illegal to preserve data
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -833,7 +834,8 @@ static void decode_bgezall(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
 static void decode_mfc0(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    if (!(check_opcode(op, 0xffe007f8, 0x40000000)))
+    if (!(check_opcode(op, 0xffe007f8, 0x40000000))
+     || (op & 0x03E007ff)) // those 5 bits and the last 11 bits are always 0
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -844,7 +846,8 @@ static void decode_mfc0(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
 static void decode_mtc0(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    if (!(check_opcode(op, 0xffe007f8, 0x40800000)))
+    if (!(check_opcode(op, 0xffe007f8, 0x40800000))
+     || (op & 0x036007ff)) // same case as mfc0
     {
         decode_illegal(outbuf, n, pc, op);
         return;

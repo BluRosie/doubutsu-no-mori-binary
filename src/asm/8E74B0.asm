@@ -1688,7 +1688,7 @@
 /* 00001a50:	ffffffed */	/*illegal*/ .word 0xffffffed
 /* 00001a54:	dddddddd */	/*illegal*/ .word 0xdddddddd
 /* 00001a58:	00000000 */	nop
-/* 00001a5c:	0000008f */	sync
+/* 00001a5c:	0000008f */	/*illegal*/ .word 0x0000008f
 /* 00001a60:	ffffffdd */	/*illegal*/ .word 0xffffffdd
 /* 00001a64:	dddddddd */	/*illegal*/ .word 0xdddddddd
 /* 00001a68:	00000000 */	nop

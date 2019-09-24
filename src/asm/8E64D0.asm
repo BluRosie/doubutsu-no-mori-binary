@@ -1962,7 +1962,7 @@
 /* 00001e98:	ff400000 */	/*illegal*/ .word 0xff400000
 /* 00001e9c:	00000000 */	nop
 /* 00001ea0:	00000000 */	nop
-/* 00001ea4:	000000cf */	sync
+/* 00001ea4:	000000cf */	/*illegal*/ .word 0x000000cf
 /* 00001ea8:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00001eac:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00001eb0:	ffffffff */	/*illegal*/ .word 0xffffffff

@@ -5,9 +5,9 @@ of the 3299 yaz0 files, all disassemble.
 
 1161 currently assemble back
 
-of those that assemble back, there are 8 that don't do so properly (mipsdis fixes)
+of those that assemble back, there are 0 that don't do so properly (mipsdis fixes)
 
-progress:  1153/3299
+progress:  1161/3299
 
 let's get something done here
 

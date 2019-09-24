@@ -3059,7 +3059,7 @@
 /* 00002fbc:	000000aa */	/*illegal*/ .word 0x000000aa
 /* 00002fc0:	ffdffffb */	/*illegal*/ .word 0xffdffffb
 /* 00002fc4:	39000000 */	xori $zero, t0, 0x0
-/* 00002fc8:	0000060f */	sync
+/* 00002fc8:	0000060f */	/*illegal*/ .word 0x0000060f
 /* 00002fcc:	0e0e0e0f */	jal 0x838383c
 /* 00002fd0:	09000009 */	j 0x4000024
 /* 00002fd4:	0f0e0f06 */	jal 0xc383c18
@@ -3498,7 +3498,7 @@
 /* 00003698:	fff9f9f9 */	/*illegal*/ .word 0xfff9f9f9
 /* 0000369c:	f9f9f6d6 */	/*illegal*/ .word 0xf9f9f6d6
 /* 000036a0:	81140000 */	lb s4, 0(t0)
-/* 000036a4:	0000004f */	sync
+/* 000036a4:	0000004f */	/*illegal*/ .word 0x0000004f
 /* 000036a8:	d4ffffff */	/*illegal*/ .word 0xd4ffffff
 /* 000036ac:	ffffe774 */	/*illegal*/ .word 0xffffe774
 /* 000036b0:	03000009 */	jalr t8, $zero

@@ -2362,7 +2362,7 @@
 /* 000024d8:	0000025e */	/*illegal*/ .word 0x0000025e
 /* 000024dc:	000001bd */	/*illegal*/ .word 0x000001bd
 /* 000024e0:	00000294 */	/*illegal*/ .word 0x00000294
-/* 000024e4:	000001cf */	sync
+/* 000024e4:	000001cf */	/*illegal*/ .word 0x000001cf
 /* 000024e8:	000002ca */	/*illegal*/ .word 0x000002ca
 /* 000024ec:	00000440 */	sll $zero, $zero, 0x11
 /* 000024f0:	0000035e */	/*illegal*/ .word 0x0000035e

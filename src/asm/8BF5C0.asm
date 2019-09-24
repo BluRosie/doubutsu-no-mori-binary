@@ -7622,7 +7622,7 @@
 /* 00007708:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 0000770c:	fffefcf8 */	/*illegal*/ .word 0xfffefcf8
 /* 00007710:	f0e0c080 */	/*illegal*/ .word 0xf0e0c080
-/* 00007714:	0000070f */	sync
+/* 00007714:	0000070f */	/*illegal*/ .word 0x0000070f
 /* 00007718:	1f1f3f3f */	/*illegal*/ .word 0x1f1f3f3f
 /* 0000771c:	0000e0f0 */	tge $zero, $zero, 0x383
 /* 00007720:	f8f8fcfc */	/*illegal*/ .word 0xf8f8fcfc
@@ -9102,7 +9102,7 @@
 /* 00008e28:	00000000 */	nop
 /* 00008e2c:	000000f0 */	tge $zero, $zero, 0x3
 /* 00008e30:	00010f00 */	sll at, at, 0x1c
-/* 00008e34:	0000010f */	sync
+/* 00008e34:	0000010f */	/*illegal*/ .word 0x0000010f
 /* 00008e38:	00000007 */	srav $zero, $zero, $zero
 /* 00008e3c:	00000000 */	nop
 /* 00008e40:	38e00000 */	xori $zero, a3, 0x0
@@ -9647,7 +9647,7 @@
 /* 000096ac:	3060c080 */	andi $zero, v1, 0xc080
 /* 000096b0:	00000708 */	/*illegal*/ .word 0x00000708
 /* 000096b4:	10102020 */	beq $zero, s0, 0x11738
-/* 000096b8:	0000070f */	sync
+/* 000096b8:	0000070f */	/*illegal*/ .word 0x0000070f
 /* 000096bc:	1f1f3f3f */	/*illegal*/ .word 0x1f1f3f3f
 /* 000096c0:	0000e010 */	mfhi gp
 /* 000096c4:	08080404 */	j 0x201010

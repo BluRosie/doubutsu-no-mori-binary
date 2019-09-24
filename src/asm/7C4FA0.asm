@@ -6588,7 +6588,7 @@
 /* 000066e0:	000005a2 */	/*illegal*/ .word 0x000005a2
 /* 000066e4:	000005b1 */	tgeu $zero, $zero, 0x16
 /* 000066e8:	000005c0 */	sll $zero, $zero, 0x17
-/* 000066ec:	000005cf */	sync
+/* 000066ec:	000005cf */	/*illegal*/ .word 0x000005cf
 /* 000066f0:	00000064 */	/*illegal*/ .word 0x00000064
 /* 000066f4:	000003e8 */	/*illegal*/ .word 0x000003e8
 /* 000066f8:	00002710 */	/*illegal*/ .word 0x00002710

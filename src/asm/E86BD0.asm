@@ -643,7 +643,7 @@
 /* 000009fc:	8800005c */	lwl $zero, 92($zero)
 /* 00000a00:	fbf506bd */	/*illegal*/ .word 0xfbf506bd
 /* 00000a04:	05640000 */	/*illegal*/ .word 0x05640000
-/* 00000a08:	0000010f */	sync
+/* 00000a08:	0000010f */	/*illegal*/ .word 0x0000010f
 /* 00000a0c:	8800005c */	lwl $zero, 92($zero)
 /* 00000a10:	fbf50816 */	/*illegal*/ .word 0xfbf50816
 /* 00000a14:	035f0000 */	/*illegal*/ .word 0x035f0000
@@ -655,7 +655,7 @@
 /* 00000a2c:	78000032 */	/*illegal*/ .word 0x78000032
 /* 00000a30:	040b06bd */	tltiu $zero, 1725
 /* 00000a34:	05640000 */	/*illegal*/ .word 0x05640000
-/* 00000a38:	0000010f */	sync
+/* 00000a38:	0000010f */	/*illegal*/ .word 0x0000010f
 /* 00000a3c:	78000032 */	/*illegal*/ .word 0x78000032
 /* 00000a40:	040b0000 */	tltiu $zero, 0
 /* 00000a44:	05640000 */	/*illegal*/ .word 0x05640000

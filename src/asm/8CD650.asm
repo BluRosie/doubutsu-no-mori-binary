@@ -1779,7 +1779,7 @@
 /* 00001bbc:	ef600000 */	/*illegal*/ .word 0xef600000
 /* 00001bc0:	0000000a */	/*illegal*/ .word 0x0000000a
 /* 00001bc4:	fc000000 */	/*illegal*/ .word 0xfc000000
-/* 00001bc8:	0000004f */	sync
+/* 00001bc8:	0000004f */	/*illegal*/ .word 0x0000004f
 /* 00001bcc:	f1000000 */	/*illegal*/ .word 0xf1000000
 /* 00001bd0:	000000ef */	/*illegal*/ .word 0x000000ef
 /* 00001bd4:	60000000 */	/*illegal*/ .word 0x60000000
@@ -1833,7 +1833,7 @@
 /* 00001c94:	74000000 */	/*illegal*/ .word 0x74000000
 /* 00001c98:	00000008 */	jr $zero
 /* 00001c9c:	f8000000 */	/*illegal*/ .word 0xf8000000
-/* 00001ca0:	0000008f */	sync
+/* 00001ca0:	0000008f */	/*illegal*/ .word 0x0000008f
 /* 00001ca4:	f4000000 */	/*illegal*/ .word 0xf4000000
 /* 00001ca8:	00002bff */	/*illegal*/ .word 0x00002bff
 /* 00001cac:	b0000000 */	/*illegal*/ .word 0xb0000000
@@ -11732,7 +11732,7 @@
 /* 0000b740:	0004efff */	/*illegal*/ .word 0x0004efff
 /* 0000b744:	50000000 */	beql $zero, $zero, 0xb748
 /* 0000b748:	36200000 */	ori $zero, s1, 0x0
-/* 0000b74c:	000003cf */	sync
+/* 0000b74c:	000003cf */	/*illegal*/ .word 0x000003cf
 /* 0000b750:	f200004d */	/*illegal*/ .word 0xf200004d
 /* 0000b754:	ffff8000 */	/*illegal*/ .word 0xffff8000
 /* 0000b758:	008ff70f */	/*illegal*/ .word 0x008ff70f
@@ -11933,7 +11933,7 @@
 /* 0000ba64:	cccccccc */	/*illegal*/ .word 0xcccccccc
 /* 0000ba68:	cccccccc */	/*illegal*/ .word 0xcccccccc
 /* 0000ba6c:	cccccccc */	/*illegal*/ .word 0xcccccccc
-/* 0000ba70:	000003cf */	sync
+/* 0000ba70:	000003cf */	/*illegal*/ .word 0x000003cf
 /* 0000ba74:	eeeeeeed */	/*illegal*/ .word 0xeeeeeeed
 /* 0000ba78:	dccccccc */	/*illegal*/ .word 0xdccccccc
 /* 0000ba7c:	cccccccc */	/*illegal*/ .word 0xcccccccc

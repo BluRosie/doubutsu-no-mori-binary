@@ -2681,7 +2681,7 @@
 /* 000029d4:	00000000 */	nop
 /* 000029d8:	00000000 */	nop
 /* 000029dc:	00000000 */	nop
-/* 000029e0:	000001cf */	sync
+/* 000029e0:	000001cf */	/*illegal*/ .word 0x000001cf
 /* 000029e4:	fd720000 */	/*illegal*/ .word 0xfd720000
 /* 000029e8:	00000000 */	nop
 /* 000029ec:	00000000 */	nop
@@ -3015,7 +3015,7 @@
 /* 00002f0c:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00002f10:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00002f14:	f6000000 */	/*illegal*/ .word 0xf6000000
-/* 00002f18:	000005cf */	sync
+/* 00002f18:	000005cf */	/*illegal*/ .word 0x000005cf
 /* 00002f1c:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00002f20:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00002f24:	ffffffff */	/*illegal*/ .word 0xffffffff
@@ -22578,7 +22578,7 @@
 /* 000160b8:	00000000 */	nop
 /* 000160bc:	00147bef */	/*illegal*/ .word 0x00147bef
 /* 000160c0:	00000000 */	nop
-/* 000160c4:	000000cf */	sync
+/* 000160c4:	000000cf */	/*illegal*/ .word 0x000000cf
 /* 000160c8:	ffffd830 */	/*illegal*/ .word 0xffffd830
 /* 000160cc:	00000000 */	nop
 /* 000160d0:	027dffff */	/*illegal*/ .word 0x027dffff
@@ -22586,7 +22586,7 @@
 /* 000160d8:	a8766678 */	swl s6, 26232(v1)
 /* 000160dc:	adffffff */	sw ra, -1(t7)
 /* 000160e0:	00000000 */	nop
-/* 000160e4:	0000008f */	sync
+/* 000160e4:	0000008f */	/*illegal*/ .word 0x0000008f
 /* 000160e8:	fffffffe */	/*illegal*/ .word 0xfffffffe
 /* 000160ec:	a7644468 */	sh a0, 17512(k1)
 /* 000160f0:	cfffffff */	/*illegal*/ .word 0xcfffffff
@@ -22626,7 +22626,7 @@
 /* 00016178:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 0001617c:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00016180:	00000000 */	nop
-/* 00016184:	0000008f */	sync
+/* 00016184:	0000008f */	/*illegal*/ .word 0x0000008f
 /* 00016188:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 0001618c:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00016190:	ffffffff */	/*illegal*/ .word 0xffffffff
@@ -22697,7 +22697,7 @@
 /* 00016294:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00016298:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 0001629c:	ffffffff */	/*illegal*/ .word 0xffffffff
-/* 000162a0:	0000018f */	sync
+/* 000162a0:	0000018f */	/*illegal*/ .word 0x0000018f
 /* 000162a4:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 000162a8:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 000162ac:	ffffffff */	/*illegal*/ .word 0xffffffff

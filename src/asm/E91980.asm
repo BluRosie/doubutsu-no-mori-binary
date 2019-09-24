@@ -92,7 +92,7 @@
 /* 00000160:	00000f00 */	sll at, $zero, 0x1c
 /* 00000164:	000089f5 */	/*illegal*/ .word 0x000089f5
 /* 00000168:	00009ff2 */	tlt $zero, $zero, 0x27f
-/* 0000016c:	0000028f */	sync
+/* 0000016c:	0000028f */	/*illegal*/ .word 0x0000028f
 /* 00000170:	000000f8 */	/*illegal*/ .word 0x000000f8
 /* 00000174:	0000feee */	/*illegal*/ .word 0x0000feee
 /* 00000178:	0000098e */	/*illegal*/ .word 0x0000098e

@@ -1,1 +1,0 @@
-build/jap/6F2C00.bin dump/jap/6F2C00.DAT differ: byte 20, line 1

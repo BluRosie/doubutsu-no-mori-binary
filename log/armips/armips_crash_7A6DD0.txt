@@ -51,6 +51,7 @@ C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14729) error
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14731) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14734) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14739) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14741) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14743) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14745) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14747) error: This instruction can't be in a delay slot
@@ -79,6 +80,7 @@ C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14861) error
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14862) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14864) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14867) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14869) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14871) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14873) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14875) error: This instruction can't be in a delay slot
@@ -131,6 +133,7 @@ C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14989) error
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14990) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14992) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14995) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14997) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(14999) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(15001) error: This instruction can't be in a delay slot
 C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7A6DD0.asm(15003) error: This instruction can't be in a delay slot
