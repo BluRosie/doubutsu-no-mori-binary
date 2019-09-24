@@ -128,7 +128,7 @@
 /* 000001f0:	00000004 */	sllv $zero, $zero, $zero
 /* 000001f4:	cfffffff */	/*illegal*/ .word 0xcfffffff
 /* 000001f8:	fffffffc */	/*illegal*/ .word 0xfffffffc
-/* 000001fc:	40000000 */	mfc0 $zero, $zero, 0
+/* 000001fc:	40000000 */	mfc0 $zero, $0
 /* 00000200:	0000018d */	break 0x6
 /* 00000204:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00000208:	ffffffff */	/*illegal*/ .word 0xffffffff
@@ -228,7 +228,7 @@
 /* 00000380:	00000004 */	sllv $zero, $zero, $zero
 /* 00000384:	cfffffff */	/*illegal*/ .word 0xcfffffff
 /* 00000388:	fffffffc */	/*illegal*/ .word 0xfffffffc
-/* 0000038c:	40000000 */	mfc0 $zero, $zero, 0
+/* 0000038c:	40000000 */	mfc0 $zero, $0
 /* 00000390:	00000000 */	nop
 /* 00000394:	28cfffff */	slti t7, a2, -1
 /* 00000398:	fffffc82 */	/*illegal*/ .word 0xfffffc82

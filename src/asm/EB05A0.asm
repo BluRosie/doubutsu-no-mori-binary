@@ -708,7 +708,7 @@
 /* 00000b00:	05910000 */	bgezal t4, 0xb04
 /* 00000b04:	01db0000 */	/*illegal*/ .word 0x01db0000
 /* 00000b08:	00c00200 */	/*illegal*/ .word 0x00c00200
-/* 00000b0c:	70032aff */	sdbbp 0xcab
+/* 00000b0c:	70032aff */	/*illegal*/ .word 0x70032aff
 /* 00000b10:	fa6fff9c */	/*illegal*/ .word 0xfa6fff9c
 /* 00000b14:	01db0000 */	/*illegal*/ .word 0x01db0000
 /* 00000b18:	07660200 */	/*illegal*/ .word 0x07660200

@@ -132,7 +132,7 @@
 /* 00000200:	0532055f */	bltzall t1, 0x1780
 /* 00000204:	ffa80000 */	/*illegal*/ .word 0xffa80000
 /* 00000208:	03600400 */	/*illegal*/ .word 0x03600400
-/* 0000020c:	7220f4ff */	sdbbp 0x883d3
+/* 0000020c:	7220f4ff */	/*illegal*/ .word 0x7220f4ff
 /* 00000210:	0408055f */	tgei $zero, 1375
 /* 00000214:	fdb90000 */	/*illegal*/ .word 0xfdb90000
 /* 00000218:	04000400 */	bltz $zero, 0x121c
@@ -200,7 +200,7 @@
 /* 00000310:	fc03055f */	/*illegal*/ .word 0xfc03055f
 /* 00000314:	025a0000 */	/*illegal*/ .word 0x025a0000
 /* 00000318:	04000400 */	bltz $zero, 0x131c
-/* 0000031c:	70d808ff */	sdbbp 0x36023
+/* 0000031c:	70d808ff */	/*illegal*/ .word 0x70d808ff
 /* 00000320:	03e4065e */	/*illegal*/ .word 0x03e4065e
 /* 00000324:	fac10000 */	/*illegal*/ .word 0xfac10000
 /* 00000328:	03000400 */	/*illegal*/ .word 0x03000400

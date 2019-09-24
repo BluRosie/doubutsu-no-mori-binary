@@ -752,7 +752,7 @@
 /* 00000bb0:	00000004 */	sllv $zero, $zero, $zero
 /* 00000bb4:	c0000000 */	ll $zero, 0($zero)
 /* 00000bb8:	0000000c */	syscall 0x0
-/* 00000bbc:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000bbc:	40000000 */	mfc0 $zero, $0
 /* 00000bc0:	0000000b */	/*illegal*/ .word 0x0000000b
 /* 00000bc4:	00000000 */	nop
 /* 00000bc8:	00000000 */	nop
@@ -880,7 +880,7 @@
 /* 00000db0:	00000004 */	sllv $zero, $zero, $zero
 /* 00000db4:	aaaaaaaa */	swl t2, -21846(s5)
 /* 00000db8:	aaaaaaaa */	swl t2, -21846(s5)
-/* 00000dbc:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000dbc:	40000000 */	mfc0 $zero, $0
 /* 00000dc0:	00000003 */	sra $zero, $zero, 0x0
 /* 00000dc4:	3aaaaaaa */	xori t2, s5, 0xaaaa
 /* 00000dc8:	aaaaaaa3 */	swl t2, -21853(s5)

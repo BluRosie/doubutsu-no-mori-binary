@@ -475,7 +475,7 @@
 /* 0000075c:	007800fc */	/*illegal*/ .word 0x007800fc
 /* 00000760:	00000640 */	sll $zero, $zero, 0x19
 /* 00000764:	11300000 */	beq t1, s0, 0x768
-/* 00000768:	40000800 */	mfc0 $zero, at, 0
+/* 00000768:	40000800 */	mfc0 $zero, $1
 /* 0000076c:	f677fcff */	/*illegal*/ .word 0xf677fcff
 /* 00000770:	03510c80 */	/*illegal*/ .word 0x03510c80
 /* 00000774:	152c0000 */	bne t1, t4, 0x778
@@ -491,7 +491,7 @@
 /* 0000079c:	1f6ad3e4 */	/*illegal*/ .word 0x1f6ad3e4
 /* 000007a0:	00000c80 */	sll at, $zero, 0x12
 /* 000007a4:	15e00000 */	bne t7, $zero, 0x7a8
-/* 000007a8:	40000000 */	mfc0 $zero, $zero, 0
+/* 000007a8:	40000000 */	mfc0 $zero, $0
 /* 000007ac:	006ccaff */	/*illegal*/ .word 0x006ccaff
 /* 000007b0:	07d00640 */	bltzal fp, 0x20b4
 /* 000007b4:	11f80000 */	beq t7, t8, 0x7b8
@@ -555,11 +555,11 @@
 /* 0000089c:	037700fa */	/*illegal*/ .word 0x037700fa
 /* 000008a0:	32000c80 */	andi $zero, s0, 0xc80
 /* 000008a4:	0c800000 */	jal 0x2000000
-/* 000008a8:	40000000 */	mfc0 $zero, $zero, 0
+/* 000008a8:	40000000 */	mfc0 $zero, $0
 /* 000008ac:	006c36a4 */	/*illegal*/ .word 0x006c36a4
 /* 000008b0:	32000640 */	andi $zero, s0, 0x640
 /* 000008b4:	11300000 */	beq t1, s0, 0x8b8
-/* 000008b8:	40000800 */	mfc0 $zero, at, 0
+/* 000008b8:	40000800 */	mfc0 $zero, $1
 /* 000008bc:	007800fc */	/*illegal*/ .word 0x007800fc
 /* 000008c0:	1e140640 */	/*illegal*/ .word 0x1e140640
 /* 000008c4:	157c0000 */	bne t3, gp, 0x8c8
@@ -731,7 +731,7 @@
 /* 00000b5c:	016d31c8 */	/*illegal*/ .word 0x016d31c8
 /* 00000b60:	1c680c80 */	/*illegal*/ .word 0x1c680c80
 /* 00000b64:	12a60000 */	beq s5, a2, 0xb68
-/* 00000b68:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000b68:	40000000 */	mfc0 $zero, $0
 /* 00000b6c:	185f458a */	/*illegal*/ .word 0x185f458a
 /* 00000b70:	194e0c80 */	/*illegal*/ .word 0x194e0c80
 /* 00000b74:	0c3d0000 */	jal 0xf40000
@@ -775,7 +775,7 @@
 /* 00000c0c:	007800fc */	/*illegal*/ .word 0x007800fc
 /* 00000c10:	2d9e0c80 */	sltiu fp, t4, 3200
 /* 00000c14:	19130000 */	/*illegal*/ .word 0x19130000
-/* 00000c18:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000c18:	40000000 */	mfc0 $zero, $0
 /* 00000c1c:	007800fc */	/*illegal*/ .word 0x007800fc
 /* 00000c20:	28a30c80 */	slti v1, a1, 3200
 /* 00000c24:	14fa0000 */	bne a3, k0, 0xc28

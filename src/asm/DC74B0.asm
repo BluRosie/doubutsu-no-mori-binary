@@ -666,7 +666,7 @@
 /* 00000a58:	05c80c70 */	tgei t6, 3184
 /* 00000a5c:	ff0e0000 */	/*illegal*/ .word 0xff0e0000
 /* 00000a60:	06bc0203 */	/*illegal*/ .word 0x06bc0203
-/* 00000a64:	70dfeaff */	sdbbp 0x37fab
+/* 00000a64:	70dfeaff */	/*illegal*/ .word 0x70dfeaff
 /* 00000a68:	04041301 */	/*illegal*/ .word 0x04041301
 /* 00000a6c:	02d20000 */	/*illegal*/ .word 0x02d20000
 /* 00000a70:	080e00f7 */	j 0x3803dc

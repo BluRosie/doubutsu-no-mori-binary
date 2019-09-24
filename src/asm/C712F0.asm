@@ -999,7 +999,7 @@
 /* 00000f8c:	a77c777f */	sh gp, 30591(k1)
 /* 00000f90:	aaaca7ff */	swl t4, -22529(s5)
 /* 00000f94:	000eee4f */	/*illegal*/ .word 0x000eee4f
-/* 00000f98:	7000eeff */	sdbbp 0x3bb
+/* 00000f98:	7000eeff */	/*illegal*/ .word 0x7000eeff
 /* 00000f9c:	aacaaac7 */	swl t2, -21817(s6)
 /* 00000fa0:	bacaaca7 */	swr t2, -21337(s6)
 /* 00000fa4:	77000fff */	/*illegal*/ .word 0x77000fff

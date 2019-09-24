@@ -2282,7 +2282,7 @@
 /* 00002398:	31c1cccc */	andi at, t6, 0xcccc
 /* 0000239c:	ccccccc1 */	/*illegal*/ .word 0xccccccc1
 /* 000023a0:	13333311 */	beq t9, s3, 0xefe8
-/* 000023a4:	40000000 */	mfc0 $zero, $zero, 0
+/* 000023a4:	40000000 */	mfc0 $zero, $0
 /* 000023a8:	00000000 */	nop
 /* 000023ac:	ccbbb116 */	/*illegal*/ .word 0xccbbb116
 /* 000023b0:	66655555 */	/*illegal*/ .word 0x66655555

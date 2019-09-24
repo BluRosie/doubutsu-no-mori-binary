@@ -3,11 +3,11 @@ my attempt at setting up a sort of disassembly to animal forest for the n64 to a
 
 of the 3299 yaz0 files, all disassemble.
 
-1150 currently assemble back (mipsdis produces bad output)
+1161 currently assemble back
 
-of those that assemble back, there are 6 that don't do so properly (armips fixes that will probably still be fixed through mipsdis)
+of those that assemble back, there are 8 that don't do so properly (mipsdis fixes)
 
-progress:  1144/3299
+progress:  1153/3299
 
 let's get something done here
 

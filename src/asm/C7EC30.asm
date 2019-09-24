@@ -8,7 +8,7 @@
 /* 00000010:	0d58fe7b */	jal 0x563f9ec
 /* 00000014:	ff2f0000 */	/*illegal*/ .word 0xff2f0000
 /* 00000018:	00700000 */	/*illegal*/ .word 0x00700000
-/* 0000001c:	7222f5ff */	sdbbp 0x88bd7
+/* 0000001c:	7222f5ff */	/*illegal*/ .word 0x7222f5ff
 /* 00000020:	0c0aff39 */	jal 0x2bfce4
 /* 00000024:	ff790000 */	/*illegal*/ .word 0xff790000
 /* 00000028:	00000070 */	tge $zero, $zero, 0x1
@@ -36,7 +36,7 @@
 /* 00000080:	0d580185 */	jal 0x5600614
 /* 00000084:	ff2f0000 */	/*illegal*/ .word 0xff2f0000
 /* 00000088:	00700000 */	/*illegal*/ .word 0x00700000
-/* 0000008c:	72def5ff */	sdbbp 0xb7bd7
+/* 0000008c:	72def5ff */	/*illegal*/ .word 0x72def5ff
 /* 00000090:	0d190356 */	jal 0x4640d58
 /* 00000094:	fee10000 */	/*illegal*/ .word 0xfee10000
 /* 00000098:	01900000 */	/*illegal*/ .word 0x01900000
@@ -352,7 +352,7 @@
 /* 00000570:	0d580185 */	jal 0x5600614
 /* 00000574:	ff2f0000 */	/*illegal*/ .word 0xff2f0000
 /* 00000578:	01900000 */	/*illegal*/ .word 0x01900000
-/* 0000057c:	72def5ff */	sdbbp 0xb7bd7
+/* 0000057c:	72def5ff */	/*illegal*/ .word 0x72def5ff
 /* 00000580:	0c0a00c5 */	jal 0x280314
 /* 00000584:	ff790000 */	/*illegal*/ .word 0xff790000
 /* 00000588:	02000070 */	tge s0, $zero, 0x1
@@ -368,7 +368,7 @@
 /* 000005b0:	0d58fe7b */	jal 0x563f9ec
 /* 000005b4:	ff2f0000 */	/*illegal*/ .word 0xff2f0000
 /* 000005b8:	01900000 */	/*illegal*/ .word 0x01900000
-/* 000005bc:	7222f5ff */	sdbbp 0x88bd7
+/* 000005bc:	7222f5ff */	/*illegal*/ .word 0x7222f5ff
 /* 000005c0:	0c06fccc */	jal 0x1bf330
 /* 000005c4:	fd240000 */	/*illegal*/ .word 0xfd240000
 /* 000005c8:	00a00070 */	tge a1, $zero, 0x1
@@ -836,7 +836,7 @@
 /* 00000d00:	02b70000 */	/*illegal*/ .word 0x02b70000
 /* 00000d04:	00230000 */	/*illegal*/ .word 0x00230000
 /* 00000d08:	02000170 */	tge s0, $zero, 0x5
-/* 00000d0c:	7000d7ff */	sdbbp 0x35f
+/* 00000d0c:	7000d7ff */	/*illegal*/ .word 0x7000d7ff
 /* 00000d10:	019cff27 */	/*illegal*/ .word 0x019cff27
 /* 00000d14:	ff880000 */	/*illegal*/ .word 0xff880000
 /* 00000d18:	01900090 */	/*illegal*/ .word 0x01900090
@@ -896,7 +896,7 @@
 /* 00000df0:	02b70000 */	/*illegal*/ .word 0x02b70000
 /* 00000df4:	00230000 */	/*illegal*/ .word 0x00230000
 /* 00000df8:	0200016e */	/*illegal*/ .word 0x0200016e
-/* 00000dfc:	7000d7ff */	sdbbp 0x35f
+/* 00000dfc:	7000d7ff */	/*illegal*/ .word 0x7000d7ff
 /* 00000e00:	025c0000 */	/*illegal*/ .word 0x025c0000
 /* 00000e04:	01770000 */	/*illegal*/ .word 0x01770000
 /* 00000e08:	01000200 */	/*illegal*/ .word 0x01000200

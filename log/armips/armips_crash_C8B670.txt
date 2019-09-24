@@ -1,15 +1,7 @@
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(38) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(102) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(166) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(230) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(294) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(358) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(422) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(486) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(534) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(598) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(726) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(950) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(1078) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(1126) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(1376) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(1379) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(1380) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(1383) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(1384) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C8B670.asm(1388) error: This instruction can't be in a delay slot
 Aborting.

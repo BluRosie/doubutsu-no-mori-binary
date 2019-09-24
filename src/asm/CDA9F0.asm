@@ -691,11 +691,11 @@
 /* 00000abc:	cc6bf8ff */	/*illegal*/ .word 0xcc6bf8ff
 /* 00000ac0:	1130fce0 */	beq t1, s0, 0xfffffe44
 /* 00000ac4:	32000000 */	andi $zero, s0, 0x0
-/* 00000ac8:	40000800 */	mfc0 $zero, at, 0
+/* 00000ac8:	40000800 */	mfc0 $zero, $1
 /* 00000acc:	fc7700e2 */	/*illegal*/ .word 0xfc7700e2
 /* 00000ad0:	15e00320 */	bne t7, $zero, 0x1754
 /* 00000ad4:	32000000 */	andi $zero, s0, 0x0
-/* 00000ad8:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000ad8:	40000000 */	mfc0 $zero, $0
 /* 00000adc:	ca6c00ff */	/*illegal*/ .word 0xca6c00ff
 /* 00000ae0:	25780c80 */	addiu t8, t3, 3200
 /* 00000ae4:	21f00000 */	addi s0, t7, 0

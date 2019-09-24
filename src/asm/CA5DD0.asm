@@ -349,8 +349,8 @@
 /* 00000564:	00000000 */	nop
 /* 00000568:	df000000 */	/*illegal*/ .word 0xdf000000
 /* 0000056c:	00000000 */	nop
-/* 00000570:	73beffff */	sdbbp 0xefbff
-/* 00000574:	73bfbdff */	sdbbp 0xefef7
+/* 00000570:	73beffff */	/*illegal*/ .word 0x73beffff
+/* 00000574:	73bfbdff */	/*illegal*/ .word 0x73bfbdff
 /* 00000578:	ce737bff */	/*illegal*/ .word 0xce737bff
 /* 0000057c:	9cffdeff */	/*illegal*/ .word 0x9cffdeff
 /* 00000580:	e73fb5bf */	/*illegal*/ .word 0xe73fb5bf

@@ -871,7 +871,7 @@
 /* 00000d8c:	fd77feb8 */	/*illegal*/ .word 0xfd77feb8
 /* 00000d90:	0f5103e8 */	jal 0xd440fa0
 /* 00000d94:	28250000 */	slti a1, at, 0
-/* 00000d98:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000d98:	40000000 */	mfc0 $zero, $0
 /* 00000d9c:	0b480a98 */	j 0xd202a60
 /* 00000da0:	0f4703e8 */	jal 0xd1c0fa0
 /* 00000da4:	21bd0000 */	addi sp, t5, 0

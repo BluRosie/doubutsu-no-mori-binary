@@ -244,7 +244,7 @@
 /* 000003c0:	0676ffff */	/*illegal*/ .word 0x0676ffff
 /* 000003c4:	ff9d0000 */	/*illegal*/ .word 0xff9d0000
 /* 000003c8:	020000b0 */	tge s0, $zero, 0x2
-/* 000003cc:	7200deff */	sdbbp 0x8037b
+/* 000003cc:	7200deff */	/*illegal*/ .word 0x7200deff
 /* 000003d0:	0698ffff */	/*illegal*/ .word 0x0698ffff
 /* 000003d4:	03280000 */	/*illegal*/ .word 0x03280000
 /* 000003d8:	01fe0200 */	/*illegal*/ .word 0x01fe0200

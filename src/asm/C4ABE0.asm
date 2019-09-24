@@ -1095,7 +1095,7 @@
 /* 0000110c:	c4000000 */	/*illegal*/ .word 0xc4000000
 /* 00001110:	0000004c */	syscall 0x1
 /* 00001114:	000cddc4 */	/*illegal*/ .word 0x000cddc4
-/* 00001118:	40000000 */	mfc0 $zero, $zero, 0
+/* 00001118:	40000000 */	mfc0 $zero, $0
 /* 0000111c:	dc400044 */	/*illegal*/ .word 0xdc400044
 /* 00001120:	0004cc40 */	sll t9, a0, 0x11
 /* 00001124:	00000004 */	sllv $zero, $zero, $zero
@@ -1111,7 +1111,7 @@
 /* 0000114c:	00000000 */	nop
 /* 00001150:	cddddc40 */	/*illegal*/ .word 0xcddddc40
 /* 00001154:	00000004 */	sllv $zero, $zero, $zero
-/* 00001158:	40000000 */	mfc0 $zero, $zero, 0
+/* 00001158:	40000000 */	mfc0 $zero, $0
 /* 0000115c:	04cddddc */	/*illegal*/ .word 0x04cddddc
 /* 00001160:	00000000 */	nop
 /* 00001164:	4cdddddd */	/*illegal*/ .word 0x4cdddddd
@@ -1151,12 +1151,12 @@
 /* 000011ec:	c4000000 */	/*illegal*/ .word 0xc4000000
 /* 000011f0:	00000000 */	nop
 /* 000011f4:	00000000 */	nop
-/* 000011f8:	40000000 */	mfc0 $zero, $zero, 0
+/* 000011f8:	40000000 */	mfc0 $zero, $0
 /* 000011fc:	0004dddd */	/*illegal*/ .word 0x0004dddd
 /* 00001200:	00000000 */	nop
 /* 00001204:	04cdc400 */	/*illegal*/ .word 0x04cdc400
 /* 00001208:	000cdddc */	/*illegal*/ .word 0x000cdddc
-/* 0000120c:	40000000 */	mfc0 $zero, $zero, 0
+/* 0000120c:	40000000 */	mfc0 $zero, $0
 /* 00001210:	4cdddc40 */	/*illegal*/ .word 0x4cdddc40
 /* 00001214:	00000000 */	nop
 /* 00001218:	00000000 */	nop
@@ -1171,12 +1171,12 @@
 /* 0000123c:	00004400 */	sll t0, $zero, 0x10
 /* 00001240:	04cddc40 */	/*illegal*/ .word 0x04cddc40
 /* 00001244:	000cdddd */	/*illegal*/ .word 0x000cdddd
-/* 00001248:	40000000 */	mfc0 $zero, $zero, 0
+/* 00001248:	40000000 */	mfc0 $zero, $0
 /* 0000124c:	00000000 */	nop
 /* 00001250:	0000dddd */	/*illegal*/ .word 0x0000dddd
 /* 00001254:	0cdddd40 */	jal 0x3777500
 /* 00001258:	0000004c */	syscall 0x1
-/* 0000125c:	40000000 */	mfc0 $zero, $zero, 0
+/* 0000125c:	40000000 */	mfc0 $zero, $0
 /* 00001260:	0cdddc40 */	jal 0x3777100
 /* 00001264:	0000cddc */	/*illegal*/ .word 0x0000cddc
 /* 00001268:	0000004c */	syscall 0x1
@@ -1199,7 +1199,7 @@
 /* 000012ac:	c4000000 */	/*illegal*/ .word 0xc4000000
 /* 000012b0:	00000000 */	nop
 /* 000012b4:	00000000 */	nop
-/* 000012b8:	40000000 */	mfc0 $zero, $zero, 0
+/* 000012b8:	40000000 */	mfc0 $zero, $0
 /* 000012bc:	00000044 */	/*illegal*/ .word 0x00000044
 /* 000012c0:	00000000 */	nop
 /* 000012c4:	00000000 */	nop

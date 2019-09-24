@@ -431,7 +431,7 @@
 /* 000006ac:	007800e6 */	/*illegal*/ .word 0x007800e6
 /* 000006b0:	16410320 */	bne s2, at, 0x1334
 /* 000006b4:	06c60000 */	/*illegal*/ .word 0x06c60000
-/* 000006b8:	40000000 */	mfc0 $zero, $zero, 0
+/* 000006b8:	40000000 */	mfc0 $zero, $0
 /* 000006bc:	ed6c2fff */	/*illegal*/ .word 0xed6c2fff
 /* 000006c0:	2a940320 */	slti s4, s4, 800
 /* 000006c4:	05780000 */	/*illegal*/ .word 0x05780000

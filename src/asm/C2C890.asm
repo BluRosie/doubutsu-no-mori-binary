@@ -28,11 +28,11 @@
 /* 00000060:	0009fec7 */	/*illegal*/ .word 0x0009fec7
 /* 00000064:	fff50000 */	/*illegal*/ .word 0xfff50000
 /* 00000068:	04000000 */	bltz $zero, 0x6c
-/* 0000006c:	70d7fdff */	sdbbp 0x35ff7
+/* 0000006c:	70d7fdff */	/*illegal*/ .word 0x70d7fdff
 /* 00000070:	0009fec7 */	/*illegal*/ .word 0x0009fec7
 /* 00000074:	fff50000 */	/*illegal*/ .word 0xfff50000
 /* 00000078:	04000000 */	bltz $zero, 0x7c
-/* 0000007c:	70d7fdff */	sdbbp 0x35ff7
+/* 0000007c:	70d7fdff */	/*illegal*/ .word 0x70d7fdff
 /* 00000080:	000a0000 */	sll $zero, t2, 0x0
 /* 00000084:	014b0000 */	/*illegal*/ .word 0x014b0000
 /* 00000088:	02000000 */	/*illegal*/ .word 0x02000000
@@ -44,7 +44,7 @@
 /* 000000a0:	00090139 */	/*illegal*/ .word 0x00090139
 /* 000000a4:	fff50000 */	/*illegal*/ .word 0xfff50000
 /* 000000a8:	08000000 */	j 0x0
-/* 000000ac:	7029fdff */	sdbbp 0xa7f7
+/* 000000ac:	7029fdff */	/*illegal*/ .word 0x7029fdff
 /* 000000b0:	000a0000 */	sll $zero, t2, 0x0
 /* 000000b4:	014b0000 */	/*illegal*/ .word 0x014b0000
 /* 000000b8:	0a000000 */	j 0x8000000
@@ -52,7 +52,7 @@
 /* 000000c0:	00090139 */	/*illegal*/ .word 0x00090139
 /* 000000c4:	fff50000 */	/*illegal*/ .word 0xfff50000
 /* 000000c8:	08000000 */	j 0x0
-/* 000000cc:	7029fdff */	sdbbp 0xa7f7
+/* 000000cc:	7029fdff */	/*illegal*/ .word 0x7029fdff
 /* 000000d0:	00080000 */	sll $zero, t0, 0x0
 /* 000000d4:	feb00000 */	/*illegal*/ .word 0xfeb00000
 /* 000000d8:	05ff0000 */	/*illegal*/ .word 0x05ff0000
@@ -60,7 +60,7 @@
 /* 000000e0:	0009fec7 */	/*illegal*/ .word 0x0009fec7
 /* 000000e4:	fff50000 */	/*illegal*/ .word 0xfff50000
 /* 000000e8:	04000000 */	bltz $zero, 0xec
-/* 000000ec:	70d7fdff */	sdbbp 0x35ff7
+/* 000000ec:	70d7fdff */	/*illegal*/ .word 0x70d7fdff
 /* 000000f0:	00080000 */	sll $zero, t0, 0x0
 /* 000000f4:	feb00000 */	/*illegal*/ .word 0xfeb00000
 /* 000000f8:	05ff0000 */	/*illegal*/ .word 0x05ff0000
@@ -68,7 +68,7 @@
 /* 00000100:	00090139 */	/*illegal*/ .word 0x00090139
 /* 00000104:	fff50000 */	/*illegal*/ .word 0xfff50000
 /* 00000108:	08000000 */	j 0x0
-/* 0000010c:	7029fdff */	sdbbp 0xa7f7
+/* 0000010c:	7029fdff */	/*illegal*/ .word 0x7029fdff
 /* 00000110:	00080000 */	sll $zero, t0, 0x0
 /* 00000114:	feb00000 */	/*illegal*/ .word 0xfeb00000
 /* 00000118:	05ff0000 */	/*illegal*/ .word 0x05ff0000

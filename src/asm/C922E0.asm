@@ -536,7 +536,7 @@
 /* 00000850:	0a45ffeb */	j 0x917ffac
 /* 00000854:	fe140000 */	/*illegal*/ .word 0xfe140000
 /* 00000858:	01ef0040 */	/*illegal*/ .word 0x01ef0040
-/* 0000085c:	7100d9ff */	sdbbp 0x40367
+/* 0000085c:	7100d9ff */	/*illegal*/ .word 0x7100d9ff
 /* 00000860:	09b302ce */	j 0x6cc0b38
 /* 00000864:	fe000000 */	/*illegal*/ .word 0xfe000000
 /* 00000868:	01d40023 */	subu $zero, t6, s4

@@ -191,10 +191,10 @@
 /* 000002ec:	3f000000 */	/*illegal*/ .word 0x3f000000
 /* 000002f0:	3f99999a */	/*illegal*/ .word 0x3f99999a
 /* 000002f4:	3f000000 */	/*illegal*/ .word 0x3f000000
-/* 000002f8:	40000000 */	mfc0 $zero, $zero, 0
+/* 000002f8:	40000000 */	mfc0 $zero, $0
 /* 000002fc:	3f99999a */	/*illegal*/ .word 0x3f99999a
 /* 00000300:	3fb33333 */	/*illegal*/ .word 0x3fb33333
-/* 00000304:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000304:	40000000 */	mfc0 $zero, $0
 /* 00000308:	3f333333 */	/*illegal*/ .word 0x3f333333
 /* 0000030c:	3fc00000 */	/*illegal*/ .word 0x3fc00000
 /* 00000310:	3f4ccccd */	/*illegal*/ .word 0x3f4ccccd

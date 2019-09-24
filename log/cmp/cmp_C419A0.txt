@@ -1,0 +1,1 @@
+build/jap/C419A0.bin dump/jap/C419A0.DAT differ: byte 120, line 1

@@ -1,12 +1,34 @@
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(15) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(79) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(143) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(207) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(271) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(335) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(399) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(463) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(911) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1050) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1103) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(64) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(128) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(195) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(241) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(256) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(320) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(382) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(383) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(448) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(510) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(961) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1333) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1334) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1335) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1336) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1337) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1338) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1339) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1340) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1341) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1342) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1343) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1397) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1398) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1399) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1400) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1401) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1402) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1403) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1404) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1405) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1406) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C64880.asm(1407) error: This instruction can't be in a delay slot
 Aborting.

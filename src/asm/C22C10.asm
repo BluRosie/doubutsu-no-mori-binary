@@ -844,7 +844,7 @@
 /* 00000d20:	00000001 */	/*illegal*/ .word 0x00000001
 /* 00000d24:	10001101 */	beq $zero, $zero, 0x512c
 /* 00000d28:	10011112 */	beq $zero, at, 0x5174
-/* 00000d2c:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000d2c:	40000000 */	mfc0 $zero, $0
 /* 00000d30:	14041201 */	bne $zero, a0, 0x5538
 /* 00000d34:	00000002 */	srl $zero, $zero, 0x0
 /* 00000d38:	30000000 */	andi $zero, $zero, 0x0
@@ -879,7 +879,7 @@
 /* 00000dac:	30000000 */	andi $zero, $zero, 0x0
 /* 00000db0:	31313001 */	andi s1, t1, 0x3001
 /* 00000db4:	00000000 */	nop
-/* 00000db8:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000db8:	40000000 */	mfc0 $zero, $0
 /* 00000dbc:	10011112 */	beq $zero, at, 0x5208
 /* 00000dc0:	00000000 */	nop
 /* 00000dc4:	31313001 */	andi s1, t1, 0x3001
@@ -986,7 +986,7 @@
 /* 00000f58:	dddddddd */	/*illegal*/ .word 0xdddddddd
 /* 00000f5c:	dddddddd */	/*illegal*/ .word 0xdddddddd
 /* 00000f60:	55552222 */	bnel t2, s5, 0x97ec
-/* 00000f64:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000f64:	40000000 */	mfc0 $zero, $0
 /* 00000f68:	24000000 */	addiu $zero, $zero, 0
 /* 00000f6c:	55522222 */	bnel t2, s2, 0x97f8
 /* 00000f70:	55222555 */	bnel t1, v0, 0xa4c8
@@ -999,7 +999,7 @@
 /* 00000f8c:	55222555 */	bnel t1, v0, 0xa4e4
 /* 00000f90:	55522222 */	bnel t2, s2, 0x981c
 /* 00000f94:	24000000 */	addiu $zero, $zero, 0
-/* 00000f98:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000f98:	40000000 */	mfc0 $zero, $0
 /* 00000f9c:	55552222 */	bnel t2, s5, 0x9828
 /* 00000fa0:	25725725 */	addiu s2, t3, 22309
 /* 00000fa4:	72572572 */	/*illegal*/ .word 0x72572572

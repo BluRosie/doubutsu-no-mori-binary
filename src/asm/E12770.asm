@@ -754,7 +754,7 @@
 /* 00000bb8:	ff251153 */	/*illegal*/ .word 0xff251153
 /* 00000bbc:	fcad0000 */	/*illegal*/ .word 0xfcad0000
 /* 00000bc0:	06000800 */	bltz s0, 0x2bc4
-/* 00000bc4:	702905ff */	sdbbp 0xa417
+/* 00000bc4:	702905ff */	/*illegal*/ .word 0x702905ff
 /* 00000bc8:	fbe31942 */	/*illegal*/ .word 0xfbe31942
 /* 00000bcc:	041d0000 */	/*illegal*/ .word 0x041d0000
 /* 00000bd0:	0200fe00 */	/*illegal*/ .word 0x0200fe00

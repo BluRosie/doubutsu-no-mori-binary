@@ -1040,7 +1040,7 @@
 /* 00001030:	03c1ffff */	/*illegal*/ .word 0x03c1ffff
 /* 00001034:	ff2e0000 */	/*illegal*/ .word 0xff2e0000
 /* 00001038:	04000100 */	bltz $zero, 0x143c
-/* 0000103c:	73ffe1ff */	sdbbp 0xfff87
+/* 0000103c:	73ffe1ff */	/*illegal*/ .word 0x73ffe1ff
 /* 00001040:	01e0013d */	/*illegal*/ .word 0x01e0013d
 /* 00001044:	fee80000 */	/*illegal*/ .word 0xfee80000
 /* 00001048:	02d000d0 */	/*illegal*/ .word 0x02d000d0

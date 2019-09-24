@@ -1555,7 +1555,7 @@
 /* 0000183c:	00000000 */	nop
 /* 00001840:	00000000 */	nop
 /* 00001844:	00000000 */	nop
-/* 00001848:	40000000 */	mfc0 $zero, $zero, 0
+/* 00001848:	40000000 */	mfc0 $zero, $0
 /* 0000184c:	00000000 */	nop
 /* 00001850:	00000000 */	nop
 /* 00001854:	00000000 */	nop
@@ -2152,7 +2152,7 @@
 /* 00002190:	00000000 */	nop
 /* 00002194:	00000000 */	nop
 /* 00002198:	dfffffff */	/*illegal*/ .word 0xdfffffff
-/* 0000219c:	40000000 */	mfc0 $zero, $zero, 0
+/* 0000219c:	40000000 */	mfc0 $zero, $0
 /* 000021a0:	00000000 */	nop
 /* 000021a4:	00000000 */	nop
 /* 000021a8:	effffffb */	/*illegal*/ .word 0xeffffffb
@@ -2709,7 +2709,7 @@
 /* 00002a44:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00002a48:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00002a4c:	fffffffa */	/*illegal*/ .word 0xfffffffa
-/* 00002a50:	40000000 */	mfc0 $zero, $zero, 0
+/* 00002a50:	40000000 */	mfc0 $zero, $0
 /* 00002a54:	00000000 */	nop
 /* 00002a58:	efffffff */	/*illegal*/ .word 0xefffffff
 /* 00002a5c:	ffffffff */	/*illegal*/ .word 0xffffffff

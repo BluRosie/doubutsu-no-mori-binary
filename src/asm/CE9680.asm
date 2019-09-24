@@ -1207,7 +1207,7 @@
 /* 000012cc:	007800ff */	/*illegal*/ .word 0x007800ff
 /* 000012d0:	03c10c80 */	/*illegal*/ .word 0x03c10c80
 /* 000012d4:	163a0000 */	bne s1, k0, 0x12d8
-/* 000012d8:	40000000 */	mfc0 $zero, $zero, 0
+/* 000012d8:	40000000 */	mfc0 $zero, $0
 /* 000012dc:	007800ff */	/*illegal*/ .word 0x007800ff
 /* 000012e0:	138ef8f8 */	beq gp, t6, 0xfffff6c4
 /* 000012e4:	22eb0000 */	addi t3, s7, 0

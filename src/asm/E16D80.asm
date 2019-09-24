@@ -628,7 +628,7 @@
 /* 000009c0:	02a509f1 */	tgeu s5, a1, 0x27
 /* 000009c4:	00c40000 */	/*illegal*/ .word 0x00c40000
 /* 000009c8:	03780406 */	/*illegal*/ .word 0x03780406
-/* 000009cc:	730be2ff */	sdbbp 0xc2f8b
+/* 000009cc:	730be2ff */	/*illegal*/ .word 0x730be2ff
 /* 000009d0:	02cf094c */	syscall 0xb3c25
 /* 000009d4:	feb80000 */	/*illegal*/ .word 0xfeb80000
 /* 000009d8:	00880406 */	/*illegal*/ .word 0x00880406

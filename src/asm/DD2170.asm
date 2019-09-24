@@ -570,7 +570,7 @@
 /* 000008d8:	03651242 */	/*illegal*/ .word 0x03651242
 /* 000008dc:	01b10000 */	/*illegal*/ .word 0x01b10000
 /* 000008e0:	03ff003f */	/*illegal*/ .word 0x03ff003f
-/* 000008e4:	722203ff */	sdbbp 0x8880f
+/* 000008e4:	722203ff */	/*illegal*/ .word 0x722203ff
 /* 000008e8:	001c0f02 */	srl at, gp, 0x1c
 /* 000008ec:	fb090000 */	/*illegal*/ .word 0xfb090000
 /* 000008f0:	0575016c */	/*illegal*/ .word 0x0575016c
@@ -582,7 +582,7 @@
 /* 00000908:	04040616 */	/*illegal*/ .word 0x04040616
 /* 0000090c:	ff200000 */	/*illegal*/ .word 0xff200000
 /* 00000910:	06cd0555 */	/*illegal*/ .word 0x06cd0555
-/* 00000914:	7208dfff */	sdbbp 0x8237f
+/* 00000914:	7208dfff */	/*illegal*/ .word 0x7208dfff
 /* 00000918:	03481242 */	/*illegal*/ .word 0x03481242
 /* 0000091c:	03480000 */	/*illegal*/ .word 0x03480000
 /* 00000920:	08000000 */	j 0x0
@@ -610,7 +610,7 @@
 /* 00000978:	04040616 */	/*illegal*/ .word 0x04040616
 /* 0000097c:	ff200000 */	/*illegal*/ .word 0xff200000
 /* 00000980:	06cd0555 */	/*illegal*/ .word 0x06cd0555
-/* 00000984:	7208dfff */	sdbbp 0x8237f
+/* 00000984:	7208dfff */	/*illegal*/ .word 0x7208dfff
 /* 00000988:	02a107ea */	/*illegal*/ .word 0x02a107ea
 /* 0000098c:	02a10000 */	/*illegal*/ .word 0x02a10000
 /* 00000990:	0800048a */	j 0x1228
@@ -730,7 +730,7 @@
 /* 00000b58:	04040616 */	/*illegal*/ .word 0x04040616
 /* 00000b5c:	ff200000 */	/*illegal*/ .word 0xff200000
 /* 00000b60:	06cd0555 */	/*illegal*/ .word 0x06cd0555
-/* 00000b64:	7208dfff */	sdbbp 0x8237f
+/* 00000b64:	7208dfff */	/*illegal*/ .word 0x7208dfff
 /* 00000b68:	fa0b0d63 */	/*illegal*/ .word 0xfa0b0d63
 /* 00000b6c:	fd860000 */	/*illegal*/ .word 0xfd860000
 /* 00000b70:	03430222 */	/*illegal*/ .word 0x03430222
@@ -766,7 +766,7 @@
 /* 00000be8:	04040616 */	/*illegal*/ .word 0x04040616
 /* 00000bec:	ff200000 */	/*illegal*/ .word 0xff200000
 /* 00000bf0:	06cd0555 */	/*illegal*/ .word 0x06cd0555
-/* 00000bf4:	7208dfff */	sdbbp 0x8237f
+/* 00000bf4:	7208dfff */	/*illegal*/ .word 0x7208dfff
 /* 00000bf8:	05e60324 */	/*illegal*/ .word 0x05e60324
 /* 00000bfc:	01a50000 */	/*illegal*/ .word 0x01a50000
 /* 00000c00:	070006a4 */	bltz t8, 0x2694

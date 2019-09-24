@@ -5612,7 +5612,7 @@
 /* 000057a0:	88f00310 */	lwl s0, 784(a3)
 /* 000057a4:	6660a920 */	/*illegal*/ .word 0x6660a920
 /* 000057a8:	8d0620a9 */	lw a2, 8361(t0)
-/* 000057ac:	438d0620 */	wait 0x63418
+/* 000057ac:	438d0620 */	/*illegal*/ .word 0x438d0620
 /* 000057b0:	a98e8d07 */	swl t6, -29433(t4)
 /* 000057b4:	20a204b5 */	addi v0, a1, 1205
 /* 000057b8:	038d0720 */	/*illegal*/ .word 0x038d0720
@@ -9676,7 +9676,7 @@
 /* 00009720:	fee1debf */	/*illegal*/ .word 0xfee1debf
 /* 00009724:	bfffffff */	cache 0x1f, -1(ra)
 /* 00009728:	1f3e6140 */	/*illegal*/ .word 0x1f3e6140
-/* 0000972c:	40000000 */	mfc0 $zero, $zero, 0
+/* 0000972c:	40000000 */	mfc0 $zero, $0
 /* 00009730:	ff7f7f3f */	/*illegal*/ .word 0xff7f7f3f
 /* 00009734:	1f0f0700 */	/*illegal*/ .word 0x1f0f0700
 /* 00009738:	80c0c060 */	lb $zero, -16288(a2)

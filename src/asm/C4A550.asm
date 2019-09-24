@@ -732,7 +732,7 @@
 /* 00000b60:	00000004 */	sllv $zero, $zero, $zero
 /* 00000b64:	d0110000 */	/*illegal*/ .word 0xd0110000
 /* 00000b68:	0000110d */	break 0x44
-/* 00000b6c:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000b6c:	40000000 */	mfc0 $zero, $0
 /* 00000b70:	0000000d */	break 0x0
 /* 00000b74:	12621040 */	beq s3, v0, 0x4c78
 /* 00000b78:	04012621 */	bgez $zero, 0xa400
@@ -740,7 +740,7 @@
 /* 00000b80:	00000004 */	sllv $zero, $zero, $zero
 /* 00000b84:	2101220d */	addi at, t0, 8717
 /* 00000b88:	d0221012 */	/*illegal*/ .word 0xd0221012
-/* 00000b8c:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000b8c:	40000000 */	mfc0 $zero, $0
 /* 00000b90:	00000000 */	nop
 /* 00000b94:	10000220 */	beq $zero, $zero, 0x1418
 /* 00000b98:	02200001 */	/*illegal*/ .word 0x02200001
@@ -796,7 +796,7 @@
 /* 00000c60:	00000004 */	sllv $zero, $zero, $zero
 /* 00000c64:	d0111000 */	/*illegal*/ .word 0xd0111000
 /* 00000c68:	0001110d */	break 0x444
-/* 00000c6c:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000c6c:	40000000 */	mfc0 $zero, $0
 /* 00000c70:	0000000d */	break 0x0
 /* 00000c74:	12662140 */	beq s3, a2, 0x9178
 /* 00000c78:	04126621 */	bltzall $zero, 0x1a500
@@ -804,7 +804,7 @@
 /* 00000c80:	00000004 */	sllv $zero, $zero, $zero
 /* 00000c84:	210aaa1d */	addi t2, t0, -21987
 /* 00000c88:	d1aaa012 */	/*illegal*/ .word 0xd1aaa012
-/* 00000c8c:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000c8c:	40000000 */	mfc0 $zero, $0
 /* 00000c90:	00000000 */	nop
 /* 00000c94:	1009aaa2 */	beq $zero, t1, 0xfffeb720
 /* 00000c98:	2aaa9001 */	slti t2, s5, -28671
@@ -860,7 +860,7 @@
 /* 00000d60:	00000004 */	sllv $zero, $zero, $zero
 /* 00000d64:	d1266210 */	/*illegal*/ .word 0xd1266210
 /* 00000d68:	0126621d */	/*illegal*/ .word 0x0126621d
-/* 00000d6c:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000d6c:	40000000 */	mfc0 $zero, $0
 /* 00000d70:	0000000d */	break 0x0
 /* 00000d74:	126aaaaa */	beq s3, t2, 0xfffeb820
 /* 00000d78:	aaaaa621 */	swl t2, -23007(s5)
@@ -868,7 +868,7 @@
 /* 00000d80:	00000004 */	sllv $zero, $zero, $zero
 /* 00000d84:	21aaaaaa */	addi t2, t5, -21846
 /* 00000d88:	aaaaaa12 */	swl t2, -21998(s5)
-/* 00000d8c:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000d8c:	40000000 */	mfc0 $zero, $0
 /* 00000d90:	00000000 */	nop
 /* 00000d94:	109aaabb */	beq a0, k0, 0xfffeb884
 /* 00000d98:	bbaaa901 */	swr t2, -22271(sp)

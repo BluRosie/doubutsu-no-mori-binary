@@ -927,7 +927,7 @@
 /* 00000e6c:	00000c7f */	/*illegal*/ .word 0x00000c7f
 /* 00000e70:	00000c7f */	/*illegal*/ .word 0x00000c7f
 /* 00000e74:	f777ffff */	/*illegal*/ .word 0xf777ffff
-/* 00000e78:	70007fff */	sdbbp 0x1ff
+/* 00000e78:	70007fff */	/*illegal*/ .word 0x70007fff
 /* 00000e7c:	00000c7f */	/*illegal*/ .word 0x00000c7f
 /* 00000e80:	00000c7f */	/*illegal*/ .word 0x00000c7f
 /* 00000e84:	f777ffff */	/*illegal*/ .word 0xf777ffff

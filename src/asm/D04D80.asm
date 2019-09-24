@@ -767,7 +767,7 @@
 /* 00000bec:	007800ac */	/*illegal*/ .word 0x007800ac
 /* 00000bf0:	05780c80 */	/*illegal*/ .word 0x05780c80
 /* 00000bf4:	15180000 */	bne t0, t8, 0xbf8
-/* 00000bf8:	40970000 */	mtc0 s7, $zero, 0
+/* 00000bf8:	40970000 */	mtc0 s7, $0
 /* 00000bfc:	f06fd6f8 */	/*illegal*/ .word 0xf06fd6f8
 /* 00000c00:	06a40640 */	/*illegal*/ .word 0x06a40640
 /* 00000c04:	0f280000 */	jal 0xca00000

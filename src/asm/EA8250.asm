@@ -604,11 +604,11 @@
 /* 00000960:	ff7407dd */	/*illegal*/ .word 0xff7407dd
 /* 00000964:	04e20000 */	bltzl a3, 0x968
 /* 00000968:	01f40200 */	/*illegal*/ .word 0x01f40200
-/* 0000096c:	731c12ff */	sdbbp 0xc704b
+/* 0000096c:	731c12ff */	/*illegal*/ .word 0x731c12ff
 /* 00000970:	ff7407dd */	/*illegal*/ .word 0xff7407dd
 /* 00000974:	fb1e0000 */	/*illegal*/ .word 0xfb1e0000
 /* 00000978:	01f4fe00 */	/*illegal*/ .word 0x01f4fe00
-/* 0000097c:	731ceeff */	sdbbp 0xc73bb
+/* 0000097c:	731ceeff */	/*illegal*/ .word 0x731ceeff
 /* 00000980:	fe0c0000 */	/*illegal*/ .word 0xfe0c0000
 /* 00000984:	fa240000 */	/*illegal*/ .word 0xfa240000
 /* 00000988:	00000600 */	sll $zero, $zero, 0x18

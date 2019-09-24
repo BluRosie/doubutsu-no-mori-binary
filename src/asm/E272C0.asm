@@ -112,7 +112,7 @@
 /* 000001b0:	ffee3373 */	/*illegal*/ .word 0xffee3373
 /* 000001b4:	55555101 */	bnel t2, s5, 0x145bc
 /* 000001b8:	10155555 */	beq $zero, s5, 0x15710
-/* 000001bc:	7333eeff */	sdbbp 0xccfbb
+/* 000001bc:	7333eeff */	/*illegal*/ .word 0x7333eeff
 /* 000001c0:	55555010 */	bnel t2, s5, 0x14204
 /* 000001c4:	f3ff3666 */	/*illegal*/ .word 0xf3ff3666
 /* 000001c8:	6663ff3f */	/*illegal*/ .word 0x6663ff3f

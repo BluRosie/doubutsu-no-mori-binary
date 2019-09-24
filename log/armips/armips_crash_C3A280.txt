@@ -1,4 +1,12 @@
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C3A280.asm(1225) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C3A280.asm(1228) error: MIPS parameter failure
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C3A280.asm(1229) error: MIPS parameter failure
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C3A280.asm(42) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C3A280.asm(106) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C3A280.asm(170) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C3A280.asm(234) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C3A280.asm(298) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C3A280.asm(362) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C3A280.asm(426) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C3A280.asm(490) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C3A280.asm(1051) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C3A280.asm(1109) error: This instruction can't be in a delay slot
+C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/C3A280.asm(1115) error: This instruction can't be in a delay slot
 Aborting.

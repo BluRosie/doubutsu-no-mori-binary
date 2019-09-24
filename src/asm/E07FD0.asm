@@ -762,11 +762,11 @@
 /* 00000bd8:	05f01372 */	bltzal t7, 0x59a4
 /* 00000bdc:	f94d0000 */	/*illegal*/ .word 0xf94d0000
 /* 00000be0:	02ab0800 */	/*illegal*/ .word 0x02ab0800
-/* 00000be4:	722400ff */	sdbbp 0x89003
+/* 00000be4:	722400ff */	/*illegal*/ .word 0x722400ff
 /* 00000be8:	05f01372 */	bltzal t7, 0x59b4
 /* 00000bec:	fa6a0000 */	/*illegal*/ .word 0xfa6a0000
 /* 00000bf0:	02ab0600 */	/*illegal*/ .word 0x02ab0600
-/* 00000bf4:	722400ff */	sdbbp 0x89003
+/* 00000bf4:	722400ff */	/*illegal*/ .word 0x722400ff
 /* 00000bf8:	d7000002 */	/*illegal*/ .word 0xd7000002
 /* 00000bfc:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00000c00:	e7000000 */	/*illegal*/ .word 0xe7000000

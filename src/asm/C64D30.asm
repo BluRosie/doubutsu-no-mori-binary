@@ -430,7 +430,7 @@
 /* 000006a8:	fffff222 */	/*illegal*/ .word 0xfffff222
 /* 000006ac:	22222222 */	addi v0, s1, 8738
 /* 000006b0:	22222242 */	addi v0, s1, 8770
-/* 000006b4:	702fffff */	sdbbp 0xbfff
+/* 000006b4:	702fffff */	/*illegal*/ .word 0x702fffff
 /* 000006b8:	fffff207 */	/*illegal*/ .word 0xfffff207
 /* 000006bc:	24222222 */	addiu v0, at, 8738
 /* 000006c0:	22222245 */	addi v0, s1, 8773

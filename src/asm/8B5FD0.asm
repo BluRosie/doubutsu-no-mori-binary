@@ -4270,7 +4270,7 @@
 /* 000042a8:	20000008 */	addi $zero, $zero, 8
 /* 000042ac:	28000008 */	slti $zero, $zero, 8
 /* 000042b0:	30000008 */	andi $zero, $zero, 0x8
-/* 000042b4:	4018a000 */	mfc0 t8, s4, 0
+/* 000042b4:	4018a000 */	mfc0 t8, $20
 /* 000042b8:	20700050 */	addi s0, v1, 80
 /* 000042bc:	70006070 */	/*illegal*/ .word 0x70006070
 /* 000042c0:	00986800 */	/*illegal*/ .word 0x00986800
@@ -4681,7 +4681,7 @@
 /* 00004914:	8085fda9 */	lb a1, -599(a0)
 /* 00004918:	048d1805 */	/*illegal*/ .word 0x048d1805
 /* 0000491c:	a90f8d15 */	swl t7, -29419(t0)
-/* 00004920:	408d0001 */	mtc0 t5, $zero, 1
+/* 00004920:	408d0001 */	mtc0 t5, $0
 /* 00004924:	ad1005d0 */	sw s0, 1488(t0)
 /* 00004928:	27209ad1 */	addiu $zero, t9, -25903
 /* 0000492c:	a9082007 */	swl t0, 8199(t0)
@@ -8135,7 +8135,7 @@
 /* 00007f0c:	28302881 */	slti s0, at, 10369
 /* 00007f10:	3a853c84 */	xori a1, s4, 0x3c84
 /* 00007f14:	3a5e0220 */	xori fp, s2, 0x220
-/* 00007f18:	424a4260 */	wait 0x12909
+/* 00007f18:	424a4260 */	/*illegal*/ .word 0x424a4260
 /* 00007f1c:	5e601d00 */	bgtzl s3, 0xf320
 /* 00007f20:	82264226 */	lb a2, 16934(s1)
 /* 00007f24:	42814080 */	/*illegal*/ .word 0x42814080
@@ -8675,7 +8675,7 @@
 /* 0000877c:	e0e0e042 */	sc $zero, -8126(a3)
 /* 00008780:	fca098d8 */	/*illegal*/ .word 0xfca098d8
 /* 00008784:	10a0e0c0 */	beq a1, $zero, 0xa88
-/* 00008788:	43c76220 */	wait 0x71d88
+/* 00008788:	43c76220 */	/*illegal*/ .word 0x43c76220
 /* 0000878c:	e040e0c0 */	sc $zero, -8000(v0)
 /* 00008790:	00010d1d */	/*illegal*/ .word 0x00010d1d
 /* 00008794:	63c9efc7 */	/*illegal*/ .word 0x63c9efc7
@@ -9532,7 +9532,7 @@
 /* 000094e0:	515f005f */	beql t2, ra, 0x9660
 /* 000094e4:	5f5f5fbf */	/*illegal*/ .word 0x5f5f5fbf
 /* 000094e8:	7f7f7f7f */	/*illegal*/ .word 0x7f7f7f7f
-/* 000094ec:	727f7fff */	sdbbp 0x9fdff
+/* 000094ec:	727f7fff */	/*illegal*/ .word 0x727f7fff
 /* 000094f0:	fffefefe */	/*illegal*/ .word 0xfffefefe
 /* 000094f4:	00fe2626 */	/*illegal*/ .word 0x00fe2626
 /* 000094f8:	fffefefe */	/*illegal*/ .word 0xfffefefe
@@ -10029,7 +10029,7 @@
 /* 00009ca4:	000000e0 */	/*illegal*/ .word 0x000000e0
 /* 00009ca8:	00000000 */	nop
 /* 00009cac:	80c0c0f0 */	lb $zero, -16144(a2)
-/* 00009cb0:	707c7eff */	sdbbp 0x1f1fb
+/* 00009cb0:	707c7eff */	/*illegal*/ .word 0x707c7eff
 /* 00009cb4:	fff7ef1f */	/*illegal*/ .word 0xfff7ef1f
 /* 00009cb8:	fcfeffff */	/*illegal*/ .word 0xfcfeffff
 /* 00009cbc:	ffffffff */	/*illegal*/ .word 0xffffffff

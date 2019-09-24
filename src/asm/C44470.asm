@@ -244,11 +244,11 @@
 /* 000003c0:	0287fd34 */	teq s4, a3, 0x3f4
 /* 000003c4:	06fb0000 */	/*illegal*/ .word 0x06fb0000
 /* 000003c8:	020000a0 */	/*illegal*/ .word 0x020000a0
-/* 000003cc:	70dfe9ff */	sdbbp 0x37fa7
+/* 000003cc:	70dfe9ff */	/*illegal*/ .word 0x70dfe9ff
 /* 000003d0:	028702cc */	syscall 0xa1c0b
 /* 000003d4:	06fb0000 */	/*illegal*/ .word 0x06fb0000
 /* 000003d8:	010000a0 */	/*illegal*/ .word 0x010000a0
-/* 000003dc:	7021e9ff */	sdbbp 0x87a7
+/* 000003dc:	7021e9ff */	/*illegal*/ .word 0x7021e9ff
 /* 000003e0:	037a0000 */	/*illegal*/ .word 0x037a0000
 /* 000003e4:	06310000 */	bgezal s1, 0x3e8
 /* 000003e8:	017f0060 */	/*illegal*/ .word 0x017f0060

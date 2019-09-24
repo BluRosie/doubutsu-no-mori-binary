@@ -72,7 +72,7 @@
 /* 00000110:	072ffffe */	/*illegal*/ .word 0x072ffffe
 /* 00000114:	04f50000 */	/*illegal*/ .word 0x04f50000
 /* 00000118:	02000182 */	/*illegal*/ .word 0x02000182
-/* 0000011c:	720025ff */	sdbbp 0x80097
+/* 0000011c:	720025ff */	/*illegal*/ .word 0x720025ff
 /* 00000120:	079603f1 */	/*illegal*/ .word 0x079603f1
 /* 00000124:	00fa0000 */	/*illegal*/ .word 0x00fa0000
 /* 00000128:	ff9300e2 */	/*illegal*/ .word 0xff9300e2
@@ -272,7 +272,7 @@
 /* 00000430:	0ac5fe12 */	j 0xb17f848
 /* 00000434:	015e0000 */	/*illegal*/ .word 0x015e0000
 /* 00000438:	01900070 */	tge t4, s0, 0x1
-/* 0000043c:	71dafcff */	sdbbp 0x76bf3
+/* 0000043c:	71dafcff */	/*illegal*/ .word 0x71dafcff
 /* 00000440:	095ffcfc */	j 0x57ff3f0
 /* 00000444:	fedb0000 */	/*illegal*/ .word 0xfedb0000
 /* 00000448:	02200010 */	/*illegal*/ .word 0x02200010
@@ -292,7 +292,7 @@
 /* 00000480:	0ac501ea */	j 0xb1407a8
 /* 00000484:	015e0000 */	/*illegal*/ .word 0x015e0000
 /* 00000488:	00700070 */	tge v1, s0, 0x1
-/* 0000048c:	7126fcff */	sdbbp 0x49bf3
+/* 0000048c:	7126fcff */	/*illegal*/ .word 0x7126fcff
 /* 00000490:	098e0355 */	j 0x6380d54
 /* 00000494:	00c80000 */	/*illegal*/ .word 0x00c80000
 /* 00000498:	ffe000b0 */	/*illegal*/ .word 0xffe000b0
@@ -776,7 +776,7 @@
 /* 00000c10:	0761038c */	bgez k1, 0x1a44
 /* 00000c14:	f96a0000 */	/*illegal*/ .word 0xf96a0000
 /* 00000c18:	02000000 */	/*illegal*/ .word 0x02000000
-/* 00000c1c:	721ae9ff */	sdbbp 0x86ba7
+/* 00000c1c:	721ae9ff */	/*illegal*/ .word 0x721ae9ff
 /* 00000c20:	0529ff2b */	tgeiu t1, -213
 /* 00000c24:	f7a20000 */	/*illegal*/ .word 0xf7a20000
 /* 00000c28:	01b00090 */	/*illegal*/ .word 0x01b00090
@@ -832,7 +832,7 @@
 /* 00000cf0:	0761038c */	bgez k1, 0x1b24
 /* 00000cf4:	f96a0000 */	/*illegal*/ .word 0xf96a0000
 /* 00000cf8:	0203ffa0 */	/*illegal*/ .word 0x0203ffa0
-/* 00000cfc:	721ae9ff */	sdbbp 0x86ba7
+/* 00000cfc:	721ae9ff */	/*illegal*/ .word 0x721ae9ff
 /* 00000d00:	034806b4 */	teq k0, t0, 0x1a
 /* 00000d04:	f7a20000 */	/*illegal*/ .word 0xf7a20000
 /* 00000d08:	0000ffa0 */	/*illegal*/ .word 0x0000ffa0

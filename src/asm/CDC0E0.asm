@@ -711,7 +711,7 @@
 /* 00000b0c:	ff7704ac */	/*illegal*/ .word 0xff7704ac
 /* 00000b10:	147b03e8 */	bne v1, k1, 0x1ab4
 /* 00000b14:	15490000 */	bne t2, t1, 0xb18
-/* 00000b18:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000b18:	40000000 */	mfc0 $zero, $0
 /* 00000b1c:	f948f0d0 */	/*illegal*/ .word 0xf948f0d0
 /* 00000b20:	160104b0 */	bne s0, at, 0x1de4
 /* 00000b24:	1a880000 */	/*illegal*/ .word 0x1a880000

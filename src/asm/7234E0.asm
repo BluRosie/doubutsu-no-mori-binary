@@ -1729,7 +1729,7 @@
 /* 00001af4:	cdcd50ff */	/*illegal*/ .word 0xcdcd50ff
 /* 00001af8:	969628ff */	lhu s6, 10495(s4)
 /* 00001afc:	91ff64ff */	lbu ra, 25855(t7)
-/* 00001b00:	73e150ff */	sdbbp 0xf8543
+/* 00001b00:	73e150ff */	/*illegal*/ .word 0x73e150ff
 /* 00001b04:	64be3cff */	/*illegal*/ .word 0x64be3cff
 /* 00001b08:	6e7332ff */	/*illegal*/ .word 0x6e7332ff
 /* 00001b0c:	008714ff */	/*illegal*/ .word 0x008714ff

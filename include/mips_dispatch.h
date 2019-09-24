@@ -757,7 +757,8 @@ static void decode_clo(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
 static void decode_sdbbp(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"sdbbp 0x%x",getsyscode(op));
+    decode_illegal(outbuf, n, pc, op);
+    //snprintf(outbuf,n,"sdbbp 0x%x",getsyscode(op));
 }
 
 static void decode_bltz(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -838,7 +839,7 @@ static void decode_mfc0(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"mfc0 %s, %s, %d",format_register(getrt(op)),format_register(getrd(op)),getsel(op));
+    snprintf(outbuf,n,"mfc0 %s, $%d",format_register(getrt(op)),getrd(op));
 }
 
 static void decode_mtc0(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -849,7 +850,7 @@ static void decode_mtc0(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         return;
     }
 
-    snprintf(outbuf,n,"mtc0 %s, %s, %d",format_register(getrt(op)),format_register(getrd(op)),getsel(op));
+    snprintf(outbuf,n,"mtc0 %s, $%d",format_register(getrt(op)),getrd(op));
 }
 
 static void decode_tlbr(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -920,7 +921,8 @@ static void decode_deret(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
 static void decode_wait(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    snprintf(outbuf,n,"wait 0x%x",getwaitcode(op));
+    decode_illegal(outbuf, n, pc, op);
+    //snprintf(outbuf,n,"wait 0x%x",getwaitcode(op));
 }
 
 static void decode_OPCODE(char *outbuf, size_t n, uint32_t pc, uint32_t op);

@@ -92,11 +92,11 @@
 /* 00000160:	012bfb6f */	/*illegal*/ .word 0x012bfb6f
 /* 00000164:	f8190000 */	/*illegal*/ .word 0xf8190000
 /* 00000168:	0000ffb9 */	/*illegal*/ .word 0x0000ffb9
-/* 0000016c:	701423ff */	sdbbp 0x508f
+/* 0000016c:	701423ff */	/*illegal*/ .word 0x701423ff
 /* 00000170:	012bf6de */	/*illegal*/ .word 0x012bf6de
 /* 00000174:	00010000 */	sll $zero, at, 0x0
 /* 00000178:	0000ffb9 */	/*illegal*/ .word 0x0000ffb9
-/* 0000017c:	702900ff */	sdbbp 0xa403
+/* 0000017c:	702900ff */	/*illegal*/ .word 0x702900ff
 /* 00000180:	0000fa0e */	/*illegal*/ .word 0x0000fa0e
 /* 00000184:	03700000 */	/*illegal*/ .word 0x03700000
 /* 00000188:	034b0428 */	/*illegal*/ .word 0x034b0428
@@ -112,11 +112,11 @@
 /* 000001b0:	012b0490 */	/*illegal*/ .word 0x012b0490
 /* 000001b4:	07e90000 */	tgeiu ra, 0
 /* 000001b8:	0000ffb9 */	/*illegal*/ .word 0x0000ffb9
-/* 000001bc:	70ecddff */	sdbbp 0x3b377
+/* 000001bc:	70ecddff */	/*illegal*/ .word 0x70ecddff
 /* 000001c0:	012bfb6f */	/*illegal*/ .word 0x012bfb6f
 /* 000001c4:	07e90000 */	tgeiu ra, 0
 /* 000001c8:	0000ffb9 */	/*illegal*/ .word 0x0000ffb9
-/* 000001cc:	7014ddff */	sdbbp 0x5377
+/* 000001cc:	7014ddff */	/*illegal*/ .word 0x7014ddff
 /* 000001d0:	000005f1 */	tgeu $zero, $zero, 0x17
 /* 000001d4:	fc930000 */	/*illegal*/ .word 0xfc930000
 /* 000001d8:	022dfb4a */	/*illegal*/ .word 0x022dfb4a
@@ -124,11 +124,11 @@
 /* 000001e0:	012b0920 */	/*illegal*/ .word 0x012b0920
 /* 000001e4:	00010000 */	sll $zero, at, 0x0
 /* 000001e8:	0000ffb9 */	/*illegal*/ .word 0x0000ffb9
-/* 000001ec:	70d700ff */	sdbbp 0x35c03
+/* 000001ec:	70d700ff */	/*illegal*/ .word 0x70d700ff
 /* 000001f0:	012b0490 */	/*illegal*/ .word 0x012b0490
 /* 000001f4:	f8190000 */	/*illegal*/ .word 0xf8190000
 /* 000001f8:	0000ffb9 */	/*illegal*/ .word 0x0000ffb9
-/* 000001fc:	70ec23ff */	sdbbp 0x3b08f
+/* 000001fc:	70ec23ff */	/*illegal*/ .word 0x70ec23ff
 /* 00000200:	fe1aff9c */	/*illegal*/ .word 0xfe1aff9c
 /* 00000204:	fd440000 */	/*illegal*/ .word 0xfd440000
 /* 00000208:	03000106 */	/*illegal*/ .word 0x03000106

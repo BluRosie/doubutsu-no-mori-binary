@@ -12,7 +12,7 @@
 /* 00000020:	ff17ffc3 */	/*illegal*/ .word 0xff17ffc3
 /* 00000024:	00010000 */	sll $zero, at, 0x0
 /* 00000028:	02000000 */	/*illegal*/ .word 0x02000000
-/* 0000002c:	731bf1ff */	sdbbp 0xc6fc7
+/* 0000002c:	731bf1ff */	/*illegal*/ .word 0x731bf1ff
 /* 00000030:	fd90fc50 */	/*illegal*/ .word 0xfd90fc50
 /* 00000034:	05f30000 */	bgezall t7, 0x38
 /* 00000038:	00b20256 */	/*illegal*/ .word 0x00b20256
@@ -36,7 +36,7 @@
 /* 00000080:	ff17ffc3 */	/*illegal*/ .word 0xff17ffc3
 /* 00000084:	00010000 */	sll $zero, at, 0x0
 /* 00000088:	02000000 */	/*illegal*/ .word 0x02000000
-/* 0000008c:	731b0fff */	sdbbp 0xc6c3f
+/* 0000008c:	731b0fff */	/*illegal*/ .word 0x731b0fff
 /* 00000090:	fd74069b */	/*illegal*/ .word 0xfd74069b
 /* 00000094:	00010000 */	sll $zero, at, 0x0
 /* 00000098:	00b30255 */	/*illegal*/ .word 0x00b30255

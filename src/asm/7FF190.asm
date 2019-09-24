@@ -199,10 +199,10 @@
 /* 0000030c:	3f000000 */	/*illegal*/ .word 0x3f000000
 /* 00000310:	3f99999a */	/*illegal*/ .word 0x3f99999a
 /* 00000314:	3f000000 */	/*illegal*/ .word 0x3f000000
-/* 00000318:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000318:	40000000 */	mfc0 $zero, $0
 /* 0000031c:	3f99999a */	/*illegal*/ .word 0x3f99999a
 /* 00000320:	3fb33333 */	/*illegal*/ .word 0x3fb33333
-/* 00000324:	40000000 */	mfc0 $zero, $zero, 0
+/* 00000324:	40000000 */	mfc0 $zero, $0
 /* 00000328:	3f333333 */	/*illegal*/ .word 0x3f333333
 /* 0000032c:	3fc00000 */	/*illegal*/ .word 0x3fc00000
 /* 00000330:	3f4ccccd */	/*illegal*/ .word 0x3f4ccccd

@@ -180,7 +180,7 @@
 /* 000002c0:	021afcf0 */	tge s0, k0, 0x3f3
 /* 000002c4:	04ba0000 */	/*illegal*/ .word 0x04ba0000
 /* 000002c8:	01a80000 */	/*illegal*/ .word 0x01a80000
-/* 000002cc:	7124f4ff */	sdbbp 0x493d3
+/* 000002cc:	7124f4ff */	/*illegal*/ .word 0x7124f4ff
 /* 000002d0:	009ffdda */	/*illegal*/ .word 0x009ffdda
 /* 000002d4:	03970000 */	/*illegal*/ .word 0x03970000
 /* 000002d8:	02000080 */	/*illegal*/ .word 0x02000080
@@ -204,7 +204,7 @@
 /* 00000320:	021a0310 */	/*illegal*/ .word 0x021a0310
 /* 00000324:	04ba0000 */	/*illegal*/ .word 0x04ba0000
 /* 00000328:	01a80000 */	/*illegal*/ .word 0x01a80000
-/* 0000032c:	71dcf4ff */	sdbbp 0x773d3
+/* 0000032c:	71dcf4ff */	/*illegal*/ .word 0x71dcf4ff
 /* 00000330:	015b0440 */	/*illegal*/ .word 0x015b0440
 /* 00000334:	03f40000 */	/*illegal*/ .word 0x03f40000
 /* 00000338:	01980050 */	/*illegal*/ .word 0x01980050
@@ -232,7 +232,7 @@
 /* 00000390:	094e0003 */	j 0x538000c
 /* 00000394:	fd880000 */	/*illegal*/ .word 0xfd880000
 /* 00000398:	0129ff8d */	break 0x4a7fe
-/* 0000039c:	7300dfff */	sdbbp 0xc037f
+/* 0000039c:	7300dfff */	/*illegal*/ .word 0x7300dfff
 /* 000003a0:	08b502a5 */	j 0x2d40a94
 /* 000003a4:	fddd0000 */	/*illegal*/ .word 0xfddd0000
 /* 000003a8:	0169ffc7 */	/*illegal*/ .word 0x0169ffc7
@@ -1204,7 +1204,7 @@
 /* 000012c0:	02aefe36 */	tne s5, t6, 0x3f8
 /* 000012c4:	fc460000 */	/*illegal*/ .word 0xfc460000
 /* 000012c8:	02d9003c */	/*illegal*/ .word 0x02d9003c
-/* 000012cc:	73f8e0ff */	sdbbp 0xfe383
+/* 000012cc:	73f8e0ff */	/*illegal*/ .word 0x73f8e0ff
 /* 000012d0:	03d90350 */	/*illegal*/ .word 0x03d90350
 /* 000012d4:	00cf0000 */	/*illegal*/ .word 0x00cf0000
 /* 000012d8:	ff7afffa */	/*illegal*/ .word 0xff7afffa
@@ -1216,7 +1216,7 @@
 /* 000012f0:	02ae01ca */	/*illegal*/ .word 0x02ae01ca
 /* 000012f4:	fc460000 */	/*illegal*/ .word 0xfc460000
 /* 000012f8:	02d9003c */	/*illegal*/ .word 0x02d9003c
-/* 000012fc:	7308e0ff */	sdbbp 0xc2383
+/* 000012fc:	7308e0ff */	/*illegal*/ .word 0x7308e0ff
 /* 00001300:	022302e9 */	/*illegal*/ .word 0x022302e9
 /* 00001304:	01240000 */	/*illegal*/ .word 0x01240000
 /* 00001308:	02d9003c */	/*illegal*/ .word 0x02d9003c

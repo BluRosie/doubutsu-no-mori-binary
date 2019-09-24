@@ -14885,7 +14885,7 @@
 /* 0000e884:	000005fc */	/*illegal*/ .word 0x000005fc
 /* 0000e888:	fa000000 */	/*illegal*/ .word 0xfa000000
 /* 0000e88c:	008fa04f */	/*illegal*/ .word 0x008fa04f
-/* 0000e890:	700000bf */	sdbbp 0x2
+/* 0000e890:	700000bf */	/*illegal*/ .word 0x700000bf
 /* 0000e894:	df700000 */	/*illegal*/ .word 0xdf700000
 /* 0000e898:	00000000 */	nop
 /* 0000e89c:	00000000 */	nop

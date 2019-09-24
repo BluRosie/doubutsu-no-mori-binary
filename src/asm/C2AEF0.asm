@@ -1180,7 +1180,7 @@
 /* 00001260:	0843fe4f */	j 0x10ff93c
 /* 00001264:	fe6a0000 */	/*illegal*/ .word 0xfe6a0000
 /* 00001268:	02000200 */	/*illegal*/ .word 0x02000200
-/* 0000126c:	701025ff */	sdbbp 0x4097
+/* 0000126c:	701025ff */	/*illegal*/ .word 0x701025ff
 /* 00001270:	068efbb2 */	tnei s4, -1102
 /* 00001274:	fcdd0000 */	/*illegal*/ .word 0xfcdd0000
 /* 00001278:	ffd80092 */	/*illegal*/ .word 0xffd80092
@@ -1228,7 +1228,7 @@
 /* 00001320:	0843fe4f */	j 0x10ff93c
 /* 00001324:	fe6a0000 */	/*illegal*/ .word 0xfe6a0000
 /* 00001328:	01000000 */	/*illegal*/ .word 0x01000000
-/* 0000132c:	701025ff */	sdbbp 0x4097
+/* 0000132c:	701025ff */	/*illegal*/ .word 0x701025ff
 /* 00001330:	081dfd49 */	j 0x77f524
 /* 00001334:	fc660000 */	/*illegal*/ .word 0xfc660000
 /* 00001338:	00000000 */	nop
@@ -1388,7 +1388,7 @@
 /* 000015a0:	08810314 */	j 0x2040c50
 /* 000015a4:	fd1d0000 */	/*illegal*/ .word 0xfd1d0000
 /* 000015a8:	02000200 */	/*illegal*/ .word 0x02000200
-/* 000015ac:	7219e7ff */	sdbbp 0x8679f
+/* 000015ac:	7219e7ff */	/*illegal*/ .word 0x7219e7ff
 /* 000015b0:	080d0297 */	j 0x340a5c
 /* 000015b4:	ff5b0000 */	/*illegal*/ .word 0xff5b0000
 /* 000015b8:	00e0ffe0 */	/*illegal*/ .word 0x00e0ffe0
@@ -1408,7 +1408,7 @@
 /* 000015f0:	08810314 */	j 0x2040c50
 /* 000015f4:	fd1d0000 */	/*illegal*/ .word 0xfd1d0000
 /* 000015f8:	0100ffe0 */	/*illegal*/ .word 0x0100ffe0
-/* 000015fc:	7219e7ff */	sdbbp 0x8679f
+/* 000015fc:	7219e7ff */	/*illegal*/ .word 0x7219e7ff
 /* 00001600:	080d0297 */	j 0x340a5c
 /* 00001604:	ff5b0000 */	/*illegal*/ .word 0xff5b0000
 /* 00001608:	0000ffe0 */	/*illegal*/ .word 0x0000ffe0
@@ -1436,7 +1436,7 @@
 /* 00001660:	08810314 */	j 0x2040c50
 /* 00001664:	fd1d0000 */	/*illegal*/ .word 0xfd1d0000
 /* 00001668:	00f0ffe0 */	/*illegal*/ .word 0x00f0ffe0
-/* 0000166c:	7219e7ff */	sdbbp 0x8679f
+/* 0000166c:	7219e7ff */	/*illegal*/ .word 0x7219e7ff
 /* 00001670:	023e01bf */	/*illegal*/ .word 0x023e01bf
 /* 00001674:	00e80000 */	/*illegal*/ .word 0x00e80000
 /* 00001678:	02d9003c */	/*illegal*/ .word 0x02d9003c

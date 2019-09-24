@@ -1831,7 +1831,7 @@
 /* 00001c8c:	006400ff */	/*illegal*/ .word 0x006400ff
 /* 00001c90:	5a6400ff */	/*illegal*/ .word 0x5a6400ff
 /* 00001c94:	a00000ff */	sb $zero, 255($zero)
-/* 00001c98:	733c00ff */	sdbbp 0xcf003
+/* 00001c98:	733c00ff */	/*illegal*/ .word 0x733c00ff
 /* 00001c9c:	ffb900ff */	/*illegal*/ .word 0xffb900ff
 /* 00001ca0:	ffffcdff */	/*illegal*/ .word 0xffffcdff
 /* 00001ca4:	000064ff */	/*illegal*/ .word 0x000064ff

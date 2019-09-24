@@ -51,7 +51,7 @@
 /* 000000bc:	00000000 */	nop
 /* 000000c0:	00000000 */	nop
 /* 000000c4:	00000000 */	nop
-/* 000000c8:	40000000 */	mfc0 $zero, $zero, 0
+/* 000000c8:	40000000 */	mfc0 $zero, $0
 /* 000000cc:	00000004 */	sllv $zero, $zero, $zero
 /* 000000d0:	55555544 */	bnel t2, s5, 0x155e4
 /* 000000d4:	44555555 */	/*illegal*/ .word 0x44555555
@@ -700,11 +700,11 @@
 /* 00000ae0:	070702ee */	/*illegal*/ .word 0x070702ee
 /* 00000ae4:	fe0c0000 */	/*illegal*/ .word 0xfe0c0000
 /* 00000ae8:	03280000 */	/*illegal*/ .word 0x03280000
-/* 00000aec:	712700ff */	sdbbp 0x49c03
+/* 00000aec:	712700ff */	/*illegal*/ .word 0x712700ff
 /* 00000af0:	0707fd12 */	/*illegal*/ .word 0x0707fd12
 /* 00000af4:	03e80000 */	/*illegal*/ .word 0x03e80000
 /* 00000af8:	04bc01e0 */	/*illegal*/ .word 0x04bc01e0
-/* 00000afc:	71d900ff */	sdbbp 0x76403
+/* 00000afc:	71d900ff */	/*illegal*/ .word 0x71d900ff
 /* 00000b00:	0707fd12 */	/*illegal*/ .word 0x0707fd12
 /* 00000b04:	fe0c0000 */	/*illegal*/ .word 0xfe0c0000
 /* 00000b08:	04bc0000 */	/*illegal*/ .word 0x04bc0000

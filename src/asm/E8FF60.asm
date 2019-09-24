@@ -810,7 +810,7 @@
 /* 00000c98:	05d7fc6e */	/*illegal*/ .word 0x05d7fc6e
 /* 00000c9c:	00000000 */	nop
 /* 00000ca0:	0200ff8a */	/*illegal*/ .word 0x0200ff8a
-/* 00000ca4:	72dc00ff */	sdbbp 0xb7003
+/* 00000ca4:	72dc00ff */	/*illegal*/ .word 0x72dc00ff
 /* 00000ca8:	d7000002 */	/*illegal*/ .word 0xd7000002
 /* 00000cac:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00000cb0:	e7000000 */	/*illegal*/ .word 0xe7000000

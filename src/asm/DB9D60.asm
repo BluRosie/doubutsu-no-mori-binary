@@ -81,7 +81,7 @@
 /* 00000134:	00023454 */	/*illegal*/ .word 0x00023454
 /* 00000138:	55336b0f */	bnel t1, s3, 0x1ad78
 /* 0000013c:	02222333 */	tltu s1, v0, 0x8c
-/* 00000140:	70afffff */	sdbbp 0x2bfff
+/* 00000140:	70afffff */	/*illegal*/ .word 0x70afffff
 /* 00000144:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00000148:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 0000014c:	ffffffff */	/*illegal*/ .word 0xffffffff

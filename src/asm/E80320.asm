@@ -3,7 +3,7 @@
 
 /* 00000000:	a5917447 */	sh s1, 29767(t4)
 /* 00000004:	43412201 */	/*illegal*/ .word 0x43412201
-/* 00000008:	72ffb4ff */	sdbbp 0xbfed3
+/* 00000008:	72ffb4ff */	/*illegal*/ .word 0x72ffb4ff
 /* 0000000c:	3880ffff */	xori $zero, a0, 0xffff
 /* 00000010:	bed93881 */	cache 0x19, 14465(s6)
 /* 00000014:	7101a1c1 */	/*illegal*/ .word 0x7101a1c1

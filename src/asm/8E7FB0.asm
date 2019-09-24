@@ -3649,7 +3649,7 @@
 /* 000038f4:	dddddddd */	/*illegal*/ .word 0xdddddddd
 /* 000038f8:	dddddddd */	/*illegal*/ .word 0xdddddddd
 /* 000038fc:	dddedca7 */	/*illegal*/ .word 0xdddedca7
-/* 00003900:	40000000 */	mfc0 $zero, $zero, 0
+/* 00003900:	40000000 */	mfc0 $zero, $0
 /* 00003904:	00000000 */	nop
 /* 00003908:	bbbbbbbb */	swr k1, -17477(sp)
 /* 0000390c:	bbaaaaaa */	swr t2, -21846(sp)

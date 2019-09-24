@@ -6506,7 +6506,7 @@
 /* 00006598:	24f9fefc */	addiu t9, a3, -260
 /* 0000659c:	fafffdfb */	/*illegal*/ .word 0xfafffdfb
 /* 000065a0:	70808078 */	/*illegal*/ .word 0x70808078
-/* 000065a4:	707080ff */	sdbbp 0x1c203
+/* 000065a4:	707080ff */	/*illegal*/ .word 0x707080ff
 /* 000065a8:	78a89898 */	/*illegal*/ .word 0x78a89898
 /* 000065ac:	a0a8a898 */	sb t0, -22376(a1)
 /* 000065b0:	ffa00800 */	/*illegal*/ .word 0xffa00800

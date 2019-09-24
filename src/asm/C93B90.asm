@@ -956,7 +956,7 @@
 /* 00000ee0:	039dff03 */	/*illegal*/ .word 0x039dff03
 /* 00000ee4:	fede0000 */	/*illegal*/ .word 0xfede0000
 /* 00000ee8:	014f0019 */	multu t2, t7
-/* 00000eec:	7301e0ff */	sdbbp 0xc0783
+/* 00000eec:	7301e0ff */	/*illegal*/ .word 0x7301e0ff
 /* 00000ef0:	02710000 */	/*illegal*/ .word 0x02710000
 /* 00000ef4:	ff9c0000 */	/*illegal*/ .word 0xff9c0000
 /* 00000ef8:	01000019 */	multu t0, $zero
@@ -972,7 +972,7 @@
 /* 00000f20:	039d00fd */	/*illegal*/ .word 0x039d00fd
 /* 00000f24:	fede0000 */	/*illegal*/ .word 0xfede0000
 /* 00000f28:	00b00019 */	multu a1, s0
-/* 00000f2c:	73ffe0ff */	sdbbp 0xfff83
+/* 00000f2c:	73ffe0ff */	/*illegal*/ .word 0x73ffe0ff
 /* 00000f30:	02710000 */	/*illegal*/ .word 0x02710000
 /* 00000f34:	ff9c0000 */	/*illegal*/ .word 0xff9c0000
 /* 00000f38:	00700019 */	multu v1, s0

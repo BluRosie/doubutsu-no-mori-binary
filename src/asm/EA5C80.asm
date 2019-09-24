@@ -490,15 +490,15 @@
 /* 00000798:	77700000 */	/*illegal*/ .word 0x77700000
 /* 0000079c:	00000777 */	/*illegal*/ .word 0x00000777
 /* 000007a0:	00000007 */	srav $zero, $zero, $zero
-/* 000007a4:	40000000 */	mfc0 $zero, $zero, 0
-/* 000007a8:	40000000 */	mfc0 $zero, $zero, 0
+/* 000007a4:	40000000 */	mfc0 $zero, $0
+/* 000007a8:	40000000 */	mfc0 $zero, $0
 /* 000007ac:	00000007 */	srav $zero, $zero, $zero
 /* 000007b0:	00000007 */	srav $zero, $zero, $zero
-/* 000007b4:	40000000 */	mfc0 $zero, $zero, 0
-/* 000007b8:	40000000 */	mfc0 $zero, $zero, 0
+/* 000007b4:	40000000 */	mfc0 $zero, $0
+/* 000007b8:	40000000 */	mfc0 $zero, $0
 /* 000007bc:	00000007 */	srav $zero, $zero, $zero
 /* 000007c0:	00000007 */	srav $zero, $zero, $zero
-/* 000007c4:	40000000 */	mfc0 $zero, $zero, 0
+/* 000007c4:	40000000 */	mfc0 $zero, $0
 /* 000007c8:	bb000000 */	swr $zero, 0(t8)
 /* 000007cc:	000000bb */	/*illegal*/ .word 0x000000bb
 /* 000007d0:	000000aa */	/*illegal*/ .word 0x000000aa
