@@ -1,21 +1,21 @@
 .n64
-.create "build/jap/816830.bin", 0
+.create "build/obj/816830.bin", 0
 
-/* 00000000:	000003d0 */	/*illegal*/ .word 0x000003d0
-/* 00000004:	00000070 */	tge $zero, $zero, 0x1
-/* 00000008:	00000000 */	nop
-/* 0000000c:	00000000 */	nop
-/* 00000010:	00000007 */	srav $zero, $zero, $zero
-/* 00000014:	450002c8 */	/*illegal*/ .word 0x450002c8
-/* 00000018:	460002d8 */	/*illegal*/ .word 0x460002d8
-/* 0000001c:	82000014 */	lb $zero, 20(s0)
-/* 00000020:	82000018 */	lb $zero, 24(s0)
-/* 00000024:	8200001c */	lb $zero, 28(s0)
-/* 00000028:	82000020 */	lb $zero, 32(s0)
-/* 0000002c:	82000068 */	lb $zero, 104(s0)
-/* 00000030:	00000000 */	nop
-/* 00000034:	00000000 */	nop
-/* 00000038:	00000000 */	nop
-/* 0000003c:	00000040 */	sll $zero, $zero, 0x1
+	/*illegal*/ .word 0x000003d0
+	tge $zero, $zero, 0x1
+	nop
+	nop
+	srav $zero, $zero, $zero
+	/*illegal*/ .word 0x450002c8
+	/*illegal*/ .word 0x460002d8
+	lb $zero, 20(s0)
+	lb $zero, 24(s0)
+	lb $zero, 28(s0)
+	lb $zero, 32(s0)
+	lb $zero, 104(s0)
+	nop
+	nop
+	nop
+	sll $zero, $zero, 0x1
 
 .close

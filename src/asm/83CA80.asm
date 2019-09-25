@@ -1,25 +1,25 @@
 .n64
-.create "build/jap/83CA80.bin", 0
+.create "build/obj/83CA80.bin", 0
 
-/* 00000000:	06000fa8 */	bltz s0, 0x3ea4
-/* 00000004:	06000904 */	/*illegal*/ .word 0x06000904
-/* 00000008:	3f800000 */	/*illegal*/ .word 0x3f800000
-/* 0000000c:	01704000 */	/*illegal*/ .word 0x01704000
-/* 00000010:	01704fb0 */	tge t3, s0, 0x13e
-/* 00000014:	06000000 */	bltz s0, 0x18
-/* 00000018:	06000fb0 */	/*illegal*/ .word 0x06000fb0
-/* 0000001c:	00000000 */	nop
-/* 00000020:	00000000 */	nop
-/* 00000024:	00000000 */	nop
-/* 00000028:	00000000 */	nop
-/* 0000002c:	06000040 */	/*illegal*/ .word 0x06000040
-/* 00000030:	06000000 */	/*illegal*/ .word 0x06000000
-/* 00000034:	80a7ee40 */	lb a3, -4544(a1)
-/* 00000038:	00000000 */	nop
-/* 0000003c:	41f00000 */	/*illegal*/ .word 0x41f00000
-/* 00000040:	3c23d70a */	/*illegal*/ .word 0x3c23d70a
-/* 00000044:	04000000 */	bltz $zero, 0x48
-/* 00000048:	00000080 */	sll $zero, $zero, 0x2
-/* 0000004c:	00000000 */	nop
+	bltz s0, 0x3ea4
+	/*illegal*/ .word 0x06000904
+	/*illegal*/ .word 0x3f800000
+	/*illegal*/ .word 0x01704000
+	tge t3, s0, 0x13e
+	bltz s0, 0x18
+	/*illegal*/ .word 0x06000fb0
+	nop
+	nop
+	nop
+	nop
+	/*illegal*/ .word 0x06000040
+	/*illegal*/ .word 0x06000000
+	lb a3, -4544(a1)
+	nop
+	/*illegal*/ .word 0x41f00000
+	/*illegal*/ .word 0x3c23d70a
+	bltz $zero, 0x48
+	sll $zero, $zero, 0x2
+	nop
 
 .close

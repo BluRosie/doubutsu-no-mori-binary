@@ -1,41 +1,41 @@
 .n64
-.create "build/jap/FBB720.bin", 0
+.create "build/obj/FBB720.bin", 0
 
-/* 00000000:	09000000 */	j 0x4000000
-/* 00000004:	00000000 */	nop
-/* 00000008:	04010000 */	/*illegal*/ .word 0x04010000
-/* 0000000c:	02000074 */	teq s0, $zero, 0x1
-/* 00000010:	00010000 */	sll $zero, at, 0x0
-/* 00000014:	02000040 */	/*illegal*/ .word 0x02000040
-/* 00000018:	08060000 */	j 0x180000
-/* 0000001c:	00000000 */	nop
-/* 00000020:	010f0000 */	/*illegal*/ .word 0x010f0000
-/* 00000024:	02000050 */	/*illegal*/ .word 0x02000050
-/* 00000028:	03010000 */	/*illegal*/ .word 0x03010000
-/* 0000002c:	02000070 */	tge s0, $zero, 0x1
-/* 00000030:	05010100 */	bgez t0, 0x434
-/* 00000034:	a0000301 */	sb $zero, 769($zero)
-/* 00000038:	0a000000 */	j 0x8000000
-/* 0000003c:	00000000 */	nop
-/* 00000040:	00000140 */	sll $zero, $zero, 0x5
-/* 00000044:	0000021c */	/*illegal*/ .word 0x0000021c
-/* 00000048:	00008000 */	sll s0, $zero, 0x0
-/* 0000004c:	00000000 */	nop
-/* 00000050:	00310025 */	or $zero, at, s1
-/* 00000054:	0022003b */	/*illegal*/ .word 0x0022003b
-/* 00000058:	00440040 */	/*illegal*/ .word 0x00440040
-/* 0000005c:	00210029 */	/*illegal*/ .word 0x00210029
-/* 00000060:	00260034 */	teq at, a2, 0x0
-/* 00000064:	0037000b */	/*illegal*/ .word 0x0037000b
-/* 00000068:	0032009f */	/*illegal*/ .word 0x0032009f
-/* 0000006c:	00800000 */	/*illegal*/ .word 0x00800000
-/* 00000070:	000d0000 */	sll $zero, t5, 0x0
-/* 00000074:	0000001d */	/*illegal*/ .word 0x0000001d
-/* 00000078:	00000000 */	nop
-/* 0000007c:	012c0028 */	/*illegal*/ .word 0x012c0028
-/* 00000080:	00410000 */	/*illegal*/ .word 0x00410000
-/* 00000084:	02000000 */	/*illegal*/ .word 0x02000000
-/* 00000088:	00000000 */	nop
-/* 0000008c:	00000000 */	nop
+	j 0x4000000
+	nop
+	/*illegal*/ .word 0x04010000
+	teq s0, $zero, 0x1
+	sll $zero, at, 0x0
+	/*illegal*/ .word 0x02000040
+	j 0x180000
+	nop
+	/*illegal*/ .word 0x010f0000
+	/*illegal*/ .word 0x02000050
+	/*illegal*/ .word 0x03010000
+	tge s0, $zero, 0x1
+	bgez t0, 0x434
+	sb $zero, 769($zero)
+	j 0x8000000
+	nop
+	sll $zero, $zero, 0x5
+	/*illegal*/ .word 0x0000021c
+	sll s0, $zero, 0x0
+	nop
+	or $zero, at, s1
+	/*illegal*/ .word 0x0022003b
+	/*illegal*/ .word 0x00440040
+	/*illegal*/ .word 0x00210029
+	teq at, a2, 0x0
+	/*illegal*/ .word 0x0037000b
+	/*illegal*/ .word 0x0032009f
+	/*illegal*/ .word 0x00800000
+	sll $zero, t5, 0x0
+	/*illegal*/ .word 0x0000001d
+	nop
+	/*illegal*/ .word 0x012c0028
+	/*illegal*/ .word 0x00410000
+	/*illegal*/ .word 0x02000000
+	nop
+	nop
 
 .close

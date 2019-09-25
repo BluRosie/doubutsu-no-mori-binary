@@ -1,17 +1,17 @@
 .n64
-.create "build/jap/80D250.bin", 0
+.create "build/obj/80D250.bin", 0
 
-/* 00000000:	000003e0 */	/*illegal*/ .word 0x000003e0
-/* 00000004:	00000020 */	add $zero, $zero, $zero
-/* 00000008:	00000000 */	nop
-/* 0000000c:	00000000 */	nop
-/* 00000010:	00000005 */	/*illegal*/ .word 0x00000005
-/* 00000014:	44000194 */	/*illegal*/ .word 0x44000194
-/* 00000018:	82000000 */	lb $zero, 0(s0)
-/* 0000001c:	82000004 */	lb $zero, 4(s0)
-/* 00000020:	82000008 */	lb $zero, 8(s0)
-/* 00000024:	8200000c */	lb $zero, 12(s0)
-/* 00000028:	00000000 */	nop
-/* 0000002c:	00000030 */	tge $zero, $zero, 0x0
+	/*illegal*/ .word 0x000003e0
+	add $zero, $zero, $zero
+	nop
+	nop
+	/*illegal*/ .word 0x00000005
+	/*illegal*/ .word 0x44000194
+	lb $zero, 0(s0)
+	lb $zero, 4(s0)
+	lb $zero, 8(s0)
+	lb $zero, 12(s0)
+	nop
+	tge $zero, $zero, 0x0
 
 .close

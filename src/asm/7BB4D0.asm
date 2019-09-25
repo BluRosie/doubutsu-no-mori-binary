@@ -1,21 +1,21 @@
 .n64
-.create "build/jap/7BB4D0.bin", 0
+.create "build/obj/7BB4D0.bin", 0
 
-/* 00000000:	00000150 */	/*illegal*/ .word 0x00000150
-/* 00000004:	00000040 */	sll $zero, $zero, 0x1
-/* 00000008:	00000000 */	nop
-/* 0000000c:	00000000 */	nop
-/* 00000010:	00000008 */	jr $zero
-/* 00000014:	4500003c */	/*illegal*/ .word 0x4500003c
-/* 00000018:	46000040 */	/*illegal*/ .word 0x46000040
-/* 0000001c:	82000010 */	lb $zero, 16(s0)
-/* 00000020:	82000014 */	lb $zero, 20(s0)
-/* 00000024:	82000018 */	lb $zero, 24(s0)
-/* 00000028:	82000020 */	lb $zero, 32(s0)
-/* 0000002c:	82000024 */	lb $zero, 36(s0)
-/* 00000030:	82000028 */	lb $zero, 40(s0)
-/* 00000034:	00000000 */	nop
-/* 00000038:	00000000 */	nop
-/* 0000003c:	00000040 */	sll $zero, $zero, 0x1
+	/*illegal*/ .word 0x00000150
+	sll $zero, $zero, 0x1
+	nop
+	nop
+	jr $zero
+	/*illegal*/ .word 0x4500003c
+	/*illegal*/ .word 0x46000040
+	lb $zero, 16(s0)
+	lb $zero, 20(s0)
+	lb $zero, 24(s0)
+	lb $zero, 32(s0)
+	lb $zero, 36(s0)
+	lb $zero, 40(s0)
+	nop
+	nop
+	sll $zero, $zero, 0x1
 
 .close

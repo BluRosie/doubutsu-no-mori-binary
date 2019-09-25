@@ -1,25 +1,25 @@
 .n64
-.create "build/jap/FBC390.bin", 0
+.create "build/obj/FBC390.bin", 0
 
-/* 00000000:	800c0000 */	lb t4, 0($zero)
-/* 00000004:	00000000 */	nop
-/* 00000008:	00000000 */	nop
-/* 0000000c:	0101ff00 */	/*illegal*/ .word 0x0101ff00
-/* 00000010:	00000000 */	nop
-/* 00000014:	00000000 */	nop
-/* 00000018:	d0130000 */	/*illegal*/ .word 0xd0130000
-/* 0000001c:	00000000 */	nop
-/* 00000020:	00000000 */	nop
-/* 00000024:	0404ff00 */	/*illegal*/ .word 0x0404ff00
-/* 00000028:	ffff0000 */	/*illegal*/ .word 0xffff0000
-/* 0000002c:	00000000 */	nop
-/* 00000030:	ffff0000 */	/*illegal*/ .word 0xffff0000
-/* 00000034:	00000000 */	nop
-/* 00000038:	00000000 */	nop
-/* 0000003c:	00000000 */	nop
-/* 00000040:	00000000 */	nop
-/* 00000044:	00000000 */	nop
-/* 00000048:	00000000 */	nop
-/* 0000004c:	00000000 */	nop
+	lb t4, 0($zero)
+	nop
+	nop
+	/*illegal*/ .word 0x0101ff00
+	nop
+	nop
+	/*illegal*/ .word 0xd0130000
+	nop
+	nop
+	/*illegal*/ .word 0x0404ff00
+	/*illegal*/ .word 0xffff0000
+	nop
+	/*illegal*/ .word 0xffff0000
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
 
 .close

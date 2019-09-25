@@ -1,273 +1,273 @@
 .n64
-.create "build/jap/77A920.bin", 0
+.create "build/obj/77A920.bin", 0
 
-/* 00000000:	00000ff0 */	tge $zero, $zero, 0x3f
-/* 00000004:	000015a0 */	/*illegal*/ .word 0x000015a0
-/* 00000008:	00000000 */	nop
-/* 0000000c:	00000310 */	/*illegal*/ .word 0x00000310
-/* 00000010:	00000103 */	sra $zero, $zero, 0x4
-/* 00000014:	45000080 */	/*illegal*/ .word 0x45000080
-/* 00000018:	46000084 */	/*illegal*/ .word 0x46000084
-/* 0000001c:	44000210 */	/*illegal*/ .word 0x44000210
-/* 00000020:	4500066c */	/*illegal*/ .word 0x4500066c
-/* 00000024:	46000670 */	/*illegal*/ .word 0x46000670
-/* 00000028:	450006a0 */	/*illegal*/ .word 0x450006a0
-/* 0000002c:	460006a4 */	/*illegal*/ .word 0x460006a4
-/* 00000030:	45000790 */	/*illegal*/ .word 0x45000790
-/* 00000034:	46000794 */	/*illegal*/ .word 0x46000794
-/* 00000038:	450007b8 */	/*illegal*/ .word 0x450007b8
-/* 0000003c:	460007c0 */	/*illegal*/ .word 0x460007c0
-/* 00000040:	450009c0 */	/*illegal*/ .word 0x450009c0
-/* 00000044:	460009c8 */	/*illegal*/ .word 0x460009c8
-/* 00000048:	45000bb0 */	/*illegal*/ .word 0x45000bb0
-/* 0000004c:	46000bb4 */	/*illegal*/ .word 0x46000bb4
-/* 00000050:	45000bc0 */	/*illegal*/ .word 0x45000bc0
-/* 00000054:	46000bcc */	/*illegal*/ .word 0x46000bcc
-/* 00000058:	44000c8c */	/*illegal*/ .word 0x44000c8c
-/* 0000005c:	44000cac */	/*illegal*/ .word 0x44000cac
-/* 00000060:	44000cbc */	/*illegal*/ .word 0x44000cbc
-/* 00000064:	44000cdc */	/*illegal*/ .word 0x44000cdc
-/* 00000068:	44000d04 */	/*illegal*/ .word 0x44000d04
-/* 0000006c:	44000d18 */	/*illegal*/ .word 0x44000d18
-/* 00000070:	44000d3c */	/*illegal*/ .word 0x44000d3c
-/* 00000074:	44000dac */	/*illegal*/ .word 0x44000dac
-/* 00000078:	45000ef0 */	/*illegal*/ .word 0x45000ef0
-/* 0000007c:	46000efc */	/*illegal*/ .word 0x46000efc
-/* 00000080:	44000ef8 */	/*illegal*/ .word 0x44000ef8
-/* 00000084:	44000f10 */	/*illegal*/ .word 0x44000f10
-/* 00000088:	44000f2c */	/*illegal*/ .word 0x44000f2c
-/* 0000008c:	44000f48 */	/*illegal*/ .word 0x44000f48
-/* 00000090:	44000f58 */	/*illegal*/ .word 0x44000f58
-/* 00000094:	45000f64 */	/*illegal*/ .word 0x45000f64
-/* 00000098:	46000f68 */	/*illegal*/ .word 0x46000f68
-/* 0000009c:	44000f80 */	/*illegal*/ .word 0x44000f80
-/* 000000a0:	45000f90 */	/*illegal*/ .word 0x45000f90
-/* 000000a4:	46000fa8 */	/*illegal*/ .word 0x46000fa8
-/* 000000a8:	45000f94 */	/*illegal*/ .word 0x45000f94
-/* 000000ac:	46000fa4 */	/*illegal*/ .word 0x46000fa4
-/* 000000b0:	44000fac */	/*illegal*/ .word 0x44000fac
-/* 000000b4:	45000fb4 */	/*illegal*/ .word 0x45000fb4
-/* 000000b8:	46000fbc */	/*illegal*/ .word 0x46000fbc
-/* 000000bc:	44000fc0 */	/*illegal*/ .word 0x44000fc0
-/* 000000c0:	82000d4c */	lb $zero, 3404(s0)
-/* 000000c4:	82000d54 */	lb $zero, 3412(s0)
-/* 000000c8:	82000d5c */	lb $zero, 3420(s0)
-/* 000000cc:	82000d64 */	lb $zero, 3428(s0)
-/* 000000d0:	82000d6c */	lb $zero, 3436(s0)
-/* 000000d4:	82000d74 */	lb $zero, 3444(s0)
-/* 000000d8:	82000d7c */	lb $zero, 3452(s0)
-/* 000000dc:	82000d84 */	lb $zero, 3460(s0)
-/* 000000e0:	82000d8c */	lb $zero, 3468(s0)
-/* 000000e4:	82000d94 */	lb $zero, 3476(s0)
-/* 000000e8:	82000d9c */	lb $zero, 3484(s0)
-/* 000000ec:	82000da4 */	lb $zero, 3492(s0)
-/* 000000f0:	82000dac */	lb $zero, 3500(s0)
-/* 000000f4:	82000db4 */	lb $zero, 3508(s0)
-/* 000000f8:	82000dbc */	lb $zero, 3516(s0)
-/* 000000fc:	82000dc4 */	lb $zero, 3524(s0)
-/* 00000100:	82000dcc */	lb $zero, 3532(s0)
-/* 00000104:	82000dd4 */	lb $zero, 3540(s0)
-/* 00000108:	82000ddc */	lb $zero, 3548(s0)
-/* 0000010c:	82000de4 */	lb $zero, 3556(s0)
-/* 00000110:	82000dec */	lb $zero, 3564(s0)
-/* 00000114:	82000df4 */	lb $zero, 3572(s0)
-/* 00000118:	82000dfc */	lb $zero, 3580(s0)
-/* 0000011c:	82000e04 */	lb $zero, 3588(s0)
-/* 00000120:	82000e0c */	lb $zero, 3596(s0)
-/* 00000124:	82000e14 */	lb $zero, 3604(s0)
-/* 00000128:	82000e1c */	lb $zero, 3612(s0)
-/* 0000012c:	82000e24 */	lb $zero, 3620(s0)
-/* 00000130:	82000e2c */	lb $zero, 3628(s0)
-/* 00000134:	82000e34 */	lb $zero, 3636(s0)
-/* 00000138:	82000e3c */	lb $zero, 3644(s0)
-/* 0000013c:	82000e44 */	lb $zero, 3652(s0)
-/* 00000140:	82000e4c */	lb $zero, 3660(s0)
-/* 00000144:	82000e54 */	lb $zero, 3668(s0)
-/* 00000148:	82000e5c */	lb $zero, 3676(s0)
-/* 0000014c:	82000e64 */	lb $zero, 3684(s0)
-/* 00000150:	82000e6c */	lb $zero, 3692(s0)
-/* 00000154:	82000e74 */	lb $zero, 3700(s0)
-/* 00000158:	82000e7c */	lb $zero, 3708(s0)
-/* 0000015c:	82000e84 */	lb $zero, 3716(s0)
-/* 00000160:	82000e8c */	lb $zero, 3724(s0)
-/* 00000164:	82000e94 */	lb $zero, 3732(s0)
-/* 00000168:	82000e9c */	lb $zero, 3740(s0)
-/* 0000016c:	82000ea4 */	lb $zero, 3748(s0)
-/* 00000170:	82000eac */	lb $zero, 3756(s0)
-/* 00000174:	82000eb4 */	lb $zero, 3764(s0)
-/* 00000178:	82000ebc */	lb $zero, 3772(s0)
-/* 0000017c:	82000ec4 */	lb $zero, 3780(s0)
-/* 00000180:	82000ecc */	lb $zero, 3788(s0)
-/* 00000184:	82000ed4 */	lb $zero, 3796(s0)
-/* 00000188:	82000edc */	lb $zero, 3804(s0)
-/* 0000018c:	82000ee4 */	lb $zero, 3812(s0)
-/* 00000190:	82000eec */	lb $zero, 3820(s0)
-/* 00000194:	82000ef4 */	lb $zero, 3828(s0)
-/* 00000198:	82000efc */	lb $zero, 3836(s0)
-/* 0000019c:	82000f04 */	lb $zero, 3844(s0)
-/* 000001a0:	82000f0c */	lb $zero, 3852(s0)
-/* 000001a4:	82000f14 */	lb $zero, 3860(s0)
-/* 000001a8:	82000f1c */	lb $zero, 3868(s0)
-/* 000001ac:	82000f24 */	lb $zero, 3876(s0)
-/* 000001b0:	82000f2c */	lb $zero, 3884(s0)
-/* 000001b4:	82000f34 */	lb $zero, 3892(s0)
-/* 000001b8:	82000f3c */	lb $zero, 3900(s0)
-/* 000001bc:	82000f44 */	lb $zero, 3908(s0)
-/* 000001c0:	82000f4c */	lb $zero, 3916(s0)
-/* 000001c4:	82000f54 */	lb $zero, 3924(s0)
-/* 000001c8:	82000f5c */	lb $zero, 3932(s0)
-/* 000001cc:	82000f64 */	lb $zero, 3940(s0)
-/* 000001d0:	82000f6c */	lb $zero, 3948(s0)
-/* 000001d4:	82000f74 */	lb $zero, 3956(s0)
-/* 000001d8:	82000f7c */	lb $zero, 3964(s0)
-/* 000001dc:	82000f84 */	lb $zero, 3972(s0)
-/* 000001e0:	82000f8c */	lb $zero, 3980(s0)
-/* 000001e4:	82000f94 */	lb $zero, 3988(s0)
-/* 000001e8:	82000f9c */	lb $zero, 3996(s0)
-/* 000001ec:	82000fa4 */	lb $zero, 4004(s0)
-/* 000001f0:	82000fac */	lb $zero, 4012(s0)
-/* 000001f4:	82000fb4 */	lb $zero, 4020(s0)
-/* 000001f8:	82000fbc */	lb $zero, 4028(s0)
-/* 000001fc:	82000fc4 */	lb $zero, 4036(s0)
-/* 00000200:	82000fcc */	lb $zero, 4044(s0)
-/* 00000204:	82000fd4 */	lb $zero, 4052(s0)
-/* 00000208:	82000fdc */	lb $zero, 4060(s0)
-/* 0000020c:	82000fe4 */	lb $zero, 4068(s0)
-/* 00000210:	82000fec */	lb $zero, 4076(s0)
-/* 00000214:	82000ff4 */	lb $zero, 4084(s0)
-/* 00000218:	82000ffc */	lb $zero, 4092(s0)
-/* 0000021c:	82001004 */	lb $zero, 4100(s0)
-/* 00000220:	8200100c */	lb $zero, 4108(s0)
-/* 00000224:	82001014 */	lb $zero, 4116(s0)
-/* 00000228:	8200101c */	lb $zero, 4124(s0)
-/* 0000022c:	82001024 */	lb $zero, 4132(s0)
-/* 00000230:	8200102c */	lb $zero, 4140(s0)
-/* 00000234:	82001034 */	lb $zero, 4148(s0)
-/* 00000238:	8200103c */	lb $zero, 4156(s0)
-/* 0000023c:	82001044 */	lb $zero, 4164(s0)
-/* 00000240:	8200104c */	lb $zero, 4172(s0)
-/* 00000244:	82001054 */	lb $zero, 4180(s0)
-/* 00000248:	8200105c */	lb $zero, 4188(s0)
-/* 0000024c:	82001064 */	lb $zero, 4196(s0)
-/* 00000250:	8200106c */	lb $zero, 4204(s0)
-/* 00000254:	82001074 */	lb $zero, 4212(s0)
-/* 00000258:	8200107c */	lb $zero, 4220(s0)
-/* 0000025c:	82001084 */	lb $zero, 4228(s0)
-/* 00000260:	8200108c */	lb $zero, 4236(s0)
-/* 00000264:	82001094 */	lb $zero, 4244(s0)
-/* 00000268:	8200109c */	lb $zero, 4252(s0)
-/* 0000026c:	820010a4 */	lb $zero, 4260(s0)
-/* 00000270:	820010ac */	lb $zero, 4268(s0)
-/* 00000274:	820010b4 */	lb $zero, 4276(s0)
-/* 00000278:	820010bc */	lb $zero, 4284(s0)
-/* 0000027c:	820010c4 */	lb $zero, 4292(s0)
-/* 00000280:	820010cc */	lb $zero, 4300(s0)
-/* 00000284:	820010d4 */	lb $zero, 4308(s0)
-/* 00000288:	820010dc */	lb $zero, 4316(s0)
-/* 0000028c:	820010e4 */	lb $zero, 4324(s0)
-/* 00000290:	820010ec */	lb $zero, 4332(s0)
-/* 00000294:	820010f4 */	lb $zero, 4340(s0)
-/* 00000298:	820010fc */	lb $zero, 4348(s0)
-/* 0000029c:	82001104 */	lb $zero, 4356(s0)
-/* 000002a0:	8200110c */	lb $zero, 4364(s0)
-/* 000002a4:	82001114 */	lb $zero, 4372(s0)
-/* 000002a8:	8200111c */	lb $zero, 4380(s0)
-/* 000002ac:	82001124 */	lb $zero, 4388(s0)
-/* 000002b0:	8200112c */	lb $zero, 4396(s0)
-/* 000002b4:	82001134 */	lb $zero, 4404(s0)
-/* 000002b8:	8200113c */	lb $zero, 4412(s0)
-/* 000002bc:	82001144 */	lb $zero, 4420(s0)
-/* 000002c0:	8200114c */	lb $zero, 4428(s0)
-/* 000002c4:	82001154 */	lb $zero, 4436(s0)
-/* 000002c8:	8200115c */	lb $zero, 4444(s0)
-/* 000002cc:	82001164 */	lb $zero, 4452(s0)
-/* 000002d0:	8200116c */	lb $zero, 4460(s0)
-/* 000002d4:	82001174 */	lb $zero, 4468(s0)
-/* 000002d8:	8200117c */	lb $zero, 4476(s0)
-/* 000002dc:	82001184 */	lb $zero, 4484(s0)
-/* 000002e0:	8200118c */	lb $zero, 4492(s0)
-/* 000002e4:	82001194 */	lb $zero, 4500(s0)
-/* 000002e8:	8200119c */	lb $zero, 4508(s0)
-/* 000002ec:	820011a4 */	lb $zero, 4516(s0)
-/* 000002f0:	820011ac */	lb $zero, 4524(s0)
-/* 000002f4:	820011b4 */	lb $zero, 4532(s0)
-/* 000002f8:	820011bc */	lb $zero, 4540(s0)
-/* 000002fc:	820011c4 */	lb $zero, 4548(s0)
-/* 00000300:	820011cc */	lb $zero, 4556(s0)
-/* 00000304:	820011d4 */	lb $zero, 4564(s0)
-/* 00000308:	820011dc */	lb $zero, 4572(s0)
-/* 0000030c:	820011e4 */	lb $zero, 4580(s0)
-/* 00000310:	820011ec */	lb $zero, 4588(s0)
-/* 00000314:	820011f4 */	lb $zero, 4596(s0)
-/* 00000318:	820011fc */	lb $zero, 4604(s0)
-/* 0000031c:	82001204 */	lb $zero, 4612(s0)
-/* 00000320:	8200120c */	lb $zero, 4620(s0)
-/* 00000324:	82001214 */	lb $zero, 4628(s0)
-/* 00000328:	8200121c */	lb $zero, 4636(s0)
-/* 0000032c:	82001224 */	lb $zero, 4644(s0)
-/* 00000330:	8200122c */	lb $zero, 4652(s0)
-/* 00000334:	82001234 */	lb $zero, 4660(s0)
-/* 00000338:	8200123c */	lb $zero, 4668(s0)
-/* 0000033c:	82001244 */	lb $zero, 4676(s0)
-/* 00000340:	8200124c */	lb $zero, 4684(s0)
-/* 00000344:	82001254 */	lb $zero, 4692(s0)
-/* 00000348:	8200125c */	lb $zero, 4700(s0)
-/* 0000034c:	82001264 */	lb $zero, 4708(s0)
-/* 00000350:	8200126c */	lb $zero, 4716(s0)
-/* 00000354:	82001274 */	lb $zero, 4724(s0)
-/* 00000358:	8200127c */	lb $zero, 4732(s0)
-/* 0000035c:	82001284 */	lb $zero, 4740(s0)
-/* 00000360:	8200128c */	lb $zero, 4748(s0)
-/* 00000364:	82001294 */	lb $zero, 4756(s0)
-/* 00000368:	8200129c */	lb $zero, 4764(s0)
-/* 0000036c:	820012a4 */	lb $zero, 4772(s0)
-/* 00000370:	820012ac */	lb $zero, 4780(s0)
-/* 00000374:	820012b4 */	lb $zero, 4788(s0)
-/* 00000378:	820012bc */	lb $zero, 4796(s0)
-/* 0000037c:	820012c4 */	lb $zero, 4804(s0)
-/* 00000380:	820012cc */	lb $zero, 4812(s0)
-/* 00000384:	820012d4 */	lb $zero, 4820(s0)
-/* 00000388:	820012dc */	lb $zero, 4828(s0)
-/* 0000038c:	820012e4 */	lb $zero, 4836(s0)
-/* 00000390:	820012ec */	lb $zero, 4844(s0)
-/* 00000394:	820012f4 */	lb $zero, 4852(s0)
-/* 00000398:	820012fc */	lb $zero, 4860(s0)
-/* 0000039c:	82001304 */	lb $zero, 4868(s0)
-/* 000003a0:	8200130c */	lb $zero, 4876(s0)
-/* 000003a4:	82001314 */	lb $zero, 4884(s0)
-/* 000003a8:	8200131c */	lb $zero, 4892(s0)
-/* 000003ac:	82001324 */	lb $zero, 4900(s0)
-/* 000003b0:	8200132c */	lb $zero, 4908(s0)
-/* 000003b4:	82001334 */	lb $zero, 4916(s0)
-/* 000003b8:	8200133c */	lb $zero, 4924(s0)
-/* 000003bc:	82001344 */	lb $zero, 4932(s0)
-/* 000003c0:	8200134c */	lb $zero, 4940(s0)
-/* 000003c4:	82001354 */	lb $zero, 4948(s0)
-/* 000003c8:	8200135c */	lb $zero, 4956(s0)
-/* 000003cc:	82001364 */	lb $zero, 4964(s0)
-/* 000003d0:	8200136c */	lb $zero, 4972(s0)
-/* 000003d4:	82001374 */	lb $zero, 4980(s0)
-/* 000003d8:	8200137c */	lb $zero, 4988(s0)
-/* 000003dc:	82001384 */	lb $zero, 4996(s0)
-/* 000003e0:	8200138c */	lb $zero, 5004(s0)
-/* 000003e4:	82001394 */	lb $zero, 5012(s0)
-/* 000003e8:	8200139c */	lb $zero, 5020(s0)
-/* 000003ec:	820013a4 */	lb $zero, 5028(s0)
-/* 000003f0:	820013ac */	lb $zero, 5036(s0)
-/* 000003f4:	820013b4 */	lb $zero, 5044(s0)
-/* 000003f8:	820013bc */	lb $zero, 5052(s0)
-/* 000003fc:	820013c4 */	lb $zero, 5060(s0)
-/* 00000400:	820013cc */	lb $zero, 5068(s0)
-/* 00000404:	820013d4 */	lb $zero, 5076(s0)
-/* 00000408:	820013dc */	lb $zero, 5084(s0)
-/* 0000040c:	820013e4 */	lb $zero, 5092(s0)
-/* 00000410:	820013ec */	lb $zero, 5100(s0)
-/* 00000414:	820013f4 */	lb $zero, 5108(s0)
-/* 00000418:	820013fc */	lb $zero, 5116(s0)
-/* 0000041c:	82001404 */	lb $zero, 5124(s0)
-/* 00000420:	00000000 */	nop
-/* 00000424:	00000000 */	nop
-/* 00000428:	00000000 */	nop
-/* 0000042c:	00000430 */	tge $zero, $zero, 0x10
+	tge $zero, $zero, 0x3f
+	/*illegal*/ .word 0x000015a0
+	nop
+	/*illegal*/ .word 0x00000310
+	sra $zero, $zero, 0x4
+	/*illegal*/ .word 0x45000080
+	/*illegal*/ .word 0x46000084
+	/*illegal*/ .word 0x44000210
+	/*illegal*/ .word 0x4500066c
+	/*illegal*/ .word 0x46000670
+	/*illegal*/ .word 0x450006a0
+	/*illegal*/ .word 0x460006a4
+	/*illegal*/ .word 0x45000790
+	/*illegal*/ .word 0x46000794
+	/*illegal*/ .word 0x450007b8
+	/*illegal*/ .word 0x460007c0
+	/*illegal*/ .word 0x450009c0
+	/*illegal*/ .word 0x460009c8
+	/*illegal*/ .word 0x45000bb0
+	/*illegal*/ .word 0x46000bb4
+	/*illegal*/ .word 0x45000bc0
+	/*illegal*/ .word 0x46000bcc
+	/*illegal*/ .word 0x44000c8c
+	/*illegal*/ .word 0x44000cac
+	/*illegal*/ .word 0x44000cbc
+	/*illegal*/ .word 0x44000cdc
+	/*illegal*/ .word 0x44000d04
+	/*illegal*/ .word 0x44000d18
+	/*illegal*/ .word 0x44000d3c
+	/*illegal*/ .word 0x44000dac
+	/*illegal*/ .word 0x45000ef0
+	/*illegal*/ .word 0x46000efc
+	/*illegal*/ .word 0x44000ef8
+	/*illegal*/ .word 0x44000f10
+	/*illegal*/ .word 0x44000f2c
+	/*illegal*/ .word 0x44000f48
+	/*illegal*/ .word 0x44000f58
+	/*illegal*/ .word 0x45000f64
+	/*illegal*/ .word 0x46000f68
+	/*illegal*/ .word 0x44000f80
+	/*illegal*/ .word 0x45000f90
+	/*illegal*/ .word 0x46000fa8
+	/*illegal*/ .word 0x45000f94
+	/*illegal*/ .word 0x46000fa4
+	/*illegal*/ .word 0x44000fac
+	/*illegal*/ .word 0x45000fb4
+	/*illegal*/ .word 0x46000fbc
+	/*illegal*/ .word 0x44000fc0
+	lb $zero, 3404(s0)
+	lb $zero, 3412(s0)
+	lb $zero, 3420(s0)
+	lb $zero, 3428(s0)
+	lb $zero, 3436(s0)
+	lb $zero, 3444(s0)
+	lb $zero, 3452(s0)
+	lb $zero, 3460(s0)
+	lb $zero, 3468(s0)
+	lb $zero, 3476(s0)
+	lb $zero, 3484(s0)
+	lb $zero, 3492(s0)
+	lb $zero, 3500(s0)
+	lb $zero, 3508(s0)
+	lb $zero, 3516(s0)
+	lb $zero, 3524(s0)
+	lb $zero, 3532(s0)
+	lb $zero, 3540(s0)
+	lb $zero, 3548(s0)
+	lb $zero, 3556(s0)
+	lb $zero, 3564(s0)
+	lb $zero, 3572(s0)
+	lb $zero, 3580(s0)
+	lb $zero, 3588(s0)
+	lb $zero, 3596(s0)
+	lb $zero, 3604(s0)
+	lb $zero, 3612(s0)
+	lb $zero, 3620(s0)
+	lb $zero, 3628(s0)
+	lb $zero, 3636(s0)
+	lb $zero, 3644(s0)
+	lb $zero, 3652(s0)
+	lb $zero, 3660(s0)
+	lb $zero, 3668(s0)
+	lb $zero, 3676(s0)
+	lb $zero, 3684(s0)
+	lb $zero, 3692(s0)
+	lb $zero, 3700(s0)
+	lb $zero, 3708(s0)
+	lb $zero, 3716(s0)
+	lb $zero, 3724(s0)
+	lb $zero, 3732(s0)
+	lb $zero, 3740(s0)
+	lb $zero, 3748(s0)
+	lb $zero, 3756(s0)
+	lb $zero, 3764(s0)
+	lb $zero, 3772(s0)
+	lb $zero, 3780(s0)
+	lb $zero, 3788(s0)
+	lb $zero, 3796(s0)
+	lb $zero, 3804(s0)
+	lb $zero, 3812(s0)
+	lb $zero, 3820(s0)
+	lb $zero, 3828(s0)
+	lb $zero, 3836(s0)
+	lb $zero, 3844(s0)
+	lb $zero, 3852(s0)
+	lb $zero, 3860(s0)
+	lb $zero, 3868(s0)
+	lb $zero, 3876(s0)
+	lb $zero, 3884(s0)
+	lb $zero, 3892(s0)
+	lb $zero, 3900(s0)
+	lb $zero, 3908(s0)
+	lb $zero, 3916(s0)
+	lb $zero, 3924(s0)
+	lb $zero, 3932(s0)
+	lb $zero, 3940(s0)
+	lb $zero, 3948(s0)
+	lb $zero, 3956(s0)
+	lb $zero, 3964(s0)
+	lb $zero, 3972(s0)
+	lb $zero, 3980(s0)
+	lb $zero, 3988(s0)
+	lb $zero, 3996(s0)
+	lb $zero, 4004(s0)
+	lb $zero, 4012(s0)
+	lb $zero, 4020(s0)
+	lb $zero, 4028(s0)
+	lb $zero, 4036(s0)
+	lb $zero, 4044(s0)
+	lb $zero, 4052(s0)
+	lb $zero, 4060(s0)
+	lb $zero, 4068(s0)
+	lb $zero, 4076(s0)
+	lb $zero, 4084(s0)
+	lb $zero, 4092(s0)
+	lb $zero, 4100(s0)
+	lb $zero, 4108(s0)
+	lb $zero, 4116(s0)
+	lb $zero, 4124(s0)
+	lb $zero, 4132(s0)
+	lb $zero, 4140(s0)
+	lb $zero, 4148(s0)
+	lb $zero, 4156(s0)
+	lb $zero, 4164(s0)
+	lb $zero, 4172(s0)
+	lb $zero, 4180(s0)
+	lb $zero, 4188(s0)
+	lb $zero, 4196(s0)
+	lb $zero, 4204(s0)
+	lb $zero, 4212(s0)
+	lb $zero, 4220(s0)
+	lb $zero, 4228(s0)
+	lb $zero, 4236(s0)
+	lb $zero, 4244(s0)
+	lb $zero, 4252(s0)
+	lb $zero, 4260(s0)
+	lb $zero, 4268(s0)
+	lb $zero, 4276(s0)
+	lb $zero, 4284(s0)
+	lb $zero, 4292(s0)
+	lb $zero, 4300(s0)
+	lb $zero, 4308(s0)
+	lb $zero, 4316(s0)
+	lb $zero, 4324(s0)
+	lb $zero, 4332(s0)
+	lb $zero, 4340(s0)
+	lb $zero, 4348(s0)
+	lb $zero, 4356(s0)
+	lb $zero, 4364(s0)
+	lb $zero, 4372(s0)
+	lb $zero, 4380(s0)
+	lb $zero, 4388(s0)
+	lb $zero, 4396(s0)
+	lb $zero, 4404(s0)
+	lb $zero, 4412(s0)
+	lb $zero, 4420(s0)
+	lb $zero, 4428(s0)
+	lb $zero, 4436(s0)
+	lb $zero, 4444(s0)
+	lb $zero, 4452(s0)
+	lb $zero, 4460(s0)
+	lb $zero, 4468(s0)
+	lb $zero, 4476(s0)
+	lb $zero, 4484(s0)
+	lb $zero, 4492(s0)
+	lb $zero, 4500(s0)
+	lb $zero, 4508(s0)
+	lb $zero, 4516(s0)
+	lb $zero, 4524(s0)
+	lb $zero, 4532(s0)
+	lb $zero, 4540(s0)
+	lb $zero, 4548(s0)
+	lb $zero, 4556(s0)
+	lb $zero, 4564(s0)
+	lb $zero, 4572(s0)
+	lb $zero, 4580(s0)
+	lb $zero, 4588(s0)
+	lb $zero, 4596(s0)
+	lb $zero, 4604(s0)
+	lb $zero, 4612(s0)
+	lb $zero, 4620(s0)
+	lb $zero, 4628(s0)
+	lb $zero, 4636(s0)
+	lb $zero, 4644(s0)
+	lb $zero, 4652(s0)
+	lb $zero, 4660(s0)
+	lb $zero, 4668(s0)
+	lb $zero, 4676(s0)
+	lb $zero, 4684(s0)
+	lb $zero, 4692(s0)
+	lb $zero, 4700(s0)
+	lb $zero, 4708(s0)
+	lb $zero, 4716(s0)
+	lb $zero, 4724(s0)
+	lb $zero, 4732(s0)
+	lb $zero, 4740(s0)
+	lb $zero, 4748(s0)
+	lb $zero, 4756(s0)
+	lb $zero, 4764(s0)
+	lb $zero, 4772(s0)
+	lb $zero, 4780(s0)
+	lb $zero, 4788(s0)
+	lb $zero, 4796(s0)
+	lb $zero, 4804(s0)
+	lb $zero, 4812(s0)
+	lb $zero, 4820(s0)
+	lb $zero, 4828(s0)
+	lb $zero, 4836(s0)
+	lb $zero, 4844(s0)
+	lb $zero, 4852(s0)
+	lb $zero, 4860(s0)
+	lb $zero, 4868(s0)
+	lb $zero, 4876(s0)
+	lb $zero, 4884(s0)
+	lb $zero, 4892(s0)
+	lb $zero, 4900(s0)
+	lb $zero, 4908(s0)
+	lb $zero, 4916(s0)
+	lb $zero, 4924(s0)
+	lb $zero, 4932(s0)
+	lb $zero, 4940(s0)
+	lb $zero, 4948(s0)
+	lb $zero, 4956(s0)
+	lb $zero, 4964(s0)
+	lb $zero, 4972(s0)
+	lb $zero, 4980(s0)
+	lb $zero, 4988(s0)
+	lb $zero, 4996(s0)
+	lb $zero, 5004(s0)
+	lb $zero, 5012(s0)
+	lb $zero, 5020(s0)
+	lb $zero, 5028(s0)
+	lb $zero, 5036(s0)
+	lb $zero, 5044(s0)
+	lb $zero, 5052(s0)
+	lb $zero, 5060(s0)
+	lb $zero, 5068(s0)
+	lb $zero, 5076(s0)
+	lb $zero, 5084(s0)
+	lb $zero, 5092(s0)
+	lb $zero, 5100(s0)
+	lb $zero, 5108(s0)
+	lb $zero, 5116(s0)
+	lb $zero, 5124(s0)
+	nop
+	nop
+	nop
+	tge $zero, $zero, 0x10
 
 .close

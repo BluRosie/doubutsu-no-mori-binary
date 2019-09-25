@@ -1,29 +1,29 @@
 .n64
-.create "build/jap/836E80.bin", 0
+.create "build/obj/836E80.bin", 0
 
-/* 00000000:	000004b0 */	tge $zero, $zero, 0x12
-/* 00000004:	00000050 */	/*illegal*/ .word 0x00000050
-/* 00000008:	00000000 */	nop
-/* 0000000c:	00000000 */	nop
-/* 00000010:	00000011 */	mthi $zero
-/* 00000014:	44000010 */	/*illegal*/ .word 0x44000010
-/* 00000018:	44000020 */	/*illegal*/ .word 0x44000020
-/* 0000001c:	45000124 */	/*illegal*/ .word 0x45000124
-/* 00000020:	46000128 */	/*illegal*/ .word 0x46000128
-/* 00000024:	45000210 */	/*illegal*/ .word 0x45000210
-/* 00000028:	46000218 */	/*illegal*/ .word 0x46000218
-/* 0000002c:	44000354 */	/*illegal*/ .word 0x44000354
-/* 00000030:	45000360 */	/*illegal*/ .word 0x45000360
-/* 00000034:	46000364 */	/*illegal*/ .word 0x46000364
-/* 00000038:	45000480 */	/*illegal*/ .word 0x45000480
-/* 0000003c:	46000484 */	/*illegal*/ .word 0x46000484
-/* 00000040:	82000010 */	lb $zero, 16(s0)
-/* 00000044:	82000014 */	lb $zero, 20(s0)
-/* 00000048:	82000018 */	lb $zero, 24(s0)
-/* 0000004c:	8200001c */	lb $zero, 28(s0)
-/* 00000050:	82000030 */	lb $zero, 48(s0)
-/* 00000054:	8200004c */	lb $zero, 76(s0)
-/* 00000058:	00000000 */	nop
-/* 0000005c:	00000060 */	/*illegal*/ .word 0x00000060
+	tge $zero, $zero, 0x12
+	/*illegal*/ .word 0x00000050
+	nop
+	nop
+	mthi $zero
+	/*illegal*/ .word 0x44000010
+	/*illegal*/ .word 0x44000020
+	/*illegal*/ .word 0x45000124
+	/*illegal*/ .word 0x46000128
+	/*illegal*/ .word 0x45000210
+	/*illegal*/ .word 0x46000218
+	/*illegal*/ .word 0x44000354
+	/*illegal*/ .word 0x45000360
+	/*illegal*/ .word 0x46000364
+	/*illegal*/ .word 0x45000480
+	/*illegal*/ .word 0x46000484
+	lb $zero, 16(s0)
+	lb $zero, 20(s0)
+	lb $zero, 24(s0)
+	lb $zero, 28(s0)
+	lb $zero, 48(s0)
+	lb $zero, 76(s0)
+	nop
+	/*illegal*/ .word 0x00000060
 
 .close

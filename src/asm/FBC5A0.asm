@@ -1,17 +1,17 @@
 .n64
-.create "build/jap/FBC5A0.bin", 0
+.create "build/obj/FBC5A0.bin", 0
 
-/* 00000000:	d06a0000 */	/*illegal*/ .word 0xd06a0000
-/* 00000004:	00000000 */	nop
-/* 00000008:	00000000 */	nop
-/* 0000000c:	0201ff00 */	/*illegal*/ .word 0x0201ff00
-/* 00000010:	00000000 */	nop
-/* 00000014:	00000000 */	nop
-/* 00000018:	ffff0000 */	/*illegal*/ .word 0xffff0000
-/* 0000001c:	00000000 */	nop
-/* 00000020:	00000000 */	nop
-/* 00000024:	00000000 */	nop
-/* 00000028:	00000000 */	nop
-/* 0000002c:	00000000 */	nop
+	/*illegal*/ .word 0xd06a0000
+	nop
+	nop
+	/*illegal*/ .word 0x0201ff00
+	nop
+	nop
+	/*illegal*/ .word 0xffff0000
+	nop
+	nop
+	nop
+	nop
+	nop
 
 .close

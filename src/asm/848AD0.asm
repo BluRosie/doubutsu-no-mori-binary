@@ -1,61 +1,61 @@
 .n64
-.create "build/jap/848AD0.bin", 0
+.create "build/obj/848AD0.bin", 0
 
-/* 00000000:	afa40000 */	sw a0, 0(sp)
-/* 00000004:	afa50004 */	sw a1, 4(sp)
-/* 00000008:	03e00008 */	jr ra
-/* 0000000c:	00000000 */	nop
-/* 00000010:	27bdffe0 */	addiu sp, sp, -32
-/* 00000014:	44800000 */	/*illegal*/ .word 0x44800000
-/* 00000018:	afbf001c */	sw ra, 28(sp)
-/* 0000001c:	afa7002c */	sw a3, 44(sp)
-/* 00000020:	3c0e8013 */	lui t6, 0x8013
-/* 00000024:	8dce6f2c */	lw t6, 28460(t6)
-/* 00000028:	e7a00010 */	/*illegal*/ .word 0xe7a00010
-/* 0000002c:	44070000 */	/*illegal*/ .word 0x44070000
-/* 00000030:	8dd9003c */	lw t9, 60(t6)
-/* 00000034:	0320f809 */	jalr t9, ra
-/* 00000038:	00000000 */	nop
-/* 0000003c:	8fbf001c */	lw ra, 28(sp)
-/* 00000040:	27bd0020 */	addiu sp, sp, 32
-/* 00000044:	03e00008 */	jr ra
-/* 00000048:	00000000 */	nop
-/* 0000004c:	afa40000 */	sw a0, 0(sp)
-/* 00000050:	afa50004 */	sw a1, 4(sp)
-/* 00000054:	afa60008 */	sw a2, 8(sp)
-/* 00000058:	afa7000c */	sw a3, 12(sp)
-/* 0000005c:	03e00008 */	jr ra
-/* 00000060:	00000000 */	nop
-/* 00000064:	afa40000 */	sw a0, 0(sp)
-/* 00000068:	afa50004 */	sw a1, 4(sp)
-/* 0000006c:	03e00008 */	jr ra
-/* 00000070:	00000000 */	nop
-/* 00000074:	00000000 */	nop
-/* 00000078:	00000000 */	nop
-/* 0000007c:	00000000 */	nop
-/* 00000080:	80a8fbe0 */	lb t0, -1056(a1)
-/* 00000084:	80a8fbf0 */	lb t0, -1040(a1)
-/* 00000088:	80a8fc2c */	lb t0, -980(a1)
-/* 0000008c:	80a8fc44 */	lb t0, -956(a1)
-/* 00000090:	00000000 */	nop
-/* 00000094:	0173b000 */	/*illegal*/ .word 0x0173b000
-/* 00000098:	0173bdf0 */	tge t3, s3, 0x2f7
-/* 0000009c:	06000000 */	bltz s0, 0xa0
-/* 000000a0:	06000df0 */	/*illegal*/ .word 0x06000df0
-/* 000000a4:	06000c60 */	/*illegal*/ .word 0x06000c60
-/* 000000a8:	06000d30 */	/*illegal*/ .word 0x06000d30
-/* 000000ac:	00000000 */	nop
-/* 000000b0:	00000000 */	nop
-/* 000000b4:	06000020 */	/*illegal*/ .word 0x06000020
-/* 000000b8:	06000000 */	/*illegal*/ .word 0x06000000
-/* 000000bc:	00000000 */	nop
-/* 000000c0:	00000000 */	nop
-/* 000000c4:	41900000 */	/*illegal*/ .word 0x41900000
-/* 000000c8:	3c23d70a */	/*illegal*/ .word 0x3c23d70a
-/* 000000cc:	03010000 */	/*illegal*/ .word 0x03010000
-/* 000000d0:	00000008 */	/*illegal*/ .word 0x00000008
-/* 000000d4:	80a8fc60 */	lb t0, -928(a1)
-/* 000000d8:	00000000 */	nop
-/* 000000dc:	00000000 */	nop
+	sw a0, 0(sp)
+	sw a1, 4(sp)
+	jr ra
+	nop
+	addiu sp, sp, -32
+	/*illegal*/ .word 0x44800000
+	sw ra, 28(sp)
+	sw a3, 44(sp)
+	lui t6, 0x8013
+	lw t6, 28460(t6)
+	/*illegal*/ .word 0xe7a00010
+	/*illegal*/ .word 0x44070000
+	lw t9, 60(t6)
+	jalr t9, ra
+	nop
+	lw ra, 28(sp)
+	addiu sp, sp, 32
+	jr ra
+	nop
+	sw a0, 0(sp)
+	sw a1, 4(sp)
+	sw a2, 8(sp)
+	sw a3, 12(sp)
+	jr ra
+	nop
+	sw a0, 0(sp)
+	sw a1, 4(sp)
+	jr ra
+	nop
+	nop
+	nop
+	nop
+	lb t0, -1056(a1)
+	lb t0, -1040(a1)
+	lb t0, -980(a1)
+	lb t0, -956(a1)
+	nop
+	/*illegal*/ .word 0x0173b000
+	tge t3, s3, 0x2f7
+	bltz s0, 0xa0
+	/*illegal*/ .word 0x06000df0
+	/*illegal*/ .word 0x06000c60
+	/*illegal*/ .word 0x06000d30
+	nop
+	nop
+	/*illegal*/ .word 0x06000020
+	/*illegal*/ .word 0x06000000
+	nop
+	nop
+	/*illegal*/ .word 0x41900000
+	/*illegal*/ .word 0x3c23d70a
+	/*illegal*/ .word 0x03010000
+	/*illegal*/ .word 0x00000008
+	lb t0, -928(a1)
+	nop
+	nop
 
 .close

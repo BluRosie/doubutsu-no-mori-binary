@@ -1,21 +1,21 @@
 .n64
-.create "build/jap/806CE0.bin", 0
+.create "build/obj/806CE0.bin", 0
 
-/* 00000000:	00000230 */	tge $zero, $zero, 0x8
-/* 00000004:	00000030 */	tge $zero, $zero, 0x0
-/* 00000008:	00000010 */	mfhi $zero
-/* 0000000c:	00000000 */	nop
-/* 00000010:	00000008 */	jr $zero
-/* 00000014:	45000020 */	/*illegal*/ .word 0x45000020
-/* 00000018:	46000024 */	/*illegal*/ .word 0x46000024
-/* 0000001c:	45000030 */	/*illegal*/ .word 0x45000030
-/* 00000020:	4600004c */	/*illegal*/ .word 0x4600004c
-/* 00000024:	82000000 */	lb $zero, 0(s0)
-/* 00000028:	82000004 */	lb $zero, 4(s0)
-/* 0000002c:	82000008 */	lb $zero, 8(s0)
-/* 00000030:	8200000c */	lb $zero, 12(s0)
-/* 00000034:	00000000 */	nop
-/* 00000038:	00000000 */	nop
-/* 0000003c:	00000040 */	sll $zero, $zero, 0x1
+	tge $zero, $zero, 0x8
+	tge $zero, $zero, 0x0
+	mfhi $zero
+	nop
+	jr $zero
+	/*illegal*/ .word 0x45000020
+	/*illegal*/ .word 0x46000024
+	/*illegal*/ .word 0x45000030
+	/*illegal*/ .word 0x4600004c
+	lb $zero, 0(s0)
+	lb $zero, 4(s0)
+	lb $zero, 8(s0)
+	lb $zero, 12(s0)
+	nop
+	nop
+	sll $zero, $zero, 0x1
 
 .close

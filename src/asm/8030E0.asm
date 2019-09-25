@@ -1,233 +1,233 @@
 .n64
-.create "build/jap/8030E0.bin", 0
+.create "build/obj/8030E0.bin", 0
 
-/* 00000000:	27bdffb0 */	addiu sp, sp, -80
-/* 00000004:	afbf0034 */	sw ra, 52(sp)
-/* 00000008:	afa40050 */	sw a0, 80(sp)
-/* 0000000c:	afa50054 */	sw a1, 84(sp)
-/* 00000010:	afa60058 */	sw a2, 88(sp)
-/* 00000014:	afa7005c */	sw a3, 92(sp)
-/* 00000018:	0c018152 */	jal 0x60548
-/* 0000001c:	8fa40064 */	lw a0, 100(sp)
-/* 00000020:	87ae0062 */	lh t6, 98(sp)
-/* 00000024:	34018000 */	ori at, $zero, 0x8000
-/* 00000028:	0041c821 */	addu t9, v0, at
-/* 0000002c:	01d91823 */	subu v1, t6, t9
-/* 00000030:	3063ffff */	andi v1, v1, 0xffff
-/* 00000034:	28612aab */	slti at, v1, 10923
-/* 00000038:	1020000b */	beq at, $zero, 0x68
-/* 0000003c:	27a80050 */	addiu t0, sp, 80
-/* 00000040:	3c0140c0 */	lui at, 0x40c0
-/* 00000044:	44812000 */	/*illegal*/ .word 0x44812000
-/* 00000048:	3c014160 */	lui at, 0x4160
-/* 0000004c:	44813000 */	/*illegal*/ .word 0x44813000
-/* 00000050:	3c01c100 */	lui at, 0xc100
-/* 00000054:	44814000 */	/*illegal*/ .word 0x44814000
-/* 00000058:	e7a4003c */	/*illegal*/ .word 0xe7a4003c
-/* 0000005c:	e7a60044 */	/*illegal*/ .word 0xe7a60044
-/* 00000060:	1000003d */	beq $zero, $zero, 0x158
-/* 00000064:	e7a80040 */	/*illegal*/ .word 0xe7a80040
-/* 00000068:	28615557 */	slti at, v1, 21847
-/* 0000006c:	1020000a */	beq at, $zero, 0x98
-/* 00000070:	3c014150 */	lui at, 0x4150
-/* 00000074:	44815000 */	/*illegal*/ .word 0x44815000
-/* 00000078:	3c014160 */	lui at, 0x4160
-/* 0000007c:	44818000 */	/*illegal*/ .word 0x44818000
-/* 00000080:	3c01c100 */	lui at, 0xc100
-/* 00000084:	44819000 */	/*illegal*/ .word 0x44819000
-/* 00000088:	e7aa003c */	/*illegal*/ .word 0xe7aa003c
-/* 0000008c:	e7b00044 */	/*illegal*/ .word 0xe7b00044
-/* 00000090:	10000031 */	beq $zero, $zero, 0x158
-/* 00000094:	e7b20040 */	/*illegal*/ .word 0xe7b20040
-/* 00000098:	34018001 */	ori at, $zero, 0x8001
-/* 0000009c:	0061082a */	slt at, v1, at
-/* 000000a0:	1020000a */	beq at, $zero, 0xcc
-/* 000000a4:	3c014150 */	lui at, 0x4150
-/* 000000a8:	44812000 */	/*illegal*/ .word 0x44812000
-/* 000000ac:	3c01c160 */	lui at, 0xc160
-/* 000000b0:	44813000 */	/*illegal*/ .word 0x44813000
-/* 000000b4:	3c01c040 */	lui at, 0xc040
-/* 000000b8:	44814000 */	/*illegal*/ .word 0x44814000
-/* 000000bc:	e7a4003c */	/*illegal*/ .word 0xe7a4003c
-/* 000000c0:	e7a60044 */	/*illegal*/ .word 0xe7a60044
-/* 000000c4:	10000024 */	beq $zero, $zero, 0x158
-/* 000000c8:	e7a80040 */	/*illegal*/ .word 0xe7a80040
-/* 000000cc:	3401aaab */	ori at, $zero, 0xaaab
-/* 000000d0:	0061082a */	slt at, v1, at
-/* 000000d4:	1020000a */	beq at, $zero, 0x100
-/* 000000d8:	3c01c150 */	lui at, 0xc150
-/* 000000dc:	44815000 */	/*illegal*/ .word 0x44815000
-/* 000000e0:	3c01c160 */	lui at, 0xc160
-/* 000000e4:	44818000 */	/*illegal*/ .word 0x44818000
-/* 000000e8:	3c01c040 */	lui at, 0xc040
-/* 000000ec:	44819000 */	/*illegal*/ .word 0x44819000
-/* 000000f0:	e7aa003c */	/*illegal*/ .word 0xe7aa003c
-/* 000000f4:	e7b00044 */	/*illegal*/ .word 0xe7b00044
-/* 000000f8:	10000017 */	beq $zero, $zero, 0x158
-/* 000000fc:	e7b20040 */	/*illegal*/ .word 0xe7b20040
-/* 00000100:	3401d557 */	ori at, $zero, 0xd557
-/* 00000104:	0061082a */	slt at, v1, at
-/* 00000108:	1020000a */	beq at, $zero, 0x134
-/* 0000010c:	3c01c150 */	lui at, 0xc150
-/* 00000110:	44812000 */	/*illegal*/ .word 0x44812000
-/* 00000114:	3c014160 */	lui at, 0x4160
-/* 00000118:	44813000 */	/*illegal*/ .word 0x44813000
-/* 0000011c:	3c01c100 */	lui at, 0xc100
-/* 00000120:	44814000 */	/*illegal*/ .word 0x44814000
-/* 00000124:	e7a4003c */	/*illegal*/ .word 0xe7a4003c
-/* 00000128:	e7a60044 */	/*illegal*/ .word 0xe7a60044
-/* 0000012c:	1000000a */	beq $zero, $zero, 0x158
-/* 00000130:	e7a80040 */	/*illegal*/ .word 0xe7a80040
-/* 00000134:	3c0140e0 */	lui at, 0x40e0
-/* 00000138:	44815000 */	/*illegal*/ .word 0x44815000
-/* 0000013c:	3c014160 */	lui at, 0x4160
-/* 00000140:	44818000 */	/*illegal*/ .word 0x44818000
-/* 00000144:	3c01c100 */	lui at, 0xc100
-/* 00000148:	44819000 */	/*illegal*/ .word 0x44819000
-/* 0000014c:	e7aa003c */	/*illegal*/ .word 0xe7aa003c
-/* 00000150:	e7b00044 */	/*illegal*/ .word 0xe7b00044
-/* 00000154:	e7b20040 */	/*illegal*/ .word 0xe7b20040
-/* 00000158:	8d0a0000 */	lw t2, 0(t0)
-/* 0000015c:	8fac0064 */	lw t4, 100(sp)
-/* 00000160:	97ad006a */	lhu t5, 106(sp)
-/* 00000164:	afaa0004 */	sw t2, 4(sp)
-/* 00000168:	8d060004 */	lw a2, 4(t0)
-/* 0000016c:	8faf005c */	lw t7, 92(sp)
-/* 00000170:	3c188013 */	lui t8, 0x8013
-/* 00000174:	afa60008 */	sw a2, 8(sp)
-/* 00000178:	8d070008 */	lw a3, 8(t0)
-/* 0000017c:	8f186f3c */	lw t8, 28476(t8)
-/* 00000180:	27ab003c */	addiu t3, sp, 60
-/* 00000184:	afab0010 */	sw t3, 16(sp)
-/* 00000188:	afa00028 */	sw $zero, 40(sp)
-/* 0000018c:	afa00024 */	sw $zero, 36(sp)
-/* 00000190:	afa00018 */	sw $zero, 24(sp)
-/* 00000194:	afac0014 */	sw t4, 20(sp)
-/* 00000198:	afad001c */	sw t5, 28(sp)
-/* 0000019c:	afaf0020 */	sw t7, 32(sp)
-/* 000001a0:	afa7000c */	sw a3, 12(sp)
-/* 000001a4:	8f190028 */	lw t9, 40(t8)
-/* 000001a8:	8fa50004 */	lw a1, 4(sp)
-/* 000001ac:	24040011 */	addiu a0, $zero, 17
-/* 000001b0:	0320f809 */	jalr t9, ra
-/* 000001b4:	00000000 */	nop
-/* 000001b8:	8fbf0034 */	lw ra, 52(sp)
-/* 000001bc:	27bd0050 */	addiu sp, sp, 80
-/* 000001c0:	03e00008 */	jr ra
-/* 000001c4:	00000000 */	nop
-/* 000001c8:	44800000 */	/*illegal*/ .word 0x44800000
-/* 000001cc:	afa50004 */	sw a1, 4(sp)
-/* 000001d0:	afa60008 */	sw a2, 8(sp)
-/* 000001d4:	240e000f */	addiu t6, $zero, 15
-/* 000001d8:	a48e0000 */	sh t6, 0(a0)
-/* 000001dc:	e4800034 */	/*illegal*/ .word 0xe4800034
-/* 000001e0:	e4800038 */	/*illegal*/ .word 0xe4800038
-/* 000001e4:	e480003c */	/*illegal*/ .word 0xe480003c
-/* 000001e8:	03e00008 */	jr ra
-/* 000001ec:	00000000 */	nop
-/* 000001f0:	27bdffd0 */	addiu sp, sp, -48
-/* 000001f4:	afb00020 */	sw s0, 32(sp)
-/* 000001f8:	00808025 */	or s0, a0, $zero
-/* 000001fc:	afbf0024 */	sw ra, 36(sp)
-/* 00000200:	afa50034 */	sw a1, 52(sp)
-/* 00000204:	860e0000 */	lh t6, 0(s0)
-/* 00000208:	240f000f */	addiu t7, $zero, 15
-/* 0000020c:	24050006 */	addiu a1, $zero, 6
-/* 00000210:	01eec023 */	subu t8, t7, t6
-/* 00000214:	0018cc00 */	sll t9, t8, 0x10
-/* 00000218:	00194403 */	sra t0, t9, 0x10
-/* 0000021c:	29010005 */	slti at, t0, 5
-/* 00000220:	10200011 */	beq at, $zero, 0x268
-/* 00000224:	a7b8002e */	sh t8, 46(sp)
-/* 00000228:	3c0180a3 */	lui at, 0x80a3
-/* 0000022c:	c424fc90 */	/*illegal*/ .word 0xc424fc90
-/* 00000230:	3c098013 */	lui t1, 0x8013
-/* 00000234:	8d296f3c */	lw t1, 28476(t1)
-/* 00000238:	e7a40010 */	/*illegal*/ .word 0xe7a40010
-/* 0000023c:	00182400 */	sll a0, t8, 0x10
-/* 00000240:	8d390014 */	lw t9, 20(t1)
-/* 00000244:	00042403 */	sra a0, a0, 0x10
-/* 00000248:	00002825 */	or a1, $zero, $zero
-/* 0000024c:	24060005 */	addiu a2, $zero, 5
-/* 00000250:	0320f809 */	jalr t9, ra
-/* 00000254:	24070000 */	addiu a3, $zero, 0
-/* 00000258:	e6000034 */	/*illegal*/ .word 0xe6000034
-/* 0000025c:	e6000038 */	/*illegal*/ .word 0xe6000038
-/* 00000260:	1000000e */	beq $zero, $zero, 0x29c
-/* 00000264:	e600003c */	/*illegal*/ .word 0xe600003c
-/* 00000268:	44803000 */	/*illegal*/ .word 0x44803000
-/* 0000026c:	3c0a8013 */	lui t2, 0x8013
-/* 00000270:	8d4a6f3c */	lw t2, 28476(t2)
-/* 00000274:	e7a60010 */	/*illegal*/ .word 0xe7a60010
-/* 00000278:	3c073c13 */	lui a3, 0x3c13
-/* 0000027c:	8d590014 */	lw t9, 20(t2)
-/* 00000280:	34e774bc */	ori a3, a3, 0x74bc
-/* 00000284:	87a4002e */	lh a0, 46(sp)
-/* 00000288:	0320f809 */	jalr t9, ra
-/* 0000028c:	2406000e */	addiu a2, $zero, 14
-/* 00000290:	e6000034 */	/*illegal*/ .word 0xe6000034
-/* 00000294:	e6000038 */	/*illegal*/ .word 0xe6000038
-/* 00000298:	e600003c */	/*illegal*/ .word 0xe600003c
-/* 0000029c:	8fbf0024 */	lw ra, 36(sp)
-/* 000002a0:	8fb00020 */	lw s0, 32(sp)
-/* 000002a4:	27bd0030 */	addiu sp, sp, 48
-/* 000002a8:	03e00008 */	jr ra
-/* 000002ac:	00000000 */	nop
-/* 000002b0:	27bdffd0 */	addiu sp, sp, -48
-/* 000002b4:	afbf0014 */	sw ra, 20(sp)
-/* 000002b8:	afa40030 */	sw a0, 48(sp)
-/* 000002bc:	afa50034 */	sw a1, 52(sp)
-/* 000002c0:	8fa40034 */	lw a0, 52(sp)
-/* 000002c4:	3c188013 */	lui t8, 0x8013
-/* 000002c8:	8f186f3c */	lw t8, 28476(t8)
-/* 000002cc:	8c880000 */	lw t0, 0(a0)
-/* 000002d0:	8faf0030 */	lw t7, 48(sp)
-/* 000002d4:	afa80020 */	sw t0, 32(sp)
-/* 000002d8:	8f19001c */	lw t9, 28(t8)
-/* 000002dc:	25e50010 */	addiu a1, t7, 16
-/* 000002e0:	25e60034 */	addiu a2, t7, 52
-/* 000002e4:	0320f809 */	jalr t9, ra
-/* 000002e8:	25e70040 */	addiu a3, t7, 64
-/* 000002ec:	8fa80020 */	lw t0, 32(sp)
-/* 000002f0:	8d0202a8 */	lw v0, 680(t0)
-/* 000002f4:	3c0adb06 */	lui t2, 0xdb06
-/* 000002f8:	354a0020 */	ori t2, t2, 0x20
-/* 000002fc:	24490008 */	addiu t1, v0, 8
-/* 00000300:	ad0902a8 */	sw t1, 680(t0)
-/* 00000304:	3c040601 */	lui a0, 0x601
-/* 00000308:	ac4a0000 */	sw t2, 0(v0)
-/* 0000030c:	afa80020 */	sw t0, 32(sp)
-/* 00000310:	24841db0 */	addiu a0, a0, 7600
-/* 00000314:	0c026b6a */	jal 0x9ada8
-/* 00000318:	afa20018 */	sw v0, 24(sp)
-/* 0000031c:	8fa30018 */	lw v1, 24(sp)
-/* 00000320:	8fa80020 */	lw t0, 32(sp)
-/* 00000324:	3c0cde00 */	lui t4, 0xde00
-/* 00000328:	ac620004 */	sw v0, 4(v1)
-/* 0000032c:	8d0202a8 */	lw v0, 680(t0)
-/* 00000330:	3c0d0601 */	lui t5, 0x601
-/* 00000334:	25ad1d18 */	addiu t5, t5, 7448
-/* 00000338:	244b0008 */	addiu t3, v0, 8
-/* 0000033c:	ad0b02a8 */	sw t3, 680(t0)
-/* 00000340:	ac4d0004 */	sw t5, 4(v0)
-/* 00000344:	ac4c0000 */	sw t4, 0(v0)
-/* 00000348:	8fbf0014 */	lw ra, 20(sp)
-/* 0000034c:	27bd0030 */	addiu sp, sp, 48
-/* 00000350:	03e00008 */	jr ra
-/* 00000354:	00000000 */	nop
-/* 00000358:	00000000 */	nop
-/* 0000035c:	00000000 */	nop
-/* 00000360:	80a2f910 */	lb v0, -1776(a1)
-/* 00000364:	80a2fad8 */	lb v0, -1320(a1)
-/* 00000368:	80a2fb00 */	lb v0, -1280(a1)
-/* 0000036c:	80a2fbc0 */	lb v0, -1088(a1)
-/* 00000370:	ffff00ff */	/*illegal*/ .word 0xffff00ff
-/* 00000374:	44480000 */	/*illegal*/ .word 0x44480000
-/* 00000378:	00000000 */	nop
-/* 0000037c:	00000000 */	nop
-/* 00000380:	3c1374bc */	lui s3, 0x74bc
-/* 00000384:	00000000 */	nop
-/* 00000388:	00000000 */	nop
-/* 0000038c:	00000000 */	nop
+	addiu sp, sp, -80
+	sw ra, 52(sp)
+	sw a0, 80(sp)
+	sw a1, 84(sp)
+	sw a2, 88(sp)
+	sw a3, 92(sp)
+	jal 0x60548
+	lw a0, 100(sp)
+	lh t6, 98(sp)
+	ori at, $zero, 0x8000
+	addu t9, v0, at
+	subu v1, t6, t9
+	andi v1, v1, 0xffff
+	slti at, v1, 10923
+	beq at, $zero, 0x68
+	addiu t0, sp, 80
+	lui at, 0x40c0
+	/*illegal*/ .word 0x44812000
+	lui at, 0x4160
+	/*illegal*/ .word 0x44813000
+	lui at, 0xc100
+	/*illegal*/ .word 0x44814000
+	/*illegal*/ .word 0xe7a4003c
+	/*illegal*/ .word 0xe7a60044
+	beq $zero, $zero, 0x158
+	/*illegal*/ .word 0xe7a80040
+	slti at, v1, 21847
+	beq at, $zero, 0x98
+	lui at, 0x4150
+	/*illegal*/ .word 0x44815000
+	lui at, 0x4160
+	/*illegal*/ .word 0x44818000
+	lui at, 0xc100
+	/*illegal*/ .word 0x44819000
+	/*illegal*/ .word 0xe7aa003c
+	/*illegal*/ .word 0xe7b00044
+	beq $zero, $zero, 0x158
+	/*illegal*/ .word 0xe7b20040
+	ori at, $zero, 0x8001
+	slt at, v1, at
+	beq at, $zero, 0xcc
+	lui at, 0x4150
+	/*illegal*/ .word 0x44812000
+	lui at, 0xc160
+	/*illegal*/ .word 0x44813000
+	lui at, 0xc040
+	/*illegal*/ .word 0x44814000
+	/*illegal*/ .word 0xe7a4003c
+	/*illegal*/ .word 0xe7a60044
+	beq $zero, $zero, 0x158
+	/*illegal*/ .word 0xe7a80040
+	ori at, $zero, 0xaaab
+	slt at, v1, at
+	beq at, $zero, 0x100
+	lui at, 0xc150
+	/*illegal*/ .word 0x44815000
+	lui at, 0xc160
+	/*illegal*/ .word 0x44818000
+	lui at, 0xc040
+	/*illegal*/ .word 0x44819000
+	/*illegal*/ .word 0xe7aa003c
+	/*illegal*/ .word 0xe7b00044
+	beq $zero, $zero, 0x158
+	/*illegal*/ .word 0xe7b20040
+	ori at, $zero, 0xd557
+	slt at, v1, at
+	beq at, $zero, 0x134
+	lui at, 0xc150
+	/*illegal*/ .word 0x44812000
+	lui at, 0x4160
+	/*illegal*/ .word 0x44813000
+	lui at, 0xc100
+	/*illegal*/ .word 0x44814000
+	/*illegal*/ .word 0xe7a4003c
+	/*illegal*/ .word 0xe7a60044
+	beq $zero, $zero, 0x158
+	/*illegal*/ .word 0xe7a80040
+	lui at, 0x40e0
+	/*illegal*/ .word 0x44815000
+	lui at, 0x4160
+	/*illegal*/ .word 0x44818000
+	lui at, 0xc100
+	/*illegal*/ .word 0x44819000
+	/*illegal*/ .word 0xe7aa003c
+	/*illegal*/ .word 0xe7b00044
+	/*illegal*/ .word 0xe7b20040
+	lw t2, 0(t0)
+	lw t4, 100(sp)
+	lhu t5, 106(sp)
+	sw t2, 4(sp)
+	lw a2, 4(t0)
+	lw t7, 92(sp)
+	lui t8, 0x8013
+	sw a2, 8(sp)
+	lw a3, 8(t0)
+	lw t8, 28476(t8)
+	addiu t3, sp, 60
+	sw t3, 16(sp)
+	sw $zero, 40(sp)
+	sw $zero, 36(sp)
+	sw $zero, 24(sp)
+	sw t4, 20(sp)
+	sw t5, 28(sp)
+	sw t7, 32(sp)
+	sw a3, 12(sp)
+	lw t9, 40(t8)
+	lw a1, 4(sp)
+	addiu a0, $zero, 17
+	jalr t9, ra
+	nop
+	lw ra, 52(sp)
+	addiu sp, sp, 80
+	jr ra
+	nop
+	/*illegal*/ .word 0x44800000
+	sw a1, 4(sp)
+	sw a2, 8(sp)
+	addiu t6, $zero, 15
+	sh t6, 0(a0)
+	/*illegal*/ .word 0xe4800034
+	/*illegal*/ .word 0xe4800038
+	/*illegal*/ .word 0xe480003c
+	jr ra
+	nop
+	addiu sp, sp, -48
+	sw s0, 32(sp)
+	or s0, a0, $zero
+	sw ra, 36(sp)
+	sw a1, 52(sp)
+	lh t6, 0(s0)
+	addiu t7, $zero, 15
+	addiu a1, $zero, 6
+	subu t8, t7, t6
+	sll t9, t8, 0x10
+	sra t0, t9, 0x10
+	slti at, t0, 5
+	beq at, $zero, 0x268
+	sh t8, 46(sp)
+	lui at, 0x80a3
+	/*illegal*/ .word 0xc424fc90
+	lui t1, 0x8013
+	lw t1, 28476(t1)
+	/*illegal*/ .word 0xe7a40010
+	sll a0, t8, 0x10
+	lw t9, 20(t1)
+	sra a0, a0, 0x10
+	or a1, $zero, $zero
+	addiu a2, $zero, 5
+	jalr t9, ra
+	addiu a3, $zero, 0
+	/*illegal*/ .word 0xe6000034
+	/*illegal*/ .word 0xe6000038
+	beq $zero, $zero, 0x29c
+	/*illegal*/ .word 0xe600003c
+	/*illegal*/ .word 0x44803000
+	lui t2, 0x8013
+	lw t2, 28476(t2)
+	/*illegal*/ .word 0xe7a60010
+	lui a3, 0x3c13
+	lw t9, 20(t2)
+	ori a3, a3, 0x74bc
+	lh a0, 46(sp)
+	jalr t9, ra
+	addiu a2, $zero, 14
+	/*illegal*/ .word 0xe6000034
+	/*illegal*/ .word 0xe6000038
+	/*illegal*/ .word 0xe600003c
+	lw ra, 36(sp)
+	lw s0, 32(sp)
+	addiu sp, sp, 48
+	jr ra
+	nop
+	addiu sp, sp, -48
+	sw ra, 20(sp)
+	sw a0, 48(sp)
+	sw a1, 52(sp)
+	lw a0, 52(sp)
+	lui t8, 0x8013
+	lw t8, 28476(t8)
+	lw t0, 0(a0)
+	lw t7, 48(sp)
+	sw t0, 32(sp)
+	lw t9, 28(t8)
+	addiu a1, t7, 16
+	addiu a2, t7, 52
+	jalr t9, ra
+	addiu a3, t7, 64
+	lw t0, 32(sp)
+	lw v0, 680(t0)
+	lui t2, 0xdb06
+	ori t2, t2, 0x20
+	addiu t1, v0, 8
+	sw t1, 680(t0)
+	lui a0, 0x601
+	sw t2, 0(v0)
+	sw t0, 32(sp)
+	addiu a0, a0, 7600
+	jal 0x9ada8
+	sw v0, 24(sp)
+	lw v1, 24(sp)
+	lw t0, 32(sp)
+	lui t4, 0xde00
+	sw v0, 4(v1)
+	lw v0, 680(t0)
+	lui t5, 0x601
+	addiu t5, t5, 7448
+	addiu t3, v0, 8
+	sw t3, 680(t0)
+	sw t5, 4(v0)
+	sw t4, 0(v0)
+	lw ra, 20(sp)
+	addiu sp, sp, 48
+	jr ra
+	nop
+	nop
+	nop
+	lb v0, -1776(a1)
+	lb v0, -1320(a1)
+	lb v0, -1280(a1)
+	lb v0, -1088(a1)
+	/*illegal*/ .word 0xffff00ff
+	/*illegal*/ .word 0x44480000
+	nop
+	nop
+	lui s3, 0x74bc
+	nop
+	nop
+	nop
 
 .close

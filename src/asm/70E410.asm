@@ -1,21 +1,21 @@
 .n64
-.create "build/jap/70E410.bin", 0
+.create "build/obj/70E410.bin", 0
 
-/* 00000000:	000003c0 */	sll $zero, $zero, 0xf
-/* 00000004:	00000000 */	nop
-/* 00000008:	00000010 */	mfhi $zero
-/* 0000000c:	00000000 */	nop
-/* 00000010:	00000008 */	jr $zero
-/* 00000014:	45000144 */	/*illegal*/ .word 0x45000144
-/* 00000018:	46000148 */	/*illegal*/ .word 0x46000148
-/* 0000001c:	4400032c */	/*illegal*/ .word 0x4400032c
-/* 00000020:	44000334 */	/*illegal*/ .word 0x44000334
-/* 00000024:	45000384 */	/*illegal*/ .word 0x45000384
-/* 00000028:	4600038c */	/*illegal*/ .word 0x4600038c
-/* 0000002c:	45000388 */	/*illegal*/ .word 0x45000388
-/* 00000030:	46000390 */	/*illegal*/ .word 0x46000390
-/* 00000034:	00000000 */	nop
-/* 00000038:	00000000 */	nop
-/* 0000003c:	00000040 */	sll $zero, $zero, 0x1
+	sll $zero, $zero, 0xf
+	nop
+	mfhi $zero
+	nop
+	jr $zero
+	/*illegal*/ .word 0x45000144
+	/*illegal*/ .word 0x46000148
+	/*illegal*/ .word 0x4400032c
+	/*illegal*/ .word 0x44000334
+	/*illegal*/ .word 0x45000384
+	/*illegal*/ .word 0x4600038c
+	/*illegal*/ .word 0x45000388
+	/*illegal*/ .word 0x46000390
+	nop
+	nop
+	sll $zero, $zero, 0x1
 
 .close

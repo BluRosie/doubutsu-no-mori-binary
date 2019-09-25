@@ -1,29 +1,29 @@
 .n64
-.create "build/jap/810950.bin", 0
+.create "build/obj/810950.bin", 0
 
-/* 00000000:	00000390 */	/*illegal*/ .word 0x00000390
-/* 00000004:	00000090 */	/*illegal*/ .word 0x00000090
-/* 00000008:	00000010 */	mfhi $zero
-/* 0000000c:	00000000 */	nop
-/* 00000010:	0000000f */	sync
-/* 00000014:	4400005c */	/*illegal*/ .word 0x4400005c
-/* 00000018:	44000150 */	/*illegal*/ .word 0x44000150
-/* 0000001c:	4500016c */	/*illegal*/ .word 0x4500016c
-/* 00000020:	46000170 */	/*illegal*/ .word 0x46000170
-/* 00000024:	450001cc */	/*illegal*/ .word 0x450001cc
-/* 00000028:	460001d0 */	/*illegal*/ .word 0x460001d0
-/* 0000002c:	45000204 */	/*illegal*/ .word 0x45000204
-/* 00000030:	46000230 */	/*illegal*/ .word 0x46000230
-/* 00000034:	45000314 */	/*illegal*/ .word 0x45000314
-/* 00000038:	46000320 */	/*illegal*/ .word 0x46000320
-/* 0000003c:	82000034 */	lb $zero, 52(s0)
-/* 00000040:	82000038 */	lb $zero, 56(s0)
-/* 00000044:	8200003c */	lb $zero, 60(s0)
-/* 00000048:	82000040 */	lb $zero, 64(s0)
-/* 0000004c:	82000088 */	lb $zero, 136(s0)
-/* 00000050:	00000000 */	nop
-/* 00000054:	00000000 */	nop
-/* 00000058:	00000000 */	nop
-/* 0000005c:	00000060 */	/*illegal*/ .word 0x00000060
+	/*illegal*/ .word 0x00000390
+	/*illegal*/ .word 0x00000090
+	mfhi $zero
+	nop
+	sync
+	/*illegal*/ .word 0x4400005c
+	/*illegal*/ .word 0x44000150
+	/*illegal*/ .word 0x4500016c
+	/*illegal*/ .word 0x46000170
+	/*illegal*/ .word 0x450001cc
+	/*illegal*/ .word 0x460001d0
+	/*illegal*/ .word 0x45000204
+	/*illegal*/ .word 0x46000230
+	/*illegal*/ .word 0x45000314
+	/*illegal*/ .word 0x46000320
+	lb $zero, 52(s0)
+	lb $zero, 56(s0)
+	lb $zero, 60(s0)
+	lb $zero, 64(s0)
+	lb $zero, 136(s0)
+	nop
+	nop
+	nop
+	/*illegal*/ .word 0x00000060
 
 .close

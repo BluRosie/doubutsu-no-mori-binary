@@ -1,21 +1,21 @@
 .n64
-.create "build/jap/81A1A0.bin", 0
+.create "build/obj/81A1A0.bin", 0
 
-/* 00000000:	00000430 */	tge $zero, $zero, 0x10
-/* 00000004:	000000e0 */	/*illegal*/ .word 0x000000e0
-/* 00000008:	00000000 */	nop
-/* 0000000c:	00000000 */	nop
-/* 00000010:	00000009 */	/*illegal*/ .word 0x00000009
-/* 00000014:	4500039c */	/*illegal*/ .word 0x4500039c
-/* 00000018:	460003b0 */	/*illegal*/ .word 0x460003b0
-/* 0000001c:	450003b4 */	/*illegal*/ .word 0x450003b4
-/* 00000020:	460003c8 */	/*illegal*/ .word 0x460003c8
-/* 00000024:	82000084 */	lb $zero, 132(s0)
-/* 00000028:	82000088 */	lb $zero, 136(s0)
-/* 0000002c:	8200008c */	lb $zero, 140(s0)
-/* 00000030:	82000090 */	lb $zero, 144(s0)
-/* 00000034:	820000d8 */	lb $zero, 216(s0)
-/* 00000038:	00000000 */	nop
-/* 0000003c:	00000040 */	sll $zero, $zero, 0x1
+	tge $zero, $zero, 0x10
+	/*illegal*/ .word 0x000000e0
+	nop
+	nop
+	/*illegal*/ .word 0x00000009
+	/*illegal*/ .word 0x4500039c
+	/*illegal*/ .word 0x460003b0
+	/*illegal*/ .word 0x450003b4
+	/*illegal*/ .word 0x460003c8
+	lb $zero, 132(s0)
+	lb $zero, 136(s0)
+	lb $zero, 140(s0)
+	lb $zero, 144(s0)
+	lb $zero, 216(s0)
+	nop
+	sll $zero, $zero, 0x1
 
 .close

@@ -1,21 +1,21 @@
 .n64
-.create "build/jap/7FA5C0.bin", 0
+.create "build/obj/7FA5C0.bin", 0
 
-/* 00000000:	00000290 */	/*illegal*/ .word 0x00000290
-/* 00000004:	00000050 */	/*illegal*/ .word 0x00000050
-/* 00000008:	00000010 */	mfhi $zero
-/* 0000000c:	00000000 */	nop
-/* 00000010:	0000000a */	/*illegal*/ .word 0x0000000a
-/* 00000014:	45000024 */	/*illegal*/ .word 0x45000024
-/* 00000018:	46000028 */	/*illegal*/ .word 0x46000028
-/* 0000001c:	450001a4 */	/*illegal*/ .word 0x450001a4
-/* 00000020:	460001b8 */	/*illegal*/ .word 0x460001b8
-/* 00000024:	45000214 */	/*illegal*/ .word 0x45000214
-/* 00000028:	46000220 */	/*illegal*/ .word 0x46000220
-/* 0000002c:	82000000 */	lb $zero, 0(s0)
-/* 00000030:	82000004 */	lb $zero, 4(s0)
-/* 00000034:	82000008 */	lb $zero, 8(s0)
-/* 00000038:	8200000c */	lb $zero, 12(s0)
-/* 0000003c:	00000040 */	sll $zero, $zero, 0x1
+	/*illegal*/ .word 0x00000290
+	/*illegal*/ .word 0x00000050
+	mfhi $zero
+	nop
+	/*illegal*/ .word 0x0000000a
+	/*illegal*/ .word 0x45000024
+	/*illegal*/ .word 0x46000028
+	/*illegal*/ .word 0x450001a4
+	/*illegal*/ .word 0x460001b8
+	/*illegal*/ .word 0x45000214
+	/*illegal*/ .word 0x46000220
+	lb $zero, 0(s0)
+	lb $zero, 4(s0)
+	lb $zero, 8(s0)
+	lb $zero, 12(s0)
+	sll $zero, $zero, 0x1
 
 .close

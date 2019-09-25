@@ -1,41 +1,41 @@
 .n64
-.create "build/jap/80CE40.bin", 0
+.create "build/obj/80CE40.bin", 0
 
-/* 00000000:	00000500 */	sll $zero, $zero, 0x14
-/* 00000004:	00000160 */	/*illegal*/ .word 0x00000160
-/* 00000008:	00000000 */	nop
-/* 0000000c:	00000000 */	nop
-/* 00000010:	0000001c */	/*illegal*/ .word 0x0000001c
-/* 00000014:	45000014 */	/*illegal*/ .word 0x45000014
-/* 00000018:	46000018 */	/*illegal*/ .word 0x46000018
-/* 0000001c:	45000064 */	/*illegal*/ .word 0x45000064
-/* 00000020:	46000070 */	/*illegal*/ .word 0x46000070
-/* 00000024:	44000184 */	/*illegal*/ .word 0x44000184
-/* 00000028:	45000310 */	/*illegal*/ .word 0x45000310
-/* 0000002c:	46000330 */	/*illegal*/ .word 0x46000330
-/* 00000030:	4400033c */	/*illegal*/ .word 0x4400033c
-/* 00000034:	82000000 */	lb $zero, 0(s0)
-/* 00000038:	82000004 */	lb $zero, 4(s0)
-/* 0000003c:	82000008 */	lb $zero, 8(s0)
-/* 00000040:	8200000c */	lb $zero, 12(s0)
-/* 00000044:	82000044 */	lb $zero, 68(s0)
-/* 00000048:	82000060 */	lb $zero, 96(s0)
-/* 0000004c:	8200007c */	lb $zero, 124(s0)
-/* 00000050:	82000098 */	lb $zero, 152(s0)
-/* 00000054:	820000c0 */	lb $zero, 192(s0)
-/* 00000058:	820000e8 */	lb $zero, 232(s0)
-/* 0000005c:	82000110 */	lb $zero, 272(s0)
-/* 00000060:	82000138 */	lb $zero, 312(s0)
-/* 00000064:	82000140 */	lb $zero, 320(s0)
-/* 00000068:	82000144 */	lb $zero, 324(s0)
-/* 0000006c:	82000148 */	lb $zero, 328(s0)
-/* 00000070:	8200014c */	lb $zero, 332(s0)
-/* 00000074:	82000150 */	lb $zero, 336(s0)
-/* 00000078:	82000154 */	lb $zero, 340(s0)
-/* 0000007c:	82000158 */	lb $zero, 344(s0)
-/* 00000080:	8200015c */	lb $zero, 348(s0)
-/* 00000084:	00000000 */	nop
-/* 00000088:	00000000 */	nop
-/* 0000008c:	00000090 */	/*illegal*/ .word 0x00000090
+	sll $zero, $zero, 0x14
+	/*illegal*/ .word 0x00000160
+	nop
+	nop
+	/*illegal*/ .word 0x0000001c
+	/*illegal*/ .word 0x45000014
+	/*illegal*/ .word 0x46000018
+	/*illegal*/ .word 0x45000064
+	/*illegal*/ .word 0x46000070
+	/*illegal*/ .word 0x44000184
+	/*illegal*/ .word 0x45000310
+	/*illegal*/ .word 0x46000330
+	/*illegal*/ .word 0x4400033c
+	lb $zero, 0(s0)
+	lb $zero, 4(s0)
+	lb $zero, 8(s0)
+	lb $zero, 12(s0)
+	lb $zero, 68(s0)
+	lb $zero, 96(s0)
+	lb $zero, 124(s0)
+	lb $zero, 152(s0)
+	lb $zero, 192(s0)
+	lb $zero, 232(s0)
+	lb $zero, 272(s0)
+	lb $zero, 312(s0)
+	lb $zero, 320(s0)
+	lb $zero, 324(s0)
+	lb $zero, 328(s0)
+	lb $zero, 332(s0)
+	lb $zero, 336(s0)
+	lb $zero, 340(s0)
+	lb $zero, 344(s0)
+	lb $zero, 348(s0)
+	nop
+	nop
+	/*illegal*/ .word 0x00000090
 
 .close

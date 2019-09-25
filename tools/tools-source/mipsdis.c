@@ -358,6 +358,9 @@ static uint32_t hex_to_u32(const char *s)
     return (uint32_t) strtoul(s, 0, 16);
 }
 
+//#define DEBUG
+// define DEBUG to get the address and opcode in hex.  the output will still be compilable, though
+
 /*
  * For each line of the given stream, call the decoder and print the
  * input address, opcode and disasm to stdout.
@@ -398,6 +401,7 @@ static void decode_stream(FILE * stream)
         address = hex_to_u32(addrtok);
         opcode = hex_to_u32(optok);
 
+        #ifdef DEBUG
         if (!opcode)
             printf("/* %08x:\t%08x */\tnop\n", address, opcode);
         else
@@ -405,6 +409,15 @@ static void decode_stream(FILE * stream)
             decode(outbuf, 64, address, opcode);
             printf("/* %08x:\t%08x */\t%s\n", address, opcode, outbuf);
         }
+        #else
+        if (!opcode)
+            printf("\tnop\n");
+        else
+        {
+            decode(outbuf, 64, address, opcode);
+            printf("\t%s\n", outbuf);
+        }
+        #endif // DEBUG
     }
 
     printf("\n.close\n");

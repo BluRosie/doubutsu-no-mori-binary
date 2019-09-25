@@ -1,25 +1,25 @@
 .n64
-.create "build/jap/801D90.bin", 0
+.create "build/obj/801D90.bin", 0
 
-/* 00000000:	00000210 */	/*illegal*/ .word 0x00000210
-/* 00000004:	00000030 */	tge $zero, $zero, 0x0
-/* 00000008:	00000010 */	mfhi $zero
-/* 0000000c:	00000000 */	nop
-/* 00000010:	0000000c */	syscall 0x0
-/* 00000014:	450000a4 */	/*illegal*/ .word 0x450000a4
-/* 00000018:	460000a8 */	/*illegal*/ .word 0x460000a8
-/* 0000001c:	45000134 */	/*illegal*/ .word 0x45000134
-/* 00000020:	46000150 */	/*illegal*/ .word 0x46000150
-/* 00000024:	45000154 */	/*illegal*/ .word 0x45000154
-/* 00000028:	46000160 */	/*illegal*/ .word 0x46000160
-/* 0000002c:	450001ac */	/*illegal*/ .word 0x450001ac
-/* 00000030:	460001bc */	/*illegal*/ .word 0x460001bc
-/* 00000034:	82000000 */	lb $zero, 0(s0)
-/* 00000038:	82000004 */	lb $zero, 4(s0)
-/* 0000003c:	82000008 */	lb $zero, 8(s0)
-/* 00000040:	8200000c */	lb $zero, 12(s0)
-/* 00000044:	00000000 */	nop
-/* 00000048:	00000000 */	nop
-/* 0000004c:	00000050 */	/*illegal*/ .word 0x00000050
+	/*illegal*/ .word 0x00000210
+	tge $zero, $zero, 0x0
+	mfhi $zero
+	nop
+	syscall 0x0
+	/*illegal*/ .word 0x450000a4
+	/*illegal*/ .word 0x460000a8
+	/*illegal*/ .word 0x45000134
+	/*illegal*/ .word 0x46000150
+	/*illegal*/ .word 0x45000154
+	/*illegal*/ .word 0x46000160
+	/*illegal*/ .word 0x450001ac
+	/*illegal*/ .word 0x460001bc
+	lb $zero, 0(s0)
+	lb $zero, 4(s0)
+	lb $zero, 8(s0)
+	lb $zero, 12(s0)
+	nop
+	nop
+	/*illegal*/ .word 0x00000050
 
 .close
