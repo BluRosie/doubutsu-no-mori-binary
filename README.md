@@ -65,3 +65,17 @@ back in cmd in log/cmp (same as above, empty files denote lack of difference so 
 ```for /r %F in (*) do @if %~zF==0 echo "%F" >>no_diff.txt```
 
 ```for /r %F in (*) do @if %~zF==0 del "%F"```
+
+# doing this for the english version
+
+now i used the last patch released as the basis for the decompilation here
+
+so yeah command dump:
+
+```for file in dump/eng/*.DAT; do xxd -o 0x00000000 -c 4 -g 4 "dump/eng/$(basename "$file")" | awk '{print $1,$2}' | ./tools/mipsdis >"src/eng/$(basename "$file" .DAT).asm" -; done```
+
+```for file in src/eng/*.asm; do sed -i "s#output.bin#build/eng/$(basename "$file" .asm).bin#g" "src/eng/$(basename "$file")"; done```
+
+```for file in src/eng/*.asm; do armips >"log/armips/eng_crash_$(basename "$file" .asm).txt" src/eng/$(basename "$file"); done```
+
+```for file in build/eng/*.bin; do cmp >log/cmp/eng_$(basename "$file" .bin).txt build/eng/$(basename "$file") dump/eng/$(basename "$file" .bin).DAT; done```
