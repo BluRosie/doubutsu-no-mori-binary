@@ -102,3 +102,76 @@ AFA60034	*SW	A2,0034 (SP)
 1420FFF4	*BNE	AT,R0,-FFF4
 24C60001	*ADDIU	A2,A2,0001
 
++_+
+
+Need some room, and this allows a couple more header entries
+Headers will use normal xpos of 150.0 and be left-aligned
+Other entries will require subtracting string width from a right-aligned value
+
+//80AA3EE8:	loop to display each line of text
+3C074316	*LUI	A3,4316	;xpos for headers
+46006006	MOV.S	F0,F12		;F0=F12: title size
+3C0D80AA	*LUI	T5,80AA
+25AD4D54	*ADDIU	T5,T5,4D54	;T4=80AA4D54: p->start values
+16000004	*BNE	S0,R0,80AA3F0C
+	NOP
+	NOP
+552D0021	*BNEL	T1,T4,80AA3F88	;branch if reading first entry
+46026002	-MUL.S	F0,F12,F2	;F0=title size * heading size
+//80AA3F0C:	scan list of header lines to handle size, placement
+	LUI	T5,80AA
+	LBU	T5,4D68 (T5)	;T5=80AA4D68: first header line entry
+	LUI	V0,80AA
+	ADDIU	V0,V0,4D69	;V0=80AA3D69: p->subsequent header line entries
+506D001B	*BEQL	V1,T5,80AA3F88	;branch if cur. entry doesn't match header#
+46026002	-MUL.S	F0,F12,F2	;F0=title size * heading size
+//80AA3F24:
+506D0019	*BEQL	V1,T5,80AA3F88	;branch if cur. entry doesn't match header#
+46020002	-MUL.S	F0,F0,F2	;F0=title size * heading size
+904D0001	-LBU	T5,0001 (V0)	;T6=V0+0: next header entry
+15A0FFFC	*BNE	T5,R0,80AA3F24	
+24420001	*ADDIU	V0,V0,0001
+//80AA3F38:	others will use a right-aligned xpos
+AFA3007C	*SW	V1,007C (SP)
+AFA9005C	*SW	T1,005C (SP)
+AFAA0080	*SW	T2,0070 (SP)
+E7A00030	*SWC1	F0,0030 (SP)
+00112025	*OR	A0,S1,R0
+24050015	*ADDIU	A1,R0,0015	;A2=strlen 15
+0C027070	*JAL	8009C1C0	;V0=actual strlen
+24060020	*ADDIU	A2,R0,0020
+00112025	*OR	A0,S1,R0
+0C0240B2	*JAL	800902C8	;V0=width of A1 chars at A0
+00022825	*OR	A1,R0,V0	;A1=strlen
+//80AA3F60:
+2401012C	*ADDIU	AT,R0,012C
+00221023	*SUBU	V0,AT,V0
+44820000	*MTC1	V0,F0
+8FA3007C	*LW	V1,007C (SP)
+46802020	*CVT.S.W	F4,F0
+8FA9005C	*LW	T1,005C (SP)
+8FAA0080	*LW	T2,0080 (SP)
+//80AA3F7C:
+44072000	*MFC1	A3,F4
+C7A00030	*LWC1	F0,0030 (SP)
+//80AA3F84:
+
+Alternate version:
+//80AA3F60:
+44820000	*MTC1	V0,F0
+3C014396	*LUI	AT,4396
+44812000	*MTC1	AT,F4		;F4=300.0	[43960000]
+46800020	*CVT.S.W	F0,F0
+8FA9005C	*LW	T1,005C (SP)
+8FAA0080	*LW	T2,0080 (SP)
+46002101	*SUB.S	F4,F4,F0
+8FA3007C	*LW	V1,007C (SP)
+//80AA3F74:
+44072000	*MFC1	A3,F4
+C7A00030	*LWC1	F0,0030 (SP)
+//80AA3F88:
+//80AA3FDC:	KILL, then shift everything up a command!
+	*NOP
+
+will likely need to save: V1, T1, T2, F0
+AEGH...  need it under D80

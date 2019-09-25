@@ -17,6 +17,10 @@ match the codeword with the codeword<->ROM table in ROM+0x19D40
 
 ROM proper	+80024C00
 +-+-+-+-+-+-+-+
+ 	80025C60	
+ 	80025CC0	
+ 	80025DF0	
+ 	80025E6C	
  13D0	80025FD0	???	has an infinite loop though!
  14A0	800260A0
  
@@ -42,7 +46,23 @@ ROM proper	+80024C00
  2340	80026F40	twiddle status of COP0 Status
 		accepts: A0=flags to OR
 		fries: T0
- 235C	80026F5C
+ 2460	80027060	Yaz0 decompression routine
+ 25E8	800271E8
+ 
+ 26DC	800272DC	removed: would processes KeyWait strings
+		now saves A0-A3 -> SP+0-SP+C
+		accepts: A0=p->KeyWait string
+ 26F8	800272F8	removed: 
+		now saves A0-A3 -> SP+0-SP+C
+ 2720	80027320
+ 
+ 3BBC	800287BC	???; uses KeyWaitB() strings
+		uses pointer table @ 8003DE1C	(0xA)
+ 3E88	80028A88
+	
+ 48D0	800294D0	calls main loop 8002DFA0 and handles exceptions and faults it may throw
+		code at 80029588 only run when 8002DFA0 returns, value indicating error
+ 4C30	80029830
 	
  59F0	8002A5F0	blank controller input table entry; blank 0x18 bytes at A0
 		accepts: A0=p->controller input table	[80145B30/48]
@@ -93,11 +113,22 @@ ROM proper	+80024C00
 		accepts: A0=p->???, A1=, A2=
  906C	8002DC6C
 
+	8002EB60	exception handler
+	8002ED98	??? exception	(masks ~20000000)
+	8002EDA4	??? exception	(masks ~40000000)
+	8002EDB0	??? exception	(masks ~80000000)
+	8002EDD0	??? exception	(masks ~08000000)
+	8002EE14	??? exception	(masks ~04000000)
+	8002EF7C	??? exception	(masks ~10000000)
+	8002EFD8	??? exception	(masks ~02000000)
+	8002EFF8	??? exception	(masks ~01000000)
+	8002F030	??? exception
+ 
  A6DC	8002F2DC	move to next block of data
 		accepts: A0=p->data block struct
 		fries: V0,T9
  A6EC	8002F2EC
-	
+	8002F470
  A8C0	8002F4C0	blanks large chunks of data
 		accepts: A0=p->source, A1=size
  A960	8002F560
@@ -120,6 +151,9 @@ ROM proper	+80024C00
 	80034CE0	sets cache ??? for A1 bytes at A0 (writable, I know that)
 		accepts: A0=p->target, A1=size
 10160	80034D60
+
+	800358E0	handles PI access
+	80035AC0
 
 	80035B20	V0=TRUE if strings A0 and A1 differ
 		accepts: A0=p->data1, A1=p->data2, A2=strlen
@@ -145,6 +179,54 @@ ROM proper	+80024C00
 	800396B0	???
 		accepts: A0=p->???, A1=, A2=, A3=, SP+10=, SP+14=, SP+18=p->???, SP+1C=p->???
 
+18580	8003D180	system errors, especially DMA transfers
+18ED8	8003DAD8	"KeyWaitB (LRZ up down up down left left right right BA START)"
+18F50	8003DB50	"KeyWaitB'(LR left right START) "
+18F84	8003DB84	"%s %08x"
+18F8C	8003DB8C	"PrintDump%06x"
+18FA0	8003DBA0	"%08x"
+18FA8	8003DBA8	"Dump"
+18FB0	8003DBB0	"SP       PC       (VPC)"
+18FC8	8003DBC8	"%08x %08x"
+18FD4	8003DBD4	" -> %08x"
+18FE0	8003DBE0	"STACK TRACE\rSP       PC       (VPC)\r"
+19008	8003DC08	"%08x %08x"
+19014	8003DC14	" -> %08x"
+19020	8003DC20	"\r"
+19024	8003DC24	"$1A38hCallBack (%d) %08x %08x %08x\r$1A37h"
+19048	8003DC48	"fault_manager: OS_EVENT_CPU_BREAK received\r"
+19080	8003DC80	"fault_manager: OS_EVENT_FAULT received\r"
+190B4	8003DCB4	"fault_manager: Unknown message received\r"
+190E8	8003DCE8	"__osGetCurrFaultedThread()=%08x\r"
+1910C	8003DD0C	"FindFaultedThread()=%08x\r"
+19128	8003DD28	"STACK TRACE"
+19134	8003DD34	"    CONGRATURATIONS!    "
+19150	8003DD50	"All Pages are displayed."
+19170	8003DD70	"   THANK YOU!       "
+19188	8003DD88	" You are great debugger!"
+191A4	8003DDA4	"fault"
+191AC	8003DDAC	"HungUp on Thread %d\r"
+191C4	8003DDC4	"%s\r"
+191C8	8003DDC8	"(NULL)"
+191D0	8003DDD0	"%s\r"
+191D4	8003DDD4	"(NULL)"
+191DC	8003DDDC	"HungUp on Thread %d\r"
+191F4	8003DDF4	"%s\r"
+191F8	8003DDF8	"(NULL)"
+19200	8003DE00	"%s\r"
+19204	8003DE04	"(NULL)"
+1920C	8003DE0C	"HungUp %s:%d"
+
+		
+19710	8003E310	allocation debug messages
+199D0	8003E5D0	
+
+	8003E6A0	exception handler offsets
+	8003E6C0	pointers to exception handlers
+	8003E6E4
+
+19D00	8003E900	forest@srd038J.srd.nintendo.co.jp
+19D24	8003E924	compile date	01-02-14 16:37:16
 19D40	8003E940	end of block - begins Codeword <-> ROM offset table
 
 +_+
@@ -198,6 +280,9 @@ variables within this domain:
  D420	8005EEA0
  D468	8005EEE8
  
+ D5A0	8005F020
+ D6BC	8005F13C
+ 
  DA64	8005F4E4	V0=TRUE if [8014A248] a 3xxx, 4xxx, 6xxx value
 	8005F528
 
@@ -243,8 +328,35 @@ variables within this domain:
 146B0	80066130	copy selected option from select_txt menu
 	80066194
 	
+	80068A50	retrieve values from player's current collision tile
+	80068BB8	
+	
 	80069580	
 	80069680	
+	
+	8007075C
+		accepts: A0=, A1=p->collision tile
+	80070880
+		accepts: A0=, A1=p->collision tile
+	80070950	???; handles tile height
+		accepts: A0=, A1=p->collision tile
+		uses pointer table @ 80104220
+		8007075C or 80070880 if tile & 80000000 set (0:1)
+	80070990
+	800709A8
+	800709E8	
+		uses pointer table @ 80104228
+	80070A28	
+	
+	80070D28	???; handles tile type sounds and effects
+	80070F58
+	80070FBC
+	80071064	???; handles tile type sounds and effects
+		8007112C	type 1B-3F
+		800712A8	types C-15
+		800712F0	type 18
+		80071300	types 0-B, 16-17, 19-1A
+	800713CC
 	
 272B0	80078D30	V0=TRUE if buttons A0 pressed on controller 1; @8010EF90+14
 		accepts: A0=button mask
@@ -258,6 +370,10 @@ variables within this domain:
 
 27640	800790C0	???	at 80079120 creates blank mempak entry
 
+27DB8	80079838	???; tied to the debug gyroid, setting name etc
+	uses p->801047A8, p->80137C40, p->80138E44
+27E5C	800798DC
+
 299CC	8007B44C	save animation value to specific bank and slot
 		accepts: A0=bank offset, A1=slot, A2=animation value
 	8007B49C
@@ -267,20 +383,30 @@ variables within this domain:
 		@80104A70+E4 defines response; if 7,8,9, set text ID#
 	8007B5F4
 	
-29BD0	8007B650	stores A0->address+D8 at 80104A70
+29BD0	8007B650	set status; stores A0->address+D8 at 80104A70
 		accepts: A0=1 byte
 		fries: T6; reduces A0 to 1 byte
-29BF0	8007B670	loads byte from address+D8 at 80104A70
+29BF0	8007B670	V0=status; loads byte from address+D8 at 80104A70
 		returns: V0=1 byte
 		fries: T6
-29C04	8007B684	redirect to 8007B650; Sets A0=-1
-	8007B6A4
+29C04	8007B684	neutralize status register; redirect to 8007B650: A0=-1
+29C24	8007B6A4	copies status and timestamp to playerdata if not neutral
+	8007B724
 	
 2BE8C	8007D90C	V0=80104F94: 
 2BE9C	8007D91C	store A0->80104F94
 		returns: V0=value saved (A0)
 		fries: AT
 	8007D930
+	
+	8007DB20	???; time-related
+	8007DBB0	???; time-related
+	
+	8007ED70	???; handles day-of-week events
+		8007EDBC	Sunday: ???
+		8007EDF4	Saturday: ???
+		8007EE10	weekdays: ???
+		8007EEBC	return
 	
 	8008033C	V0=p->entered data
 		accepts: A0=???, A1=strlen
@@ -289,6 +415,8 @@ variables within this domain:
 36208	80087C88	returns V0= halfword at 8014A248
 		fries: T6
 	80087C9C
+	
+	8008907C	V0=p->current collision tile
 
 3D270	8008ECF0	sets word # A0 at 80106A9C to 0
 		accepts: A0 (0-5)
@@ -382,14 +510,14 @@ variables within this domain:
 		accepts: A0=, A1=p->text, A2=#chars, A3=[float]xpos, SP+10=ypos, 
 			  SP+14=red, SP+18=green, SP+1C=blue, 
 			  SP+20=, SP+24=, SP+28=, SP+2C=, 
-			  SP+30=[float], SP+34=[float], SP+38=
+			  SP+30=[float]xscale?, SP+34=[float]yscale?, SP+38=
 3F418	80090E98	print text to screen
 		accepts: A0=p->manager, A1=p->text, A2=#chars
 			  A3=[float]xpos, SP+10=[float]ypos
 			  SP+14=red, SP+18=green, SP+1C=blue, SP+20=alpha
 			  SP+24=?, SP+28=?, SP+2C=?, SP+30=[float]?, SP+34=[float]?
-3F510	80090F10
-
+3F510	80090F10	???; inserts DL code, maybe for yellow text bubbles?
+		accepts: A0=p->DL, A1=mode 
 3F5CC	8009104C	redirect to 800E0244
 		saves A0->SP+18, A1->SP+1C; does not recall
 3F5F4	80091074	redirect to 8009040C; sets A1=1
@@ -479,11 +607,11 @@ variables within this domain:
 	800933C4	7F3E	calls 80092FC4: SP+10=12, SP+14=[SP+10]
 	800933F0	7F3F	calls 80092FC4: SP+10=13, SP+14=[SP+10]
 4199C	8009341C	handles 7F slot insert types in mail messages and other text banks
-		accepts: A0=p->text, A1=, A2=
+		accepts: A0=p->text, A1=size, A2=, A3=, SP+10=
 419F8	80093478	loads and expands mail messages (ie. snowman)
-		accepts: A0=
+		accepts: A0=p->text, A1=size, A2=max size, A3=fill mode
 		note: will loop endlessly if a mail message exceeds buffer
-	
+	80093520	??; similiar to 80093478, used for superscripts
 41B78	800935F8	converts super_txt ID to codeword and size
 		accepts: A0=super_txt ID, A1=p->codeword, A2=p->size
 41CB8	80093738	converts ps_txt ID to codeword and size
@@ -513,8 +641,10 @@ variables within this domain:
 			0xC	4	max strlen
 			0x10	4	RESERVED for codeword
 			0x14	4	RESERVED for strlen
-42730	800941B0
-	
+42730	800941B0	???; related to superz
+42820	800942A0	???; related to maila+mailb+mailc
+42980	80094400	???; related to psz
+	800944B8
 42AA0	80094520	at one point sets the default 'I'm not home' message (0x55C string)
 	80094690
 	
@@ -535,6 +665,9 @@ variables within this domain:
 44CC0	80096740	copy item A1's name from ROM to A0
 		accepts: A0=p->target, A1=item ID# (1xxx or 2xxx)
 	80096860
+	
+	800996CC	
+		accepts: A0=
 	
 47E40	800998C0	copy routine for NPC name strings
 		accepts: A0=p->target, A1=p->source, A2=strlen
@@ -561,7 +694,7 @@ variables within this domain:
 491CC	8009AC4C	copy 4 bytes from source to target
 		accepts: A0=p->target, A1=p->source
 		fries: T6,T7,T8,T9
-491F4	8009AC74	returns V0=0; used by C-724950
+491F4	8009AC74	returns V0=0; used by C-724950, C-8574E0
 49200	8009AC80	A0->SP+0, A1->SP+4
 49210	8009AC90	
 
@@ -726,7 +859,7 @@ variables within this domain:
 4CF98	8009EA18	V0=TRUE if 0x80 text controller flag set; A0+28C
 		accepts: A0=p->text controller
 4CFAC	8009EA2C	extend txt bank for a newly-created string (ie. hours 7F com.); copies contents into extension but does not copy new string in!
-		accepts: A0=p->text bank, A1=cur text pos.+size of created string, A2=cur text pos.+command size, A3=size of text bank, SP+10=???
+		accepts: A0=p->text bank, A1=cur text pos.+size of created string, A2=cur text pos.+command size, A3=size of text bank, SP+10=TRUE fills with spaces when reducing bank size
 		returns: V0=new size of text bank
 4D0C4	8009EB44	copy source to destination - used by text insertion routines
 		accepts: A0=p->copy location,A1=source location, A2=strlen
@@ -982,13 +1115,13 @@ variables within this domain:
 	
 5B1B8	800ACC38	copy NPC# A1's name to A0	8, then 0x6 each
 		accepts: A0=p->target, A1=actor#
-5B22C	800ACCAC	retrieve actor's name
+5B22C	800ACCAC	retrieve actor's name	(default: 8010B810)
 		accepts: A0=p->target, A1=actor ID (Exxx)
-5B298	800ACD18	retrieve actor's name by ID
+5B298	800ACD18	retrieve actor's name by ID	(default: 8010B810)
 		accepts: A0=p->target, A1=p->actor ID
-5B2F4	800ACD74	NPC name copier for those from string.txt
+5B2F4	800ACD74	NPC name copier for those from string.txt	(default: 8010B810)
 		accepts: A0=p->target, A1=string to retrieve (Dxxx), 
-5B378	800ACDF8	retrieve current actor's name
+5B378	800ACDF8	retrieve current actor's name	(default: 8010B810)
 		accepts: A0=p->target, A1=???
 	800ACE90
 	
@@ -1146,6 +1279,7 @@ variables within this domain:
 		accepts: A0=p->???
 80C24	800D26A4	V0=TRUE when binary finished loading; A0+9F
 		accepts: A0=p->???
+	
 	800D36B0
 	
 82104	800D3B84	selects menu to load
@@ -1161,6 +1295,9 @@ variables within this domain:
 			8082DF6C->80106FA0: 
 			8085BA28->80106FD0: 
 	800D3C94
+	
+	800D3E14	calls 8002DB20: A0+=68, A1=0, A2=1
+	800D3E40
 	
 	800D4DC0	??? - untoggles values in RTC controller
 	800D4E20	read date from RTC, storing in A0
@@ -1263,6 +1400,12 @@ variables within this domain:
 	800D731C
 	800D7358
 	
+	800D88A0	A1->A0+18, A2->A0+1C
+	800D88B0	calls 800D88A0: A1=20, A2=16
+		accepts: A0=p->???
+	800D88D4	does nothing; A0->SP+0
+	800D88E0
+	
 8E78C	800E020C	redirect to 800E15E0: copy matrix to next 0x40, set as current
 		calls: 800E15E0: A1=801462B4: p->matrix, A0=A1+40
 		fries: V0,A0,A1,T6,T7 [F4,F6,F8,F10,F16,F18]
@@ -1343,8 +1486,12 @@ B08B0	80102330
 B2D10	80104790	30310000	01, part of mempak save verity
 B2D14	80104794	NAFJ	used for verity tests on mempak
 B2D18	80104798	p->'name' given to mempak saves
+B2D1C	8010479C	p->
+B2D20	801047A0	p->
+B2D24	801047A4	p->
+B2D28	801047A8	name of debug gyroid	"Johnny B"
 	
-B2FF0	80104A70	p->[80139C40]
+B2FF0	80104A70	p->[80139C40]	target for player variables, status among them
 	
 B501C	80106A9C	? - table of six words
 B5034	80106AB4	pointer table: 8008F040, 8008F0A0
@@ -1357,17 +1504,19 @@ B5174	80106BF4	table of 7F command sizes and type(?)
 	0x0	1	size of command in bytes (min 2)
 	0x1	1	unknown
 B5234	80106CB4	DL: 
-B53A0	80106E20	recall chunks for compressed menu code
-B53A0	80106E20	74E1A0	
-B53D0	80106E50	73F4D0	debug menu
-B5400	80106E80	741FB0	
-B5430	80106EB0	743B70	
-B5460	80106EE0	743CD0	
-B5490	80106F10	744020	
-B54C0	80106F40	747AA0	
-B54F0	80106F70	7486E0	
-B5520	80106FA0	7492E0	
-B5550	80106FD0	7745B0	
+B52A0	80106D30
+B5320	80106DA0	DL: 
+B5390	80106E20	menu jump preload list, loading data via codewords
+B53A0	80106E20	741EA0	[6EF0B0]
+B53D0	80106E50	73F4D0	[6ED6C0]	debug menu
+B5400	80106E80	741FB0	[6EF1A0]	../m_play.c
+B5430	80106EB0	743B70	[6F05A0]
+B5460	80106EE0	743CD0	[6F0700]
+B5490	80106F10	744020	[6F09C0]	../m_trademark.c
+B54C0	80106F40	747AA0	[6F2D60]
+B54F0	80106F70	7486E0	[6F3740]	save file manager
+B5520	80106FA0	7492E0	[6F3F30]	../famicom_emu.c
+B5550	80106FD0	7745B0	[70E0E0]
 B5580	80107000	#menus
 B5584	80107004	???
 B55A0	80107020	pointer table	0x61 entries
@@ -1430,6 +1579,44 @@ B9380	8010AE00	rdram pointers
 		800A2904	
 B93C0	8010AE40	19 07 F8 11 05 C3	Farway Museum
 
+B9A90	8010B510	table of some kind	0xC each
+	0x0	2	text ID?
+	0x2	2	RESERVED
+	0x4	4	
+	0x8	4	
+
+B9D90	8010B810	D4 8E A6 90 85 42	"Johnny B"	default character name
+B9D98	8010B818	D3 AF 9D 20		default catchphrase
+
+BB0B0	8010CB30	display list snippet
+BB0E0	8010CB60	display list snippet
+BB110	8010CB90	display list snippet
+BB140	8010CBC0	display list snippet
+BB170	8010CBF0	display list snippet
+BB1A0	8010CC20	display list snippet
+BB1D0	8010CC50	display list snippet
+BB200	8010CC80	display list snippet
+BB230	8010CCB0	display list snippet
+BB260	8010CCE0	display list snippet
+BB290	8010CD10	display list snippet
+BB2C0	8010CD40	display list snippet
+BB2F0	8010CD70	display list snippet
+BB320	8010CDA0	display list snippet
+BB350	8010CDD0	display list snippet
+BB380	8010CE00	display list snippet
+BB3E0	8010CE60	display list snippet
+BB410	8010CE90	display list snippet
+BB438	8010CEB8
+
+BC368	8010DDE8	codeword tables	0x8 each; start codeword + end codeword
+	BC600	8010E080	codeword tables: character geometry
+BCFD8	8010EA58	codeword table	0x1C each
+	0x0	4	
+	0x4	4	
+	0x8	4	
+	0xC	4	codeword start
+	0x10	4	codeword end
+
 BD4E0	8010EF60	toggle - tied to FLASHram verity tests
 BD4E4	8010EF64
 	
@@ -1438,6 +1625,20 @@ BD4F0	8010EF70	mempak 'name' for save files
 		1D 28 2E 1B 2E 2D 2C 2E 27 28 26 28 2B 22 
 		ANIMAL FOREST
 		1A 27 22 26 1A 25 0F 1F 28 2B 1E 2C 2D 00
+
+	80113898	tone of voice
+		0	normal
+		1	angry
+		2	disappointed
+		3	happy
+		4	tired
+	801138A0	? tone counter
+	801138A4	? tone counter
+		
+C2C80	80114700	sound sequence pointers	0x91 entries
+C35A0	80115020	sound sequence pointers	6 entries
+C3610	80115090	sound sequence pointers	0xCE entries	animalese samples, most likely
+C4300	80115D80
 
 C46E0	80116160	c-style display strings
 	%4d %1d%1d %1d%1d %1d%1d %1d%1d 
@@ -1574,14 +1775,32 @@ C6110	80117B90	"sFRm_flashrom"
 
 C62A0	80117D60	DEBUG TEXT - replaced with 7Fext command table in hax
 
+C9600	8011B0C0
+
+C9738	8011B1F8	"RSP Gfx ucode F3DZEX.NoN  fifo 2.08J Yoshitaka Yasumoto/Kawasedo 1999.\n"
+C9780	8011B240
+
+C9B58	8011B618	"RSP Gfx ucode S2DEX       fifo 2.08  Yoshitaka Yasumoto 1999 Nintendo.\n"
+C9BA0	8011B668
+
 C9DB0	8011B830	end of file
 
 +-+-+-+-+
 
 nothing to do with rom - just handy...
 
+80124840	player collision variables
+ 4	4	(float) (03E00000 flags + 7FFFFFFF)*10.0 + base
+ 8	4	(float) (001F0000 flags + 7FFFFFFF)*10.0 + base
+ C	4	(float) (0000F800 flags + 7FFFFFFF)*10.0 + base
+10	4	(float) (000007C0 flags + 7FFFFFFF)*10.0 + base
+14	4	(float) base value
+28	4	TRUE if 80000000 flag set
+2C	1	tile type
+
 80126EA0	save data file
  20	80126EC0	playerdata (see below)
+ 2F6A	80129E0A	message board messages	0x68 each
  4080	8012AF20	pl1.gyroid message
  40C0	8012AF60	
  40D0	8012AF70	pl1.name
@@ -1598,17 +1817,30 @@ nothing to do with rom - just handy...
  6298	8012D138	
  62A8	8012D148	pl4.name
  62AE	8012D14E	pl4.town
- 
+
++
 
 80126EC0	playerdata
  10	80126ED0	1	gender (0-boy; 1-girl)
  11	80126ED1	1	face type (0-7)
 	
+ A86	80127946	8	current time
+ A8E	8012794E	1	status
+ 
  AC4	80127984	8	songs heard flags, ensuring K.K. doesn't nail you with the same one over and over: 34 bits, 1<<n format, word-sized registers
  ACC	8012798C
 
 
 +_+
+
+80135CE1	1	TRUE for Resetti event?
+80135CE2	1	event, maybe?
+	1E	???
+	1F	Sow Joan
+	21	K.K. Slider
+80135CE3	1	TRUE if event?
+
+80135CF0	2	
 
 801362D4	set time: year
 801362D6	set time: month
@@ -1660,6 +1892,24 @@ A38	801378D8	beesting register
 
 A80	80137920
 A82	80137922	???
+
+AB0	80137950	???	byte
+
++_+
+
+80139C40	player variables, probably
+D8	80139D18	status
+		0	normal
+		1	popular
+		2	unpopular
+		3	unlucky
+		4	money charm
+		5	rare item charm
+		6	???
+		7	???
+		8	???
+		9	???
+		FF	neutral
 
 +-+-+-+-+
 

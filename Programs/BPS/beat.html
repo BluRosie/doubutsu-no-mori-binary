@@ -1,0 +1,185 @@
+<html>
+  <head>
+    <title>beat user manual</title>
+    <style type="text/css">
+      body {
+        background: #fff;
+        color: #000;
+        font-family: Verdana, sans-serif;
+        font-size: 0.9em;
+      }
+
+      h1, h2, h3, h4 {
+        margin: 0em;
+      }
+
+      h3 {
+        background: #eee;
+        margin-bottom: 0.25em;
+        padding: 0.25em;
+      }
+
+      h4 {
+        border-bottom: 2px solid #eee;
+        margin-bottom: 0.25em;
+      }
+
+      p {
+        margin: 0em;
+        margin-bottom: 1em;
+      }
+
+      pre {
+        white-space: pre-line;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>beat v01</h1>
+    <p>
+      Author: byuu<br>
+      License: GPLv3
+    </p>
+
+    <h3>Overview</h3>
+    <p>beat is a delta-based binary differencing patcher and specification. It
+    encodes the differences between either a) two files, or b) two folders, and
+    stores the difference as a beat patch.</p>
+
+    <p>Unlike linear patches, delta patches can detect and encode data
+    insertions and deletions. What this means is that patches against files that
+    have had data inserted or removed from them are <i>substantially</i>
+    smaller.</p>
+
+    <p>Patches that encode the difference between two files use the .bps
+    extension, short for "beat patch - single (file)"</p>
+
+    <p>Patches that encode the difference between two folders full of files use
+    the .bpm extension, sort for "beat patch - multi (file)"</p>
+
+    <h3>Applying patches</h3>
+    <p>Run beat, and click the "Apply Patch" button.</p>
+
+    <p>First, you will be asked to choose a beat patch file.</p>
+
+    <h4>If you select a bps patch ...</h4>
+
+    <p>You will be asked to select the original, unmodified file first.</p>
+
+    <p>Finally, you will be asked to select where to save the patched file to.
+    This is the output file. You cannot choose the same file to apply the patch
+    to. This is because if patch application were to fail, it might damage the
+    original file. This also lets the original file serve as an unpatched
+    backup. This is important as beat patches are a one-way transformation, and
+    cannot be undone.</p>
+
+    <p>The output file should be a new file that does not yet exist, so type a
+    new name into the file name box and hit save.</p>
+
+    <h4>If you select a bpm patch ...</h4>
+
+    <p>You will be asked to select the original, unmodified folder first.</p>
+
+    <p>Finally, you will be asked to select where to save the patched directory
+    to. This is the output folder. This works similarly to file patching, in
+    that you must select a new folder name: you cannot apply a patch directly to
+    a folder.</p>
+
+    <p>You should create a new folder using the beat folder selection dialog
+    here. The output folder will be lost if patch application fails.</p>
+
+    <h4>Patching process</h4>
+
+    <p>Patch application will now begin. The beat user interface will be
+    unresponsive during this time. Please be patient and wait until beat
+    displays a message: this will indicate whether patch application was
+    successful or not.</p>
+
+    <p>Pretty much the only reason patch application will fail is if you choose
+    the wrong source file. beat patches embed checksums to make sure that you
+    apply it to the same source file that the patch was created against. Make
+    sure you are using the correct file, and try again.</p>
+
+    <h3>Creating patches</h3>
+    <p>Run beat. You have two options along the bottom of the user interface to
+    control how the patch is created.</p>
+
+    <h4>Embed manifest</h4>
+    <p>beat patches can embed an XML manifest file that describes what this
+    patch is for. The XML manifest must be XML version 1.0 with UTF-8 encoding,
+    but otherwise the document contents are domain-specific. In other words, you
+    are free to put whatever you want here. Typically, you might want to embed
+    authorship information, copyright information, a link to your website, etc.
+    But it's entirely up to you.</p>
+
+    <p>This is completely optional. If you check this, you will be asked at the
+    end of the patch creation to select a manifest file to embed. If you do not,
+    this part will be skipped and the beat patch will have no manifest. The beat
+    patch will still work to patch files exactly as you would expect.</p>
+
+    <h4>Delta mode</h4>
+    <p>Linear patches can be performed in linear time, or O(n). Whereas delta
+    patches require quadratic time, or O(n^2). Optimizations exist to
+    significantly reduce the delta patch overhead, of course. But only so much
+    can be done. The more a delta patch is optimized, the less effective it is
+    at spotting insertions and deletions.</p>
+
+    <p>In laymen's terms: delta patches take a lot longer to create. The bigger
+    the file, the longer it takes compared to a linear patch. This could
+    potentially be hours for a file that is hundreds of megabytes in size.</p>
+
+    <p>But in return, delta patches are often substantially smaller than linear
+    patches.</p>
+
+    <p>If you are certain that your changes only modify data (and do not insert
+    or delete data), or you need the patch to be created quicker, you can leave
+    this unchecked. But if you want the smallest patch size possible, and don't
+    mind being patient, you'll want to check this option.</p>
+
+    <h4>Mode selection</h4>
+    <p>You are now ready to create your patch. Choose either "Create File Patch"
+    or "Create Folder Patch", depending on what you want to do.</p>
+
+    <p>If you are only modifying a single file, a file (bps) patch is strongly
+    recommended. But if you are modifying more than one file, you will need to
+    create a folder (bpm) patch instead.</p>
+
+    <h4>If you select a file patch ...</h4>
+    <p>First, you will be asked to select the original, unmodified file.</p>
+
+    <p>Next, you will be asked to select the modified file.</p>
+
+    <p>Next, you will be asked where to save the patch that is about to be
+    created. You will make up your own name for the patch file here, as the
+    patch obviously does not exist yet.</p>
+
+    <p>Finally, if you chose to embed a manifest, you will be asked to select
+    a manifest XML file here.</p>
+
+    <p>The main window will now be unresponsive until patch creation is
+    completed. If you chose to create a delta patch, this can take several
+    minutes or even hours, depending on how big the files are. Please be patient
+    and wait for a message indicating success.</p>
+
+    <h4>If you select a folder patch ...</h4>
+    <p>The same steps as selecting a file patch apply here. Just note that you
+    are first asked to select a source folder, and then a target folder.</p>
+
+    <h3>Command-line usage</h3>
+    <p>beat can also be used on the command-line.</p>
+
+    <p>When no arguments are given, the user interface is opened.</p>
+
+    <h4>To apply a patch from the command-line ...</h4>
+    <pre>beat -apply -p patch -o output input</pre>
+
+    <h4>To create a patch from the command-line ...</h4>
+    <pre>beat -create [-delta] [-m manifest] -p patch -o output input</pre>
+
+    <h4>beat patch association</h4>
+    <p>You may associate beat with .bps and/or .bpm files. When this is done,
+    the user interface will be activated, and the "Apply Patch" process will
+    begin. However, the patch name will already have been selected, so that part
+    will be skipped. This can be used as a faster way to apply patches.</p>
+  </body>
+</html>

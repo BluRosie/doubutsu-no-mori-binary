@@ -693,7 +693,7 @@ AFA20028	SW	V0,0028 (SP)	;SP+28=V0: command size
 //	initialize the text buffer
 27A40030	ADDIU	A0,SP,0030	;A0=p->buffer
 34050400	ORI	A1,R0,0400	;A1=max strlen
-0C02664B	JAL	8009992C
+0C02664B	JAL	8009992C	;memset(A0,A1,A2)
 34060020	ORI	A2,R0,0020	;fill with spaces
 //	grab the item#
 26040010	ADDIU	A0,S0,0010	;A0=p->msg_txt
@@ -856,6 +856,300 @@ ps.txt correction
 08024F26	J	80093C98
 30C60FFF	ANDI	A2,A2,0FFF
 
+
+final form:	7F6F.ixxx
+800A05D0	4EB50	table of redirects
+800A0708	select.txt
+80096748	furniture
+80096748	items
+800A0710	mail.txt
+800A06FC	msg.txt (0xxx)
+800A06FC	msg.txt (1xxx)
+800A06FC	msg.txt (2xxx)
+800A0718	super.txt
+800A0700	super_z.txt
+800A0700	mail_a.txt
+800A0700	mail_b.txt
+800A0700	mail_c.txt
+800A0700	ps_z.txt
+800A073C	string.txt
+800A0744	npc.txt
+800A074C	ps.txt
+
+800A0610	4EB90	7F6F final command processor
+	accepts: A0=p->text controller, A1=p->curpos
+27BDFBD0	ADDIU	SP,SP,FBD0
+AFBF001C	SW	RA,001C (SP)
+AFB00020	SW	S0,0020 (SP)
+AFB10024	SW	S1,0024 (SP)
+8C90000C	LW	S0,000C (A0)	;A0=A0+C: p->msg_txt bank
+//	will need to grab the text ID f/ command
+8CA50000	LW	A1,0000 (A1)	;A1=A3+0: curpos in msg_txt
+0C027701	JAL	8009DC04	;get command size
+00058825	OR	S1,A1,R0	;S1=V1: curpos
+AFA20028	SW	V0,0028 (SP)	;SP+28=V0: command size
+//	initialize the text buffer
+27A40030	ADDIU	A0,SP,0030	;A0=p->buffer
+34050400	ORI	A1,R0,0400	;A1=max strlen
+0C02664B	JAL	8009992C	;memset(A0,A1,A2)
+34060020	ORI	A2,R0,0020	;fill with spaces
+//	grab the item#
+26040010	ADDIU	A0,S0,0010	;A0=p->msg_txt
+00912021	ADDU	A0,A0,S1	;A0=p->command
+90870003	LBU	A3,0003 (A0)
+90840002	LBU	A0,0002 (A0)
+00042200	SLL	A0,A0,0x8
+00873025	OR	A2,A0,A3	;A2=string#
+//	pull string
+00062302	SRL	A0,A2,0xC
+00042080	SLL	A0,A0,0x2
+3C02800A	LUI	V0,800A
+00441021	ADDU	V0,V0,A0
+8C4205D0	LW	V0,05D0 (V0)
+27A40030	ADDIU	A0,SP,0030	;A0=p->buffer
+0040F809	JALR	RA,V0		;copy string from ROM to buffer
+34050400	ORI	A1,R0,0400	;A1=max strlen
+27A40030	ADDIU	A0,SP,0030	;A0=p->buffer
+0C027A34	JAL	8009E8D0	;V0=strlen, right-aligned no whitespace
+34050400	ORI	A1,R0,0400	;A1=max strlen
+AFA20014	SW	V0,0014 (SP)	;SP+14= strlen
+//	offset existing text in msg_txt
+8FA90028	LW	T1,0028 (SP)	;T1=SP+28: command size
+26040010	ADDIU	A0,S0,0010	;A0=p->msg_txt
+8E070008	LW	A3,0008 (S0)	;A3=sizeof msg_txt
+AFA00010	SW	R0,0010 (SP)
+02293021	ADDU	A2,S1,T1	;A2=S1+T1: msg_txt curpos+command size: 
+0C027A8D	*JAL	8009EA34	;extend text bank for entry; V0=new msg_txt size
+02222821	ADDU	A1,S1,V0	;A1=S1+V0: msg_txt curpos+strlen
+//	update msg_txt size
+AE020008	SW	V0,0008 (S0)	;V0->sizeof msg_txt
+//	copy string to msg_txt
+26040010	ADDIU	A0,S0,0010	;A0=p->msg_txt
+8FA60014	LW	A2,0014 (SP)	;A2=strlen
+27A50030	ADDIU	A1,SP,0030	;A1=p->buffer
+0C027AD1	JAL	8009EB44	;formatted copy A2 bytes from string A1 to A0
+00912021	ADDU	A0,A0,S1	;A0+=S1: curpos+msg_txt: p->target
+//	return
+8FB10024	LW	S1,0024 (SP)
+8FB00020	LW	S0,0020 (SP)
+8FBF001C	LW	RA,001C (SP)
+27BD0430	ADDIU	SP,SP,0430
+03E00008	JR	RA
+00001025	OR	V0,R0,R0
+//msg.txt correction
+24070002	ADDIU	A3,R0,0002
+08030FDD	J	800C3F74
+30C63FFF	ANDI	A2,A2,3FFF
+//select.txt correction
+10000006	BEQ	R0,R0,+6
+24070001	ADDIU	A3,R0,0001
+//mail.txt correction
+10000004	BEQ	R0,R0,+4
+24070004	ADDIU	A3,R0,0004
+//super.txt correction
+10000002	BEQ	R0,R0,+2
+24070003	ADDIU	A3,R0,0003
+//ps.txt correction
+24070005	ADDIU	A3,R0,0005
+08030FDD	J	800C3F74
+30C60FFF	ANDI	A2,A2,0FFF
+//multi-bank correction
+27BDFFD0	ADDIU	SP,SP,FFD0
+AFBF0014	SW	RA,0014 (SP)
+//	build struct at SP+18
+AFA40020	SW	A0,0020 (SP)	;p->target -> struct+8
+AFA50024	SW	A1,0024 (SP)	;max strlen-> struct+C
+00062302	SRL	A0,A2,0xC
+2484FFF8	ADDIU	A0,A0,FFF8	;8,9,A,B,C -> 0,1,2,3,4
+AFA40018	SW	A0,0018 (SP)
+30C60FFF	ANDI	A2,A2,0FFF
+AFA4001C	SW	A0,001C (SP)
+0C02502A	JAL	800940A8	;grab text from multibank index#
+27A40018	ADDIU	A0,SP,0018	;A0=p->struct
+//	return
+8FBF0014	LW	RA,0014 (SP)
+27BD0030	ADDIU	SP,SP,0030
+03E00008	JR	RA
+00000000	NOP
+//string.txt correction
+08030FDC	J	800C3F70
+30C60FFF	ANDI	A2,A2,0FFF
+//npc.txt correction
+0802B32B	J	800ACCAC
+00062825	OR	A1,A2,R0
+
+
+should be able to use it for other purposes...
+IF!
+A0=p->struct, likely on stack
++8	sizeof
+
+To hijack, will need to use S2 to store p->text (A0+C + 10)
+Alternately permit A2 = p->text
+Then, in prelude, 
+800A0610	4EB90	7F6F beta msg_txt command processor
+	accepts: A0=p->text controller, A1=p->curpos
+8C84000C	+LW	A0,000C (A0)	;A0=A0+C: p->msg_txt bank
+24860010	+ADDIU	A2,A0,0010	;A2=p->text
+24840008	+ADDIU	A0,A0,0008	;A0=p->sizeof text
+24070400	+ADDIU	A3,R0,0400	;A3=max size for msg_txt
+//	800A0620	4EBA0	7F6F beta command processor
+//	accepts: A0=p->sizeof, A1=p->curpos, A2=p->text, A3=max.size (CAN'T EXCEED 0x400!)
+27BDFBD0	ADDIU	SP,SP,FBD0
+AFBF001C	SW	RA,001C (SP)
+AFB00020	SW	S0,0020 (SP)
+AFB10024	SW	S1,0024 (SP)
+AFB2002C	+SW	S2,002C (SP)
+AFA70018	+SW	A3,0018 (SP)
+00069025	+OR	S2,A2,R0	;S2=A2: p->text
+00048025	*OR	S0,A0,R0	;S0=A0: msg_txt bank
+//	will need to grab the text ID f/ command
+00122025	+OR	A0,S2,R0	;A0=S2: p->text
+8CA50000	LW	A1,0000 (A1)	;A1=A3+0: curpos in msg_txt
+0C0240EA	*JAL	800903A8	;get command size at A0[A1]
+00058825	OR	S1,A1,R0	;S1=V1: curpos
+AFA20028	SW	V0,0028 (SP)	;SP+28=V0: command size
+//	initialize the text buffer
+27A40030	ADDIU	A0,SP,0030	;A0=p->buffer
+34050400	ORI	A1,R0,0400	;A1=max strlen
+0C02664B	JAL	8009992C	;memset(A0,A1,A2)
+34060020	ORI	A2,R0,0020	;fill with spaces
+//	grab the item#
+//26040010	ADDIU	A0,S0,0010	;A0=p->msg_txt
+02512021	*ADDU	A0,S2,S1	;A0=p->command
+90870003	LBU	A3,0003 (A0)
+90840002	LBU	A0,0002 (A0)
+00042200	SLL	A0,A0,0x8
+00873025	OR	A2,A0,A3	;A2=string#
+//	pull string
+00062302	SRL	A0,A2,0xC
+00042080	SLL	A0,A0,0x2
+3C02800A	LUI	V0,800A
+00441021	ADDU	V0,V0,A0
+8C4205D0	LW	V0,05D0 (V0)
+27A40030	ADDIU	A0,SP,0030	;A0=p->buffer
+0040F809	JALR	RA,V0		;copy string from ROM to buffer
+34050400	ORI	A1,R0,0400	;A1=max strlen
+27A40030	ADDIU	A0,SP,0030	;A0=p->buffer
+0C027A34	JAL	8009E8D0	;V0=strlen, right-aligned no whitespace
+34050400	ORI	A1,R0,0400	;A1=max strlen
+AFA20014	SW	V0,0014 (SP)	;SP+14= strlen
+//	offset existing text in msg_txt
+8FA90028	LW	T1,0028 (SP)	;T1=SP+28: command size
+00122025	*OR	A0,S2,R0	;A0=S2: p->text
+8E070000	*LW	A3,0000 (S0)	;A3=sizeof msg_txt
+AFA00010	SW	R0,0010 (SP)
+8FA10018	+LW	AT,0018 (SP)
+A7A10010	+SH	AT,0010 (SP)
+02293021	ADDU	A2,S1,T1	;A2=S1+T1: msg_txt curpos+command size: 
+0C027A8B	JAL	8009EA34	;extend text bank for entry; V0=new msg_txt size
+02222821	ADDU	A1,S1,V0	;A1=S1+V0: msg_txt curpos+strlen
+//	update msg_txt size
+AE020000	SW	V0,0000 (S0)	;V0->sizeof msg_txt
+//	copy string to msg_txt
+//26040010	ADDIU	A0,S0,0010	;A0=p->msg_txt
+8FA60014	LW	A2,0014 (SP)	;A2=strlen
+27A50030	ADDIU	A1,SP,0030	;A1=p->buffer
+0C027AD1	JAL	8009EB44	;formatted copy A2 bytes from string A1 to A0
+02512021	*ADDU	A0,S2,S1	;A0=p->command
+//	return
+8FB2002C	+LW	S2,002C (SP)
+8FB10024	LW	S1,0024 (SP)
+8FB00020	LW	S0,0020 (SP)
+8FBF001C	LW	RA,001C (SP)
+27BD0430	ADDIU	SP,SP,0430
+00001025	OR	V0,R0,R0
+03E00008	JR	RA
+00000000	NOP
+
+
+This presumes a slight adaptation for...
+8009EA2C	0x4CFAC	extend msg_txt bank for a newly-created string (ie. hours 7F com.)
+	accepts: A0=p->text bank, A1=cur text pos.+size of created string.A2=cur text pos.+command size.A3=size of text bank, SP+10=mode
+	returns: V0=new size of text bank
+24020400	*ADDIU	V0,R0,0400
+A7A20010	*SH	V0,0010 (SP)
+//8009EA34	alternate entrypoint to declare max size
+//	accepts: SP+10= maxsize | mode
+00A6082A	SLT	AT,A1,A2
+1020001C	BEQ	AT,R0,8009EAA4	;branch if created string > command size
+00E01825	OR	V1,A3,R0	;V1=max length of bank
+00C7082A	SLT	AT,A2,A3
+1020000A	BEQ	AT,R0,8009EA68	;branch if cur+com exceeds bank size
+00851021	ADDU	V0,A0,A1	;V0=p->cur+created
+//8009EA44:	when string is smaller than command (0 or 1)
+00861821	ADDU	V1,A0,A2	;V1=p->cur+com size
+906E0000	LBU	T6,0000 (V1)	;load org.
+24C60001	ADDIU	A2,A2,0001	;ORG++
+00C7082A	SLT	AT,A2,A3
+24A50001	ADDIU	A1,A1,0001	;target++
+24420001	ADDIU	V0,V0,0001	;p->target++
+24630001	ADDIU	V1,V1,0001	;p->org++
+1420FFF9	BNEZ	AT,8009EA48	;continue until all copied
+A04EFFFF	SB	T6,FFFF (V0)	;save to new
+//8009EA68:
+83B80013	*LB	T8,0013 (SP)	;1=space-extend
+00E67823	SUBU	T7,A3,A2	;difference in bank size and command size
+01E51821	ADDU	V1,T7,A1	;V1=cur+difference
+13000020	*BEQ	T8,R0,8009EB38
+00A7082A	SLT	AT,A1,A3	;true if cur<bank size
+1020001E	*BEQ	AT,R0,8009EB38
+00851021	ADDU	V0,A0,A1	;V0=p->cur+created
+//8009EA84:	extend with spaces, maybe
+24040020	ADDIU	A0,R0,0020	;A0=" " (space)
+24A50001	ADDIU	A1,A1,0001
+00A7082A	SLT	AT,A1,A3
+A0440000	SB	A0,0000 (V0)
+1420FFFC	BNEZ	AT,8009EA88	;loop and fill with spaces
+24420001	ADDIU	V0,V0,0001
+10000017	*BEQ	R0,R0,8009EB3C
+00601025	OR	V0,V1,R0
+//8009EAA4:
+10C50014	*BEQ	A2,A1,8009EB38	;effectively, testing if equivalent from first test
+00E64023	SUBU	T0,A3,A2	;T0=difference in cur+com and endpoint
+00A6C823	SUBU	T9,A1,A2	;T9=difference in cur and command
+00F91821	ADDU	V1,A3,T9	;V1=max+'extension' to write out created string
+97A20010	*LHU	V0,0010 (SP)
+24420001	*ADDIU	V0,V0,0001
+0062082A	*SLT	AT,V1,V0
+1020000D	*BEQ	AT,R0,8009EB38	;bail if exceeding max bank size 0x400
+01001025	OR	V0,T0,R0	;V0=difference in cur+com and endpoint
+00832821	ADDU	A1,A0,V1	;A1=p->extended endpoint
+00873021	ADDU	A2,A0,A3	;A2=p->endpoint
+24A5FFFF	ADDIU	A1,A1,FFFF	;A1--
+24C6FFFF	ADDIU	A2,A2,FFFF	;A2--
+19000007	*BLEZ	T0,8009EB38	;branch if no change or reduction would occur
+00004825	OR	T1,R0,R0	;T1=counter
+//8009EAE8:	copy non-words one byte at a time
+90CA0000	LBU	T2,0000 (A2)
+25290001	ADDIU	T1,T1,0001	;counter++
+24A5FFFF	ADDIU	A1,A1,FFFF
+24C6FFFF	ADDIU	A2,A2,FFFF
+1509FFFB	*BNE	T0,T1,8009EAE8	;loop for small fries
+A0AA0001	SB	T2,0001 (A1)
+//8009EB38:	QUIT
+00601025	OR	V0,V1,R0
+03E00008	JR	RA
+00000000	NOP
+//
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+
+
++_+
+
 unless want to push everything will need to fit within c+77FA0
 simplify stuff.
 
@@ -872,6 +1166,8 @@ simplify stuff.
 	ADDIU	SP,SP,0020
 	JR	RA
 	NOP
+
++_+
 
 Can use 800A1BEC as a basic "advance to next command" routine.  Rewrite to diminish
 800A1BEC, 800A1CA4, 800A1CDC, 800A1D14, 800A1F7C

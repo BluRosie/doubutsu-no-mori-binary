@@ -4,7 +4,7 @@
   You can use this code:
   8008F443 0000
   - or enter 'memory editor' and set byte 8008F443 from 1 to 0.
-  Note that this does not repair a damaged file; it skips setting the flag that denotes a corrupt save, replaing it with the damaged clock test.
+  Note that this does not repair a damaged file; it skips setting the flag that denotes a corrupt save, replacing it with the damaged clock test.
 
 +Downloading a FlashRam Save at Runtime
 	Requires: GameShark + PC uplink, hex editor (optional)
