@@ -1,0 +1,1 @@
+build/eng/716EF0.bin build/jap/716EF0.bin differ: byte 20, line 1

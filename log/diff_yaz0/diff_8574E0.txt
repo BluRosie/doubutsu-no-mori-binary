@@ -1,0 +1,1 @@
+build/eng/8574E0.bin build/jap/8574E0.bin differ: byte 396, line 2
