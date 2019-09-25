@@ -1,2 +1,0 @@
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/801B70.asm(147) error: This instruction can't be in a delay slot
-Aborting.

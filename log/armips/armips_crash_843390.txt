@@ -1,5 +1,0 @@
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/843390.asm(1200) error: This instruction can't be in a delay slot
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/843390.asm(1205) error: This instruction can't be in a delay slot
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/843390.asm(1206) error: This instruction can't be in a delay slot
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/843390.asm(1210) error: This instruction can't be in a delay slot
-Aborting.

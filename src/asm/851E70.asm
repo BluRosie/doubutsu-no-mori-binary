@@ -52,7 +52,7 @@
 /* 000000c0:	00002825 */	or a1, $zero, $zero
 /* 000000c4:	0c2a71df */	jal 0xa9c77c
 /* 000000c8:	e60402c8 */	/*illegal*/ .word 0xe60402c8
-/* 000000cc:	0c014a35 */	jal 0x528d4
+/* 000000cc:	0c014a35 */	/*illegal*/ .word 0x0c014a35
 /* 000000d0:	8fa40028 */	lw a0, 40(sp)
 /* 000000d4:	ae020174 */	sw v0, 372(s0)
 /* 000000d8:	8fbf0024 */	lw ra, 36(sp)
@@ -496,23 +496,23 @@
 /* 000007b0:	80a9cb64 */	lb t1, -13468(a1)
 /* 000007b4:	42700000 */	/*illegal*/ .word 0x42700000
 /* 000007b8:	06009928 */	bltz s0, 0xfffe6c5c
-/* 000007bc:	060099a8 */	bltz s0, 0xfffe6e60
+/* 000007bc:	060099a8 */	/*illegal*/ .word 0x060099a8
 /* 000007c0:	06090954 */	tgeiu s0, 2388
 /* 000007c4:	06092a74 */	tgeiu s0, 10868
 /* 000007c8:	640c000c */	/*illegal*/ .word 0x640c000c
 /* 000007cc:	0c0c0164 */	jal 0x300590
-/* 000007d0:	0c0c0c0c */	jal 0x303030
-/* 000007d4:	0c00640c */	jal 0x19030
-/* 000007d8:	0c0c0c00 */	jal 0x303000
-/* 000007dc:	01640c0c */	syscall 0x59030
-/* 000007e0:	0c0c0c00 */	jal 0x303000
+/* 000007d0:	0c0c0c0c */	/*illegal*/ .word 0x0c0c0c0c
+/* 000007d4:	0c00640c */	/*illegal*/ .word 0x0c00640c
+/* 000007d8:	0c0c0c00 */	/*illegal*/ .word 0x0c0c0c00
+/* 000007dc:	01640c0c */	/*illegal*/ .word 0x01640c0c
+/* 000007e0:	0c0c0c00 */	/*illegal*/ .word 0x0c0c0c00
 /* 000007e4:	640c0c0c */	/*illegal*/ .word 0x640c0c0c
-/* 000007e8:	0c0c0064 */	jal 0x300190
-/* 000007ec:	0c0c0c0c */	jal 0x303030
-/* 000007f0:	0c00640c */	jal 0x19030
-/* 000007f4:	0c000c0c */	jal 0x3030
-/* 000007f8:	01640c0c */	syscall 0x59030
-/* 000007fc:	0c0c0c00 */	jal 0x303000
+/* 000007e8:	0c0c0064 */	/*illegal*/ .word 0x0c0c0064
+/* 000007ec:	0c0c0c0c */	/*illegal*/ .word 0x0c0c0c0c
+/* 000007f0:	0c00640c */	/*illegal*/ .word 0x0c00640c
+/* 000007f4:	0c000c0c */	/*illegal*/ .word 0x0c000c0c
+/* 000007f8:	01640c0c */	/*illegal*/ .word 0x01640c0c
+/* 000007fc:	0c0c0c00 */	/*illegal*/ .word 0x0c0c0c00
 /* 00000800:	640c0c0c */	/*illegal*/ .word 0x640c0c0c
 /* 00000804:	000c0100 */	sll $zero, t4, 0x4
 /* 00000808:	64000000 */	/*illegal*/ .word 0x64000000

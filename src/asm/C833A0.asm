@@ -947,7 +947,7 @@
 /* 00000ebc:	bbbbbbbb */	swr k1, -17477(sp)
 /* 00000ec0:	bbbbbbbb */	swr k1, -17477(sp)
 /* 00000ec4:	0bbbbbbb */	j 0xeeeeeec
-/* 00000ec8:	0bbbbbbb */	j 0xeeeeeec
+/* 00000ec8:	0bbbbbbb */	/*illegal*/ .word 0x0bbbbbbb
 /* 00000ecc:	bbbbbbbb */	swr k1, -17477(sp)
 /* 00000ed0:	bbbbbbb0 */	swr k1, -17488(sp)
 /* 00000ed4:	00bbbbbb */	/*illegal*/ .word 0x00bbbbbb
@@ -979,7 +979,7 @@
 /* 00000f3c:	bbbbbbb0 */	swr k1, -17488(sp)
 /* 00000f40:	bbbbbbb0 */	swr k1, -17488(sp)
 /* 00000f44:	0bbbbbbb */	j 0xeeeeeec
-/* 00000f48:	0bbbbbbb */	j 0xeeeeeec
+/* 00000f48:	0bbbbbbb */	/*illegal*/ .word 0x0bbbbbbb
 /* 00000f4c:	bbbbbb00 */	swr k1, -17664(sp)
 /* 00000f50:	bbbbbb00 */	swr k1, -17664(sp)
 /* 00000f54:	00bbbbbb */	/*illegal*/ .word 0x00bbbbbb
@@ -1405,8 +1405,8 @@
 /* 000015e4:	80505805 */	lb s0, 22533(v0)
 /* 000015e8:	00850050 */	/*illegal*/ .word 0x00850050
 /* 000015ec:	50050808 */	beql $zero, a1, 0x3610
-/* 000015f0:	55805808 */	bnel t4, $zero, 0x17614
-/* 000015f4:	50808085 */	beql a0, $zero, 0xfffe180c
+/* 000015f0:	55805808 */	/*illegal*/ .word 0x55805808
+/* 000015f4:	50808085 */	/*illegal*/ .word 0x50808085
 /* 000015f8:	80058005 */	lb a1, -32763($zero)
 /* 000015fc:	80808000 */	lb $zero, -32768(a0)
 /* 00001600:	33333333 */	andi s3, t9, 0x3333

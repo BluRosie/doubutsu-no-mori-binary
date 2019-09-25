@@ -4,8 +4,8 @@
 /* 00000000:	ffffbef9 */	/*illegal*/ .word 0xffffbef9
 /* 00000004:	95f174eb */	lhu s1, 29931(t7)
 /* 00000008:	53e13297 */	beql ra, at, 0xca68
-/* 0000000c:	10855541 */	beq a0, a1, 0x15514
-/* 00000010:	5417f147 */	bnel $zero, s7, 0xffffc530
+/* 0000000c:	10855541 */	/*illegal*/ .word 0x10855541
+/* 00000010:	5417f147 */	/*illegal*/ .word 0x5417f147
 /* 00000014:	f3e5edbd */	/*illegal*/ .word 0xf3e5edbd
 /* 00000018:	a56dceb7 */	sh t5, -12617(t3)
 /* 0000001c:	8cf1eeef */	lw s1, -4369(a3)
@@ -942,11 +942,11 @@
 /* 00000ea8:	0ddddddd */	jal 0x7777774
 /* 00000eac:	dddddddd */	/*illegal*/ .word 0xdddddddd
 /* 00000eb0:	dddddddd */	/*illegal*/ .word 0xdddddddd
-/* 00000eb4:	0ddddddd */	jal 0x7777774
-/* 00000eb8:	0ddddddd */	jal 0x7777774
+/* 00000eb4:	0ddddddd */	/*illegal*/ .word 0x0ddddddd
+/* 00000eb8:	0ddddddd */	/*illegal*/ .word 0x0ddddddd
 /* 00000ebc:	dddddddd */	/*illegal*/ .word 0xdddddddd
 /* 00000ec0:	dddddddd */	/*illegal*/ .word 0xdddddddd
-/* 00000ec4:	0ddddddd */	jal 0x7777774
+/* 00000ec4:	0ddddddd */	/*illegal*/ .word 0x0ddddddd
 /* 00000ec8:	00dddddd */	/*illegal*/ .word 0x00dddddd
 /* 00000ecc:	ddddddd0 */	/*illegal*/ .word 0xddddddd0
 /* 00000ed0:	dddddd00 */	/*illegal*/ .word 0xdddddd00
@@ -963,14 +963,14 @@
 /* 00000efc:	dddddddd */	/*illegal*/ .word 0xdddddddd
 /* 00000f00:	dddddddd */	/*illegal*/ .word 0xdddddddd
 /* 00000f04:	dddddddd */	/*illegal*/ .word 0xdddddddd
-/* 00000f08:	0ddddddd */	jal 0x7777774
+/* 00000f08:	0ddddddd */	/*illegal*/ .word 0x0ddddddd
 /* 00000f0c:	dddddddd */	/*illegal*/ .word 0xdddddddd
 /* 00000f10:	dddddddd */	/*illegal*/ .word 0xdddddddd
-/* 00000f14:	0ddddddd */	jal 0x7777774
-/* 00000f18:	0ddddddd */	jal 0x7777774
+/* 00000f14:	0ddddddd */	/*illegal*/ .word 0x0ddddddd
+/* 00000f18:	0ddddddd */	/*illegal*/ .word 0x0ddddddd
 /* 00000f1c:	dddddddd */	/*illegal*/ .word 0xdddddddd
 /* 00000f20:	dddddddd */	/*illegal*/ .word 0xdddddddd
-/* 00000f24:	0ddddddd */	jal 0x7777774
+/* 00000f24:	0ddddddd */	/*illegal*/ .word 0x0ddddddd
 /* 00000f28:	00dddddd */	/*illegal*/ .word 0x00dddddd
 /* 00000f2c:	dddddddd */	/*illegal*/ .word 0xdddddddd
 /* 00000f30:	dddddddd */	/*illegal*/ .word 0xdddddddd
@@ -1223,7 +1223,7 @@
 /* 0000130c:	bbb24555 */	swr s2, 17749(sp)
 /* 00001310:	bb245665 */	swr a0, 22117(t9)
 /* 00001314:	554321bb */	bnel t2, v1, 0x9a04
-/* 00001318:	5554321b */	bnel t2, s4, 0xdb88
+/* 00001318:	5554321b */	/*illegal*/ .word 0x5554321b
 /* 0000131c:	b2466666 */	/*illegal*/ .word 0xb2466666
 /* 00001320:	22222222 */	addi v0, s1, 8738
 /* 00001324:	22ebbbbb */	addi t3, s7, -17477

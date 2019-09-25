@@ -145,8 +145,8 @@
 /* 00000234:	3c656041 */	/*illegal*/ .word 0x3c656041
 /* 00000238:	3cdd2f1b */	/*illegal*/ .word 0x3cdd2f1b
 /* 0000023c:	0600a790 */	bltz s0, 0xfffea080
-/* 00000240:	0600a6d8 */	bltz s0, 0xfffe9da4
-/* 00000244:	0600a790 */	bltz s0, 0xfffea088
+/* 00000240:	0600a6d8 */	/*illegal*/ .word 0x0600a6d8
+/* 00000244:	0600a790 */	/*illegal*/ .word 0x0600a790
 /* 00000248:	00000000 */	nop
 /* 0000024c:	00000000 */	nop
 

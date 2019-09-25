@@ -579,7 +579,7 @@
 /* 000008fc:	021e7e0f */	/*illegal*/ .word 0x021e7e0f
 /* 00000900:	1ac2017e */	/*illegal*/ .word 0x1ac2017e
 /* 00000904:	12170000 */	beq s0, s7, 0x908
-/* 00000908:	04c17c00 */	bgez a2, 0x1f90c
+/* 00000908:	04c17c00 */	/*illegal*/ .word 0x04c17c00
 /* 0000090c:	c30000ff */	ll $zero, 255(t8)
 /* 00000910:	4691e1ff */	/*illegal*/ .word 0x4691e1ff
 /* 00000914:	00add000 */	/*illegal*/ .word 0x00add000

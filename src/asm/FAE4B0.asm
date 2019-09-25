@@ -89,7 +89,7 @@
 /* 00000154:	eecceeee */	/*illegal*/ .word 0xeecceeee
 /* 00000158:	eeeee000 */	/*illegal*/ .word 0xeeeee000
 /* 0000015c:	ddd00001 */	/*illegal*/ .word 0xddd00001
-/* 00000160:	110000dd */	beq t0, $zero, 0x4d8
+/* 00000160:	110000dd */	/*illegal*/ .word 0x110000dd
 /* 00000164:	d0ecceee */	/*illegal*/ .word 0xd0ecceee
 /* 00000168:	eeeeeece */	/*illegal*/ .word 0xeeeeeece
 /* 0000016c:	eeee88ee */	/*illegal*/ .word 0xeeee88ee
@@ -97,7 +97,7 @@
 /* 00000174:	eeceeeee */	/*illegal*/ .word 0xeeceeeee
 /* 00000178:	eeeecedd */	/*illegal*/ .word 0xeeeecedd
 /* 0000017c:	dddd0011 */	/*illegal*/ .word 0xdddd0011
-/* 00000180:	1110dddd */	beq t0, s0, 0xffff78f8
+/* 00000180:	1110dddd */	/*illegal*/ .word 0x1110dddd
 /* 00000184:	deecceee */	/*illegal*/ .word 0xdeecceee
 /* 00000188:	eeeeeec8 */	/*illegal*/ .word 0xeeeeeec8
 /* 0000018c:	eee888ee */	/*illegal*/ .word 0xeee888ee

@@ -34,7 +34,7 @@
 /* 00000078:	d10122dd */	/*illegal*/ .word 0xd10122dd
 /* 0000007c:	00000000 */	nop
 /* 00000080:	00000000 */	nop
-/* 00000084:	0dd12221 */	jal 0x7448884
+/* 00000084:	0dd12221 */	/*illegal*/ .word 0x0dd12221
 /* 00000088:	d1221cd0 */	/*illegal*/ .word 0xd1221cd0
 /* 0000008c:	00000000 */	nop
 /* 00000090:	00000000 */	nop
@@ -106,7 +106,7 @@
 /* 00000198:	444435d0 */	/*illegal*/ .word 0x444435d0
 /* 0000019c:	00000000 */	nop
 /* 000001a0:	00000000 */	nop
-/* 000001a4:	00dccccc */	syscall 0x37333
+/* 000001a4:	00dccccc */	/*illegal*/ .word 0x00dccccc
 /* 000001a8:	cccccd00 */	/*illegal*/ .word 0xcccccd00
 /* 000001ac:	00000000 */	nop
 /* 000001b0:	00000000 */	nop
@@ -174,7 +174,7 @@
 /* 000002a8:	444435d0 */	/*illegal*/ .word 0x444435d0
 /* 000002ac:	00000000 */	nop
 /* 000002b0:	00000000 */	nop
-/* 000002b4:	00dccccc */	syscall 0x37333
+/* 000002b4:	00dccccc */	/*illegal*/ .word 0x00dccccc
 /* 000002b8:	cccccd00 */	/*illegal*/ .word 0xcccccd00
 /* 000002bc:	00000000 */	nop
 /* 000002c0:	00000000 */	nop
@@ -671,13 +671,13 @@
 /* 00000a6c:	00000000 */	nop
 /* 00000a70:	00000000 */	nop
 /* 00000a74:	dc9a0000 */	/*illegal*/ .word 0xdc9a0000
-/* 00000a78:	0000a9cd */	break 0x2a7
+/* 00000a78:	0000a9cd */	/*illegal*/ .word 0x0000a9cd
 /* 00000a7c:	00000000 */	nop
-/* 00000a80:	0000000d */	break 0x0
+/* 00000a80:	0000000d */	/*illegal*/ .word 0x0000000d
 /* 00000a84:	c88c0000 */	/*illegal*/ .word 0xc88c0000
 /* 00000a88:	0000c89c */	/*illegal*/ .word 0x0000c89c
 /* 00000a8c:	d0000000 */	/*illegal*/ .word 0xd0000000
-/* 00000a90:	0000000c */	syscall 0x0
+/* 00000a90:	0000000c */	/*illegal*/ .word 0x0000000c
 /* 00000a94:	988c0000 */	lwr t4, 0(a0)
 /* 00000a98:	0000c889 */	/*illegal*/ .word 0x0000c889
 /* 00000a9c:	c0000000 */	ll $zero, 0($zero)
@@ -930,7 +930,7 @@
 /* 00000e78:	00000000 */	nop
 /* 00000e7c:	d10122dd */	/*illegal*/ .word 0xd10122dd
 /* 00000e80:	00000000 */	nop
-/* 00000e84:	0dd12221 */	jal 0x7448884
+/* 00000e84:	0dd12221 */	/*illegal*/ .word 0x0dd12221
 /* 00000e88:	d1221cd0 */	/*illegal*/ .word 0xd1221cd0
 /* 00000e8c:	00000000 */	nop
 /* 00000e90:	00dccaaa */	/*illegal*/ .word 0x00dccaaa
@@ -1025,7 +1025,7 @@
 /* 00000ff4:	00000000 */	nop
 /* 00000ff8:	d0000000 */	/*illegal*/ .word 0xd0000000
 /* 00000ffc:	00000cac */	/*illegal*/ .word 0x00000cac
-/* 00001000:	0000000c */	syscall 0x0
+/* 00001000:	0000000c */	/*illegal*/ .word 0x0000000c
 /* 00001004:	889c0000 */	lwl gp, 0(a0)
 /* 00001008:	0000c889 */	/*illegal*/ .word 0x0000c889
 /* 0000100c:	c0000000 */	ll $zero, 0($zero)

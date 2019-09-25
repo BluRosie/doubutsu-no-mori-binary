@@ -960,7 +960,7 @@
 /* 00000ef0:	f0f0f0f0 */	/*illegal*/ .word 0xf0f0f0f0
 /* 00000ef4:	f0f0f0f0 */	/*illegal*/ .word 0xf0f0f0f0
 /* 00000ef8:	0f0f0f0f */	jal 0xc3c3c3c
-/* 00000efc:	0f0f0f0f */	jal 0xc3c3c3c
+/* 00000efc:	0f0f0f0f */	/*illegal*/ .word 0x0f0f0f0f
 /* 00000f00:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00000f04:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00000f08:	ffffffff */	/*illegal*/ .word 0xffffffff

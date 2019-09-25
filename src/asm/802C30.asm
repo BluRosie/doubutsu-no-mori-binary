@@ -283,7 +283,7 @@
 /* 0000045c:	00000000 */	nop
 /* 00000460:	40dccccd */	/*illegal*/ .word 0x40dccccd
 /* 00000464:	060119b8 */	bgez s0, 0x6b48
-/* 00000468:	06011a48 */	bgez s0, 0x6d8c
+/* 00000468:	06011a48 */	/*illegal*/ .word 0x06011a48
 /* 0000046c:	00000000 */	nop
 /* 00000470:	38c90fdb */	xori t1, a2, 0xfdb
 /* 00000474:	3ca3d70b */	/*illegal*/ .word 0x3ca3d70b

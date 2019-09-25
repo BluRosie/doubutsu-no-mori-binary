@@ -1,8 +1,0 @@
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB0940.asm(11) error: This instruction can't be in a delay slot
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB0940.asm(27) error: This instruction can't be in a delay slot
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB0940.asm(43) error: This instruction can't be in a delay slot
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB0940.asm(82) error: This instruction can't be in a delay slot
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB0940.asm(87) error: This instruction can't be in a delay slot
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB0940.asm(92) error: This instruction can't be in a delay slot
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/FB0940.asm(94) error: This instruction can't be in a delay slot
-Aborting.

@@ -3,13 +3,13 @@ my attempt at setting up a sort of disassembly to animal forest for the n64 to a
 
 of the 3299 yaz0 files, all disassemble.
 
-1161 currently assemble back
+3299 currently assemble back
 
 of those that assemble back, there are 0 that don't do so properly (mipsdis fixes)
 
-progress:  1161/3299
+progress:  3299/3299 disassemble
 
-let's get something done here
+let's GO!
 
 # credits
 zoinkity: the original distro on which this finds base
@@ -32,6 +32,8 @@ have xxd for mipsdis to have proper output.  i may edit this to not be necessary
 armips is required by kingcom here on github, make sure its part of the path variable
 
 # how this whole thing was set up
+zextract was run to get all the yaz0 files out of there and decompressed, poured into dump/jap/
+
 cygwin's parts:
 
 disassembling all the dat files was done like so:

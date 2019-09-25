@@ -220,12 +220,12 @@
 /* 00000360:	24010002 */	addiu at, $zero, 2
 /* 00000364:	1101000c */	beq t0, at, 0x398
 /* 00000368:	00000000 */	nop
-/* 0000036c:	10000019 */	beq $zero, $zero, 0x3d4
+/* 0000036c:	10000019 */	/*illegal*/ .word 0x10000019
 /* 00000370:	2407000a */	addiu a3, $zero, 10
 /* 00000374:	8cb90038 */	lw t9, 56(a1)
 /* 00000378:	17200003 */	bne t9, $zero, 0x388
 /* 0000037c:	00000000 */	nop
-/* 00000380:	10000014 */	beq $zero, $zero, 0x3d4
+/* 00000380:	10000014 */	/*illegal*/ .word 0x10000014
 /* 00000384:	24070008 */	addiu a3, $zero, 8
 /* 00000388:	10000012 */	beq $zero, $zero, 0x3d4
 /* 0000038c:	24070009 */	addiu a3, $zero, 9
@@ -237,7 +237,7 @@
 /* 000003a4:	24070004 */	addiu a3, $zero, 4
 /* 000003a8:	15200003 */	bne t1, $zero, 0x3b8
 /* 000003ac:	00000000 */	nop
-/* 000003b0:	10000008 */	beq $zero, $zero, 0x3d4
+/* 000003b0:	10000008 */	/*illegal*/ .word 0x10000008
 /* 000003b4:	00003825 */	or a3, $zero, $zero
 /* 000003b8:	10000007 */	beq $zero, $zero, 0x3d8
 /* 000003bc:	00e01025 */	or v0, a3, $zero
@@ -905,15 +905,15 @@
 /* 00000e14:	03e00008 */	jr ra
 /* 00000e18:	00000000 */	nop
 /* 00000e1c:	00000000 */	nop
-/* 00000e20:	0e7e1900 */	jal 0x9f86400
+/* 00000e20:	0e7e1900 */	/*illegal*/ .word 0x0e7e1900
 /* 00000e24:	0105e701 */	/*illegal*/ .word 0x0105e701
-/* 00000e28:	0f0b1eab */	jal 0xc2c7aac
+/* 00000e28:	0f0b1eab */	/*illegal*/ .word 0x0f0b1eab
 /* 00000e2c:	3f000000 */	/*illegal*/ .word 0x3f000000
 /* 00000e30:	f5186002 */	/*illegal*/ .word 0xf5186002
-/* 00000e34:	15010f0b */	bne t0, at, 0x4a64
+/* 00000e34:	15010f0b */	/*illegal*/ .word 0x15010f0b
 /* 00000e38:	1eab3f00 */	/*illegal*/ .word 0x1eab3f00
-/* 00000e3c:	0401077b */	bgez $zero, 0x2c2c
-/* 00000e40:	15010f0b */	bne t0, at, 0x4a70
+/* 00000e3c:	0401077b */	/*illegal*/ .word 0x0401077b
+/* 00000e40:	15010f0b */	/*illegal*/ .word 0x15010f0b
 /* 00000e44:	1eab3f00 */	/*illegal*/ .word 0x1eab3f00
 /* 00000e48:	050b091e */	tltiu t0, 2334
 /* 00000e4c:	7c1eab0f */	/*illegal*/ .word 0x7c1eab0f
@@ -923,7 +923,7 @@
 /* 00000e5c:	5b025b12 */	/*illegal*/ .word 0x5b025b12
 /* 00000e60:	1401f4ab */	bne $zero, at, 0xffffe110
 /* 00000e64:	040517e7 */	/*illegal*/ .word 0x040517e7
-/* 00000e68:	0f7c1401 */	jal 0xdf05004
+/* 00000e68:	0f7c1401 */	/*illegal*/ .word 0x0f7c1401
 /* 00000e6c:	f4ab0000 */	/*illegal*/ .word 0xf4ab0000
 /* 00000e70:	1e01f500 */	/*illegal*/ .word 0x1e01f500
 /* 00000e74:	7cf4ab00 */	/*illegal*/ .word 0x7cf4ab00

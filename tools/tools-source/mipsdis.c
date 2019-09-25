@@ -30,6 +30,7 @@
 #include <ctype.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 /*
  * The field_xxx functions provide raw access to the bits denoted by code

@@ -115,7 +115,7 @@
 /* 000001bc:	e4880014 */	/*illegal*/ .word 0xe4880014
 /* 000001c0:	c48a0014 */	/*illegal*/ .word 0xc48a0014
 /* 000001c4:	e48a0014 */	/*illegal*/ .word 0xe48a0014
-/* 000001c8:	03e00008 */	jr ra
+/* 000001c8:	03e00008 */	/*illegal*/ .word 0x03e00008
 /* 000001cc:	00000000 */	nop
 /* 000001d0:	27bdffa8 */	addiu sp, sp, -88
 /* 000001d4:	afb00020 */	sw s0, 32(sp)

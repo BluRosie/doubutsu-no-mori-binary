@@ -53,7 +53,7 @@
 /* 000000c4:	1000000b */	beq $zero, $zero, 0xf4
 /* 000000c8:	e4840040 */	/*illegal*/ .word 0xe4840040
 /* 000000cc:	c4268f84 */	/*illegal*/ .word 0xc4268f84
-/* 000000d0:	10000008 */	beq $zero, $zero, 0xf4
+/* 000000d0:	10000008 */	/*illegal*/ .word 0x10000008
 /* 000000d4:	e4860040 */	/*illegal*/ .word 0xe4860040
 /* 000000d8:	3c0180a3 */	lui at, 0x80a3
 /* 000000dc:	c4288f88 */	/*illegal*/ .word 0xc4288f88

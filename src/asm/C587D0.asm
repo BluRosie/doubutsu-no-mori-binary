@@ -943,7 +943,7 @@
 /* 00000eac:	22222222 */	addi v0, s1, 8738
 /* 00000eb0:	22222221 */	addi v0, s1, 8737
 /* 00000eb4:	11111112 */	beq t0, s1, 0x5300
-/* 00000eb8:	55eeeee2 */	bnel t7, t6, 0xffffca44
+/* 00000eb8:	55eeeee2 */	/*illegal*/ .word 0x55eeeee2
 /* 00000ebc:	22222113 */	addi v0, s1, 8467
 /* 00000ec0:	22221135 */	addi v0, s1, 4405
 /* 00000ec4:	eeeefef2 */	/*illegal*/ .word 0xeeeefef2

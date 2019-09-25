@@ -188,13 +188,13 @@
 /* 000002e0:	fffe00ff */	/*illegal*/ .word 0xfffe00ff
 /* 000002e4:	44480000 */	/*illegal*/ .word 0x44480000
 /* 000002e8:	060167f0 */	bgez s0, 0x1a2ac
-/* 000002ec:	060167f0 */	bgez s0, 0x1a2b0
-/* 000002f0:	060168f0 */	bgez s0, 0x1a6b4
-/* 000002f4:	060168f0 */	bgez s0, 0x1a6b8
-/* 000002f8:	060169f0 */	bgez s0, 0x1aabc
-/* 000002fc:	060169f0 */	bgez s0, 0x1aac0
-/* 00000300:	06016af0 */	bgez s0, 0x1aec4
-/* 00000304:	06016af0 */	bgez s0, 0x1aec8
+/* 000002ec:	060167f0 */	/*illegal*/ .word 0x060167f0
+/* 000002f0:	060168f0 */	/*illegal*/ .word 0x060168f0
+/* 000002f4:	060168f0 */	/*illegal*/ .word 0x060168f0
+/* 000002f8:	060169f0 */	/*illegal*/ .word 0x060169f0
+/* 000002fc:	060169f0 */	/*illegal*/ .word 0x060169f0
+/* 00000300:	06016af0 */	/*illegal*/ .word 0x06016af0
+/* 00000304:	06016af0 */	/*illegal*/ .word 0x06016af0
 /* 00000308:	00000000 */	nop
 /* 0000030c:	00000000 */	nop
 /* 00000310:	3c03126f */	lui v1, 0x126f

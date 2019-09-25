@@ -502,7 +502,7 @@
 /* 000007c8:	c6080068 */	/*illegal*/ .word 0xc6080068
 /* 000007cc:	460a4400 */	/*illegal*/ .word 0x460a4400
 /* 000007d0:	e6100068 */	/*illegal*/ .word 0xe6100068
-/* 000007d4:	0c026695 */	jal 0x99a54
+/* 000007d4:	0c026695 */	/*illegal*/ .word 0x0c026695
 /* 000007d8:	87a4003a */	lh a0, 58(sp)
 /* 000007dc:	4600a102 */	/*illegal*/ .word 0x4600a102
 /* 000007e0:	c6120070 */	/*illegal*/ .word 0xc6120070
@@ -700,7 +700,7 @@
 /* 00000ae0:	8fa5002c */	lw a1, 44(sp)
 /* 00000ae4:	112a0005 */	beq t1, t2, 0xafc
 /* 00000ae8:	00000000 */	nop
-/* 00000aec:	0c2716b2 */	jal 0x9c5ac8
+/* 00000aec:	0c2716b2 */	/*illegal*/ .word 0x0c2716b2
 /* 00000af0:	02002025 */	or a0, s0, $zero
 /* 00000af4:	10000003 */	beq $zero, $zero, 0xb04
 /* 00000af8:	a2020940 */	sb v0, 2368(s0)
@@ -756,7 +756,7 @@
 /* 00000bc0:	2406000b */	addiu a2, $zero, 11
 /* 00000bc4:	11e10008 */	beq t7, at, 0xbe8
 /* 00000bc8:	00000000 */	nop
-/* 00000bcc:	0c2716b2 */	jal 0x9c5ac8
+/* 00000bcc:	0c2716b2 */	/*illegal*/ .word 0x0c2716b2
 /* 00000bd0:	afa40018 */	sw a0, 24(sp)
 /* 00000bd4:	8fa40018 */	lw a0, 24(sp)
 /* 00000bd8:	24180005 */	addiu t8, $zero, 5
@@ -908,7 +908,7 @@
 /* 00000e20:	518d0005 */	beql t4, t5, 0xe38
 /* 00000e24:	c606002c */	/*illegal*/ .word 0xc606002c
 /* 00000e28:	44812000 */	/*illegal*/ .word 0x44812000
-/* 00000e2c:	1000001a */	beq $zero, $zero, 0xe98
+/* 00000e2c:	1000001a */	/*illegal*/ .word 0x1000001a
 /* 00000e30:	e604007c */	/*illegal*/ .word 0xe604007c
 /* 00000e34:	c606002c */	/*illegal*/ .word 0xc606002c
 /* 00000e38:	c6080948 */	/*illegal*/ .word 0xc6080948
@@ -946,7 +946,7 @@
 /* 00000eb8:	e48008b0 */	/*illegal*/ .word 0xe48008b0
 /* 00000ebc:	e48008b4 */	/*illegal*/ .word 0xe48008b4
 /* 00000ec0:	e48008b8 */	/*illegal*/ .word 0xe48008b8
-/* 00000ec4:	03e00008 */	jr ra
+/* 00000ec4:	03e00008 */	/*illegal*/ .word 0x03e00008
 /* 00000ec8:	00000000 */	nop
 /* 00000ecc:	3c014000 */	lui at, 0x4000
 /* 00000ed0:	44810000 */	/*illegal*/ .word 0x44810000
@@ -1164,7 +1164,7 @@
 /* 00001220:	8dd900d4 */	lw t9, 212(t6)
 /* 00001224:	0320f809 */	jalr t9, ra
 /* 00001228:	00000000 */	nop
-/* 0000122c:	0c2715bd */	jal 0x9c56f4
+/* 0000122c:	0c2715bd */	/*illegal*/ .word 0x0c2715bd
 /* 00001230:	02002025 */	or a0, s0, $zero
 /* 00001234:	02002025 */	or a0, s0, $zero
 /* 00001238:	0c27162b */	jal 0x9c58ac

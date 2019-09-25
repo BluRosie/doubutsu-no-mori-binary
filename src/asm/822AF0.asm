@@ -414,9 +414,9 @@
 /* 00000668:	c71da667 */	/*illegal*/ .word 0xc71da667
 /* 0000066c:	c0000000 */	ll $zero, 0($zero)
 /* 00000670:	0600a930 */	bltz s0, 0xfffeab34
-/* 00000674:	0600a9b0 */	bltz s0, 0xfffead38
-/* 00000678:	0600aa30 */	bltz s0, 0xfffeaf3c
-/* 0000067c:	0600aab0 */	bltz s0, 0xfffeb140
+/* 00000674:	0600a9b0 */	/*illegal*/ .word 0x0600a9b0
+/* 00000678:	0600aa30 */	/*illegal*/ .word 0x0600aa30
+/* 0000067c:	0600aab0 */	/*illegal*/ .word 0x0600aab0
 /* 00000680:	2e2e2f65 */	sltiu t6, s1, 12133
 /* 00000684:	665f6d69 */	/*illegal*/ .word 0x665f6d69
 /* 00000688:	7a757461 */	/*illegal*/ .word 0x7a757461

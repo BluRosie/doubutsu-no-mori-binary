@@ -122,7 +122,7 @@
 /* 000001d8:	41a7e9ed */	/*illegal*/ .word 0x41a7e9ed
 /* 000001dc:	00000000 */	nop
 /* 000001e0:	00000009 */	/*illegal*/ .word 0x00000009
-/* 000001e4:	51a77a14 */	beql t5, a3, 0x1ea38
+/* 000001e4:	51a77a14 */	/*illegal*/ .word 0x51a77a14
 /* 000001e8:	41a77a15 */	/*illegal*/ .word 0x41a77a15
 /* 000001ec:	90000000 */	lbu $zero, 0($zero)
 /* 000001f0:	00000034 */	teq $zero, $zero, 0x0
@@ -373,7 +373,7 @@
 /* 000005c4:	0e5dd544 */	jal 0x9775510
 /* 000005c8:	445dd5e5 */	/*illegal*/ .word 0x445dd5e5
 /* 000005cc:	00000000 */	nop
-/* 000005d0:	0000000d */	break 0x0
+/* 000005d0:	0000000d */	/*illegal*/ .word 0x0000000d
 /* 000005d4:	45e44e54 */	/*illegal*/ .word 0x45e44e54
 /* 000005d8:	45e44e54 */	/*illegal*/ .word 0x45e44e54
 /* 000005dc:	d0000000 */	/*illegal*/ .word 0xd0000000
@@ -938,9 +938,9 @@
 /* 00000e98:	aa20aa20 */	swl $zero, -21984(s1)
 /* 00000e9c:	aa20aa20 */	swl $zero, -21984(s1)
 /* 00000ea0:	11201120 */	beq t1, $zero, 0x5324
-/* 00000ea4:	11201120 */	beq t1, $zero, 0x5328
-/* 00000ea8:	11021102 */	beq t0, v0, 0x52b4
-/* 00000eac:	11021102 */	beq t0, v0, 0x52b8
+/* 00000ea4:	11201120 */	/*illegal*/ .word 0x11201120
+/* 00000ea8:	11021102 */	/*illegal*/ .word 0x11021102
+/* 00000eac:	11021102 */	/*illegal*/ .word 0x11021102
 /* 00000eb0:	02020202 */	/*illegal*/ .word 0x02020202
 /* 00000eb4:	02020202 */	/*illegal*/ .word 0x02020202
 /* 00000eb8:	20202020 */	addi $zero, at, 8224
@@ -950,9 +950,9 @@
 /* 00000ec8:	22020202 */	addi v0, s0, 514
 /* 00000ecc:	02020202 */	/*illegal*/ .word 0x02020202
 /* 00000ed0:	11111111 */	beq t0, s1, 0x5318
-/* 00000ed4:	11111111 */	beq t0, s1, 0x531c
-/* 00000ed8:	11111111 */	beq t0, s1, 0x5320
-/* 00000edc:	11111111 */	beq t0, s1, 0x5324
+/* 00000ed4:	11111111 */	/*illegal*/ .word 0x11111111
+/* 00000ed8:	11111111 */	/*illegal*/ .word 0x11111111
+/* 00000edc:	11111111 */	/*illegal*/ .word 0x11111111
 /* 00000ee0:	eeffffff */	/*illegal*/ .word 0xeeffffff
 /* 00000ee4:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00000ee8:	ffffffff */	/*illegal*/ .word 0xffffffff
@@ -979,7 +979,7 @@
 /* 00000f3c:	000ff000 */	sll fp, t7, 0x0
 /* 00000f40:	000ff000 */	sll fp, t7, 0x0
 /* 00000f44:	0efff2c2 */	jal 0xbffcb08
-/* 00000f48:	0fffeccc */	jal 0xfffb330
+/* 00000f48:	0fffeccc */	/*illegal*/ .word 0x0fffeccc
 /* 00000f4c:	000ff000 */	sll fp, t7, 0x0
 /* 00000f50:	000fe000 */	sll gp, t7, 0x0
 /* 00000f54:	efffcccc */	/*illegal*/ .word 0xefffcccc

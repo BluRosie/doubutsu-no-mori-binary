@@ -1,7 +1,0 @@
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7BB510.asm(3773) error: This instruction can't be in a delay slot
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7BB510.asm(3782) error: This instruction can't be in a delay slot
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7BB510.asm(3789) error: This instruction can't be in a delay slot
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7BB510.asm(3790) error: This instruction can't be in a delay slot
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7BB510.asm(3791) error: This instruction can't be in a delay slot
-C:\users\quinc\documents\github\doubutsu-no-mori/src/asm/7BB510.asm(4163) error: This instruction can't be in a delay slot
-Aborting.
