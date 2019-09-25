@@ -88,6 +88,14 @@ so yeah command dump:
 
 the files leftover from clearing out the empty files left in this directory are the ones that were modded.  we can thus continue with the project knowing explicitly what was changed and a view of the source as it changes and we can repack it dynamically.  will need to write a new program for this probably, but hey!
 
+moving only modded files (assuming zoinkity kept dutiful) to a new directory:
+
+```for file in data/*.DAT; do cp src/jap/$(basename "$file" .DAT).asm src/asm/; done```
+
+```for file in data/*.bin; do cp src/jap/$(basename "$file" .bin).asm src/asm/; done```
+
+```for file in src/asm/*.asm; do sed -i "s#/jap/#/obj/#g" "src/asm/$(basename "$file")"; done```
+
 # cleanish files (ones without addresses/opcode hexes cluttering)
 ```for file in dump/jap/*.DAT; do xxd -o 0x00000000 -c 4 -g 4 "dump/jap/$(basename "$file")" | awk '{print $1,$2}' | ./tools/mipsdis >"src/asm/$(basename "$file" .DAT).asm" -; done```
 
