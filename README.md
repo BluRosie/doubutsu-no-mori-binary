@@ -11,7 +11,7 @@ progress:  3299/3299 disassemble
 
 let's GO!
 
-## credits
+### credits
 zoinkity: the original distro on which this finds base
 
 _demo_: author of zextract, the yaz0 binary spitter
@@ -22,11 +22,11 @@ loadzero: base mipsdis
 
 kingcom: armips
 
-## so what can be found here?
+### so what can be found here?
 
 right now, this is just a dump of all of the yaz0 files from both zoinkity's translation patch and a vanilla japanese rom
 
-## dependencies
+### dependencies
 the executables themselves don't really require anything special
 
 just have mingw installed for c stuff (just in case)
@@ -70,7 +70,7 @@ back in cmd in log/cmp (same as above, empty files denote lack of difference so 
 
 ```for /r %F in (*) do @if %~zF==0 del "%F"```
 
-## doing this for the english version
+### doing this for the english version
 now i used the last patch released as the basis for the decompilation here
 
 so yeah command dump:
@@ -83,7 +83,7 @@ so yeah command dump:
 
 ```for file in build/eng/*.bin; do cmp >log/cmp/eng_$(basename "$file" .bin).txt build/eng/$(basename "$file") dump/eng/$(basename "$file" .bin).DAT; done```
 
-## checking which files were modded
+### checking which files were modded
 ```for file in build/eng/*.bin; do cmp >log/diff_yaz0/diff_$(basename "$file" .bin).txt build/eng/$(basename "$file") build/jap/$(basename "$file"); done```
 
 the files leftover from clearing out the empty files left in this directory are the ones that were modded.  we can thus continue with the project knowing explicitly what was changed and a view of the source as it changes and we can repack it dynamically.  will need to write a new program for this probably, but hey!
@@ -96,7 +96,7 @@ moving only modded files (assuming zoinkity kept dutiful) to a new directory:
 
 ```for file in src/asm/*.asm; do sed -i "s#/jap/#/obj/#g" "src/asm/$(basename "$file")"; done```
 
-## cleanish files (ones without addresses/opcode hexes cluttering)
+### cleanish files (ones without addresses/opcode hexes cluttering)
 ```for file in dump/jap/*.DAT; do xxd -o 0x00000000 -c 4 -g 4 "dump/jap/$(basename "$file")" | awk '{print $1,$2}' | ./tools/mipsdis >"src/asm/$(basename "$file" .DAT).asm" -; done```
 
 ```for file in src/asm/*.asm; do sed -i "s#output.bin#build/obj/$(basename "$file" .asm).bin#g" "src/asm/$(basename "$file")"; done```
@@ -106,3 +106,6 @@ building:
 ```for file in src/asm/*.asm; do armips >"log/armips/asm_crash_$(basename "$file" .asm).txt" src/asm/$(basename "$file"); done```
 
 no need to cmp it to anything
+
+# check out issues for a tracking of the progress on getting to where zoinkity was
+goal is to be able to get to where zoinkity was but a little more streamlined (ideally)
