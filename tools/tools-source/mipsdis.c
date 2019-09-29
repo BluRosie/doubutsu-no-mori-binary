@@ -296,6 +296,8 @@ static int check_jalr(uint32_t rs, uint32_t rd)
     return rs != rd;
 }
 
+bool _delay = false;
+
 #include "../../include/mips_dispatch.h"
 
 /* The entry point into the auto generated code. */
@@ -358,13 +360,14 @@ static uint32_t hex_to_u32(const char *s)
     return (uint32_t) strtoul(s, 0, 16);
 }
 
-//#define DEBUG
+#define DEBUG
 // define DEBUG to get the address and opcode in hex.  the output will still be compilable, though
 
 /*
  * For each line of the given stream, call the decoder and print the
  * input address, opcode and disasm to stdout.
  */
+
 static void decode_stream(FILE * stream)
 {
     const char *sep = " \t\r\n";
@@ -411,7 +414,10 @@ static void decode_stream(FILE * stream)
         }
         #else
         if (!opcode)
+        {
             printf("\tnop\n");
+            _delay = false;
+        }
         else
         {
             decode(outbuf, 64, address, opcode);

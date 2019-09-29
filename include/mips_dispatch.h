@@ -115,8 +115,6 @@ static char* format_register(uint32_t re)
     return reg;
 }
 
-bool _delay = false;
-
 static void decode_j(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     if (_delay)
