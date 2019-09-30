@@ -406,7 +406,10 @@ static void decode_stream(FILE * stream)
 
         #ifdef DEBUG
         if (!opcode)
+        {
             printf("/* %08x:\t%08x */\tnop\n", address, opcode);
+            _delay = false;
+        }
         else
         {
             decode(outbuf, 64, address, opcode);
