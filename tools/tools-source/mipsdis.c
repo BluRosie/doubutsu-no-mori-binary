@@ -360,7 +360,7 @@ static uint32_t hex_to_u32(const char *s)
     return (uint32_t) strtoul(s, 0, 16);
 }
 
-//#define DEBUG
+#define DEBUG
 // define DEBUG to get the address and opcode in hex.  the output will still be compilable, though
 
 /*

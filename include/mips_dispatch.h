@@ -190,25 +190,25 @@ static void decode_bgtz(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 static void decode_addi(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"addi %s, %s, %d",format_register(getrt(op)),format_register(getrs(op)),getsimm(op));
+    snprintf(outbuf,n,"addi %s, %s, 0x%x",format_register(getrt(op)),format_register(getrs(op)),getsimm(op));
 }
 
 static void decode_addiu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"addiu %s, %s, %d",format_register(getrt(op)),format_register(getrs(op)),getsimm(op));
+    snprintf(outbuf,n,"addiu %s, %s, 0x%x",format_register(getrt(op)),format_register(getrs(op)),getsimm(op));
 }
 
 static void decode_slti(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"slti %s, %s, %d",format_register(getrt(op)),format_register(getrs(op)),getsimm(op));
+    snprintf(outbuf,n,"slti %s, %s, 0x%x",format_register(getrt(op)),format_register(getrs(op)),getsimm(op));
 }
 
 static void decode_sltiu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"sltiu %s, %s, %d",format_register(getrt(op)),format_register(getrs(op)),getsimm(op));
+    snprintf(outbuf,n,"sltiu %s, %s, 0x%x",format_register(getrt(op)),format_register(getrs(op)),getsimm(op));
 }
 
 static void decode_andi(char *outbuf, size_t n, uint32_t pc, uint32_t op)
