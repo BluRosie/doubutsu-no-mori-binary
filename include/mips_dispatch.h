@@ -292,98 +292,98 @@ static void decode_bgtzl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 static void decode_lb(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"lb %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"lb %s, 0x%x(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_lh(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"lh %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"lh %s, 0x%x(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_lwl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"lwl %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"lwl %s, 0x%x(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_lw(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"lw %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"lw %s, 0x%x(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_lbu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"lbu %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"lbu %s, 0x%x(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_lhu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"lhu %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"lhu %s, 0x%x(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_lwr(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"lwr %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"lwr %s, 0x%x(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_sb(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"sb %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"sb %s, 0x%x(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_sh(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"sh %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"sh %s, 0x%x(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_swl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"swl %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"swl %s, 0x%x(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_sw(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"sw %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"sw %s, 0x%x(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_swr(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"swr %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"swr %s, 0x%x(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_cache(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"cache 0x%x, %d(%s)",getcacheop(op),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"cache 0x%x, 0x%x(%s)",getcacheop(op),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_ll(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"ll %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"ll %s, 0x%x(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_pref(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     decode_illegal(outbuf, n, pc, op);
 
-    // snprintf(outbuf,n,"pref 0x%x, %d(%s)",getprefhint(op),getoffset(op),format_register(getbase(op)));
+    // snprintf(outbuf,n,"pref 0x%x, 0x%x(%s)",getprefhint(op),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_sc(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     _delay = false;
-    snprintf(outbuf,n,"sc %s, %d(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
+    snprintf(outbuf,n,"sc %s, 0x%x(%s)",format_register(getrt(op)),getoffset(op),format_register(getbase(op)));
 }
 
 static void decode_sll(char *outbuf, size_t n, uint32_t pc, uint32_t op)
