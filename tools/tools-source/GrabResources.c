@@ -39,17 +39,17 @@ int codeword(FILE *in, unsigned long code, unsigned long *start, unsigned long *
 
     code = byteswap(code); //intel fix
 
-    for(y = 0x19D50; y < 0x27130; y += 16)
+    for(y = 0x19D50; y < 0x27130; y += 16) // 0x1FA90 in the look_for_codeword
     {
-        fseek(in, y, SEEK_SET);
-        fread(&x, 4, 1, in);
+        fseek(in, y, SEEK_SET); // at y offset
+        fread(&x, 4, 1, in); // store codeword at this offset in x
         if(x == code)
         {
-            fread(&y, 4, 1, in);
+            fread(&y, 4, 1, in); // store codeword + 4 in y
             y = byteswap(y);
             x = byteswap(x);
-            y = y - x;
-            fread(&x, 4, 1, in);
+            y = y - x; // get size = *(codeword + 4) - *codeword
+            fread(&x, 4, 1, in); // rom offset finally loaded
             *start = byteswap(x);
             *end = *start + y;
             return 0;
