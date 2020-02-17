@@ -163,7 +163,7 @@
 /* 0000027c:	0003c03c */	/*illegal*/ .word 0x0003c03c
 /* 00000280:	fcfffe03 */	/*illegal*/ .word 0xfcfffe03
 /* 00000284:	ff0cf3ff */	/*illegal*/ .word 0xff0cf3ff
-/* 00000288:	e200001c */	sc $zero, 28(s0)
+/* 00000288:	e200001c */	sc $zero, 0x1c(s0)
 /* 0000028c:	c81049d8 */	/*illegal*/ .word 0xc81049d8
 /* 00000290:	d9f3ffff */	/*illegal*/ .word 0xd9f3ffff
 /* 00000294:	00000000 */	nop

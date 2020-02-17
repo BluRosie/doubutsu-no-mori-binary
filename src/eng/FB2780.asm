@@ -36,7 +36,7 @@
 /* 00000080:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00000084:	ffb30000 */	/*illegal*/ .word 0xffb30000
 /* 00000088:	00000000 */	nop
-/* 0000008c:	bfffffff */	cache 0x1f, -1(ra)
+/* 0000008c:	bfffffff */	cache 0x1f, 0xffffffff(ra)
 /* 00000090:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00000094:	ffffffff */	/*illegal*/ .word 0xffffffff
 /* 00000098:	ffffffff */	/*illegal*/ .word 0xffffffff

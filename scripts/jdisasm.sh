@@ -1,0 +1,1 @@
+for file in dump/jap/*.DAT; do xxd -o 0x00000000 -c 4 -g 4 "dump/jap/$(basename "$file")" | awk '{print $1,$2}' | ./tools/mipsdis-debug >"src/jap/$(basename "$file" .DAT).asm" -; done

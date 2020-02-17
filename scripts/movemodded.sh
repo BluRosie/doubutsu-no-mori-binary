@@ -1,0 +1,1 @@
+for file in log/diff_yaz0/*.txt; do cp src/jap/$(basename "$file" .txt).asm src/asm/; done

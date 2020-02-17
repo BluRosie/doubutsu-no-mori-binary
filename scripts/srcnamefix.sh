@@ -1,0 +1,1 @@
+for file in src/asm/*.asm; do sed -i "s#/jap/#/obj/#g" "src/asm/$(basename "$file")"; done

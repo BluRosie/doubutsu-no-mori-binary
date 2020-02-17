@@ -1,0 +1,1 @@
+for file in build/eng/*.bin; do cmp >log/cmp/cmp_$(basename "$file" .bin).txt build/eng/$(basename "$file") dump/eng/$(basename "$file" .bin).DAT; done

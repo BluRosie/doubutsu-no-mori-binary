@@ -15,7 +15,7 @@
 /* 0000002c:	0a281450 */	/*illegal*/ .word 0x0a281450
 /* 00000030:	65909c40 */	/*illegal*/ .word 0x65909c40
 /* 00000034:	1f4004b0 */	/*illegal*/ .word 0x1f4004b0
-/* 00000038:	2ee01450 */	sltiu $zero, s7, 5200
+/* 00000038:	2ee01450 */	sltiu $zero, s7, 0x1450
 /* 0000003c:	1450ea60 */	bne v0, s0, 0xffffa9c0
 /* 00000040:	ffff0000 */	/*illegal*/ .word 0xffff0000
 /* 00000044:	00000000 */	nop

@@ -1,0 +1,1 @@
+for file in src/jap/*.asm; do sed -i "s#output.bin#build/jap/$(basename "$file" .asm).bin#g" "src/jap/$(basename "$file")"; done

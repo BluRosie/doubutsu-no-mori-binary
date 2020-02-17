@@ -1,0 +1,1 @@
+for file in build/jap/*.bin; do cmp >log/cmp/cmp_$(basename "$file" .bin).txt build/jap/$(basename "$file") dump/jap/$(basename "$file" .bin).DAT; done
