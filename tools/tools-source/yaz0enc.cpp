@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+#include <cstring>
 using namespace std;
 
 typedef unsigned char u8;
@@ -98,7 +99,7 @@ int encodeYaz0(u8* src, int srcSize, FILE* dstFile)
   u8 dst[24];    // 8 codes * 3 bytes maximum
   int dstSize = 0;
   int percent = -1;
-  
+
   u32 validBitCount = 0; //number of valid bits left in "code" byte
   u8 currCodeByte = 0;
   while(r.srcPos < srcSize)
@@ -117,10 +118,10 @@ int encodeYaz0(u8* src, int srcSize, FILE* dstFile)
       //set flag for straight copy
       currCodeByte |= (0x80 >> validBitCount);
     }
-    else 
+    else
     {
       //RLE part
-      u32 dist = r.srcPos - matchPos - 1; 
+      u32 dist = r.srcPos - matchPos - 1;
       u8 byte1, byte2, byte3;
 
       if (numBytes >= 0x12)  // 3 byte encoding
@@ -134,7 +135,7 @@ int encodeYaz0(u8* src, int srcSize, FILE* dstFile)
           numBytes = 0xff+0x12;
         byte3 = numBytes - 0x12;
         dst[r.dstPos++] = byte3;
-      } 
+      }
       else  // 2 byte encoding
       {
         byte1 = ((numBytes - 2) << 4) | (dist >> 8);
@@ -174,7 +175,7 @@ int encodeYaz0(u8* src, int srcSize, FILE* dstFile)
     r.dstPos = 0;
   }
   printf("\r done\n", percent);
-    
+
   return dstSize;
 }
 
@@ -186,14 +187,14 @@ srcName: name of original file
 
 encodeYaz0() then handles the actual encoding
 ****************************************************/
-void encodeAll(u8 * src, int srcSize, char* srcName)
+void encodeAll(u8 *src, int srcSize, char *srcName, char *dstName)
 {
-  char dstName[300];//name for output file
+  //char dstName[300];//name for output file
   char dummy[8];   //used only to store blank header entries...
   int dstSize;     //size of output file, returned by encryption routine
   FILE* DataFile;  //output's filename
 
-  sprintf(dstName, "%s.yaz0", srcName);
+  //sprintf(dstName, "%s.yaz0", srcName);
   if((DataFile=fopen(dstName,"wb"))==NULL)
     exit(-1);
   printf("Writing %s\n", dstName);
@@ -206,7 +207,7 @@ void encodeAll(u8 * src, int srcSize, char* srcName)
   fwrite(&Size, 1, 4, DataFile);
 
   memset(dummy, 0, 8);
-  // write 8 bytes unused dummy 
+  // write 8 bytes unused dummy
   fwrite(dummy, 1, 8, DataFile);
 
   dstSize = encodeYaz0(src, srcSize, DataFile);//actually compress the data
@@ -237,7 +238,7 @@ int main(int argc, char* argv[])
 
   fclose(inFile);
 
-  encodeAll(buff, size, argv[1]);
+  encodeAll(buff, size, argv[1], argv[2]);
   delete [] buff;
 
   return EXIT_SUCCESS;

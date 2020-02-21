@@ -55,6 +55,7 @@ follow the above procedure except replacing the j in each .sh file with an e and
 ### checking which files were modded
 1.) run scripts/modcheck.sh
 2.) cmd in log/diff_yaz0
+
 ```for /r %F in (*) do @if %~zF==0 echo "%F" >>no_diff.txt```
 
 ```for /r %F in (*) do @if %~zF==0 del "%F"```
@@ -62,16 +63,10 @@ follow the above procedure except replacing the j in each .sh file with an e and
 3.) run scripts/movemodded.sh
 4.) run scripts/srcnamefix.sh
 
-### cleanish files (ones without addresses/opcode hexes cluttering)
-```for file in dump/jap/*.DAT; do xxd -o 0x00000000 -c 4 -g 4 "dump/jap/$(basename "$file")" | awk '{print $1,$2}' | ./tools/mipsdis >"src/asm/$(basename "$file" .DAT).asm" -; done```
-
-```for file in src/asm/*.asm; do sed -i "s#output.bin#build/asm/$(basename "$file" .asm).bin#g" "src/asm/$(basename "$file")"; done```
-
-building:
-
-```for file in src/asm/*.asm; do armips >"log/armips/asm_crash_$(basename "$file" .asm).txt" src/asm/$(basename "$file"); done```
-
-no need to cmp it to anything
+### building
+1.) run scripts/srcbuildyaz0.sh - this will build all the files in src/asm, outputting to build/obj
+2.) run scripts/compress.sh - this will yaz0 compress the files in build/obj, outputting to build/yaz0
+3.) run scripts/insert.sh - this will insert the files in build/yaz0 to the hex address of their names
 
 # check out issues for a tracking of the progress on getting to where zoinkity was
 goal is to be able to get to where zoinkity was but a little more streamlined (ideally)

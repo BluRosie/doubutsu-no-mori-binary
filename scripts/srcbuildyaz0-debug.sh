@@ -1,0 +1,1 @@
+for file in src/asm/*.asm; do armips >"log/armips/asm_crash_$(basename "$file" .asm).txt" src/asm/$(basename "$file"); done

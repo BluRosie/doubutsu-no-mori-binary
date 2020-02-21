@@ -1,0 +1,1 @@
+for file in src/asm/*.asm; do armips src/asm/$(basename "$file"); done
