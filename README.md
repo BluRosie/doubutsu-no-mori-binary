@@ -31,9 +31,13 @@ armips is required by kingcom here on github, make sure its part of the path var
 
 # how this whole thing was set up
 1.) run zextract on your favorite doubutsu no mori n64 rom file, putting all the files into dump/jap
+
 2.) run scripts/jdisasm.sh
+
 3.) run scripts/jnamefix.sh
+
 4.) run scripts/jbuildyaz0.sh
+
 5.) now in cmd prompt, navigate to log/armips/ and run the following (empty files denote no crashes, so log and then delete them):
 
 ```for /r %F in (*) do @if %~zF==0 echo "%F" >>jap_no_crash.txt```
@@ -41,6 +45,7 @@ armips is required by kingcom here on github, make sure its part of the path var
 ```for /r %F in (*) do @if %~zF==0 del "%F"```
 
 6.) run scripts/jdiffcheck.sh
+
 7.) back in cmd in log/cmp (same as above, empty files denote lack of difference so log all those in one big file):
 
 ```for /r %F in (*) do @if %~zF==0 echo "%F" >>jap_no_diff.txt```
@@ -54,6 +59,7 @@ follow the above procedure except replacing the j in each .sh file with an e and
 
 ### checking which files were modded
 1.) run scripts/modcheck.sh
+
 2.) cmd in log/diff_yaz0
 
 ```for /r %F in (*) do @if %~zF==0 echo "%F" >>no_diff.txt```
@@ -61,11 +67,14 @@ follow the above procedure except replacing the j in each .sh file with an e and
 ```for /r %F in (*) do @if %~zF==0 del "%F"```
 
 3.) run scripts/movemodded.sh
+
 4.) run scripts/srcnamefix.sh
 
 ### building
 1.) run scripts/srcbuildyaz0.sh - this will build all the files in src/asm, outputting to build/obj
+
 2.) run scripts/compress.sh - this will yaz0 compress the files in build/obj, outputting to build/yaz0
+
 3.) run scripts/insert.sh - this will insert the files in build/yaz0 to the hex address of their names
 
 # check out issues for a tracking of the progress on getting to where zoinkity was
