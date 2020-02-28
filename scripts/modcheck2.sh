@@ -1,0 +1,1 @@
+for file in dump/checking/*.DAT; do cmp >log/obj_diff_yaz0/$(basename "$file" .DAT).txt dump/checking/$(basename "$file") dump/jap/$(basename "$file"); done
