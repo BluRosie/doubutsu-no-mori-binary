@@ -89,7 +89,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
         case TBL_MESSAGE_DATA:
             if(codeword(in, 0x00CF9000, &ptbl, &etbl))
                 break;
-            if(codeword(in, 0x00BD4000, &pbin, &ebin))
+            if(codeword(in, 0x00BD4000, &pbin, &ebin)) // if the default doesn't work, use zoinkity's reworked codeword
                 codeword(in, 0x01914000, &pbin, &ebin);
             break;
         case TBL_SELECT_DATA:
@@ -484,7 +484,7 @@ int extracto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
     if(!ptbl || !etbl)
     {
         etbl = ebin - pbin;
-        if(type > 11)
+        if(type > TBL_NPC_NAME_STR) // everything above this is items
             y = 10;  /*item lists are 10 bytes each*/
         for(x = y; x <= etbl; x += y)
         {
@@ -650,7 +650,7 @@ int main(int argc, char *argv[])
         flag |= 0x20000000;	//detect hacked item lists
 
     /*iterate through and open files*/
-    for(x = 0; x < 29; x++)
+    for(x = TBL_MESSAGE_DATA; x <= TBL_1XXX_ITEMS; x++)
     {
         if((flag >> x) & 1)
             continue;

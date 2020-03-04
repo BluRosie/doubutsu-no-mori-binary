@@ -1,7 +1,8 @@
 # doubutsu-no-mori
 
-TODO:  get building working
-TODO:  once building works, get that first bunch of code disassembled and inserted as well (until 0x19D40 or the table end, include the table?)
+TODO:  once building works, get that first bunch of code disassembled and inserted as well (until 0x19D40 or the table end, **include the table**?)
+
+TODO:  dump the text!  let's go!
 
 my attempt at setting up a sort of disassembly to animal forest for the n64 to allow for easier translation
 
