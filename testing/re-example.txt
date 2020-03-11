@@ -1,0 +1,45 @@
+an example of finding some code found in memory with this setup
+
+so, today i ran into a bee tree directly next to my house.  i decided to hunt down what exactly was handling it!
+
+i saved two ramdumps--one right before the sting, one right after.
+
+this way i could narrow down what exactly the sting affected by changing certain values at the differences.
+
+after a long while of changing various bytes at other offsets (denoted by differences), we discover that 801378D8 is the memory location that controls whether or not the bee stings show up on the face
+any value other than 0 results in the face being stung!
+
+so we set a write breakpoint at 801378D8 and go back to before the bee sting happened!
+
+when the bee sting happens, the breakpoint trips at pc = 803CC5A4.
+
+navigate there in memory to extract the opcodes for it in hex:
+A0 4E 0A 38 A0 40 0A 39
+is the hex for
+ sb t6, 0xa38(v0)
+ sb $zero, 0xa39(v0)
+
+now we learn that 801378D8 is part of a structure by the way the assembly accesses it using offsets.  at this point, v0 = 80136EA0, so we can determine that this is probably some sort of overall variable structure.
+801378D8 = 80136EA0 + A38, so that is how this should be referred to; it's how the game accesses the memory.
+
+note that this is more than enough, in all likelihood, to determine uniquity!  if it happens more than once, then there are multiple places it is handled in the exact same way, which seems extremely unlikely.
+
+now, there's ./scripts/checkforbytes.sh.  inside, there's a hexadecimal string.  replace it with yours and let your computer run for a bit.
+in our case, we put in A0 4E 0A 38 A0 40 0A 39 in the string, so the shell script looks like:
+for file in build/jap/*.bin; do grep -o "A0 4E 0A 38 A0 40 0A 39" <(hexdump -v -e '/1 "%02X "' build/jap/$(basename "$file")) | wc -l >>log/checkforbytes/$(basename "$file" .bin).txt; done
+
+this stores the results of the grep in files in log/checkforbytes/(filename).txt
+this way we can search for 1 in that directory and find the file that contains the byte sequence we defined!
+
+when we search 1 in that directory, the result is 734F30.txt
+this tells us that our hex string (and thus opcodes we searched for) is in 734F30.asm!
+
+in this current implementation, mipsdis doesn't support floating point instructions, so some instructions appear as "illegal."  special care was taken to make sure it builds back correctly though.
+
+so i modified the instruction just one little bit: 
+/* 00027e14:	a04e0a38 */	sb $zero, 0xa38(v0) // now it stores a 0 in 80136EA0 + A38 instead of a 1!
+/* 00027e18:	a0400a39 */	sb $zero, 0xa39(v0)
+
+so we run through the building process as described in README.md
+
+and the results are in this very folder!  so yeah!  a little lengthy, but gets the job done!  as time progresses, you get used to the flow of things
