@@ -124,7 +124,10 @@ static void decode_j(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"j 0x%x",gettarget(pc,op));
+    if (gettarget(pc,op) > pc && gettarget(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"j _%08x",gettarget(pc,op));
+    else
+        snprintf(outbuf,n,"j 0x%08x",gettarget(pc,op));
 }
 
 static void decode_jal(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -136,7 +139,10 @@ static void decode_jal(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"jal 0x%x",gettarget(pc,op));
+    if (gettarget(pc,op) > pc && gettarget(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"jal _%08x",gettarget(pc,op));
+    else
+        snprintf(outbuf,n,"jal 0x%08x",gettarget(pc,op));
 }
 
 static void decode_beq(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -148,7 +154,10 @@ static void decode_beq(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"beq %s, %s, 0x%x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"beq %s, %s, _%08x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"beq %s, %s, 0x%08x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
 }
 
 static void decode_bne(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -160,7 +169,10 @@ static void decode_bne(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"bne %s, %s, 0x%x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"bne %s, %s, _%08x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"bne %s, %s, 0x%08x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
 }
 
 static void decode_blez(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -172,7 +184,10 @@ static void decode_blez(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"blez %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"blez %s, _%08x",format_register(getrs(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"blez %s, 0x%08x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bgtz(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -184,7 +199,10 @@ static void decode_bgtz(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"bgtz %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"bgtz %s, _%08x",format_register(getrs(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"bgtz %s, 0x%08x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_addi(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -250,7 +268,10 @@ static void decode_beql(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"beql %s, %s, 0x%x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"beql %s, %s, _%08x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"beql %s, %s, 0x%08x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
 }
 
 static void decode_bnel(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -262,7 +283,10 @@ static void decode_bnel(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"bnel %s, %s, 0x%x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"bnel %s, %s, _%08x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"bnel %s, %s, 0x%08x",format_register(getrs(op)),format_register(getrt(op)),getbroff(pc,op));
 }
 
 static void decode_blezl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -274,7 +298,10 @@ static void decode_blezl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"blezl %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"blezl %s, _%08x",format_register(getrs(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"blezl %s, 0x%08x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bgtzl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -286,7 +313,10 @@ static void decode_bgtzl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"bgtzl %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"bgtzl %s, _%08x",format_register(getrs(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"bgtzl %s, 0x%08x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_lb(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -887,7 +917,10 @@ static void decode_bltz(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"bltz %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"bltz %s, _%08x",format_register(getrs(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"bltz %s, 0x%08x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bgez(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -899,7 +932,10 @@ static void decode_bgez(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"bgez %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"bgez %s, _%08x",format_register(getrs(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"bgez %s, 0x%08x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bltzl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -911,7 +947,10 @@ static void decode_bltzl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"bltzl %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"bltzl %s, _%08x",format_register(getrs(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"bltzl %s, 0x%08x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bgezl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -923,7 +962,10 @@ static void decode_bgezl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"bgezl %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"bgezl %s, _%08x",format_register(getrs(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"bgezl %s, 0x%08x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_tgei(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -971,7 +1013,10 @@ static void decode_bltzal(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"bltzal %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"bltzal %s, _%08x",format_register(getrs(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"bltzal %s, 0x%08x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bgezal(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -983,7 +1028,10 @@ static void decode_bgezal(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"bgezal %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"bgezal %s, _%08x",format_register(getrs(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"bgezal %s, 0x%08x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bltzall(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -995,7 +1043,10 @@ static void decode_bltzall(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"bltzall %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"bltzall %s, _%08x",format_register(getrs(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"bltzall %s, 0x%08x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_bgezall(char *outbuf, size_t n, uint32_t pc, uint32_t op)
@@ -1007,7 +1058,10 @@ static void decode_bgezall(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 
     _delay = true;
-    snprintf(outbuf,n,"bgezall %s, 0x%x",format_register(getrs(op)),getbroff(pc,op));
+    if (getbroff(pc,op) > pc && getbroff(pc,op) <= programbase + filesize)
+        snprintf(outbuf,n,"bgezall %s, _%08x",format_register(getrs(op)),getbroff(pc,op));
+    else
+        snprintf(outbuf,n,"bgezall %s, 0x%08x",format_register(getrs(op)),getbroff(pc,op));
 }
 
 static void decode_mfc0(char *outbuf, size_t n, uint32_t pc, uint32_t op)

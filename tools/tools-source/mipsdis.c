@@ -165,6 +165,45 @@ static uint32_t getrd(uint32_t op)
     return field_d(op);
 }
 
+uint32_t logaddresses[500] = {0}; // log up to 500 addresses to be labeled
+
+static void logtarget(uint32_t address)
+{
+    int i;
+
+    for (i = 0; i < sizeof(logaddresses) / sizeof(uint32_t); i++)
+    {
+        if (logaddresses[i] == address)
+            return;
+        else if (logaddresses[i] == 0)
+        {
+            logaddresses[i] = address;
+            return;
+        }
+    }
+}
+
+static bool deleteaddress(uint32_t address) // deletes the address from the log so it won't be used again
+{
+    int i;
+    bool _hasBeenRemoved = 0;
+
+    for (i = 0; i < sizeof(logaddresses) / sizeof(uint32_t); i++)
+    {
+        if (logaddresses[i] == address)
+        {
+            _hasBeenRemoved = 1;
+        }
+
+        if (_hasBeenRemoved && i != (sizeof(logaddresses) / sizeof(uint32_t) - 1))
+        {
+            logaddresses[i] = logaddresses[i + 1];
+        }
+    }
+
+    return _hasBeenRemoved;
+}
+
 /* Compute the jump target address (used in j, jal) */
 static uint32_t gettarget(uint32_t pc, uint32_t op)
 {
@@ -172,6 +211,9 @@ static uint32_t gettarget(uint32_t pc, uint32_t op)
 
     uint32_t hibits = (pc + 4) & 0xf0000000;
     uint32_t lobits = x << 2;
+
+    if ((hibits | lobits) > pc)
+        logtarget(hibits | lobits);
 
     return hibits | lobits;
 }
@@ -184,6 +226,9 @@ static uint32_t getbroff(uint32_t pc, uint32_t op)
     /* from bithacks */
     const int32_t m = 1U << (18 - 1);
     int32_t r = (o ^ m) - m;
+
+    if (((pc + 4) + (uint32_t) r) > pc)
+        logtarget((pc + 4) + (uint32_t) r);
 
     return (pc + 4) + (uint32_t) r;
 }
@@ -297,6 +342,8 @@ static int check_jalr(uint32_t rs, uint32_t rd)
 }
 
 bool _delay = false;
+bool _baseset = false;
+uint32_t programbase = 0, filesize = 0xC9DB0; // currently it's the size of 675720.bin
 
 #include "../../include/mips_dispatch.h"
 
@@ -402,7 +449,16 @@ static void decode_stream(FILE * stream)
             continue;
 
         address = hex_to_u32(addrtok);
+        if (!_baseset)
+        {
+            programbase = address;
+            _baseset = true;
+            printf(".org 0x%08x\n\n_%08x:\n", address, address);
+        }
         opcode = hex_to_u32(optok);
+
+        if (deleteaddress(address))
+            printf("\n_%08x:\n", address);
 
         #ifdef DEBUG
         if (!opcode)
@@ -460,6 +516,13 @@ int main(int argc, char **argv)
 
         do_close = 1;
     }
+
+    // make sure to get the file size before decoding the stream
+
+    /*fseek(stream, 0, SEEK_END);
+    filesize = ftell(stream);
+    printf("file size: %08x", filesize);
+    fseek(stream, 0, SEEK_SET);*/
 
     decode_stream(stream);
 
