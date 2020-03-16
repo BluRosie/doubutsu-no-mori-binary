@@ -1,1 +1,0 @@
-build/eng/71F420.bin build/jap/71F420.bin differ: byte 20, line 1

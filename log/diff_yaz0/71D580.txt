@@ -1,1 +1,0 @@
-build/eng/71D580.bin build/jap/71D580.bin differ: byte 658, line 2

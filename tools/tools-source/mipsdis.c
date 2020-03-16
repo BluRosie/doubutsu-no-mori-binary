@@ -165,7 +165,7 @@ static uint32_t getrd(uint32_t op)
     return field_d(op);
 }
 
-uint32_t logaddresses[500] = {0}; // log up to 500 addresses to be labeled
+uint32_t logaddresses[50000] = {0}; // log up to 5000 addresses to be labeled
 
 static void logtarget(uint32_t address)
 {
@@ -212,9 +212,6 @@ static uint32_t gettarget(uint32_t pc, uint32_t op)
     uint32_t hibits = (pc + 4) & 0xf0000000;
     uint32_t lobits = x << 2;
 
-    if ((hibits | lobits) > pc)
-        logtarget(hibits | lobits);
-
     return hibits | lobits;
 }
 
@@ -226,9 +223,6 @@ static uint32_t getbroff(uint32_t pc, uint32_t op)
     /* from bithacks */
     const int32_t m = 1U << (18 - 1);
     int32_t r = (o ^ m) - m;
-
-    if (((pc + 4) + (uint32_t) r) > pc)
-        logtarget((pc + 4) + (uint32_t) r);
 
     return (pc + 4) + (uint32_t) r;
 }
@@ -343,7 +337,7 @@ static int check_jalr(uint32_t rs, uint32_t rd)
 
 bool _delay = false;
 bool _baseset = false;
-uint32_t programbase = 0, filesize = 0xC9DB0; // currently it's the size of 675720.bin
+uint32_t programbase = 0, filesize = 0;
 
 #include "../../include/mips_dispatch.h"
 
@@ -351,6 +345,32 @@ uint32_t programbase = 0, filesize = 0xC9DB0; // currently it's the size of 6757
 static void decode(char *out_buf, size_t n, uint32_t addr, uint32_t opcode)
 {
     decode_OPCODE(out_buf, n, addr, opcode);
+}
+
+static void decodeandlogtargets(uint32_t addr, uint32_t opcode)
+{
+    switch (getopcode(opcode))
+    {
+        case 1:
+            switch (getrt(opcode))
+            {
+                case 0 ... 3:
+                case 16 ... 19:
+                    logtarget(getbroff(addr, opcode));
+                default:
+                    return;
+            }
+            return;
+        case 2 ... 3:
+            logtarget(gettarget(addr, opcode));
+            return;
+        case 4 ... 7:
+        case 20 ... 23:
+            logtarget(getbroff(addr, opcode));
+        default:
+            return;
+    }
+    return;
 }
 
 /*
@@ -401,6 +421,11 @@ static int is_hexword(const char *s)
     return 1;
 }
 
+uint32_t byteswap(uint32_t w)
+{
+    return (w >> 24) | ((w >> 8) & 0x0000ff00) | ((w << 8) & 0x00ff0000) | (w << 24);
+}
+
 /* Convert the c_string containing hex chars to a u32. */
 static uint32_t hex_to_u32(const char *s)
 {
@@ -415,14 +440,14 @@ static uint32_t hex_to_u32(const char *s)
  * input address, opcode and disasm to stdout.
  */
 
-static void decode_stream(FILE * stream)
+static void decode_stream(FILE *stream, FILE *srcfile)
 {
     const char *sep = " \t\r\n";
     char *lineptr = 0;
-    size_t n = 0;
+    uint32_t n = 0;
     char outbuf[64] = { 0 };
 
-    ssize_t rn = 0;
+    int32_t rn = 0;
     char *saveptr = 0;
 
     char *addrtok = 0;
@@ -432,6 +457,18 @@ static void decode_stream(FILE * stream)
     uint32_t opcode = 0;
 
     printf(".n64\n.create \"output.bin\", 0\n\n");
+
+    for (address = 0; address < filesize; address += 4)
+    {
+        fseek(srcfile, address, SEEK_SET);
+
+        fread(&opcode, 1, 4, srcfile);
+        opcode = byteswap(opcode);
+
+        //printf("0x%08x: 0x%08x\n", address, opcode);
+
+        decodeandlogtargets(address, opcode);
+    }
 
     while (1) {
         rn = getline(&lineptr, &n, stream);
@@ -453,7 +490,7 @@ static void decode_stream(FILE * stream)
         {
             programbase = address;
             _baseset = true;
-            printf(".org 0x%08x\n\n_%08x:\n", address, address);
+            //printf(".org 0x%08x\n\n_%08x:\n", address, address); // why can't i do this?
         }
         opcode = hex_to_u32(optok);
 
@@ -493,12 +530,13 @@ static void decode_stream(FILE * stream)
 /* Handle the command line options and handoff to decode_stream. */
 int main(int argc, char **argv)
 {
-    const char *filename = NULL;
+    const char *filename = NULL, *srcfilename = NULL;
     FILE *stream = 0;
+    FILE *srcfile = 0;
     int do_close = 0;
 
-    if (argc != 2) {
-        fprintf(stderr, "usage: decoder file\n");
+    if (argc != 3) {
+        fprintf(stderr, "usage: mipsdis [address:opcode stream] [file to decode]\n");
         return 1;
     }
 
@@ -507,7 +545,7 @@ int main(int argc, char **argv)
     if (strcmp(filename, "-") == 0) {
         stream = stdin;
     } else {
-        stream = fopen(filename, "r");
+        stream = fopen(filename, "rb+");
 
         if (!stream) {
             fprintf(stderr, "could not open %s\n", filename);
@@ -517,17 +555,25 @@ int main(int argc, char **argv)
         do_close = 1;
     }
 
+	srcfilename = argv[2];
+
+    srcfile = fopen(srcfilename, "rb+");
+
+    if (!srcfile) {
+        fprintf(stderr, "could not open %s\n", srcfilename);
+        return 1;
+    }
+
     // make sure to get the file size before decoding the stream
+    fseek(srcfile, 0, SEEK_END);
+    filesize = ftell(srcfile);
+    fseek(srcfile, 0, SEEK_SET);
 
-    /*fseek(stream, 0, SEEK_END);
-    filesize = ftell(stream);
-    printf("file size: %08x", filesize);
-    fseek(stream, 0, SEEK_SET);*/
-
-    decode_stream(stream);
+    decode_stream(stream, srcfile);
 
     if (do_close)
         fclose(stream);
+	fclose(srcfile);
 
     return 0;
 }
