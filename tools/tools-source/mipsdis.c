@@ -188,16 +188,19 @@ static bool deleteaddress(uint32_t address) // deletes the address from the log 
     int i;
     bool _hasBeenRemoved = 0;
 
-    for (i = 0; i < sizeof(logaddresses) / sizeof(uint32_t); i++)
+    if (address)
     {
-        if (logaddresses[i] == address)
+        for (i = 0; i < sizeof(logaddresses) / sizeof(uint32_t); i++)
         {
-            _hasBeenRemoved = 1;
-        }
+            if (logaddresses[i] == address)
+            {
+                _hasBeenRemoved = 1;
+            }
 
-        if (_hasBeenRemoved && i != (sizeof(logaddresses) / sizeof(uint32_t) - 1))
-        {
-            logaddresses[i] = logaddresses[i + 1];
+            if (_hasBeenRemoved && i != (sizeof(logaddresses) / sizeof(uint32_t) - 1))
+            {
+                logaddresses[i] = logaddresses[i + 1];
+            }
         }
     }
 
@@ -337,7 +340,7 @@ static int check_jalr(uint32_t rs, uint32_t rd)
 
 bool _delay = false;
 bool _baseset = false;
-uint32_t programbase = 0, filesize = 0;
+uint32_t filesize = 0, programbase = 0;
 
 #include "../../include/mips_dispatch.h"
 
@@ -440,23 +443,14 @@ static uint32_t hex_to_u32(const char *s)
  * input address, opcode and disasm to stdout.
  */
 
-static void decode_stream(FILE *stream, FILE *srcfile)
+static void decode_stream(FILE *srcfile)
 {
-    const char *sep = " \t\r\n";
-    char *lineptr = 0;
-    uint32_t n = 0;
     char outbuf[64] = { 0 };
-
-    int32_t rn = 0;
-    char *saveptr = 0;
-
-    char *addrtok = 0;
-    char *optok = 0;
 
     uint32_t address = 0;
     uint32_t opcode = 0;
 
-    printf(".n64\n.create \"output.bin\", 0\n\n");
+    printf(".n64\n.create \"output.bin\", 0\n\n.headersize 0x%08x\n\n.org 0x%08x\n\n", programbase, programbase);
 
     for (address = 0; address < filesize; address += 4)
     {
@@ -465,48 +459,29 @@ static void decode_stream(FILE *stream, FILE *srcfile)
         fread(&opcode, 1, 4, srcfile);
         opcode = byteswap(opcode);
 
-        //printf("0x%08x: 0x%08x\n", address, opcode);
-
-        decodeandlogtargets(address, opcode);
+        decodeandlogtargets(address + programbase, opcode);
     }
 
-    while (1) {
-        rn = getline(&lineptr, &n, stream);
+    for (address = 0; address < filesize; address += 4)
+    {
+        fseek(srcfile, address, SEEK_SET);
 
-        if (rn <= 0)
-            break;
+        fread(&opcode, 1, 4, srcfile);
+        opcode = byteswap(opcode);
 
-        addrtok = strtok_r(lineptr, sep, &saveptr);
-        optok = strtok_r(0, sep, &saveptr);
-
-        if (!addrtok || !optok)
-            continue;
-
-        if (!is_addr(addrtok) || !is_hexword(optok))
-            continue;
-
-        address = hex_to_u32(addrtok);
-        if (!_baseset)
-        {
-            programbase = address;
-            _baseset = true;
-            //printf(".org 0x%08x\n\n_%08x:\n", address, address); // why can't i do this?
-        }
-        opcode = hex_to_u32(optok);
-
-        if (deleteaddress(address))
-            printf("\n_%08x:\n", address);
+        if (deleteaddress(address + programbase))
+            printf("\n_%08x:\n", address + programbase);
 
         #ifdef DEBUG
         if (!opcode)
         {
-            printf("/* %08x:\t%08x */\tnop\n", address, opcode);
+            printf("/* %08x:\t%08x */\tnop\n", address + programbase, opcode);
             _delay = false;
         }
         else
         {
-            decode(outbuf, 64, address, opcode);
-            printf("/* %08x:\t%08x */\t%s\n", address, opcode, outbuf);
+            decode(outbuf, 64, address + programbase, opcode);
+            printf("/* %08x:\t%08x */\t%s\n", address + programbase, opcode, outbuf);
         }
         #else
         if (!opcode)
@@ -516,46 +491,27 @@ static void decode_stream(FILE *stream, FILE *srcfile)
         }
         else
         {
-            decode(outbuf, 64, address, opcode);
+            decode(outbuf, 64, address + programbase, opcode);
             printf("\t%s\n", outbuf);
         }
         #endif // DEBUG
     }
 
     printf("\n.close\n");
-
-    free(lineptr);
 }
 
 /* Handle the command line options and handoff to decode_stream. */
 int main(int argc, char **argv)
 {
-    const char *filename = NULL, *srcfilename = NULL;
-    FILE *stream = 0;
+    const char *srcfilename = NULL;
     FILE *srcfile = 0;
-    int do_close = 0;
 
     if (argc != 3) {
-        fprintf(stderr, "usage: mipsdis [address:opcode stream] [file to decode]\n");
+        fprintf(stderr, "usage: mipsdis [file to disassemble] [pc start]\n");
         return 1;
     }
 
-    filename = argv[1];
-
-    if (strcmp(filename, "-") == 0) {
-        stream = stdin;
-    } else {
-        stream = fopen(filename, "rb+");
-
-        if (!stream) {
-            fprintf(stderr, "could not open %s\n", filename);
-            return 1;
-        }
-
-        do_close = 1;
-    }
-
-	srcfilename = argv[2];
+    srcfilename = argv[1];
 
     srcfile = fopen(srcfilename, "rb+");
 
@@ -564,16 +520,16 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    programbase = strtoul(argv[2], NULL, 16);
+
     // make sure to get the file size before decoding the stream
     fseek(srcfile, 0, SEEK_END);
     filesize = ftell(srcfile);
     fseek(srcfile, 0, SEEK_SET);
 
-    decode_stream(stream, srcfile);
+    decode_stream(srcfile);
 
-    if (do_close)
-        fclose(stream);
-	fclose(srcfile);
+    fclose(srcfile);
 
     return 0;
 }

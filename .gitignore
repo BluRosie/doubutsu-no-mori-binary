@@ -6,3 +6,4 @@ N64ops03.txt
 mips3.pdf
 log/checkforbytes/
 *.ramdump
+build/
