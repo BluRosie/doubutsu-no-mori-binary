@@ -1,1 +1,1 @@
-for file in dump/eng/*.DAT; do ./tools/mipsdis-debug >"src/eng/$(basename "$file" .DAT).asm" "dump/eng/$(basename "$file")" 0; done
+for file in dump/eng/*.DAT; do ./tools/mipsdis-debug >"src/eng/$(basename "$file" .DAT).asm" "dump/eng/$(basename "$file")" 1000; done

@@ -1,1 +1,1 @@
-for file in dump/jap/*.DAT; do ./tools/mipsdis-debug >"src/jap/$(basename "$file" .DAT).asm" "dump/jap/$(basename "$file")" 0; done
+for file in dump/jap/*.DAT; do ./tools/mipsdis-debug >"src/jap/$(basename "$file" .DAT).asm" "dump/jap/$(basename "$file")" 1000; done
