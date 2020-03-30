@@ -1,0 +1,21 @@
+.n64
+
+// include file for the buttons' bitmasks
+
+A_BUTTON equ 0x8000
+B_BUTTON equ 0x4000
+Z_BUTTON equ 0x2000
+START_BUTTON equ 0x1000
+
+DPAD_UP equ 0x800
+DPAD_DOWN equ 0x400
+DPAD_LEFT equ 0x200
+DPAD_RIGHT equ 0x100
+
+L_BUTTON equ 0x20
+R_BUTTON equ 0x10
+
+C_UP_BUTTON equ 0x8
+C_DOWN_BUTTON equ 0x4
+C_LEFT_BUTTON equ 0x1
+C_RIGHT_BUTTON equ 0x1
