@@ -1168,21 +1168,44 @@ static void decode_wait(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     //snprintf(outbuf,n,"wait 0x%x",getwaitcode(op));
 }
 
+
+
+
+// all this shit is new because loadzero left a shit ton unfinished
+
+static void decode_dsllv(char *outbuf, size_t n, uint32_t pc, uint32_t op)
+{
+    if (!(check_opcode(op, 0xfc0007ff, 0x00000007)))
+    {
+        decode_illegal(outbuf, n, pc, op);
+        return;
+    }
+
+    _delay = false;
+    snprintf(outbuf,n,"dsllv %s, %s, %s",format_register(getrd(op)),format_register(getrt(op)),format_register(getrs(op)));
+}
+
+
+
 static void decode_OPCODE(char *outbuf, size_t n, uint32_t pc, uint32_t op);
-static void decode_SPC1(char *outbuf, size_t n, uint32_t pc, uint32_t op);
-static void decode_SPC2(char *outbuf, size_t n, uint32_t pc, uint32_t op);
-static void decode_R(char *outbuf, size_t n, uint32_t pc, uint32_t op);
+static void decode_SPECIAL(char *outbuf, size_t n, uint32_t pc, uint32_t op);
+static void decode_REGIMM(char *outbuf, size_t n, uint32_t pc, uint32_t op);
 static void decode_COP0(char *outbuf, size_t n, uint32_t pc, uint32_t op);
-static void decode_CO(char *outbuf, size_t n, uint32_t pc, uint32_t op);
+static void decode_COP0FUNCT(char *outbuf, size_t n, uint32_t pc, uint32_t op);
+static void decode_COP1(char *outbuf, size_t n, uint32_t pc, uint32_t op);
+static void decode_COP1BC(char *outbuf, size_t n, uint32_t pc, uint32_t op);
+static void decode_COP1FUNCT(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix);
+
+
 static void decode_OPCODE(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     switch (getopcode(op))
     {
         case 0:
-            decode_SPC1(outbuf, n, pc, op);
+            decode_SPECIAL(outbuf, n, pc, op);
             break;
         case 1:
-            decode_R(outbuf, n, pc, op);
+            decode_REGIMM(outbuf, n, pc, op);
             break;
         case 2:
             decode_j(outbuf, n, pc, op);
@@ -1229,17 +1252,20 @@ static void decode_OPCODE(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         case 16:
             decode_COP0(outbuf, n, pc, op);
             break;
-        case 17:
-        case 18:
-        case 19:
-        case 49:
-        case 50:
-        case 53:
-        case 54:
-        case 57:
-        case 58:
-        case 61:
-        case 62:
+        case 17: // cop1 - floating point
+            decode_COP1(outbuf, n, pc, op);
+            break;
+        case 18: // cop2 - rsp/psx only
+        case 19: // unused
+        case 28: // unused
+        case 29: // unused
+        case 30: // lq - ps2 only
+        case 31: // sq - ps2 only
+        case 50: // lv.s - ps2 only
+        case 54: // lv.q - ps2 only
+        case 58: // sv.s - ps2 only
+        case 59: // unused
+        case 62: // sv.q - ps2 only
             decode_unusable(outbuf, n, pc, op);
             break;
         case 20:
@@ -1254,25 +1280,34 @@ static void decode_OPCODE(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         case 23:
             decode_bgtzl(outbuf, n, pc, op);
             break;
-        case 24:
-        case 25:
-        case 26:
-        case 27:
-        case 29:
-        case 30:
-        case 31:
-        case 39:
-        case 44:
-        case 45:
-        case 52:
-        case 55:
-        case 59:
-        case 60:
-        case 63:
+
+        case 24: // daddi/dsubi
+        case 25: // daddiu/dsubiu
+        case 26: // ldl
+        case 27: // ldr
+
+        case 39: // lwu
+
+        case 44: // sdl
+        case 45: // sdr
+
+        case 49: // lwc1
+
+        case 52: // lld
+        case 53: // ldc1
+
+        case 55: // ld
+
+        case 57: // swc1
+
+        case 60: // scd
+        case 61: // sdc1
+
+        case 63: // sd
+
+
+
             decode_reserved(outbuf, n, pc, op);
-            break;
-        case 28:
-            decode_SPC2(outbuf, n, pc, op);
             break;
         case 32:
             decode_lb(outbuf, n, pc, op);
@@ -1328,14 +1363,23 @@ static void decode_OPCODE(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 }
 
-static void decode_SPC1(char *outbuf, size_t n, uint32_t pc, uint32_t op)
+static void decode_SPECIAL(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     switch (getfunction(op))
     {
         case 0:
             decode_sll(outbuf, n, pc, op);
             break;
-        case 1:
+        case 1: // unused
+        case 5: // unused
+        case 14: // unused
+        case 21: // unused
+        case 40: // mfsa
+        case 41: // mtsa
+        case 53: // unused
+        case 55: // unused
+        case 57: // unused
+        case 61: // unused
             decode_unusable(outbuf, n, pc, op);
             break;
         case 2:
@@ -1347,32 +1391,34 @@ static void decode_SPC1(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         case 4:
             decode_sllv(outbuf, n, pc, op);
             break;
-        case 5:
-        case 14:
-        case 20:
-        case 21:
-        case 22:
-        case 23:
-        case 28:
-        case 29:
-        case 30:
-        case 31:
-        case 40:
-        case 41:
-        case 44:
-        case 45:
-        case 46:
-        case 47:
-        case 53:
-        case 55:
-        case 56:
-        case 57:
-        case 58:
-        case 59:
-        case 60:
-        case 61:
-        case 62:
-        case 63:
+
+
+
+        case 22: // dsrlv
+        case 23: // dsrav
+
+        case 28: // dmult
+        case 29: // dmultu
+        case 30: // ddiv
+        case 31: // ddivu
+
+
+        case 44: // dadd
+        case 45: // daddu
+        case 46: // dsub
+        case 47: // dsubu
+
+        case 56: // dsll
+
+        case 58: // dsrl
+        case 59: // dsra
+        case 60: // dsll32
+
+        case 62: // dsrl32
+        case 63: // dsra32
+
+
+
             decode_reserved(outbuf, n, pc, op);
             break;
         case 6:
@@ -1413,6 +1459,9 @@ static void decode_SPC1(char *outbuf, size_t n, uint32_t pc, uint32_t op)
             break;
         case 19:
             decode_mtlo(outbuf, n, pc, op);
+            break;
+        case 20: // dsllv
+            decode_dsllv(outbuf, n, pc, op);
             break;
         case 24:
             decode_mult(outbuf, n, pc, op);
@@ -1480,99 +1529,7 @@ static void decode_SPC1(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 }
 
-static void decode_SPC2(char *outbuf, size_t n, uint32_t pc, uint32_t op)
-{
-    switch (getfunction(op))
-    {
-        case 0:
-            decode_madd(outbuf, n, pc, op);
-            break;
-        case 1:
-            decode_maddu(outbuf, n, pc, op);
-            break;
-        case 2:
-            decode_mul(outbuf, n, pc, op);
-            break;
-        case 3:
-        case 6:
-        case 7:
-        case 8:
-        case 9:
-        case 10:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
-        case 16:
-        case 17:
-        case 18:
-        case 19:
-        case 20:
-        case 21:
-        case 22:
-        case 23:
-        case 24:
-        case 25:
-        case 26:
-        case 27:
-        case 28:
-        case 29:
-        case 30:
-        case 31:
-        case 34:
-        case 35:
-        case 36:
-        case 37:
-        case 38:
-        case 39:
-        case 40:
-        case 41:
-        case 42:
-        case 43:
-        case 44:
-        case 45:
-        case 46:
-        case 47:
-        case 48:
-        case 49:
-        case 50:
-        case 51:
-        case 52:
-        case 53:
-        case 54:
-        case 55:
-        case 56:
-        case 57:
-        case 58:
-        case 59:
-        case 60:
-        case 61:
-        case 62:
-            decode_reserved(outbuf, n, pc, op);
-            break;
-        case 4:
-            decode_msub(outbuf, n, pc, op);
-            break;
-        case 5:
-            decode_msubu(outbuf, n, pc, op);
-            break;
-        case 32:
-            decode_clz(outbuf, n, pc, op);
-            break;
-        case 33:
-            decode_clo(outbuf, n, pc, op);
-            break;
-        case 63:
-            decode_sdbbp(outbuf, n, pc, op);
-            break;
-        default:
-            /* unreachable */
-            abort();
-    }
-}
-
-static void decode_R(char *outbuf, size_t n, uint32_t pc, uint32_t op)
+static void decode_REGIMM(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     switch (getrt(op))
     {
@@ -1598,8 +1555,8 @@ static void decode_R(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         case 21:
         case 22:
         case 23:
-        case 24:
-        case 25:
+        case 24: // mtsab
+        case 25: // mtsah
         case 26:
         case 27:
         case 28:
@@ -1651,10 +1608,14 @@ static void decode_COP0(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         case 0:
             decode_mfc0(outbuf, n, pc, op);
             break;
-        case 1:
+
+
+        case 1: // dmfc0
+        case 5: // dmtc0
+
+
         case 2:
         case 3:
-        case 5:
         case 6:
         case 7:
         case 8:
@@ -1665,12 +1626,7 @@ static void decode_COP0(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         case 13:
         case 14:
         case 15:
-            decode_reserved(outbuf, n, pc, op);
-            break;
-        case 4:
-            decode_mtc0(outbuf, n, pc, op);
-            break;
-        case 16:
+
         case 17:
         case 18:
         case 19:
@@ -1686,7 +1642,13 @@ static void decode_COP0(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         case 29:
         case 30:
         case 31:
-            decode_CO(outbuf, n, pc, op);
+            decode_unusable(outbuf, n, pc, op);
+            break;
+        case 4:
+            decode_mtc0(outbuf, n, pc, op);
+            break;
+        case 16:
+            decode_COP0FUNCT(outbuf, n, pc, op);
             break;
         default:
             /* unreachable */
@@ -1694,7 +1656,7 @@ static void decode_COP0(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 }
 
-static void decode_CO(char *outbuf, size_t n, uint32_t pc, uint32_t op)
+static void decode_COP0FUNCT(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
     switch (getfunction(op))
     {
@@ -1755,7 +1717,7 @@ static void decode_CO(char *outbuf, size_t n, uint32_t pc, uint32_t op)
         case 61:
         case 62:
         case 63:
-            decode_reserved(outbuf, n, pc, op);
+            decode_unusable(outbuf, n, pc, op);
             break;
         case 1:
             decode_tlbr(outbuf, n, pc, op);
@@ -1784,3 +1746,319 @@ static void decode_CO(char *outbuf, size_t n, uint32_t pc, uint32_t op)
     }
 }
 
+static void decode_COP1(char *outbuf, size_t n, uint32_t pc, uint32_t op)
+{
+    switch (getrs(op))
+    {
+        case 0: // mfc1
+        case 1: // dmfc1
+        case 2: // cfc1
+        case 4: // mtc1
+        case 5: // dmtc1
+        case 6: // ctc1
+        case 8: // cop1bc
+            decode_COP1BC(outbuf, n, pc, op);
+            break;
+        case 16: // cop1s
+            decode_COP1FUNCT(outbuf, n, pc, op, 's');
+            break;
+        case 17: // cop1d
+            decode_COP1FUNCT(outbuf, n, pc, op, 'd');
+            break;
+        case 20: // cop1w
+            decode_COP1FUNCT(outbuf, n, pc, op, 'w');
+            break;
+        case 21: // cop1l
+            decode_COP1FUNCT(outbuf, n, pc, op, 'l');
+            break;
+
+
+        case 3:
+        case 7:
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+        case 18:
+        case 19:
+        case 22:
+        case 23:
+        case 24:
+        case 25:
+        case 26:
+        case 27:
+        case 28:
+        case 29:
+        case 30:
+        case 31:
+        case 32:
+        case 33:
+        case 34:
+        case 35:
+        case 36:
+        case 37:
+        case 38:
+        case 39:
+        case 40:
+        case 41:
+        case 42:
+        case 43:
+        case 44:
+        case 45:
+        case 46:
+        case 47:
+        case 48:
+        case 49:
+        case 50:
+        case 51:
+        case 52:
+        case 53:
+        case 54:
+        case 55:
+        case 56:
+        case 57:
+        case 58:
+        case 59:
+        case 60:
+        case 61:
+        case 62:
+        case 63:
+            decode_unusable(outbuf, n, pc, op);
+            break;
+        default:
+            /* unreachable */
+            abort();
+    }
+}
+
+static void decode_COP1BC(char *outbuf, size_t n, uint32_t pc, uint32_t op)
+{
+    switch (getrt(op))
+    {
+        case 0: // bc1f
+        case 1: // bc1t
+        case 2: // bc1fl
+        case 3: // bc1tl
+
+
+
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+        case 16:
+        case 17:
+        case 18:
+        case 19:
+        case 20:
+        case 21:
+        case 22:
+        case 23:
+        case 24:
+        case 25:
+        case 26:
+        case 27:
+        case 28:
+        case 29:
+        case 30:
+        case 31:
+        case 32:
+        case 33:
+        case 34:
+        case 35:
+        case 36:
+        case 37:
+        case 38:
+        case 39:
+        case 40:
+        case 41:
+        case 42:
+        case 43:
+        case 44:
+        case 45:
+        case 46:
+        case 47:
+        case 48:
+        case 49:
+        case 50:
+        case 51:
+        case 52:
+        case 53:
+        case 54:
+        case 55:
+        case 56:
+        case 57:
+        case 58:
+        case 59:
+        case 60:
+        case 61:
+        case 62:
+        case 63:
+            decode_unusable(outbuf, n, pc, op);
+            break;
+        default:
+            /* unreachable */
+            abort();
+    }
+}
+
+// the .fmt instructions are all handled weirdly, but very similarly.  because of this, they are all handled here
+static void decode_COP1FUNCT(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
+{
+    switch (getfunction(op)) // validity check first of all
+    {
+// the following can't be w or l to replace fmt
+        case 0: // add.fmt
+        case 1: // sub.fmt
+        case 2: // mul.fmt
+        case 3: // div.fmt
+        case 4: // sqrt.fmt
+        case 5: // abs.fmt
+        case 6: // mov.fmt
+        case 7: // neg.fmt
+        case 8: // round.l.fmt
+        case 9: // trunc.l.fmt
+        case 10: // ceil.l.fmt
+        case 11: // floor.l.fmt
+        case 12: // round.w.fmt
+        case 13: // trunc.w.fmt
+        case 14: // ceil.w.fmt
+        case 15: // floor.w.fmt
+        case 36: // cvt.w.fmt
+        case 37: // cvt.l.fmt
+        case 48: // c.f.fmt
+        case 49: // c.un.fmt
+        case 50: // c.eq.fmt
+        case 51: // c.ueq.fmt
+        case 52: // c.olt.fmt
+        case 53: // c.ult.fmt
+        case 54: // c.ole.fmt
+        case 55: // c.ule.fmt
+        case 56: // c.sf.fmt
+        case 57: // n.ngle.fmt
+        case 58: // c.seq.fmt
+        case 59: // c.ngl.fmt
+        case 60: // c.lt.fmt
+        case 61: // c.nge.fmt
+        case 62: // c.le.fmt
+        case 63: // c.ngt.fmt
+            if (suffix == 'w' || suffix == 'l')
+            {
+                decode_unusable(outbuf, n, pc, op);
+                return;
+            }
+            break;
+        case 32: // cvt.s.fmt
+            // can't be s, but yes to w and l
+            if (suffix == 's')
+            {
+                decode_unusable(outbuf, n, pc, op);
+                return;
+            }
+            break;
+        case 33: // cvt.d.fmt
+            // can't be d, but yes to w and l
+            if (suffix == 'd')
+            {
+                decode_unusable(outbuf, n, pc, op);
+                return;
+            }
+            break;
+
+    }
+
+    switch (getfunction(op))
+    {
+// the following can't be w or l to replace fmt
+        case 0: // add.fmt
+        case 1: // sub.fmt
+        case 2: // mul.fmt
+        case 3: // div.fmt
+        case 4: // sqrt.fmt
+        case 5: // abs.fmt
+        case 6: // mov.fmt
+        case 7: // neg.fmt
+        case 8: // round.l.fmt
+        case 9: // trunc.l.fmt
+        case 10: // ceil.l.fmt
+        case 11: // floor.l.fmt
+        case 12: // round.w.fmt
+        case 13: // trunc.w.fmt
+        case 14: // ceil.w.fmt
+        case 15: // floor.w.fmt
+
+
+        case 32: // cvt.s.fmt
+            // can't be s, but yes to w and l
+        case 33: // cvt.d.fmt
+            // can't be d, but yes to w and l
+
+// the following can't be w or l
+        case 36: // cvt.w.fmt
+        case 37: // cvt.l.fmt
+
+
+        case 48: // c.f.fmt
+        case 49: // c.un.fmt
+        case 50: // c.eq.fmt
+        case 51: // c.ueq.fmt
+        case 52: // c.olt.fmt
+        case 53: // c.ult.fmt
+        case 54: // c.ole.fmt
+        case 55: // c.ule.fmt
+        case 56: // c.sf.fmt
+        case 57: // n.ngle.fmt
+        case 58: // c.seq.fmt
+        case 59: // c.ngl.fmt
+        case 60: // c.lt.fmt
+        case 61: // c.nge.fmt
+        case 62: // c.le.fmt
+        case 63: // c.ngt.fmt
+
+
+        case 16:
+        case 17:
+        case 18:
+        case 19:
+        case 20:
+        case 21:
+        case 22:
+        case 23:
+        case 24:
+        case 25:
+        case 26:
+        case 27:
+        case 28:
+        case 29:
+        case 30:
+        case 31:
+        case 34:
+        case 35:
+        case 38:
+        case 39:
+        case 40:
+        case 41:
+        case 42:
+        case 43:
+        case 44:
+        case 45:
+        case 46:
+        case 47:
+            decode_unusable(outbuf, n, pc, op);
+            break;
+        default:
+            /* unreachable */
+            abort();
+    }
+}
