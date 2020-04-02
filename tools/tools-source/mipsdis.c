@@ -370,6 +370,23 @@ static void decodeandlogtargets(uint32_t addr, uint32_t opcode)
         case 4 ... 7:
         case 20 ... 23:
             logtarget(getbroff(addr, opcode));
+            return;
+        case 17: // cop1
+            switch (getrs(opcode))
+            {
+                case 8: // cop1bc
+                    switch (getrt(opcode))
+                    {
+                        case 0 ... 4: // bc1f - bc1tl
+                            logtarget(getbroff(addr, opcode));
+                        default:
+                            return;
+                    }
+                default:
+                    return;
+
+            }
+            return;
         default:
             return;
     }
@@ -466,34 +483,18 @@ static void decode_stream(FILE *srcfile)
     {
         fseek(srcfile, address, SEEK_SET);
 
-        fread(&opcode, 1, 4, srcfile);
-        opcode = byteswap(opcode);
-
         if (deleteaddress(address + programbase))
             printf("\n_%08x:\n", address + programbase);
 
+        fread(&opcode, 1, 4, srcfile);
+        opcode = byteswap(opcode);
+
         #ifdef DEBUG
-        if (!opcode)
-        {
-            printf("/* %08x:\t%08x */\tnop\n", address + programbase, opcode);
-            _delay = false;
-        }
-        else
-        {
-            decode(outbuf, 64, address + programbase, opcode);
-            printf("/* %08x:\t%08x */\t%s\n", address + programbase, opcode, outbuf);
-        }
+        decode(outbuf, 64, address + programbase, opcode);
+        printf("/* %08x:\t%08x */\t%s\n", address + programbase, opcode, outbuf);
         #else
-        if (!opcode)
-        {
-            printf("\tnop\n");
-            _delay = false;
-        }
-        else
-        {
-            decode(outbuf, 64, address + programbase, opcode);
-            printf("\t%s\n", outbuf);
-        }
+        decode(outbuf, 64, address + programbase, opcode);
+        printf("\t%s\n", outbuf);
         #endif // DEBUG
     }
 
