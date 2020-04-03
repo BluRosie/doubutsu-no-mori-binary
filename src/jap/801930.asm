@@ -139,8 +139,8 @@ _000011ac:
 /* 000011f4:	80a2e070 */	lb v0, 0xffffe070(a1)
 /* 000011f8:	80a2e088 */	lb v0, 0xffffe088(a1)
 /* 000011fc:	80a2e1b8 */	lb v0, 0xffffe1b8(a1)
-/* 00001200:	fffe00ff */	/*illegal*/ .word 0xfffe00ff
-/* 00001204:	44480000 */	/*illegal*/ .word 0x44480000
+/* 00001200:	fffe00ff */	sd fp, 0xff(ra)
+/* 00001204:	44480000 */	cfc1 t0, $0
 /* 00001208:	00006000 */	sll t4, $zero, 0x0
 /* 0000120c:	c0000000 */	ll $zero, 0x0($zero)
 

@@ -32,6 +32,6 @@
 /* 00001060:	00040004 */	sllv $zero, a0, $zero
 /* 00001064:	00040004 */	sllv $zero, a0, $zero
 /* 00001068:	00040004 */	sllv $zero, a0, $zero
-/* 0000106c:	0004ffff */	/*illegal*/ .word 0x0004ffff
+/* 0000106c:	0004ffff */	dsra32 ra, a0, 0x1f
 
 .close

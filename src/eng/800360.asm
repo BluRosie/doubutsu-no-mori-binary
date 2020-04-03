@@ -121,8 +121,8 @@ _00001190:
 /* 000011b4:	80a2c8d4 */	lb v0, 0xffffc8d4(a1)
 /* 000011b8:	80a2c93c */	lb v0, 0xffffc93c(a1)
 /* 000011bc:	80a2c9dc */	lb v0, 0xffffc9dc(a1)
-/* 000011c0:	fffe00ff */	/*illegal*/ .word 0xfffe00ff
-/* 000011c4:	44480000 */	/*illegal*/ .word 0x44480000
+/* 000011c0:	fffe00ff */	sd fp, 0xff(ra)
+/* 000011c4:	44480000 */	cfc1 t0, $0
 /* 000011c8:	00000000 */	nop
 /* 000011cc:	42340000 */	/*illegal*/ .word 0x42340000
 /* 000011d0:	c1a00000 */	ll $zero, 0x0(t5)

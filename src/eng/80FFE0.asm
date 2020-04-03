@@ -12,15 +12,15 @@
 /* 00001010:	afa60040 */	sw a2, 0x40(sp)
 /* 00001014:	afa70044 */	sw a3, 0x44(sp)
 /* 00001018:	3c01428c */	lui at, 0x428c
-/* 0000101c:	44813000 */	/*illegal*/ .word 0x44813000
-/* 00001020:	c7a4003c */	/*illegal*/ .word 0xc7a4003c
+/* 0000101c:	44813000 */	mtc1 at, f6
+/* 00001020:	c7a4003c */	lwc1 f4, 0x3c(sp)
 /* 00001024:	27ae0038 */	addiu t6, sp, 0x38
 /* 00001028:	8fb9004c */	lw t9, 0x4c(sp)
-/* 0000102c:	46062200 */	/*illegal*/ .word 0x46062200
+/* 0000102c:	46062200 */	add.s f8, f4, f6
 /* 00001030:	97a80052 */	lhu t0, 0x52(sp)
 /* 00001034:	8fa90044 */	lw t1, 0x44(sp)
 /* 00001038:	3c0a8013 */	lui t2, 0x8013
-/* 0000103c:	e7a8003c */	/*illegal*/ .word 0xe7a8003c
+/* 0000103c:	e7a8003c */	swc1 f8, 0x3c(sp)
 /* 00001040:	8dd80000 */	lw t8, 0x0(t6)
 /* 00001044:	8d4a6f3c */	lw t2, 0x6f3c(t2)
 /* 00001048:	2404002e */	addiu a0, $zero, 0x2e
@@ -47,14 +47,14 @@
 /* 0000109c:	27bdffe8 */	addiu sp, sp, 0xffffffe8
 /* 000010a0:	afa5001c */	sw a1, 0x1c(sp)
 /* 000010a4:	3c0180a4 */	lui at, 0x80a4
-/* 000010a8:	c420e740 */	/*illegal*/ .word 0xc420e740
+/* 000010a8:	c420e740 */	lwc1 f0, 0xffffe740(at)
 /* 000010ac:	00802825 */	or a1, a0, $zero
 /* 000010b0:	afbf0014 */	sw ra, 0x14(sp)
 /* 000010b4:	afa40018 */	sw a0, 0x18(sp)
 /* 000010b8:	afa60020 */	sw a2, 0x20(sp)
-/* 000010bc:	e4a00034 */	/*illegal*/ .word 0xe4a00034
-/* 000010c0:	e4a00038 */	/*illegal*/ .word 0xe4a00038
-/* 000010c4:	e4a0003c */	/*illegal*/ .word 0xe4a0003c
+/* 000010bc:	e4a00034 */	swc1 f0, 0x34(a1)
+/* 000010c0:	e4a00038 */	swc1 f0, 0x38(a1)
+/* 000010c4:	e4a0003c */	swc1 f0, 0x3c(a1)
 /* 000010c8:	0c0346a7 */	jal 0x000d1a9c
 /* 000010cc:	2404100a */	addiu a0, $zero, 0x100a
 /* 000010d0:	8fbf0014 */	lw ra, 0x14(sp)
@@ -97,8 +97,8 @@
 /* 00001164:	80a3e65c */	lb v1, 0xffffe65c(a1)
 /* 00001168:	80a3e6a0 */	lb v1, 0xffffe6a0(a1)
 /* 0000116c:	80a3e6b0 */	lb v1, 0xffffe6b0(a1)
-/* 00001170:	fffe00ff */	/*illegal*/ .word 0xfffe00ff
-/* 00001174:	44480000 */	/*illegal*/ .word 0x44480000
+/* 00001170:	fffe00ff */	sd fp, 0xff(ra)
+/* 00001174:	44480000 */	cfc1 t0, $0
 /* 00001178:	00000000 */	nop
 /* 0000117c:	00000000 */	nop
 /* 00001180:	3c75c28f */	/*illegal*/ .word 0x3c75c28f

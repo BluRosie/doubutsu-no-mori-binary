@@ -110,7 +110,7 @@ _000010a4:
 /* 00001190:	001d0300 */	sll $zero, sp, 0xc
 /* 00001194:	20000010 */	addi $zero, $zero, 0x10
 /* 00001198:	00000003 */	sra $zero, $zero, 0x0
-/* 0000119c:	00000938 */	/*illegal*/ .word 0x00000938
+/* 0000119c:	00000938 */	dsll at, $zero, 0x4
 /* 000011a0:	809aedf0 */	lb k0, 0xffffedf0(a0)
 /* 000011a4:	809aeed0 */	lb k0, 0xffffeed0(a0)
 /* 000011a8:	809aeefc */	lb k0, 0xffffeefc(a0)

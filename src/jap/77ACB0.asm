@@ -856,14 +856,14 @@ _00001b88:
 /* 00001b90:	8fab0020 */	lw t3, 0x20(sp)
 /* 00001b94:	0c00b26b */	jal 0x0002c9ac
 /* 00001b98:	00000000 */	nop
-/* 00001b9c:	46000100 */	/*illegal*/ .word 0x46000100
+/* 00001b9c:	46000100 */	add.s f4, f0, f0
 /* 00001ba0:	8fb80020 */	lw t8, 0x20(sp)
 /* 00001ba4:	3c088093 */	lui t0, 0x8093
-/* 00001ba8:	4600218d */	/*illegal*/ .word 0x4600218d
+/* 00001ba8:	4600218d */	trunc.w.s f6, f4
 /* 00001bac:	0018c880 */	sll t9, t8, 0x2
 /* 00001bb0:	01194021 */	addu t0, t0, t9
 /* 00001bb4:	8d08dac8 */	lw t0, 0xffffdac8(t0)
-/* 00001bb8:	440a3000 */	/*illegal*/ .word 0x440a3000
+/* 00001bb8:	440a3000 */	mfc1 t2, f6
 /* 00001bbc:	00000000 */	nop
 /* 00001bc0:	010a1821 */	addu v1, t0, t2
 /* 00001bc4:	24630001 */	addiu v1, v1, 0x1
@@ -976,13 +976,13 @@ _00001c88:
 /* 00001d40:	000020d4 */	/*illegal*/ .word 0x000020d4
 /* 00001d44:	0000226c */	/*illegal*/ .word 0x0000226c
 /* 00001d48:	00002224 */	/*illegal*/ .word 0x00002224
-/* 00001d4c:	000022fc */	/*illegal*/ .word 0x000022fc
+/* 00001d4c:	000022fc */	dsll32 a0, $zero, 0xb
 /* 00001d50:	000022b4 */	teq $zero, $zero, 0x8a
 /* 00001d54:	000021dc */	/*illegal*/ .word 0x000021dc
 /* 00001d58:	00002194 */	/*illegal*/ .word 0x00002194
 /* 00001d5c:	0000214c */	syscall 0x85
 /* 00001d60:	00000cf3 */	tltu $zero, $zero, 0x33
-/* 00001d64:	00000cf8 */	/*illegal*/ .word 0x00000cf8
+/* 00001d64:	00000cf8 */	dsll at, $zero, 0x13
 /* 00001d68:	00000cfd */	/*illegal*/ .word 0x00000cfd
 /* 00001d6c:	00000d02 */	srl at, $zero, 0x14
 /* 00001d70:	00000d07 */	/*illegal*/ .word 0x00000d07
@@ -996,7 +996,7 @@ _00001c88:
 /* 00001d90:	00000d2f */	/*illegal*/ .word 0x00000d2f
 /* 00001d94:	00000d34 */	teq $zero, $zero, 0x34
 /* 00001d98:	00000d39 */	/*illegal*/ .word 0x00000d39
-/* 00001d9c:	00000d3e */	/*illegal*/ .word 0x00000d3e
+/* 00001d9c:	00000d3e */	dsrl32 at, $zero, 0x14
 /* 00001da0:	00000d43 */	sra at, $zero, 0x15
 /* 00001da4:	00000d48 */	/*illegal*/ .word 0x00000d48
 /* 00001da8:	8092da60 */	lb s2, 0xffffda60(a0)
@@ -1011,7 +1011,7 @@ _00001c88:
 /* 00001dcc:	000018e8 */	/*illegal*/ .word 0x000018e8
 /* 00001dd0:	000018d6 */	/*illegal*/ .word 0x000018d6
 /* 00001dd4:	000018f1 */	tgeu $zero, $zero, 0x63
-/* 00001dd8:	000018fa */	/*illegal*/ .word 0x000018fa
+/* 00001dd8:	000018fa */	dsrl v1, $zero, 0x3
 /* 00001ddc:	00001903 */	sra v1, $zero, 0x4
 
 .close

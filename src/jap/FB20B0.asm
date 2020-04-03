@@ -7,7 +7,7 @@
 
 /* 00001000:	360f1d93 */	ori t7, s0, 0x1d93
 /* 00001004:	1d5d03d3 */	/*illegal*/ .word 0x1d5d03d3
-/* 00001008:	ddd9c4d3 */	/*illegal*/ .word 0xddd9c4d3
+/* 00001008:	ddd9c4d3 */	ld t9, 0xffffc4d3(t6)
 /* 0000100c:	a3cf728d */	sb t7, 0x728d(fp)
 /* 00001010:	518d0001 */	beql t4, t5, _00001018
 /* 00001014:	00010001 */	/*illegal*/ .word 0x00010001

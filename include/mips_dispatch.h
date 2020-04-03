@@ -1307,7 +1307,7 @@ static void decode_dsrav(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 // dmult
 static void decode_dmult(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    if (!(check_opcode(op, 0xfc0007ff, 28)))
+    if (!(check_opcode(op, 0xfc00ffff, 28)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -1320,7 +1320,7 @@ static void decode_dmult(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 // dmultu
 static void decode_dmultu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    if (!(check_opcode(op, 0xfc0007ff, 29)))
+    if (!(check_opcode(op, 0xfc00ffff, 29)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -1333,7 +1333,7 @@ static void decode_dmultu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 // ddiv
 static void decode_ddiv(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    if (!(check_opcode(op, 0xfc0007ff, 30)))
+    if (!(check_opcode(op, 0xfc00ffff, 30)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -1346,7 +1346,7 @@ static void decode_ddiv(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 // ddivu
 static void decode_ddivu(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 {
-    if (!(check_opcode(op, 0xfc0007ff, 31)))
+    if (!(check_opcode(op, 0xfc00ffff, 31)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -1614,9 +1614,9 @@ static void decode_bc1f(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
     _delay = true;
     if (getbroff(pc,op) >= programbase && getbroff(pc,op) < programbase + filesize)
-        snprintf(outbuf,n,"bc1f _%x",getbroff(pc,op));
+        snprintf(outbuf,n,"bc1f _%08x",getbroff(pc,op));
     else
-        snprintf(outbuf,n,"bc1f 0x%x",getbroff(pc,op));
+        snprintf(outbuf,n,"bc1f 0x%08x",getbroff(pc,op));
 }
 
 // bc1t
@@ -1630,9 +1630,9 @@ static void decode_bc1t(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
     _delay = true;
     if (getbroff(pc,op) >= programbase && getbroff(pc,op) < programbase + filesize)
-        snprintf(outbuf,n,"bc1t _%x",getbroff(pc,op));
+        snprintf(outbuf,n,"bc1t _%08x",getbroff(pc,op));
     else
-        snprintf(outbuf,n,"bc1t 0x%x",getbroff(pc,op));
+        snprintf(outbuf,n,"bc1t 0x%08x",getbroff(pc,op));
 }
 
 // bc1fl
@@ -1646,9 +1646,9 @@ static void decode_bc1fl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
     _delay = true;
     if (getbroff(pc,op) >= programbase && getbroff(pc,op) < programbase + filesize)
-        snprintf(outbuf,n,"bc1fl _%x",getbroff(pc,op));
+        snprintf(outbuf,n,"bc1fl _%08x",getbroff(pc,op));
     else
-        snprintf(outbuf,n,"bc1fl 0x%x",getbroff(pc,op));
+        snprintf(outbuf,n,"bc1fl 0x%08x",getbroff(pc,op));
 }
 
 // bc1tl
@@ -1662,9 +1662,9 @@ static void decode_bc1tl(char *outbuf, size_t n, uint32_t pc, uint32_t op)
 
     _delay = true;
     if (getbroff(pc,op) >= programbase && getbroff(pc,op) < programbase + filesize)
-        snprintf(outbuf,n,"bc1tl _%x",getbroff(pc,op));
+        snprintf(outbuf,n,"bc1tl _%08x",getbroff(pc,op));
     else
-        snprintf(outbuf,n,"bc1tl 0x%x",getbroff(pc,op));
+        snprintf(outbuf,n,"bc1tl 0x%08x",getbroff(pc,op));
 }
 
 // add.fmt
@@ -1930,7 +1930,7 @@ static void decode_cvt_l_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, c
 // c.f.fmt
 static void decode_c_f_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x44000030)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x44000030)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -1943,7 +1943,7 @@ static void decode_c_f_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, cha
 // c.un.fmt
 static void decode_c_un_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x44000031)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x44000031)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -1956,7 +1956,7 @@ static void decode_c_un_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, ch
 // c.eq.fmt
 static void decode_c_eq_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x44000032)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x44000032)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -1969,7 +1969,7 @@ static void decode_c_eq_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, ch
 // c.ueq.fmt
 static void decode_c_ueq_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x44000033)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x44000033)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -1982,7 +1982,7 @@ static void decode_c_ueq_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, c
 // c.olt.fmt
 static void decode_c_olt_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x44000034)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x44000034)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -1995,7 +1995,7 @@ static void decode_c_olt_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, c
 // c.ult.fmt
 static void decode_c_ult_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x44000035)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x44000035)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -2008,7 +2008,7 @@ static void decode_c_ult_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, c
 // c.ole.fmt
 static void decode_c_ole_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x44000036)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x44000036)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -2021,7 +2021,7 @@ static void decode_c_ole_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, c
 // c.ule.fmt
 static void decode_c_ule_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x44000037)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x44000037)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -2034,7 +2034,7 @@ static void decode_c_ule_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, c
 // c.sf.fmt
 static void decode_c_sf_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x44000038)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x44000038)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -2047,7 +2047,7 @@ static void decode_c_sf_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, ch
 // n.ngle.fmt
 static void decode_n_ngle_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x44000039)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x44000039)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -2060,7 +2060,7 @@ static void decode_n_ngle_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, 
 // c.seq.fmt
 static void decode_c_seq_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x4400003a)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x4400003a)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -2073,7 +2073,7 @@ static void decode_c_seq_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, c
 // c.ngl.fmt
 static void decode_c_ngl_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x4400003b)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x4400003b)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -2086,7 +2086,7 @@ static void decode_c_ngl_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, c
 // c.lt.fmt
 static void decode_c_lt_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x4400003c)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x4400003c)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -2099,7 +2099,7 @@ static void decode_c_lt_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, ch
 // c.nge.fmt
 static void decode_c_nge_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x4400003d)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x4400003d)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -2112,7 +2112,7 @@ static void decode_c_nge_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, c
 // c.le.fmt
 static void decode_c_le_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x4400003e)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x4400003e)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;
@@ -2125,7 +2125,7 @@ static void decode_c_le_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, ch
 // c.ngt.fmt
 static void decode_c_ngt_fmt(char *outbuf, size_t n, uint32_t pc, uint32_t op, char suffix)
 {
-    if (!(check_opcode(op, 0xfc00073f, 0x4400003f)))
+    if (!(check_opcode(op, 0xfc0007ff, 0x4400003f)))
     {
         decode_illegal(outbuf, n, pc, op);
         return;

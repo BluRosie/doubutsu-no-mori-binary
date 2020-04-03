@@ -757,8 +757,8 @@ _00001730:
 /* 00001ad4:	27bd0020 */	addiu sp, sp, 0x20
 /* 00001ad8:	00000000 */	nop
 /* 00001adc:	00000000 */	nop
-/* 00001ae0:	0000003e */	/*illegal*/ .word 0x0000003e
-/* 00001ae4:	0000003f */	/*illegal*/ .word 0x0000003f
+/* 00001ae0:	0000003e */	dsrl32 $zero, $zero, 0x0
+/* 00001ae4:	0000003f */	dsra32 $zero, $zero, 0x0
 /* 00001ae8:	00000040 */	sll $zero, $zero, 0x1
 /* 00001aec:	00000040 */	sll $zero, $zero, 0x1
 /* 00001af0:	8091cd9c */	lb s1, 0xffffcd9c(a0)

@@ -31,7 +31,7 @@
 /* 0000105c:	006f0154 */	/*illegal*/ .word 0x006f0154
 /* 00001060:	000001ae */	/*illegal*/ .word 0x000001ae
 /* 00001064:	00000000 */	nop
-/* 00001068:	0000ffff */	/*illegal*/ .word 0x0000ffff
+/* 00001068:	0000ffff */	dsra32 ra, $zero, 0x1f
 /* 0000106c:	00300000 */	/*illegal*/ .word 0x00300000
 
 .close

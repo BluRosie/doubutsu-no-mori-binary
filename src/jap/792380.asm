@@ -697,8 +697,8 @@ _00001810:
 /* 0000183c:	254a4cac */	addiu t2, t2, 0x4cac
 /* 00001840:	00094880 */	sll t1, t1, 0x2
 /* 00001844:	012a1021 */	addu v0, t1, t2
-/* 00001848:	c4440004 */	/*illegal*/ .word 0xc4440004
-/* 0000184c:	c4460008 */	/*illegal*/ .word 0xc4460008
+/* 00001848:	c4440004 */	lwc1 f4, 0x4(v0)
+/* 0000184c:	c4460008 */	lwc1 f6, 0x8(v0)
 /* 00001850:	240bffff */	addiu t3, $zero, 0xffffffff
 /* 00001854:	240cffff */	addiu t4, $zero, 0xffffffff
 /* 00001858:	240dffff */	addiu t5, $zero, 0xffffffff
@@ -716,9 +716,9 @@ _00001810:
 /* 00001888:	afa00030 */	sw $zero, 0x30(sp)
 /* 0000188c:	afa00034 */	sw $zero, 0x34(sp)
 /* 00001890:	afa30054 */	sw v1, 0x54(sp)
-/* 00001894:	e7a40010 */	/*illegal*/ .word 0xe7a40010
+/* 00001894:	e7a40010 */	swc1 f4, 0x10(sp)
 /* 00001898:	0c015f89 */	jal 0x00057e24
-/* 0000189c:	e7a60014 */	/*illegal*/ .word 0xe7a60014
+/* 0000189c:	e7a60014 */	swc1 f6, 0x14(sp)
 /* 000018a0:	8fa30054 */	lw v1, 0x54(sp)
 
 _000018a4:

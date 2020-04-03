@@ -460,13 +460,13 @@ _000016b0:
 /* 000016b8:	00000000 */	nop
 /* 000016bc:	00000000 */	nop
 /* 000016c0:	39200101 */	xori $zero, t1, 0x101
-/* 000016c4:	001e003c */	/*illegal*/ .word 0x001e003c
+/* 000016c4:	001e003c */	dsll32 $zero, fp, 0x0
 /* 000016c8:	00000000 */	nop
 /* 000016cc:	00000000 */	nop
-/* 000016d0:	dcb8978c */	/*illegal*/ .word 0xdcb8978c
-/* 000016d4:	9d202020 */	/*illegal*/ .word 0x9d202020
+/* 000016d0:	dcb8978c */	ld t8, 0xffff978c(a1)
+/* 000016d4:	9d202020 */	lwu $zero, 0x2020(t1)
 /* 000016d8:	20200000 */	addi $zero, at, 0x0
-/* 000016dc:	e4ba9da3 */	/*illegal*/ .word 0xe4ba9da3
+/* 000016dc:	e4ba9da3 */	swc1 f26, 0xffff9da3(a1)
 /* 000016e0:	32000000 */	andi $zero, s0, 0x0
 /* 000016e4:	80934190 */	lb s3, 0x4190(a0)
 /* 000016e8:	8093420c */	lb s3, 0x420c(a0)

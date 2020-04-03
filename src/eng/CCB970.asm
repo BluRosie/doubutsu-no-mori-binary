@@ -23,7 +23,7 @@
 /* 0000103c:	01ea017c */	/*illegal*/ .word 0x01ea017c
 /* 00001040:	016801e0 */	/*illegal*/ .word 0x016801e0
 /* 00001044:	00640122 */	/*illegal*/ .word 0x00640122
-/* 00001048:	ffff0000 */	/*illegal*/ .word 0xffff0000
+/* 00001048:	ffff0000 */	sd ra, 0x0(ra)
 /* 0000104c:	00000000 */	nop
 
 .close
