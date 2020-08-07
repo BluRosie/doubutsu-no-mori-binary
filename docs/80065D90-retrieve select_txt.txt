@@ -97,7 +97,11 @@ LW	A2,007C (SP)
 LW	RA,001C (SP)
 ADDIU	SP,SP,0070
 JR	RA
+NOP
+
+Like an idiot, I had done this...
 SW	A2,0000 (S0)	;added this to handle strlen on the outside
+Makes you wonder what I was on that day.
 
 =_=
 

@@ -1,0 +1,99 @@
+80093DA8	loads mail text for messages f/ mail.txt
+	accepts: A0=p->target, A1=text ID
+ADDIU	SP,SP,FFB0
+SW	RA,001C (SP)
+SW	A0,0050 (SP)
+OR	A3,A1,R0	;A3=A1: ID
+BLTZ	A3,80093EF4	;return if invalid
+SLTI	AT,A3,03D6
+BEQ	AT,R0,80093EF4	;return if over ID limit
+OR	A0,A3,R0	;A0=A3: ID
+ADDIU	A1,SP,004C	;A1=SP+4C: @codeword
+JAL	80093878	;converts mail_txt ID to codeword and size
+ADDIU	A2,SP,0048	;A2=SP+48: @size
+LW	T0,0048 (SP)	;T0=size
+LW	V1,004C (SP)	;V1=codeword
+LW	A0,0050 (SP)	;A0=SP+50: p->target
+BNEZ	T0,80093DF8	;branch on content
+//80093DE4:	fill if NULL entry
+ADDIU	A1,R0,0060	;A1=bank size
+JAL	8009992C
+ADDIU	A2,R0,00CD	;A2=fill char	'\n'
+BEQ	R0,R0,80093EF8	;return
+LW	RA,001C (SP)
+//80093DF8:
+BEQ	V1,R0,80093EF4	;return if codeword invalid
+ADDIU	T1,R0,FFF8
+AND	A1,V1,T1	;A1=V1&~7	codeword DW aligned
+SUBU	V0,V1,A1	;V0=difference from actual to aligned codeword
+ADDU	T6,V0,T0
+ADDIU	T7,T6,0007	;T7=strlen + alignment offset, rounded up
+LUI	A0,8014
+LUI	A3,8011
+ADDIU	T8,R0,051D
+SW	V0,0040 (SP)	;SP+40=V0: offset from aligned data to actual
+SW	T8,0010 (SP)	;SP+10=51D: debug value
+ADDIU	A3,A3,7070	;A3=80117070: p->debug string "../m_handbill.c"
+ADDIU	A0,A0,0748	;A0=80140748: p->buffer
+JAL	80026E10	;retrieves data from ROM with codeword
+AND	A2,T7,T1	;A2=T7& ~7	strlen DW aligned
+//80093E34:
+LW	T0,0048 (SP)	;T0=size
+LW	T9,0040 (SP)	;T9=offset
+LUI	T2,8014
+ADDIU	T2,T2,0748	;T2=80140748: p->buffer
+SLTIU	AT,T0,0060	;TRUE if size exceeds maximum
+LW	V1,0050 (SP)	;V1=SP+50: p->target
+BEQ	AT,R0,80093E5C	;branch if size invalid
+ADDU	V0,T9,T2
+BEQ	R0,R0,80093E60
+OR	A2,T0,R0	;A2=T0: size=actual
+//80093E5C:	correct size
+ADDIU	A2,R0,0060	;A2=60: default max buffer size
+//80093E60:	copy data from buffer to final
+BLEZ	A2,80093EC4	;skip if size invalid
+OR	A0,R0,R0
+ANDI	A3,A2,0003
+BEQ	A3,R0,80093E94
+OR	A1,A3,R0
+LBU	T3,0000 (V0)
+ADDIU	A0,A0,0001
+ADDIU	V1,V1,0001
+ADDIU	V0,V0,0001
+BNE	A1,A0,80093E74
+SB	T3,FFFF (V1)
+BEQL	A0,A2,80093EC8
+SLTI	AT,A0,0060
+//80093E94:
+LBU	T4,0000 (V0)
+ADDIU	A0,A0,0004
+ADDIU	V1,V1,0004
+SB	T4,FFFC (V1)
+LBU	T5,0001 (V0)
+ADDIU	V0,V0,0004
+SB	T5,FFFD (V1)
+LBU	T6,FFFE (V0)
+SB	T6,FFFE (V1)
+LBU	T7,FFFF (V0)
+BNE	A0,A2,80093E94
+SB	T7,FFFF (V1)
+//80093EC4:
+SLTI	AT,A0,0060
+BEQ	AT,R0,80093EE8	;skip if already bank size
+ADDIU	A1,R0,0060	;A1=60: size, likely
+ADDIU	V0,R0,00CD	;V0=0xCD: '\n'
+//80093ED4:	fill with newlines
+ADDIU	A0,A0,0001	;A0++	count++
+SLTI	AT,A0,0060
+SB	V0,0000 (V1)	;fill with newline
+BNEZ	AT,80093ED4	;loop until max bank size
+ADDIU	V1,V1,0001	;V1++	next byte in text bank
+//80093EE8:	expand 7F values in message
+LW	A0,0050 (SP)	;A0=SP+50: p->text
+JAL	80093478	;expand 7F variables in mail message A0
+ADDIU	A3,R0,0001	;A3=1
+//80093EF4:	return
+LW	RA,001C (SP)
+ADDIU	SP,SP,0050
+JR	RA
+NOP

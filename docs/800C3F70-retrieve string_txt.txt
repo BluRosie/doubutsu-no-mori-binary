@@ -1,25 +1,25 @@
 800C3F70	0x724F0	retrieve string from string_txt
 	accepts: A0=p->target,A1=max size,A2=string index to retrieve
-ADDIU	SP,SP,FF58
+ADDIU	SP,SP,FF58	;SP-=A8: actual buffer 0x50
 SW	S0,0020 (SP)
-OR	S0,A1,R0		;S0=size
+OR	S0,A1,R0	;S0=size
 SW	RA,0024 (SP)
 SW	A0,00A8 (SP)	;save target
-OR	A3,A2,R0		;A3=string#
+OR	A3,A2,R0	;A3=string#
 BLTZ	A3,800C4070	;should be between 0...
 SLTI	AT,A3,061A
 BEQ	AT,R0,800C4070	;...and 0x61A
-OR	A0,A3,R0		;A0=string#
+OR	A0,A3,R0	;A0=string#
 ADDIU	A1,SP,00A4	;A1=target for codeword
-JAL	800C3E30		;converts string# to codeword and size
+JAL	800C3E30	;converts string# to codeword and size
 ADDIU	A2,SP,00A0	;A2=target for size
 LW	T0,00A0 (SP)	;T0=strlen
 LW	V1,00A4 (SP)	;V1=codeword
 LW	A0,00A8 (SP)	;A0=target
 BNEZ	T0,800C3FC8
-OR	A1,S0,R0		;A1=max size
+OR	A1,S0,R0	;A1=max size
 //800C3FB8:	if strlen=0 or entry not found...
-JAL	8009992C		;create fill string with max# entries
+JAL	8009992C	;create fill string with max# entries
 ADDIU	A2,R0,0020	;A2=0x20 - " "
 BEQ	R0,R0,800C4074
 LW	RA,0024 (SP)
@@ -45,11 +45,11 @@ LW	T9,0048 (SP)	;T9=difference in pull point and real start
 SLT	AT,S0,T0
 BEQ	AT,R0,800C4020	;if max size <strlen...
 ADDIU	T2,SP,0050
-OR	T0,S0,R0		;...set strlen to maxsize
+OR	T0,S0,R0	;...set strlen to maxsize
 //800C4020:	get real start of string
-OR	A1,T0,R0		;A1=strlen
-ADDU	A0,T9,T2		;A0=real start of string
-OR	V0,R0,R0		;V0=counter
+OR	A1,T0,R0	;A1=strlen
+ADDU	A0,T9,T2	;A0=real start of string
+OR	V0,R0,R0	;V0=counter
 BLEZ	T0,800C4050	;handle maxsize=0...
 SW	T0,00A0 (SP)	;save strlen
 //800C4034:	loopus to copy to final buffer

@@ -17,12 +17,12 @@ Table at 80107CB8 list jumps to handle each type
 800A0864	7F06	quick-advance on
 800A08B0	7F07	quick-advance off
 800A0964	7F08	xx	yyyy	[01]
-	animation bank 0
+	player variables, affecting animations
 		xx	slot # 0-9
 			only slot 0 appears to be used
-		yyyy	animation
-			00FE	used throughout Resetti dialogs
-				appears to be only used command
+		yyyy	value, added to variable
+			0002	shock
+			00FE	used in Resetti dialog
 800A0984	7F09	xx	yyyy	[01]
 	character animations; animation bank 4
 	7F09 09 0001	hand over map
@@ -242,22 +242,21 @@ Table at 80107CB8 list jumps to handle each type
 800A16E0	7F3E	string variable slot 19	[02]
 800A1708	7F3F	string variable slot 20	[02]
 800A1954	7F40	insert gyroid greeting	[02]
-800A19C4	7F41	unknown	[03]
-800A19E4	7F42	unknown	[03]
-800A1A04	7F43	unknown	[03]
-800A1A24	7F44	unknown	[03]
-800A1A44	7F45	unknown	[03]
-800A1A64	7F46	unknown	[03]
-800A1A84	7F47	unknown	[03]
-800A1AA4	7F48	unknown	[03]
-800A1AC4	7F49	unknown	[03]
-800A1AE4	7F4A	unknown	[03]
-800A1B4C	7F4B	unknown	[03]
-	7F4B-7F4F are called via post office (?) in msg lines A-E
-800A1B6C	7F4C	unknown	[03]
-800A1B8C	7F4D	unknown	[03]
-800A1BAC	7F4E	unknown	[03]
-800A1BCC	7F4F	unknown	[03]
+800A19C4	7F41	status: normal	[03]
+800A19E4	7F42	status: popular	[03]
+800A1A04	7F43	status: unpopular	[03]
+800A1A24	7F44	status: unlucky	[03]
+800A1A44	7F45	status: money charm	[03]
+800A1A64	7F46	status: rare item charm	[03]
+800A1A84	7F47	status: ???	[03]	unused...
+800A1AA4	7F48	status: ???	[03]	unused...
+800A1AC4	7F49	status: ???	[03]	unused...
+800A1AE4	7F4A	status: ???	[03]	unused...
+800A1B4C	7F4B	emotion: normal	[03]
+800A1B6C	7F4C	emotion: angry	[03]
+800A1B8C	7F4D	emotion: disappointed	[03]
+800A1BAC	7F4E	emotion: happy	[03]
+800A1BCC	7F4F	emotion: tired	[03]
 800A1BEC	7F50	rrggbb	##	[05]
 	change font color for following characters
 		rrggbb	color
@@ -271,20 +270,20 @@ Table at 80107CB8 list jumps to handle each type
 800A1D14	7F54	##	[05]
 	changes size of next character typed to screen
 800A1D4C	7F55	opens typing dialog, used to insert player and town name
-800A1DD0	7F56	xx yy	[06]
-	best guess: play music x, [y might be transition time]
+800A1DD0	7F56	xx yy	[06]	play music xx starting in yy seconds
+	best guess: play music x, [y might be transition time]	7F56 03 00 starts BGM 3
 		xx	music values
-			00	no music
+			00	overworld
 			01
 			02
 			03
 			04
-			05
+			05	Resetti's music
 			06
 			07	Resetti's music
 		
-800A1E38	7F57	####	[06]
-	unknown	[one of these triggers return to normal music]
+800A1E38	7F57	####	[06]	stop music xx over yy seconds
+	unknown	[one of these triggers return to normal music]	7F57 03 00 stops BGM 3
 800A1EA0	7F58	##
 	unknown	[one of these triggers return to normal music]
 800A1F1C	7F59	##	[07]
@@ -293,8 +292,8 @@ Table at 80107CB8 list jumps to handle each type
 	resize font to ##
 800A1FB4	7F5B	open dialog	[07]
 	Prepares a jump to another dialog window, such as clock, letter, etc.
-800A2000	7F5C	unknown	[03]
-800A204C	7F5D	unknown	[03]
+800A2000	7F5C	unknown	[03]	normal voice
+800A204C	7F5D	unknown	[03]	converse voice
 800A2098	7F5E	allow B to default selectmenu option
 800A20E0	7F5F	unknown
 800A2150	7F60	unknown

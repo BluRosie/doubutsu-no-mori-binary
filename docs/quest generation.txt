@@ -240,5 +240,43 @@ From all the floats I'd say item balloon.
 
 +_+
 
+Other non-quest item name handlers
+
+Doesn't need to be pretty...
+C-734F30	2032C	dug up a blah text
+@20348
+00002825	*OR	A1,R0,R0
+0C02EDA8	*JAL	800BB6A0
+95C40D1C	*LHU	A0,0D1C (T6)
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+
+1A28C	dialog for insects
+@1A2F0
+00002825	*OR	A1,R0,R0
+0C02EDA8	*JAL	800BB6A0
+95C4021C	*LHU	A0,021C (T6)
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+
+1CBDC	dialog for fish
+@1CC4C
+00002825	*OR	A1,R0,R0
+0C02EDA8	*JAL	800BB6A0
+3044FFFF	*ANDI	A0,V0,FFFF
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+	*NOP
+
+
++_+
+
 Inherant problems:
 *) Need to rewrite colouration scheme for extracted words.  I'm guessing an on/off sort of colourizer would work, or a toggle.  In any case, don't draw from strlen, which would always be 4.
