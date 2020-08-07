@@ -1,15 +1,15 @@
 # doubutsu-no-mori
 
-TODO:  once building works, get that first bunch of code disassembled and inserted as well (until 0x19D40 or the table end, **include the table**?)
+TODO:  get table disassembled and building remotely?  or nah?
 
 TODO:  dump the text!  let's go!
 
-my attempt at setting up a sort of disassembly to animal forest for the n64 to allow for easier translation
+my attempt at setting up a sort of disassembly (within files) to animal forest for the n64 to allow for easier translation
 
 ### credits
 zoinkity: the original distro on which this finds base
 
-_demo_: author of zextract, the yaz0 binary spitter
+\_demo_: author of zextract, the yaz0 binary spitter
 
 shevious: yaz0 extracter/decoder
 
@@ -23,10 +23,6 @@ right now, this is just a dump of all of the yaz0 files from both zoinkity's tra
 
 ### dependencies 
 the executables themselves don't really require anything special
-
-just have mingw installed for c stuff (just in case)
-
-have xxd for mipsdis to have proper output.  i may edit this to not be necessary later
 
 armips is required by kingcom here on github, make sure its part of the path variable
 
