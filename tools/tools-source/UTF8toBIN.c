@@ -20,12 +20,12 @@ unsigned long byteswap(unsigned long w)
 /*converts offsets to tables, and can even do it to the same exact file!*/
 unsigned long Off2Tbl(FILE *tbl, FILE *off)
 {
-    unsigned long x = 0, y = 0, z = 0, pos, end;
+    unsigned long x = 0, y = 0, z = 0, pos, endf;
 
     fseek(off, 0, SEEK_END);
-    end = ftell(off);
+    endf = ftell(off);
 
-    for(pos = 0; pos < end; pos += 4)
+    for(pos = 0; pos < endf; pos += 4)
 	{
 	    fseek(off, pos, SEEK_SET);
         fread(&x, 4, 1, off); // size
@@ -323,18 +323,19 @@ unsigned char UTF8(unsigned char x, unsigned char y)
     return x;
 }
 
+#define BUFFER_SIZE 300
 
 /*convert strings to binary - in theory...*/
 unsigned long alias(FILE *in, unsigned long ipos, unsigned long epos, unsigned long opos, FILE *out)
 {
     unsigned long count = 2, x;
-    unsigned char vert[14], buf[50], *token;
+    unsigned char vert[14], buf[BUFFER_SIZE], *token;
 
-    memset(buf, 0, 50);
+    memset(buf, 0, BUFFER_SIZE);
 
     x = epos - ipos;
-    if(x > 50)
-        x=50;
+    if(x > BUFFER_SIZE)
+        x=BUFFER_SIZE;
 
     fseek(in, ipos, SEEK_SET);
     fread(buf, x, 1, in);
@@ -2136,8 +2137,14 @@ unsigned long next(FILE *in, unsigned long pos)
 
         switch(x = fgetc(in))
         {/*this may look cryptic, but I've gotten a few text files from people where the newlines are 0A 0D, not 0D 0A*/
-            case 0xA:
+            /*case 0xA:
                 while(fgetc(in) == 0xD)
+                {
+                    pos++;
+                }
+                break;*/
+            case 0xD:
+                while(fgetc(in) == 0xA)
                 {
                     pos++;
                 }
@@ -2175,6 +2182,8 @@ long nab(FILE *in, unsigned long pos)
     return val;
 }
 
+long endofcurstring = 0;
+
 /*process a string, pushing it into the binary file
   returns the length of the string*/
 long process(FILE *in, unsigned long ipos, FILE *out, unsigned long opos)
@@ -2183,10 +2192,11 @@ long process(FILE *in, unsigned long ipos, FILE *out, unsigned long opos)
     unsigned char buf[2], y; // buf used to convert hex values
 
     // find the end - must start at first quote
-    end = next(in, ipos);
+    if ((end = next(in,ipos)) & 0xFF)
+        endofcurstring = end;
 
     // now that you know the start and length, iterate yo!
-    for(count = 0; ipos < end; ipos++)
+    for(count = 0; ipos < endofcurstring; ipos++)
     {
         fseek(in, ipos, SEEK_SET);
         y = fgetc(in);
@@ -2275,7 +2285,8 @@ long process(FILE *in, unsigned long ipos, FILE *out, unsigned long opos)
         }
     }
 
-return count;}
+    return count;
+}
 
 /*the head honcho*/
 int main(int argc, char *argv[])
