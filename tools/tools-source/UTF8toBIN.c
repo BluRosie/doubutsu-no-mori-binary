@@ -2192,8 +2192,12 @@ long process(FILE *in, unsigned long ipos, FILE *out, unsigned long opos)
     unsigned char buf[2], y; // buf used to convert hex values
 
     // find the end - must start at first quote
-    if ((end = next(in,ipos)) & 0xFF)
+    end = next(in,ipos);
+    if (end < 0x100
+     || (end != (endofcurstring & 0xFFFFFF00)) )
+    {
         endofcurstring = end;
+    }
 
     // now that you know the start and length, iterate yo!
     for(count = 0; ipos < endofcurstring; ipos++)
