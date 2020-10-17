@@ -27,6 +27,8 @@ the executables themselves don't really require anything special
 armips is required by kingcom here on github, make sure its part of the path variable
 
 # how this whole thing was set up
+0.) run scripts/setupdirectories.sh
+
 1.) run zextract on your favorite doubutsu no mori n64 rom file, putting all the files into dump/jap
 
 2.) run scripts/jdisasm.sh

@@ -1,0 +1,1 @@
+mkdir build build/eng build/jap build/obj build/yaz0 dump dump/checking dump/eng dump/jap log log/armips log/checkforbytes log/cmp log/diff_yaz0 log/obj_diff_yaz0
