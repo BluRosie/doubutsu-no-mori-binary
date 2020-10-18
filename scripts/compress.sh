@@ -1,1 +1,1 @@
-for file in build/obj/*.bin; do ./tools/yaz0enc build/obj/$(basename "$file") build/yaz0/$(basename "$file" .bin).yaz0; done
+for file in build/obj/*.bin; do ./tools/yaz0enc.exe build/obj/$(basename "$file") build/yaz0/$(basename "$file" .bin).yaz0; done

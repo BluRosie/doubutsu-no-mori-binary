@@ -1,0 +1,1 @@
+./scripts/srcbuildyaz0.sh; ./scripts/compress.sh; ./scripts/insert.sh

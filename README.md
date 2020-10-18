@@ -72,11 +72,7 @@ follow the above procedure except replacing the j in each .sh file with an e and
 4.) run scripts/srcnamefix.sh
 
 ### building
-1.) run scripts/srcbuildyaz0.sh - this will build all the files in src/asm, outputting to build/obj
-
-2.) run scripts/compress.sh - this will yaz0 compress the files in build/obj, outputting to build/yaz0
-
-3.) run scripts/insert.sh - this will insert the files in build/yaz0 to the hex address of their names
+1.) run scripts/build.sh - will build files in src/asm, compress to yaz0, and then insert them into the rom
 
 # check out issues for a tracking of the progress on getting to where zoinkity was
 goal is to be able to get to where zoinkity was but a little more streamlined (ideally)
