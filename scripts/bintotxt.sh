@@ -1,0 +1,1 @@
+for file in text/*.bin; do ./tools/AFtoUTF8.exe text/$(basename "$file"); done

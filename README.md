@@ -2,7 +2,9 @@
 
 TODO:  get table disassembled and building remotely?  or nah?
 
-TODO:  dump the text!  let's go!
+TODO:  look at sauce for grabresources and insertresources and then get those completely out of the picture.  use the copyto
+
+TODO:  streamline building process - run all 3 scripts at the same time.  along with this, maybe start a "subscript" directory to keep things really neat?
 
 my attempt at setting up a sort of disassembly (within files) to animal forest for the n64 to allow for easier translation
 
