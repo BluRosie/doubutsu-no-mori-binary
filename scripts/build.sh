@@ -1,1 +1,1 @@
-./scripts/srcbuildyaz0.sh; ./scripts/compress.sh; ./scripts/insert.sh
+rm -r build/*; mkdir build/eng build/jap build/obj build/yaz0; ./scripts/srcbuildyaz0.sh; ./scripts/compress.sh; ./scripts/insert.sh
