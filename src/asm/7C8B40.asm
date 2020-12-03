@@ -1,5 +1,5 @@
 .n64
-.create "build/obj/7C8B40.bin", 0
+.create "build/eng/7C8B40.bin", 0
 
 .headersize 0x00001000
 
@@ -853,7 +853,7 @@ _00001c28:
 /* 00001c34:	24a50c38 */	addiu a1, a1, 0xc38
 /* 00001c38:	afa4003c */	sw a0, 0x3c(sp)
 /* 00001c3c:	0c026630 */	jal 0x000998c0
-/* 00001c40:	24060004 */	addiu a2, $zero, 0x4
+/* 00001c40:	24060003 */	addiu a2, $zero, 0x3
 /* 00001c44:	8faa003c */	lw t2, 0x3c(sp)
 
 _00001c48:
@@ -2665,7 +2665,7 @@ _0000345c:
 /* 0000350c:	809bea98 */	lb k1, 0xffffea98(a0)
 /* 00003510:	00010200 */	sll $zero, at, 0x8
 /* 00003514:	00010200 */	sll $zero, at, 0x8
-/* 00003518:	19ed2412 */	/*illegal*/ .word 0x19ed2412
+/* 00003518:	4e657700 */	/*illegal*/ .word 0x4e657700
 /* 0000351c:	00000010 */	mfhi $zero
 /* 00003520:	04000000 */	bltz $zero, _00003524
 

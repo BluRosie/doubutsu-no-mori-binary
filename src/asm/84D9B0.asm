@@ -1,5 +1,5 @@
 .n64
-.create "build/obj/84D9B0.bin", 0
+.create "build/eng/84D9B0.bin", 0
 
 .headersize 0x00001000
 
@@ -32,7 +32,7 @@
 /* 00001060:	00002825 */	or a1, $zero, $zero
 /* 00001064:	27a6001c */	addiu a2, sp, 0x1c
 /* 00001068:	0c0275b4 */	jal 0x0009d6d0
-/* 0000106c:	24070006 */	addiu a3, $zero, 0x6
+/* 0000106c:	24070008 */	addiu a3, $zero, 0x8
 /* 00001070:	0c01ed70 */	jal 0x0007b5c0
 /* 00001074:	24041369 */	addiu a0, $zero, 0x1369
 /* 00001078:	0c01ede7 */	jal 0x0007b79c

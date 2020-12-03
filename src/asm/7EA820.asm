@@ -1,5 +1,5 @@
 .n64
-.create "build/obj/7EA820.bin", 0
+.create "build/eng/7EA820.bin", 0
 
 .headersize 0x00001000
 
@@ -89,7 +89,7 @@
 /* 00001144:	24050001 */	addiu a1, $zero, 0x1
 /* 00001148:	27a60024 */	addiu a2, sp, 0x24
 /* 0000114c:	0c0275b4 */	jal 0x0009d6d0
-/* 00001150:	24070006 */	addiu a3, $zero, 0x6
+/* 00001150:	24070008 */	addiu a3, $zero, 0x8
 /* 00001154:	8faf0040 */	lw t7, 0x40(sp)
 /* 00001158:	8de202b8 */	lw v0, 0x2b8(t7)
 

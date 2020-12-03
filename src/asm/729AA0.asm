@@ -1,5 +1,5 @@
 .n64
-.create "build/obj/729AA0.bin", 0
+.create "build/eng/729AA0.bin", 0
 
 .headersize 0x00001000
 
@@ -583,7 +583,7 @@ _000014c8:
 /* 0000182c:	afa00024 */	sw $zero, 0x24(sp)
 /* 00001830:	02e02025 */	or a0, s7, $zero
 /* 00001834:	0c0243a6 */	jal 0x00090e98
-/* 00001838:	24060009 */	addiu a2, $zero, 0x9
+/* 00001838:	2406000c */	addiu a2, $zero, 0xc
 /* 0000183c:	3c01808a */	lui at, 0x808a
 /* 00001840:	c43087a0 */	lwc1 f16, 0xffff87a0(at)
 /* 00001844:	3c0142b6 */	lui at, 0x42b6
@@ -677,7 +677,7 @@ _0000197c:
 
 _00001984:
 /* 00001984:	44815000 */	mtc1 at, f10
-/* 00001988:	3c014260 */	lui at, 0x4260
+/* 00001988:	3c01427a */	lui at, 0x427a
 /* 0000198c:	44819000 */	mtc1 at, f18
 /* 00001990:	3c014180 */	lui at, 0x4180
 /* 00001994:	44813000 */	mtc1 at, f6
@@ -692,7 +692,7 @@ _00001984:
 /* 000019b8:	02e02025 */	or a0, s7, $zero
 /* 000019bc:	460a4400 */	add.s f16, f8, f10
 /* 000019c0:	44072000 */	mfc1 a3, f4
-/* 000019c4:	24060003 */	addiu a2, $zero, 0x3
+/* 000019c4:	24060004 */	addiu a2, $zero, 0x4
 /* 000019c8:	e7b00010 */	swc1 f16, 0x10(sp)
 /* 000019cc:	90580000 */	lbu t8, 0x0(v0)
 /* 000019d0:	afb80014 */	sw t8, 0x14(sp)
@@ -958,12 +958,10 @@ _00001d30:
 /* 00001da8:	8009ac74 */	lb t1, 0xffffac74($zero)
 /* 00001dac:	8009ac74 */	lb t1, 0xffffac74($zero)
 /* 00001db0:	80897e98 */	lb t1, 0x7e98(a0)
-/* 00001db4:	06c3e707 */	bgezl s6, 0xffffb9d4
-/* 00001db8:	c2017e12 */	ll at, 0x7e12(s0)
-/* 00001dbc:	17000000 */	bne t8, $zero, _00001dc0
-
-_00001dc0:
-/* 00001dc0:	04c17c00 */	/*illegal*/ .word 0x04c17c00
+/* 00001db4:	4c6f616e */	/*illegal*/ .word 0x4c6f616e
+/* 00001db8:	20506179 */	addi s0, v0, 0x6179
+/* 00001dbc:	6d656e74 */	ldr a1, 0x6e74(t3)
+/* 00001dc0:	446f6e65 */	/*illegal*/ .word 0x446f6e65
 /* 00001dc4:	6428ffff */	daddiu t0, at, 0xffffffff
 /* 00001dc8:	4678f5ff */	/*illegal*/ .word 0x4678f5ff
 /* 00001dcc:	d70000ff */	ldc1 f0, 0xff(t8)

@@ -1,5 +1,5 @@
 .n64
-.create "build/obj/7285A0.bin", 0
+.create "build/eng/7285A0.bin", 0
 
 .headersize 0x00001000
 
@@ -467,7 +467,7 @@ _0000165c:
 /* 000016a4:	44811000 */	mtc1 at, f2
 /* 000016a8:	3c014342 */	lui at, 0x4342
 /* 000016ac:	44812000 */	mtc1 at, f4
-/* 000016b0:	3c0142c0 */	lui at, 0x42c0
+/* 000016b0:	3c0142e8 */	lui at, 0x42e8
 /* 000016b4:	c7a00050 */	lwc1 f0, 0x50(sp)
 /* 000016b8:	44814000 */	mtc1 at, f8
 /* 000016bc:	c7a6004c */	lwc1 f6, 0x4c(sp)
@@ -816,23 +816,21 @@ _00001b00:
 /* 00001be8:	8009ac74 */	lb t1, 0xffffac74($zero)
 /* 00001bec:	8009ac74 */	lb t1, 0xffffac74($zero)
 /* 00001bf0:	8089607c */	lb t1, 0x607c(a0)
-/* 00001bf4:	097ef401 */	j 0x05fbd004
-/* 00001bf8:	01f40c05 */	/*illegal*/ .word 0x01f40c05
-/* 00001bfc:	3f000000 */	/*illegal*/ .word 0x3f000000
-/* 00001c00:	19010000 */	/*illegal*/ .word 0x19010000
-
-_00001c04:
-/* 00001c04:	1ef11404 */	/*illegal*/ .word 0x1ef11404
-/* 00001c08:	0c000000 */	/*illegal*/ .word 0x0c000000
-/* 00001c0c:	1405cc0f */	/*illegal*/ .word 0x1405cc0f
-/* 00001c10:	0913150c */	/*illegal*/ .word 0x0913150c
-/* 00001c14:	7d000000 */	/*illegal*/ .word 0x7d000000
-/* 00001c18:	80896a00 */	lb t1, 0x6a00(a0)
-/* 00001c1c:	00000002 */	srl $zero, $zero, 0x0
-/* 00001c20:	80896a04 */	lb t1, 0x6a04(a0)
-/* 00001c24:	00000005 */	/*illegal*/ .word 0x00000005
-/* 00001c28:	80896a0c */	lb t1, 0x6a0c(a0)
-/* 00001c2c:	00000009 */	/*illegal*/ .word 0x00000009
+/* 00001bf4:	416c6c20 */	/*illegal*/ .word 0x416c6c20
+/* 00001bf8:	446f6e65 */	/*illegal*/ .word 0x446f6e65
+/* 00001bfc:	3f536176 */	/*illegal*/ .word 0x3f536176
+/* 00001c00:	65476f20 */	daddiu a3, t2, 0x6f20
+/* 00001c04:	4261636b */	/*illegal*/ .word 0x4261636b
+/* 00001c08:	44697363 */	/*illegal*/ .word 0x44697363
+/* 00001c0c:	61726420 */	daddi s2, t3, 0x6420
+/* 00001c10:	26204578 */	addiu $zero, s1, 0x4578
+/* 00001c14:	69740000 */	ldl s4, 0x0(t3)
+/* 00001c18:	808969fd */	lb t1, 0x69fd(a0)
+/* 00001c1c:	00000004 */	sllv $zero, $zero, $zero
+/* 00001c20:	80896a01 */	lb t1, 0x6a01(a0)
+/* 00001c24:	00000007 */	srav $zero, $zero, $zero
+/* 00001c28:	80896a08 */	lb t1, 0x6a08(a0)
+/* 00001c2c:	0000000e */	/*illegal*/ .word 0x0000000e
 /* 00001c30:	000000a5 */	/*illegal*/ .word 0x000000a5
 /* 00001c34:	000000b9 */	/*illegal*/ .word 0x000000b9
 /* 00001c38:	000000b9 */	/*illegal*/ .word 0x000000b9

@@ -1,5 +1,5 @@
 .n64
-.create "build/obj/8E8F80.bin", 0
+.create "build/eng/8E8F80.bin", 0
 
 .headersize 0x00001000
 
@@ -23269,29 +23269,29 @@ _0001616c:
 /* 00016184:	00000000 */	nop
 /* 00016188:	00000400 */	sll $zero, $zero, 0x10
 /* 0001618c:	ffffffff */	sd ra, 0xffffffff(ra)
-/* 00016190:	00130056 */	/*illegal*/ .word 0x00130056
+/* 00016190:	fff80056 */	sd t8, 0x56(ra)
 /* 00016194:	00000000 */	nop
 /* 00016198:	08000000 */	j 0x00000000
 /* 0001619c:	ffffffff */	sd ra, 0xffffffff(ra)
-/* 000161a0:	00130035 */	/*illegal*/ .word 0x00130035
+/* 000161a0:	fff80035 */	sd t8, 0x35(ra)
 /* 000161a4:	00000000 */	nop
 /* 000161a8:	08000400 */	j _00001000
 /* 000161ac:	ffffffff */	sd ra, 0xffffffff(ra)
-/* 000161b0:	00130054 */	/*illegal*/ .word 0x00130054
+/* 000161b0:	fff80054 */	sd t8, 0x54(ra)
 /* 000161b4:	00000000 */	nop
 /* 000161b8:	08000400 */	j _00001000
 /* 000161bc:	ffffffff */	sd ra, 0xffffffff(ra)
-/* 000161c0:	00130033 */	tltu $zero, s3, 0x0
+/* 000161c0:	fff80033 */	sd t8, 0x33(ra)
 /* 000161c4:	00000000 */	nop
 /* 000161c8:	08000800 */	j _00002000
 /* 000161cc:	ffffffff */	sd ra, 0xffffffff(ra)
 
 _000161d0:
-/* 000161d0:	00550054 */	/*illegal*/ .word 0x00550054
+/* 000161d0:	00200054 */	/*illegal*/ .word 0x00200054
 /* 000161d4:	00000000 */	nop
 /* 000161d8:	10000400 */	beq $zero, $zero, _000171dc
 /* 000161dc:	ffffffff */	sd ra, 0xffffffff(ra)
-/* 000161e0:	00550033 */	tltu v0, s5, 0x0
+/* 000161e0:	00200033 */	tltu at, $zero, 0x0
 /* 000161e4:	00000000 */	nop
 /* 000161e8:	10000800 */	beq $zero, $zero, _000181ec
 /* 000161ec:	ffffffff */	sd ra, 0xffffffff(ra)

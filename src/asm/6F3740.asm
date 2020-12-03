@@ -1,5 +1,5 @@
 .n64
-.create "build/obj/6F3740.bin", 0
+.create "build/eng/6F3740.bin", 0
 
 .headersize 0x00001000
 
@@ -740,10 +740,10 @@ _000019c4:
 _00001adc:
 /* 00001adc:	466c6173 */	/*illegal*/ .word 0x466c6173
 /* 00001ae0:	68526f6d */	ldl s2, 0x6f6d(v0)
-/* 00001ae4:	20159e90 */	addi s5, $zero, 0xffff9e90
-/* 00001ae8:	dfe28f98 */	ld v0, 0xffff8f98(ra)
-/* 00001aec:	20159e90 */	addi s5, $zero, 0xffff9e90
-/* 00001af0:	df202020 */	ld $zero, 0x2020(t9)
+/* 00001ae4:	20536176 */	addi s3, v0, 0x6176
+/* 00001ae8:	654d656d */	daddiu t5, t2, 0x656d
+/* 00001aec:	50616b20 */	beql v1, at, 0x0001c770
+/* 00001af0:	53617665 */	/*illegal*/ .word 0x53617665
 /* 00001af4:	20200000 */	addi $zero, at, 0x0
 /* 00001af8:	00000000 */	nop
 /* 00001afc:	00000000 */	nop

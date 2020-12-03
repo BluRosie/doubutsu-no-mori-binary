@@ -1,5 +1,5 @@
 .n64
-.create "build/obj/72D130.bin", 0
+.create "build/eng/72D130.bin", 0
 
 .headersize 0x00001000
 
@@ -20,11 +20,11 @@
 /* 00001030:	45000858 */	/*illegal*/ .word 0x45000858
 /* 00001034:	4600085c */	/*illegal*/ .word 0x4600085c
 /* 00001038:	44000ba8 */	/*illegal*/ .word 0x44000ba8
-/* 0000103c:	45000d6c */	/*illegal*/ .word 0x45000d6c
-/* 00001040:	46000d70 */	/*illegal*/ .word 0x46000d70
+/* 0000103c:	45000d80 */	/*illegal*/ .word 0x45000d80
+/* 00001040:	46000d84 */	sqrt.s f22, f1
 /* 00001044:	44000e5c */	/*illegal*/ .word 0x44000e5c
 /* 00001048:	44000f08 */	/*illegal*/ .word 0x44000f08
-/* 0000104c:	45000f3c */	/*illegal*/ .word 0x45000f3c
+/* 0000104c:	45000f3c */	bc1f 0x00004d40
 /* 00001050:	46000f48 */	round.l.s f29, f1
 /* 00001054:	45000fb0 */	bc1f 0x00004f18
 /* 00001058:	46000fc0 */	add.s f31, f1, f0
