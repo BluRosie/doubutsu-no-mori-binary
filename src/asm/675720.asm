@@ -1,5 +1,5 @@
 .n64
-.create "build/obj/8EF990.bin", 0
+.create "build/obj/675720.bin", 0
 
 .headersize 0x00001000
 

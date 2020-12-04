@@ -2,14 +2,13 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include <wchar.h>
 
 #define DEBUG // debug prints just what exactly is being copied and the addresses involved
 
 int main(int argc, char **argv)
 {
     const char *sourcename = NULL, *targetname = NULL;
-    wint_t ch;
+    uint8_t ch;
     int heldbyte;
     long offset;
     long int srcsize;
@@ -63,32 +62,19 @@ int main(int argc, char **argv)
 
     printf("Writing %s to 0x%X: 0x%X bytes\n", sourcename, offset, srcsize);
 
-    fseek(target, offset + srcsize, SEEK_SET);
-    heldbyte = fgetc(target);
-
     fseek(source, 0, SEEK_SET);
     fseek(target, offset, SEEK_SET); // sets the file pointer/reading point/whatever you want to call it to the offset from sourcename
 
-    for (long int i = 0; i < srcsize;)
+    for (long int i = 0; i < srcsize; i++)
     {
-        ch = fgetwc(source);
-        fputwc(ch, target);
-        i+=2;
-        fseek(source, i, SEEK_SET);
+        //fseek(source, i, SEEK_SET);
+        ch = fgetc(source);
+        fputc(ch, target);
         #ifdef DEBUG
-        if (((i - 2) % 0x10) == 0)
-            printf("\n0x%05X:  ", i - 2);
-        printf("%02X %02X ", (uint8_t)ch & 0xFF, (uint8_t)((ch & 0xFF00) >> 8));
+        if (((i - 1) % 0x10) == 0)
+            printf("\n0x%05X:  ", i - 1);
+        printf("%02X ", ch);
         #endif // DEBUG
-    }
-
-    if (srcsize % 2 == 1)
-    {
-        fseek(source, -2, SEEK_END);
-        fseek(target, offset + srcsize - 2, SEEK_SET);
-        ch = fgetwc(source);
-        fputwc(ch, target);
-        fputc(heldbyte, target);
     }
 
     fseek(target, offset, SEEK_SET);
