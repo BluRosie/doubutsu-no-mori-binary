@@ -1,5 +1,7 @@
 .n64
 
+DEBUG equ 1 // currently just a flag to set instant text code
+
 // include file for various parts of the ram that are accessed in the code, structs covered here too
 
 gTextUnk80107c90 equ 0x80107c90 //always always seems to be one
