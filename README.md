@@ -1,10 +1,6 @@
 # doubutsu-no-mori
 
-TODO:  get table disassembled and building remotely?  or nah?
-
 TODO:  look at sauce for grabresources and insertresources and then get those completely out of the picture.  use the copyto
-
-TODO:  streamline building process - run all 3 scripts at the same time.  along with this, maybe start a "subscript" directory to keep things really neat?
 
 my attempt at setting up a sort of disassembly (within files) to animal forest for the n64 to allow for easier translation
 
@@ -18,6 +14,8 @@ shevious: yaz0 extracter/decoder
 loadzero: base mipsdis
 
 kingcom: armips
+
+RaO: rn64crc
 
 ### so what can be found here?
 
@@ -72,7 +70,7 @@ follow the above procedure except replacing the j in each .sh file with an e and
 4.) run scripts/srcnamefix.sh
 
 ### building
-1.) run scripts/build.sh - will build files in src/asm, compress to yaz0, and then insert them into the rom
+1.) run scripts/build.sh - will build files in src/asm/, compress to yaz0, and then insert them into the rom.  then it will update the codeword table and the rom checksum
 
 # check out issues for a tracking of the progress on getting to where zoinkity was
 goal is to be able to get to where zoinkity was but a little more streamlined (ideally)

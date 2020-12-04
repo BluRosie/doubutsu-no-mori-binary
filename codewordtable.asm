@@ -2,6 +2,8 @@
 
 .open "build.n64", 0x0
 
+// free space:  6786C0 until 6ED6C0
+
 .orga 0x19DA0 // move big code file to 1000000 (675720 -> 1000000)
 
 //    codeword,  endword,  location,   endloc
