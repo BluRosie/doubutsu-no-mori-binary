@@ -3,6 +3,11 @@
 .open "build.n64", 0x0
 
 /*
+	free space:	6786C0 until 6ED6C0
+				after 1077FE0
+*/
+
+/*
 	// mailabc_data one file?  psz and superz as well?
 	// all items appear to be same file too
 	// blank entry means it falls under something else.  will have to research
@@ -47,7 +52,7 @@
 .word 0x00027130, 0x000E4D10, 0x00027130, 0x00000000 
 .word 0x000E4D10, 0x0013D9A0, 0x000E4D10, 0x00000000 
 .word 0x0013D9A0, 0x00675720, 0x0013D9A0, 0x00000000 
-.word 0x00675720, 0x0073F4D0, 0x00675720, 0x006ED6C0 
+.word 0x00675720, 0x0073F4D0, 0x01000000, 0x006ED6C0  // move big code file to 1000000 (675720 -> 1000000)
 .word 0x0073F4D0, 0x00741A40, 0x006ED6C0, 0x006EECE0 
 .word 0x00741A40, 0x00741EA0, 0x006EECE0, 0x006EF0B0 
 .word 0x00741EA0, 0x00741F80, 0x006EF0B0, 0x006EF170 
@@ -1905,7 +1910,7 @@
 .word 0x00A8E000, 0x00A93EF0, 0x008E7FB0, 0x008E8F80 
 .word 0x00A94000, 0x00AAC5E0, 0x008E8F80, 0x008ED150 
 .word 0x00AAD000, 0x00AB9A90, 0x008ED150, 0x008EF990 
-.word 0x00ABA000, 0x00AC6EA0, 0x008EF990, 0x008F2920 
+.word 0x00ABA000, 0x00AC6EA0, 0x00675720, 0x008F2920  // move message board gfx to 675720 (8EF990 -> 675720) - prevents crash
 .word 0x00AC7000, 0x00AC9850, 0x008F2920, 0x008F2FD0 
 .word 0x00ACA000, 0x00ACBA20, 0x008F2FD0, 0x008F3580 
 .word 0x00ACC000, 0x00AD0290, 0x008F3580, 0x008F4660 
