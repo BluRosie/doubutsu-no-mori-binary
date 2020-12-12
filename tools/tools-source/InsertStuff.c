@@ -227,7 +227,8 @@ int inserto(int type, FILE *in, FILE *tbl, FILE *bin, int mods)
                 ptbl = pbin + 0x12230;
                 etbl = pbin + 0x12840;
                 ebin = pbin + 0x10000;
-                pbin += 0xF000;}
+                pbin += 0xF000;
+            }
             break;
         case TBL_SUPERZ_DATA:
             if(!codeword(in,0x00D1A000,&pbin,&ebin))
