@@ -1,0 +1,1 @@
+for file in build/text/*.tbl; do ./tools/writetofileat.exe build/text/$(basename "$file") build.n64; done

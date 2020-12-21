@@ -1,0 +1,1 @@
+for file in text/*.txt; do ./tools/UTF8toBIN.exe text/$(basename "$file") build/text/$(basename "$file" .txt).bin; done

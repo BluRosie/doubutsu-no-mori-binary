@@ -2182,6 +2182,7 @@ long nab(FILE *in, unsigned long pos)
     return val;
 }
 
+// hacky ass fix.  should do the trick.
 long endofcurstring = 0;
 
 /*process a string, pushing it into the binary file
@@ -2301,7 +2302,7 @@ int main(int argc, char *argv[])
     unsigned long in = 0, pos = 0, tab = 0, y; // pos in infile, pos in bin, cur in tbl
     unsigned char x, opt = 7;
 
-    for(x = 1; x < argc; x++)
+    /*for(x = 1; x < argc; x++)
     {
         if(argv[x][0] == '-' || argv[x][0] == '/')
         {
@@ -2329,13 +2330,21 @@ int main(int argc, char *argv[])
         }
         else
             strcpy(buf, argv[x]);
-    }
+    }*/
+
+    if (argv[1] != NULL)
+        strcpy(buf, argv[1]);
 
     while (!(txt = fopen(buf, "rb")))
     {
         printf("\nUTF-8 text file? ");
         strcpy(buf,"\0");
         gets(buf);
+    }
+
+    if (argv[2] != NULL)
+    {
+        strcpy(buf, argv[2]);
     }
 
     strtok(buf, ".");
@@ -2349,6 +2358,11 @@ int main(int argc, char *argv[])
         printf("\noutput %s file? ", opt&2 ? "offset":"table");
         strcpy(buf, "\0");
         gets(buf);
+    }
+
+    if (argv[2] != NULL)
+    {
+        strcpy(buf, argv[2]);
     }
 
     strtok(buf,".");
@@ -2410,6 +2424,8 @@ int main(int argc, char *argv[])
     // if you didn't disable it, converts the offset table into a table, ready for insertion
     if(opt & 2)
         Off2Tbl(tbl, tbl);
+
+
 
     fclose(tbl);
     fclose(txt);

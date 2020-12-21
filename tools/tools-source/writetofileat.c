@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define DEBUG // debug prints just what exactly is being copied and the addresses involved
+//#define DEBUG // debug prints just what exactly is being copied and the addresses involved
 
 int main(int argc, char **argv)
 {
@@ -39,6 +39,9 @@ int main(int argc, char **argv)
 
         if (strstr(sourcename, "build/yaz0/"))
             sourcename += strlen("build/yaz0/");
+        else if (strstr(sourcename, "build/text/"))
+            sourcename += strlen("build/text/");
+
     }
 
     targetname = argv[2];
@@ -55,6 +58,14 @@ int main(int argc, char **argv)
     }
 
     offset = strtol(sourcename, NULL, 0x10); // converts the file name to a hex number with the text part at the end passed into nowhere
+
+    if (offset == 0)
+    {
+        fprintf(stderr, "\"%s\" doesn't start with a number.\n", sourcename);
+        fclose(source);
+        fclose(target);
+        return 1;
+    }
 
     fseek(source, 0, SEEK_END);
 

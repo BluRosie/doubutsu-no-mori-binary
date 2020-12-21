@@ -1,1 +1,1 @@
-rm -r build/*; mkdir build/eng build/jap build/obj build/yaz0; ./scripts/srcbuildyaz0.sh; ./scripts/compress.sh; ./scripts/insert.sh; armips.exe codewordtable.asm; ./tools/rn64crc.exe build.n64 -u; echo "All inserted!"
+rm -r build/*; mkdir build/eng build/jap build/obj build/yaz0 build/text; armips.exe codewordtable.asm; ./scripts/srcbuildyaz0.sh; ./scripts/compress.sh; ./scripts/insert.sh; ./scripts/buildtext.sh; ./scripts/renametables.sh; ./scripts/inserttext.sh; ./scripts/inserttables.sh; ./tools/rn64crc.exe build.n64 -u; echo "All inserted!"
