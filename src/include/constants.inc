@@ -1,0 +1,3 @@
+.n64
+
+VILLAGER_NAME_LEN equ 8
