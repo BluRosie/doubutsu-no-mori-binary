@@ -2,6 +2,9 @@
 .create "build/obj/710680.bin", 0
 
 .include "src/include/constants.inc"
+.table "src/include/chartable.tbl"
+
+correction equ 0x4c2d80 // pointer correction
 
 .headersize 0x803bc590
 
@@ -10049,26 +10052,27 @@ _803c4df4:
 /* 803c4ecc:	91e30002 */	lbu v1, 0x2(t7)
 /* 803c4ed0:	24010001 */	addiu at, $zero, 0x1
 /* 803c4ed4:	c7a00070 */	lwc1 f0, 0x70(sp)
-/* 803c4ed8:	14610005 */	bne v1, at, _803c4ef0
+/* 803c4ed8:	14610005 */	bne v1, at, @@isNotSecondLine
 /* 803c4edc:	46081080 */	add.s f2, f2, f8
-/* 803c4ee0:	3c108088 */	lui s0, 0x8088
-/* 803c4ee4:	26108acc */	addiu s0, s0, 0x8acc
-/* 803c4ee8:	10000009 */	beq $zero, $zero, _803c4f10
-/* 803c4eec:	24110006 */	addiu s1, $zero, 0x6
+/* 803c4ee0:	3c108088 */	lui s0, (gSecondLineStringPackage + correction) >> 16
+/* 803c4ee4:	26108acc */	addiu s0, s0, (gSecondLineStringPackage + correction) & 0xFFFF
+/* 803c4ee8:	10000009 */	b @@writeTextToLine
+/* 803c4eec:	24110006 */	addiu s1, $zero, 0x6 // length of gSecondLineStringPackage in s0
 
-_803c4ef0:
-/* 803c4ef0:	24010008 */	addiu at, $zero, 0x8
-/* 803c4ef4:	14610004 */	bne v1, at, _803c4f08
+@@isNotSecondLine:
+/* 803c4ef0:	24010008 */	addiu at, $zero, 0x8 // length of gFirstLineStringPackage?
+/* 803c4ef4:	14610004 */	bne v1, at, @@_803c4f08
 /* 803c4ef8:	24110004 */	addiu s1, $zero, 0x4
 /* 803c4efc:	3c108088 */	lui s0, 0x8088
-/* 803c4f00:	10000003 */	beq $zero, $zero, _803c4f10
+/* 803c4f00:	10000003 */	b @@writeTextToLine
 /* 803c4f04:	26108ac0 */	addiu s0, s0, 0x8ac0
 
-_803c4f08:
-/* 803c4f08:	3c108088 */	lui s0, 0x8088
-/* 803c4f0c:	26108ad4 */	addiu s0, s0, 0x8ad4
+@@_803c4f08:
+	lui s0, (gFirstLineStringPackage + correction) >> 16
+	addiu s0, s0, (gFirstLineStringPackage + correction) & 0xFFFF
 
-_803c4f10:
+// s1 is string length
+@@writeTextToLine:
 /* 803c4f10:	2418005a */	addiu t8, $zero, 0x5a
 /* 803c4f14:	2419003c */	addiu t9, $zero, 0x3c
 /* 803c4f18:	24090032 */	addiu t1, $zero, 0x32
@@ -10170,7 +10174,7 @@ _803c5018:
 /* 803c5060:	0c0243a6 */	jal 0x80090e98
 /* 803c5064:	afaf001c */	sw t7, 0x1c(sp)
 /* 803c5068:	8fa40048 */	lw a0, 0x48(sp)
-/* 803c506c:	24050006 */	addiu a1, $zero, VILLAGER_NAME_LEN // for packages to be delivered
+/* 803c506c:	24050006 */	addiu a1, $zero, VILLAGER_NAME_LEN - 2 // space allocation for packages to be delivered
 /* 803c5070:	0c027070 */	jal 0x8009c1c0
 /* 803c5074:	24060020 */	addiu a2, $zero, 0x20
 /* 803c5078:	8fb90064 */	lw t9, 0x64(sp)
@@ -11035,16 +11039,33 @@ _803c5b78:
 /* 803c5d34:	00010009 */	/*illegal*/ .word 0x00010009
 /* 803c5d38:	80878978 */	lb a3, 0xffff8978(a0)
 /* 803c5d3c:	808789ec */	lb a3, 0xffff89ec(a0)
-/* 803c5d40:	041f07ed */	/*illegal*/ .word 0x041f07ed
+
+// 803c5d40
+// not sure what this is yet
+// .word 0x041f07ed
+	.stringn "おみくじ"
+
 /* 803c5d44:	aa8fe390 */	swl t7, 0xffffe390(s4)
 /* 803c5d48:	b990b100 */	swr s0, 0xffffb100(t4)
-/* 803c5d4c:	0413f508 */	bgezall $zero, _803c3170
-/* 803c5d50:	5b180000 */	/*illegal*/ .word 0x5b180000
 
-_803c5d54:
-/* 803c5d54:	0412e71f */	/*illegal*/ .word 0x0412e71f
-/* 803c5d58:	0ac31c18 */	/*illegal*/ .word 0x0ac31c18
-/* 803c5d5c:	0ac3607c */	/*illegal*/ .word 0x0ac3607c
+
+// these are the hardcoded strings that appear when a villager hands you an item to deliver elsewhere.
+
+// 803c5d4c
+gSecondLineStringPackage:
+	.stringn "おとどけもの  "
+
+
+// 803c5d54
+gFirstLineStringPackage:
+	.stringn "おてがみさんへの" // おてがみ replaced by name of villager
+
+
+// 803c5d5c
+// not sure how this is referenced, but changing it works.
+gThirdLineStringPackage:
+	.stringn "さんより"
+
 /* 803c5d60:	00087d20 */	/*illegal*/ .word 0x00087d20
 /* 803c5d64:	20202020 */	addi $zero, at, 0x2020
 /* 803c5d68:	80871ecc */	lb a3, 0x1ecc(a0)
