@@ -9973,7 +9973,7 @@ _803c4d00:
 /* 803c4da8:	afa7006c */	sw a3, 0x6c(sp)
 /* 803c4dac:	8fae0064 */	lw t6, 0x64(sp)
 /* 803c4db0:	24010004 */	addiu at, $zero, 0x4
-/* 803c4db4:	3c108088 */	lui s0, 0x8088
+/* 803c4db4:	3c108088 */	lui s0, (gFirstLineStringPackage + correction) >> 16
 /* 803c4db8:	91cf0002 */	lbu t7, 0x2(t6)
 /* 803c4dbc:	c7a00070 */	lwc1 f0, 0x70(sp)
 /* 803c4dc0:	c7a4006c */	lwc1 f4, 0x6c(sp)
@@ -9981,16 +9981,16 @@ _803c4d00:
 /* 803c4dc8:	240a00ff */	addiu t2, $zero, 0xff
 /* 803c4dcc:	3c108088 */	lui s0, 0x8088
 /* 803c4dd0:	3c028088 */	lui v0, 0x8088
-/* 803c4dd4:	26108ada */	addiu s0, s0, 0xffff8ada
+/* 803c4dd4:	26108ada */	addiu s0, s0, 0x8ada
 /* 803c4dd8:	24110002 */	addiu s1, $zero, 0x2
 /* 803c4ddc:	10000005 */	beq $zero, $zero, _803c4df4
 /* 803c4de0:	244294c8 */	addiu v0, v0, 0xffff94c8
 
 _803c4de4:
 /* 803c4de4:	3c028088 */	lui v0, 0x8088
-/* 803c4de8:	26108ad8 */	addiu s0, s0, 0xffff8ad8
-/* 803c4dec:	24110004 */	addiu s1, $zero, 0x4
-/* 803c4df0:	244294c0 */	addiu v0, v0, 0xffff94c0
+/* 803c4de8:	26108ad8 */	addiu s0, s0, (gFirstLineStringPackage + correction) & 0xFFFF
+/* 803c4dec:	24110004 */	addiu s1, $zero, 0x5 // length of gFirstLineStringPackage
+/* 803c4df0:	244294c0 */	addiu v0, v0, 0x94c0
 
 
 // draw villager name on quest something
@@ -10017,7 +10017,7 @@ _803c4df4:
 /* 803c4e40:	afa9001c */	sw t1, 0x1c(sp)
 /* 803c4e44:	8fa4004c */	lw a0, 0x4c(sp)
 /* 803c4e48:	24050006 */	addiu a1, $zero, VILLAGER_NAME_LEN
-/* 803c4e4c:	0c027070 */	jal 0x8009c1c0
+/* 803c4e4c:	0c027070 */	jal 0x8009c1c0 // distance to print letters on first line away from 
 /* 803c4e50:	24060020 */	addiu a2, $zero, 0x20
 /* 803c4e54:	44823000 */	mtc1 v0, f6
 /* 803c4e58:	c7aa0074 */	lwc1 f10, 0x74(sp)
@@ -10057,17 +10057,17 @@ _803c4df4:
 /* 803c4ee0:	3c108088 */	lui s0, (gSecondLineStringPackage + correction) >> 16
 /* 803c4ee4:	26108acc */	addiu s0, s0, (gSecondLineStringPackage + correction) & 0xFFFF
 /* 803c4ee8:	10000009 */	b @@writeTextToLine
-/* 803c4eec:	24110006 */	addiu s1, $zero, 0x6 // length of gSecondLineStringPackage in s0
+/* 803c4eec:	24110006 */	addiu s1, $zero, 0x9 // length of gSecondLineStringPackage in s0
 
 @@isNotSecondLine:
-/* 803c4ef0:	24010008 */	addiu at, $zero, 0x8 // length of gFirstLineStringPackage?
-/* 803c4ef4:	14610004 */	bne v1, at, @@_803c4f08
-/* 803c4ef8:	24110004 */	addiu s1, $zero, 0x4
+/* 803c4ef0:	24010008 */	addiu at, $zero, 0x8
+/* 803c4ef4:	14610004 */	bne v1, at, @@isFirstLine
+/* 803c4ef8:	24110004 */	addiu s1, $zero, 0x5 // length of gFirstLineStringPackage
 /* 803c4efc:	3c108088 */	lui s0, 0x8088
 /* 803c4f00:	10000003 */	b @@writeTextToLine
 /* 803c4f04:	26108ac0 */	addiu s0, s0, 0x8ac0
 
-@@_803c4f08:
+@@isFirstLine:
 	lui s0, (gFirstLineStringPackage + correction) >> 16
 	addiu s0, s0, (gFirstLineStringPackage + correction) & 0xFFFF
 
@@ -10104,7 +10104,7 @@ _803c4df4:
 /* 803c4f80:	3c108088 */	lui s0, 0x8088
 /* 803c4f84:	3c028088 */	lui v0, 0x8088
 /* 803c4f88:	250b004e */	addiu t3, t0, 0x4e
-/* 803c4f8c:	26108ac4 */	addiu s0, s0, 0xffff8ac4
+/* 803c4f8c:	26108ac4 */	addiu s0, s0, 0x8ac4
 /* 803c4f90:	24110007 */	addiu s1, $zero, 0x7
 /* 803c4f94:	afab0048 */	sw t3, 0x48(sp)
 /* 803c4f98:	1000001f */	beq $zero, $zero, _803c5018
@@ -10118,28 +10118,28 @@ _803c4fa0:
 /* 803c4fb0:	24110006 */	addiu s1, $zero, VILLAGER_NAME_LEN // for packages to be delivered
 /* 803c4fb4:	3c028088 */	lui v0, 0x8088
 /* 803c4fb8:	10000017 */	beq $zero, $zero, _803c5018
-/* 803c4fbc:	244294c8 */	addiu v0, v0, 0xffff94c8
+/* 803c4fbc:	244294c8 */	addiu v0, v0, 0x94c8
 
 _803c4fc0:
 /* 803c4fc0:	24010008 */	addiu at, $zero, 0x8
 /* 803c4fc4:	14610003 */	bne v1, at, _803c4fd4
 /* 803c4fc8:	3c028088 */	lui v0, 0x8088
 /* 803c4fcc:	10000012 */	beq $zero, $zero, _803c5018
-/* 803c4fd0:	244294d0 */	addiu v0, v0, 0xffff94d0
+/* 803c4fd0:	244294d0 */	addiu v0, v0, 0x94d0
 
 _803c4fd4:
 /* 803c4fd4:	24010006 */	addiu at, $zero, 0x6
 /* 803c4fd8:	14610003 */	bne v1, at, _803c4fe8
 /* 803c4fdc:	3c028088 */	lui v0, 0x8088
 /* 803c4fe0:	1000000d */	beq $zero, $zero, _803c5018
-/* 803c4fe4:	244294d0 */	addiu v0, v0, 0xffff94d0
+/* 803c4fe4:	244294d0 */	addiu v0, v0, 0x94d0
 
 _803c4fe8:
 /* 803c4fe8:	24010005 */	addiu at, $zero, 0x5
 /* 803c4fec:	14610003 */	bne v1, at, _803c4ffc
 /* 803c4ff0:	3c028088 */	lui v0, 0x8088
 /* 803c4ff4:	10000008 */	beq $zero, $zero, _803c5018
-/* 803c4ff8:	244294cc */	addiu v0, v0, 0xffff94cc
+/* 803c4ff8:	244294cc */	addiu v0, v0, 0x94cc
 
 _803c4ffc:
 /* 803c4ffc:	24010007 */	addiu at, $zero, 0x7
@@ -10174,7 +10174,7 @@ _803c5018:
 /* 803c5060:	0c0243a6 */	jal 0x80090e98
 /* 803c5064:	afaf001c */	sw t7, 0x1c(sp)
 /* 803c5068:	8fa40048 */	lw a0, 0x48(sp)
-/* 803c506c:	24050006 */	addiu a1, $zero, VILLAGER_NAME_LEN - 2 // space allocation for packages to be delivered
+/* 803c506c:	24050006 */	addiu a1, $zero, VILLAGER_NAME_LEN // space allocation for packages to be delivered
 /* 803c5070:	0c027070 */	jal 0x8009c1c0
 /* 803c5074:	24060020 */	addiu a2, $zero, 0x20
 /* 803c5078:	8fb90064 */	lw t9, 0x64(sp)
@@ -10190,16 +10190,16 @@ _803c5018:
 /* 803c50a0:	c7a40074 */	lwc1 f4, 0x74(sp)
 /* 803c50a4:	24010007 */	addiu at, $zero, 0x7
 /* 803c50a8:	14610005 */	bne v1, at, _803c50c0
-/* 803c50ac:	3c108088 */	lui s0, 0x8088
+/* 803c50ac:	3c108088 */	lui s0, (gThirdLineStringPackage + correction) >> 16
 
 _803c50b0:
 /* 803c50b0:	3c108088 */	lui s0, 0x8088
-/* 803c50b4:	26108ade */	addiu s0, s0, 0xffff8ade
+/* 803c50b4:	26108ade */	addiu s0, s0, 0x8ade
 /* 803c50b8:	10000003 */	beq $zero, $zero, _803c50c8
 /* 803c50bc:	24110002 */	addiu s1, $zero, 0x2
 
 _803c50c0:
-/* 803c50c0:	26108adc */	addiu s0, s0, 0xffff8adc
+/* 803c50c0:	26108adc */	addiu s0, s0, (gThirdLineStringPackage + correction) & 0xFFFF
 /* 803c50c4:	24110004 */	addiu s1, $zero, 0x4
 
 _803c50c8:
@@ -10236,6 +10236,9 @@ _803c5130:
 /* 803c5138:	8fb10040 */	lw s1, 0x40(sp)
 /* 803c513c:	03e00008 */	jr ra
 /* 803c5140:	27bd0060 */	addiu sp, sp, 0x60
+
+
+
 /* 803c5144:	27bdff80 */	addiu sp, sp, 0xffffff80
 /* 803c5148:	afb70078 */	sw s7, 0x78(sp)
 /* 803c514c:	afb60074 */	sw s6, 0x74(sp)
@@ -11053,18 +11056,22 @@ _803c5b78:
 
 // 803c5d4c
 gSecondLineStringPackage:
-	.stringn "おとどけもの  "
+	.stringn "this from"
+	//.stringn "おとどけもの  "
 
 
 // 803c5d54
 gFirstLineStringPackage:
-	.stringn "おてがみさんへの" // おてがみ replaced by name of villager
+	.stringn "wants  " // normally first four letters aren't used?
+	//.stringn "おてがみさんへの" // normally first four letters aren't used?
+
+// i'm afraid some gender shenanigans are going on here
 
 
 // 803c5d5c
-// not sure how this is referenced, but changing it works.
 gThirdLineStringPackage:
-	.stringn "さんより"
+	.stringn "    "
+	//.stringn "さんより"
 
 /* 803c5d60:	00087d20 */	/*illegal*/ .word 0x00087d20
 /* 803c5d64:	20202020 */	addi $zero, at, 0x2020
