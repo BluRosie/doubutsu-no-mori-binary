@@ -11,7 +11,7 @@
 
 /*
 	// mailabc_data one file?  psz and superz as well?
-	// all items appear to be same file too
+	// all items are the same file
 	// blank entry means it falls under something else.  will have to research
 	text file		- bincodeword	- binoffset		- tblcodeword	- tbloffset
 	1xxxItems		- 0x010F4000	- 0x00C963B0
@@ -2273,7 +2273,7 @@
 .word 0x010EE000, 0x010EF020, 0x00C95610, 0x00C95B00 
 .word 0x010F0000, 0x010F1020, 0x00C95B00, 0x00C95F80 
 .word 0x010F2000, 0x010F3020, 0x00C95F80, 0x00C963B0 
-.word 0x010F4000, 0x010FF1A0, 0x00C963B0, 0x00000000  // 1xxxItems - all items?
+.word CODEWORD_ITEMS, 0x010FF1A0, 0x00C963B0, 0x00000000  // Items
 .word 0x01100000, 0x011003C0, 0x00CA1550, 0x00CA1820 
 .word 0x01101000, 0x01101770, 0x00CA1820, 0x00CA1B30 
 .word 0x01102000, 0x011029E0, 0x00CA1B30, 0x00CA2020 
