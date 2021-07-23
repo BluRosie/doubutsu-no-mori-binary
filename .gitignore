@@ -9,3 +9,4 @@ build/
 reversing/
 dump/
 *.bak
+libstdc++-6.dll
