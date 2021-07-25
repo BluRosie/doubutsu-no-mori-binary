@@ -4,6 +4,9 @@ VILLAGER_NAME_LEN equ 8
 
 // items
 
+// "Yellow Pansies Bag" is the longest english item name
+ITEM_NAME_LEN equ 10
+
 CLOTHES_START_1XXX equ 0x17AC
 CLOTHES_END_1XXX equ 0x1BA7
 
@@ -25,3 +28,22 @@ PARASOLS_START_1XXX equ 0x1CA8
 PARASOLS_END_1XXX equ 0x1D27
 
 PARASOLS_START equ 0x2204
+
+// used for ItemSubTypeTextBankOffsets
+ENTRIES_20xx equ 0x40
+ENTRIES_21xx equ 0x4
+ENTRIES_22xx equ 0x24
+ENTRIES_23xx equ 0x20
+ENTRIES_24xx equ 0xFF
+ENTRIES_25xx equ 0x1E
+ENTRIES_26xx equ 0x40
+ENTRIES_27xx equ 0x40
+ENTRIES_28xx equ 0x7
+ENTRIES_29xx equ 0xA
+ENTRIES_2Axx equ 0x37
+ENTRIES_2Bxx equ 0x1
+ENTRIES_2Cxx equ 0x60
+ENTRIES_2Dxx equ 0x20
+ENTRIES_2Exx equ 0x2
+ENTRIES_2Fxx equ 0x4
+ENTRIES_1xxx equ 0xECD
