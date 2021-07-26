@@ -1,1 +1,3 @@
-for file in text/*.txt; do ./tools/UTF8toBIN.exe text/$(basename "$file") build/text/$(basename "$file" .txt).bin; done
+for file in text/*.txt; do ./tools/UTF8toBIN.exe text/$(basename "$file") build/text/$(basename "$file" .txt).bin; done;
+for file in text/items/*.txt; do ./tools/UTF8toBIN.exe text/items/$(basename "$file") build/text/items/$(basename "$file" .txt).bin; done;
+cat build/text/items/20xxItems.bin build/text/items/21xxItems.bin build/text/items/22xxItems.bin build/text/items/23xxItems.bin build/text/items/24xxItems.bin build/text/items/25xxItems.bin build/text/items/26xxItems.bin build/text/items/27xxItems.bin build/text/items/28xxItems.bin build/text/items/29xxItems.bin build/text/items/2AxxItems.bin build/text/items/2BxxItems.bin build/text/items/2CxxItems.bin build/text/items/2DxxItems.bin build/text/items/2ExxItems.bin build/text/items/2FxxItems.bin build/text/items/1xxxItems.bin > build/text/678DC8-items.bin

@@ -47,4 +47,19 @@ struct TextControllerStruct // where does it end?  no idea how long it is
 }
 */
 
+gItemBubbleData equ 0x801446A0
+/**/ //float
+/**/ //float
+/**/ //float
+/**/ //float
+/**/ //float
+/**/ bubbleWidthPercentage equ 0x14 // used to center text
+/**/ bubbleStateCounter equ 0x18
+/**/ item equ 0x1A
+/**/ bubbleState equ 0x1C // 0 -> blank, 1-2 -> minibubbles states, 3 -> open, 4-> close
+/**/ currentItemBuffer equ 0x1D
+/**/ isResizing equ 0x27
+
+gNewItemBubbleBuffer equ 0x800A1028
+
 //gCurrentTextBankPos equ 0x801478f8

@@ -2425,6 +2425,18 @@ int main(int argc, char *argv[])
     if(opt & 2)
         Off2Tbl(tbl, tbl);
 
+    //x = fseek(bin, 0, SEEK_CUR);
+
+    //printf("0x%X\n", pos);
+
+    if (pos % 4 != 0)
+    {
+        for (y = 0; y < (3 - pos % 4); y++); // produce files with sizes that are divisible by 4
+        {
+            fseek(bin, pos + y, SEEK_SET);
+            fputc(0, bin);
+        }
+    }
 
 
     fclose(tbl);
