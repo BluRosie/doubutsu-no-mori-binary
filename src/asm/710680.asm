@@ -1107,7 +1107,7 @@ _803bd448:
 /* 803bd448:	17210008 */	bne t9, at, _803bd46c
 /* 803bd44c:	8fa4002c */	lw a0, 0x2c(sp)
 /* 803bd450:	3c058088 */	lui a1, 0x8088
-/* 803bd454:	24a5913c */	addiu a1, a1, 0xffff913c
+/* 803bd454:	24a5913c */	addiu a1, a1, 0x913c
 /* 803bd458:	8fa4002c */	lw a0, 0x2c(sp)
 /* 803bd45c:	0c026630 */	jal 0x800998c0
 /* 803bd460:	24060005 */	addiu a2, $zero, 0x5
@@ -1120,7 +1120,7 @@ _803bd46c:
 /* 803bd474:	8fa4002c */	lw a0, 0x2c(sp)
 
 _803bd478:
-/* 803bd478:	2405000a */	addiu a1, $zero, 0xa
+/* 803bd478:	2405000a */	addiu a1, $zero, ITEM_NAME_LEN
 /* 803bd47c:	0c027070 */	jal 0x8009c1c0
 /* 803bd480:	24060020 */	addiu a2, $zero, 0x20
 /* 803bd484:	02002025 */	or a0, s0, $zero
@@ -10569,7 +10569,7 @@ _803c557c:
 /* 803c5620:	afa80014 */	sw t0, 0x14(sp)
 /* 803c5624:	90490001 */	lbu t1, 0x1(v0)
 /* 803c5628:	26050044 */	addiu a1, s0, 0x44
-/* 803c562c:	2406000a */	addiu a2, $zero, 0xa
+/* 803c562c:	2406000a */	addiu a2, $zero, ITEM_NAME_LEN
 /* 803c5630:	afa90018 */	sw t1, 0x18(sp)
 /* 803c5634:	904a0002 */	lbu t2, 0x2(v0)
 /* 803c5638:	afa00034 */	sw $zero, 0x34(sp)
