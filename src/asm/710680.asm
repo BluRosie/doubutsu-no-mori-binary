@@ -2,9 +2,11 @@
 .create "build/obj/710680.bin", 0
 
 .include "src/include/constants.inc"
+.include "src/include/char_enums.inc"
 .table "src/include/chartable.tbl"
 
 correction equ 0x4c2d80 // pointer correction
+codecorrection equ 0x4b2d80 // why the fuck
 
 .headersize 0x803bc590
 
@@ -335,31 +337,40 @@ _803bc9c4:
 /* 803bc9d8:	8fb30030 */	lw s3, 0x30(sp)
 /* 803bc9dc:	03e00008 */	jr ra
 /* 803bc9e0:	27bd0048 */	addiu sp, sp, 0x48
-/* 803bc9e4:	3c0f8088 */	lui t7, 0x8088
-/* 803bc9e8:	25ef907c */	addiu t7, t7, 0xffff907c
-/* 803bc9ec:	00057180 */	sll t6, a1, 0x6
-/* 803bc9f0:	01cf1021 */	addu v0, t6, t7
-/* 803bc9f4:	8c580014 */	lw t8, 0x14(v0)
-/* 803bc9f8:	8c480018 */	lw t0, 0x18(v0)
-/* 803bc9fc:	24e9fffe */	addiu t1, a3, 0xfffffffe
-/* 803bca00:	00d8c823 */	subu t9, a2, t8
-/* 803bca04:	44992000 */	mtc1 t9, f4
-/* 803bca08:	44884000 */	mtc1 t0, f8
-/* 803bca0c:	00403025 */	or a2, v0, $zero
-/* 803bca10:	468021a0 */	cvt.s.w f6, f4
-/* 803bca14:	00802825 */	or a1, a0, $zero
-/* 803bca18:	00001825 */	or v1, $zero, $zero
-/* 803bca1c:	468042a0 */	cvt.s.w f10, f8
-/* 803bca20:	460a3483 */	div.s f18, f6, f10
-/* 803bca24:	10e00008 */	beq a3, $zero, _803bca48
-/* 803bca28:	e4920004 */	swc1 f18, 0x4(a0)
-/* 803bca2c:	44892000 */	mtc1 t1, f4
-/* 803bca30:	3c014040 */	lui at, 0x4040
-/* 803bca34:	44813000 */	mtc1 at, f6
-/* 803bca38:	46802220 */	cvt.s.w f8, f4
-/* 803bca3c:	46064283 */	div.s f10, f8, f6
-/* 803bca40:	10000003 */	b _803bca50
-/* 803bca44:	e48a0008 */	swc1 f10, 0x8(a0)
+
+
+
+/*
+? _803bc9e4(? *bubble, row, strlen, lines)
+*/
+
+// 803bc9e4
+_803bc9e4:
+	lui t7, (_803C62FC + correction) >> 16
+	addiu t7, t7, (_803C62FC + correction) & 0xFFFF
+	sll t6, a1, 0x6 // t6 = row*0x40 -> each entry in _803C62FC is 0x40??
+	addu v0, t6, t7
+	lw t8, 0x14(v0) // table +0x14 -> correction
+	lw t0, 0x18(v0) // table +0x18 -> divisor
+	addiu t1, a3, -2 // default size -> 2 entries
+	subu t9, a2, t8 // strlen.u - correction
+	mtc1 t9, f4
+	mtc1 t0, f8
+	or a2, v0, $zero // a2 = table
+	cvt.s.w f6, f4 // f6 = (float)strlen.u - correction
+	or a1, a0, $zero // a1 = *bubble
+	or v1, $zero, $zero
+	cvt.s.w f10, f8 // f10 = (float)divisor
+	div.s f18, f6, f10 // f18 = ((float)strlen.u - correction) / (float)divisor = width%
+	beq a3, $zero, _803bca48
+	swc1 f18, 0x4(a0)
+	mtc1 t1, f4
+	lui at, 0x4040
+	mtc1 at, f6
+	cvt.s.w f8, f4
+	div.s f10, f8, f6
+	b _803bca50
+	swc1 f10, 0x8(a0)
 
 _803bca48:
 /* 803bca48:	c4920004 */	lwc1 f18, 0x4(a0)
@@ -450,6 +461,9 @@ _803bcb00:
 /* 803bcb84:	e4880028 */	swc1 f8, 0x28(a0)
 /* 803bcb88:	03e00008 */	jr ra
 /* 803bcb8c:	00000000 */	nop
+
+
+
 /* 803bcb90:	8c8e0034 */	lw t6, 0x34(a0)
 /* 803bcb94:	3c188088 */	lui t8, 0x8088
 /* 803bcb98:	8c99003c */	lw t9, 0x3c(a0)
@@ -457,7 +471,7 @@ _803bcb00:
 /* 803bcba0:	01ee7823 */	subu t7, t7, t6
 /* 803bcba4:	000f7880 */	sll t7, t7, 0x2
 /* 803bcba8:	030fc021 */	addu t8, t8, t7
-/* 803bcbac:	87188a00 */	lh t8, 0xffff8a00(t8)
+/* 803bcbac:	87188a00 */	lh t8, 0x8a00(t8)
 /* 803bcbb0:	8c890038 */	lw t1, 0x38(a0)
 /* 803bcbb4:	00001825 */	or v1, $zero, $zero
 /* 803bcbb8:	03190019 */	multu t8, t9
@@ -472,6 +486,10 @@ _803bcbd4:
 /* 803bcbd4:	00601025 */	or v0, v1, $zero
 /* 803bcbd8:	03e00008 */	jr ra
 /* 803bcbdc:	00000000 */	nop
+
+
+
+_803bcbe0:
 /* 803bcbe0:	908e0002 */	lbu t6, 0x2(a0)
 /* 803bcbe4:	3c014330 */	lui at, 0x4330
 /* 803bcbe8:	24020001 */	addiu v0, $zero, 0x1
@@ -1078,7 +1096,7 @@ _803bd3e4:
 /* 803bd3e4:	00003825 */	or a3, $zero, $zero
 
 _803bd3e8:
-/* 803bd3e8:	0c21bdd9 */	jal 0x8086f764
+/* 803bd3e8:	0c21bdd9 */	jal _803bc9e4 + codecorrection
 /* 803bd3ec:	afa60038 */	sw a2, 0x38(sp)
 /* 803bd3f0:	0c21bf3d */	jal 0x8086fcf4
 /* 803bd3f4:	02002025 */	or a0, s0, $zero
@@ -1122,15 +1140,15 @@ _803bd46c:
 _803bd478:
 /* 803bd478:	2405000a */	addiu a1, $zero, ITEM_NAME_LEN
 /* 803bd47c:	0c027070 */	jal 0x8009c1c0
-/* 803bd480:	24060020 */	addiu a2, $zero, 0x20
+/* 803bd480:	24060020 */	addiu a2, $zero, CHAR_SPACE
 /* 803bd484:	02002025 */	or a0, s0, $zero
 /* 803bd488:	00002825 */	or a1, $zero, $zero
 /* 803bd48c:	00403025 */	or a2, v0, $zero
-/* 803bd490:	0c21bdd9 */	jal 0x8086f764
+/* 803bd490:	0c21bdd9 */	jal _803bc9e4 + codecorrection
 /* 803bd494:	00003825 */	or a3, $zero, $zero
 
 _803bd498:
-/* 803bd498:	0c21be58 */	jal 0x8086f960
+/* 803bd498:	0c21be58 */	jal _803bcbe0 + codecorrection
 /* 803bd49c:	02002025 */	or a0, s0, $zero
 /* 803bd4a0:	10400004 */	beq v0, $zero, _803bd4b4
 /* 803bd4a4:	3c01bf80 */	lui at, 0xbf80
@@ -1178,7 +1196,7 @@ _803bd4f0:
 /* 803bd534:	02002025 */	or a0, s0, $zero
 /* 803bd538:	00002825 */	or a1, $zero, $zero
 /* 803bd53c:	00403025 */	or a2, v0, $zero
-/* 803bd540:	0c21bdd9 */	jal 0x8086f764
+/* 803bd540:	0c21bdd9 */	jal _803bc9e4 + codecorrection
 /* 803bd544:	00003825 */	or a3, $zero, $zero
 /* 803bd548:	3c01bf80 */	lui at, 0xbf80
 /* 803bd54c:	44814000 */	mtc1 at, f8
@@ -1222,7 +1240,7 @@ _803bd5a0:
 /* 803bd5d4:	02002025 */	or a0, s0, $zero
 /* 803bd5d8:	24050002 */	addiu a1, $zero, 0x2
 /* 803bd5dc:	8fa60044 */	lw a2, 0x44(sp)
-/* 803bd5e0:	0c21bdd9 */	jal 0x8086f764
+/* 803bd5e0:	0c21bdd9 */	jal _803bc9e4 + codecorrection
 /* 803bd5e4:	8fa70040 */	lw a3, 0x40(sp)
 /* 803bd5e8:	0c21be8c */	jal 0x8086fa30
 /* 803bd5ec:	02002025 */	or a0, s0, $zero
@@ -1316,7 +1334,7 @@ _803bd6e8:
 /* 803bd72c:	02002025 */	or a0, s0, $zero
 /* 803bd730:	24050002 */	addiu a1, $zero, 0x2
 /* 803bd734:	8fa60030 */	lw a2, 0x30(sp)
-/* 803bd738:	0c21bdd9 */	jal 0x8086f764
+/* 803bd738:	0c21bdd9 */	jal _803bc9e4 + codecorrection
 /* 803bd73c:	8fa7002c */	lw a3, 0x2c(sp)
 /* 803bd740:	922e0002 */	lbu t6, 0x2(s1)
 /* 803bd744:	3c014330 */	lui at, 0x4330
@@ -1494,7 +1512,7 @@ _803bd994:
 /* 803bd9cc:	02002025 */	or a0, s0, $zero
 /* 803bd9d0:	24050002 */	addiu a1, $zero, 0x2
 /* 803bd9d4:	8fa6002c */	lw a2, 0x2c(sp)
-/* 803bd9d8:	0c21bdd9 */	jal 0x8086f764
+/* 803bd9d8:	0c21bdd9 */	jal _803bc9e4 + codecorrection
 /* 803bd9dc:	8fa70028 */	lw a3, 0x28(sp)
 /* 803bd9e0:	3c0140e0 */	lui at, 0x40e0
 /* 803bd9e4:	44812000 */	mtc1 at, f4
@@ -11432,13 +11450,17 @@ gThirdLineStringPackage:
 /* 803c62f0:	aebda415 */	sw sp, 0xffffa415(s5)
 /* 803c62f4:	0101f40c */	syscall 0x407d0
 /* 803c62f8:	053f0000 */	/*illegal*/ .word 0x053f0000
+
+
+
+_803C62FC:
 /* 803c62fc:	3eae8ba3 */	/*illegal*/ .word 0x3eae8ba3
 /* 803c6300:	3f500000 */	/*illegal*/ .word 0x3f500000
 /* 803c6304:	c2b00000 */	ll s0, 0x0(s5)
 /* 803c6308:	41800000 */	/*illegal*/ .word 0x41800000
 /* 803c630c:	3f900000 */	/*illegal*/ .word 0x3f900000
-/* 803c6310:	00000002 */	srl $zero, $zero, 0x0
-/* 803c6314:	00000008 */	jr $zero
+/* 803c6310:	00000002 */	.word 2
+/* 803c6314:	00000008 */	.word 8 // originally 8, i think it kinda needs to stay that way
 /* 803c6318:	41900000 */	/*illegal*/ .word 0x41900000
 /* 803c631c:	c0a00000 */	ll $zero, 0x0(a1)
 /* 803c6320:	41200000 */	/*illegal*/ .word 0x41200000
@@ -11448,13 +11470,14 @@ gThirdLineStringPackage:
 /* 803c6330:	00000000 */	nop
 /* 803c6334:	41100000 */	/*illegal*/ .word 0x41100000
 /* 803c6338:	41000000 */	/*illegal*/ .word 0x41000000
+
 /* 803c633c:	3ef258bf */	/*illegal*/ .word 0x3ef258bf
 /* 803c6340:	3f60f83e */	/*illegal*/ .word 0x3f60f83e
 /* 803c6344:	c2960000 */	ll s6, 0x0(s4)
 /* 803c6348:	42040000 */	/*illegal*/ .word 0x42040000
 /* 803c634c:	3f800000 */	/*illegal*/ .word 0x3f800000
-/* 803c6350:	00000004 */	sllv $zero, $zero, $zero
-/* 803c6354:	00000006 */	srlv $zero, $zero, $zero
+/* 803c6350:	00000004 */	.word 4 // originally 4
+/* 803c6354:	00000006 */	.word 6 // originally 6
 /* 803c6358:	41900000 */	/*illegal*/ .word 0x41900000
 /* 803c635c:	c1300000 */	ll s0, 0x0(t1)
 /* 803c6360:	41400000 */	/*illegal*/ .word 0x41400000
@@ -11464,13 +11487,14 @@ gThirdLineStringPackage:
 /* 803c6370:	c0000000 */	ll $zero, 0x0($zero)
 /* 803c6374:	41c80000 */	/*illegal*/ .word 0x41c80000
 /* 803c6378:	41000000 */	/*illegal*/ .word 0x41000000
+
 /* 803c637c:	3f169697 */	/*illegal*/ .word 0x3f169697
 /* 803c6380:	3f100000 */	/*illegal*/ .word 0x3f100000
 /* 803c6384:	c2880000 */	ll t0, 0x0(s4)
 /* 803c6388:	42800000 */	/*illegal*/ .word 0x42800000
 /* 803c638c:	3f555555 */	/*illegal*/ .word 0x3f555555
-/* 803c6390:	00000003 */	sra $zero, $zero, 0x0
-/* 803c6394:	00000004 */	sllv $zero, $zero, $zero
+/* 803c6390:	00000003 */	.word 3 // sra $zero, $zero, 0x0
+/* 803c6394:	00000004 */	.word 4 // sllv $zero, $zero, $zero
 /* 803c6398:	41d00000 */	/*illegal*/ .word 0x41d00000
 /* 803c639c:	c1a00000 */	ll $zero, 0x0(t5)
 /* 803c63a0:	40800000 */	mtc0 $zero, $0
