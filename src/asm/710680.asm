@@ -346,6 +346,11 @@ _803bc9c4:
 
 // 803bc9e4
 _803bc9e4:
+	// sll v0, a2, 0x1
+	// addu v0, v0, a2
+	// sll a2, v0, 0x2
+
+//_803bc9e4_alt:
 	lui t7, (_803C62FC + correction) >> 16
 	addiu t7, t7, (_803C62FC + correction) & 0xFFFF
 	sll t6, a1, 0x6 // t6 = row*0x40 -> each entry in _803C62FC is 0x40??
@@ -357,6 +362,8 @@ _803bc9e4:
 	mtc1 t9, f4
 	mtc1 t0, f8
 	or a2, v0, $zero // a2 = table
+	// lwc1 f10, 0x18(a2)
+	// addiu t1, a3, -2
 	cvt.s.w f6, f4 // f6 = (float)strlen.u - correction
 	or a1, a0, $zero // a1 = *bubble
 	or v1, $zero, $zero
@@ -10007,7 +10014,7 @@ _803c4d00:
 _803c4de4:
 /* 803c4de4:	3c028088 */	lui v0, 0x8088
 /* 803c4de8:	26108ad8 */	addiu s0, s0, (gFirstLineStringPackage + correction) & 0xFFFF
-/* 803c4dec:	24110004 */	addiu s1, $zero, 0x5 // length of gFirstLineStringPackage
+/* 803c4dec:	24110004 */	addiu s1, $zero, 0x4 // length of gFirstLineStringPackage
 /* 803c4df0:	244294c0 */	addiu v0, v0, 0x94c0
 
 
@@ -10070,26 +10077,26 @@ _803c4df4:
 /* 803c4ecc:	91e30002 */	lbu v1, 0x2(t7)
 /* 803c4ed0:	24010001 */	addiu at, $zero, 0x1
 /* 803c4ed4:	c7a00070 */	lwc1 f0, 0x70(sp)
-/* 803c4ed8:	14610005 */	bne v1, at, @@isNotSecondLine
+/* 803c4ed8:	14610005 */	bne v1, at, @@isNotPackageString
 /* 803c4edc:	46081080 */	add.s f2, f2, f8
 /* 803c4ee0:	3c108088 */	lui s0, (gSecondLineStringPackage + correction) >> 16
 /* 803c4ee4:	26108acc */	addiu s0, s0, (gSecondLineStringPackage + correction) & 0xFFFF
 /* 803c4ee8:	10000009 */	b @@writeTextToLine
-/* 803c4eec:	24110006 */	addiu s1, $zero, 0x9 // length of gSecondLineStringPackage in s0
+/* 803c4eec:	24110006 */	addiu s1, $zero, 0x8 // length of gSecondLineStringPackage in s0
 
-@@isNotSecondLine:
+@@isNotPackageString:
 /* 803c4ef0:	24010008 */	addiu at, $zero, 0x8
-/* 803c4ef4:	14610004 */	bne v1, at, @@isFirstLine
-/* 803c4ef8:	24110004 */	addiu s1, $zero, 0x5 // length of gFirstLineStringPackage
-/* 803c4efc:	3c108088 */	lui s0, 0x8088
+/* 803c4ef4:	14610004 */	bne v1, at, @@isMailString
+/* 803c4ef8:	24110004 */	addiu s1, $zero, 0x4 // length of gSecondLineStringMail + gString80888ac0
+/* 803c4efc:	3c108088 */	lui s0, (gString80888ac0 + correction) >> 16
 /* 803c4f00:	10000003 */	b @@writeTextToLine
-/* 803c4f04:	26108ac0 */	addiu s0, s0, 0x8ac0
+/* 803c4f04:	26108ac0 */	addiu s0, s0, (gString80888ac0 + correction) & 0xFFFF
 
-@@isFirstLine:
-	lui s0, (gFirstLineStringPackage + correction) >> 16
-	addiu s0, s0, (gFirstLineStringPackage + correction) & 0xFFFF
+@@isMailString:
+	lui s0, (gSecondLineStringMail + correction) >> 16
+	addiu s0, s0, (gSecondLineStringMail + correction) & 0xFFFF
 
-// s1 is string length
+// s0 is string, s1 is string length
 @@writeTextToLine:
 /* 803c4f10:	2418005a */	addiu t8, $zero, 0x5a
 /* 803c4f14:	2419003c */	addiu t9, $zero, 0x3c
@@ -10119,14 +10126,14 @@ _803c4df4:
 /* 803c4f74:	241800ff */	addiu t8, $zero, 0xff
 /* 803c4f78:	14610009 */	bne v1, at, _803c4fa0
 /* 803c4f7c:	460a0000 */	add.s f0, f0, f10
-/* 803c4f80:	3c108088 */	lui s0, 0x8088
+/* 803c4f80:	3c108088 */	lui s0, (gStringHappyRoomAcademy + correction) >> 16
 /* 803c4f84:	3c028088 */	lui v0, 0x8088
 /* 803c4f88:	250b004e */	addiu t3, t0, 0x4e
-/* 803c4f8c:	26108ac4 */	addiu s0, s0, 0x8ac4
-/* 803c4f90:	24110007 */	addiu s1, $zero, 0x7
+/* 803c4f8c:	26108ac4 */	addiu s0, s0, (gStringHappyRoomAcademy + correction) & 0xFFFF
+/* 803c4f90:	24110007 */	addiu s1, $zero, 0x7 // length of gStringHappyRoomAcademy
 /* 803c4f94:	afab0048 */	sw t3, 0x48(sp)
 /* 803c4f98:	1000001f */	b _803c5018
-/* 803c4f9c:	244294c8 */	addiu v0, v0, 0xffff94c8
+/* 803c4f9c:	244294c8 */	addiu v0, v0, 0x94c8
 
 _803c4fa0:
 /* 803c4fa0:	2510004e */	addiu s0, t0, 0x4c
@@ -10210,9 +10217,10 @@ _803c5018:
 /* 803c50a8:	14610005 */	bne v1, at, _803c50c0
 /* 803c50ac:	3c108088 */	lui s0, (gThirdLineStringPackage + correction) >> 16
 
+// third line string is either the full 4-char one OR the same thing with the first two chars cut off
 _803c50b0:
-/* 803c50b0:	3c108088 */	lui s0, 0x8088
-/* 803c50b4:	26108ade */	addiu s0, s0, 0x8ade
+/* 803c50b0:	3c108088 */	lui s0, (gThirdLineStringPackage + correction + 2) >> 16
+/* 803c50b4:	26108ade */	addiu s0, s0, (gThirdLineStringPackage + correction + 2) & 0xFFFF
 /* 803c50b8:	10000003 */	b _803c50c8
 /* 803c50bc:	24110002 */	addiu s1, $zero, 0x2
 
@@ -11061,35 +11069,42 @@ _803c5b78:
 /* 803c5d38:	80878978 */	lb a3, 0xffff8978(a0)
 /* 803c5d3c:	808789ec */	lb a3, 0xffff89ec(a0)
 
+
+// these are the hardcoded strings that appear in the item inventory for certain items
+
 // 803c5d40
-// not sure what this is yet
-// .word 0x041f07ed
+gString80888ac0:
 	.stringn "おみくじ"
 
-/* 803c5d44:	aa8fe390 */	swl t7, 0xffffe390(s4)
-/* 803c5d48:	b990b100 */	swr s0, 0xffffb100(t4)
+gStringHappyRoomAcademy:
+    .stringn "ハッピールーム "
 
-
-// these are the hardcoded strings that appear when a villager hands you an item to deliver elsewhere.
+// the package string should be something like:
+/*
+[Villager] wants
+this from
+[Player]
+*/
 
 // 803c5d4c
 gSecondLineStringPackage:
-	.stringn "this from"
-	//.stringn "おとどけもの  "
+	.stringn "おとどけもの  "
 
 
 // 803c5d54
-gFirstLineStringPackage:
-	.stringn "wants  " // normally first four letters aren't used?
-	//.stringn "おてがみさんへの" // normally first four letters aren't used?
+gSecondLineStringMail:
+	.stringn "おてがみ"
 
-// i'm afraid some gender shenanigans are going on here
+
+// 803c5d58
+gFirstLineStringPackage:
+    .stringn "さんへの"
 
 
 // 803c5d5c
+// The third line as printed for mail is actually gThirdLineStringPackage + 2 with length 2.  This string is literally reused
 gThirdLineStringPackage:
-	.stringn "    "
-	//.stringn "さんより"
+	.stringn "さんより"
 
 /* 803c5d60:	00087d20 */	/*illegal*/ .word 0x00087d20
 /* 803c5d64:	20202020 */	addi $zero, at, 0x2020
