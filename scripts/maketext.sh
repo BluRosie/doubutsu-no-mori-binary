@@ -1,0 +1,1 @@
+./scripts/buildtext.sh; ./scripts/renametables.sh; ./scripts/inserttext.sh; ./scripts/inserttables.sh
