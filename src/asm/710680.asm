@@ -346,42 +346,48 @@ _803bc9c4:
 
 // 803bc9e4
 _803bc9e4:
-	// sll v0, a2, 0x1
-	// addu v0, v0, a2
-	// sll a2, v0, 0x2
+	/// sll v0, a2, 0x1
+	/// addu v0, v0, a2
+	/// sll a2, v0, 0x2 // a2 *= C to fake real length
 
-//_803bc9e4_alt:
+//_803bc9e4_alt: //(? *bubble, row, width, lines)
 	lui t7, (_803C62FC + correction) >> 16
 	addiu t7, t7, (_803C62FC + correction) & 0xFFFF
 	sll t6, a1, 0x6 // t6 = row*0x40 -> each entry in _803C62FC is 0x40??
 	addu v0, t6, t7
 	lw t8, 0x14(v0) // table +0x14 -> correction
-	lw t0, 0x18(v0) // table +0x18 -> divisor
-	addiu t1, a3, -2 // default size -> 2 entries
+	/*-*/lw t0, 0x18(v0) // table +0x18 -> divisor
+	/*-*/addiu t1, a3, -2 // default size -> 2 entries
 	subu t9, a2, t8 // strlen.u - correction
 	mtc1 t9, f4
-	mtc1 t0, f8
+	/*-*/mtc1 t0, f8
 	or a2, v0, $zero // a2 = table
-	// lwc1 f10, 0x18(a2)
-	// addiu t1, a3, -2
+	/// lwc1 f10, 0x18(a2)
+	/// addiu t1, a3, -2
 	cvt.s.w f6, f4 // f6 = (float)strlen.u - correction
 	or a1, a0, $zero // a1 = *bubble
 	or v1, $zero, $zero
-	cvt.s.w f10, f8 // f10 = (float)divisor
+	/*-*/cvt.s.w f10, f8 // f10 = (float)divisor
 	div.s f18, f6, f10 // f18 = ((float)strlen.u - correction) / (float)divisor = width%
-	beq a3, $zero, _803bca48
+	/*-*/beq a3, $zero, _803bca48
+	/// beq a3, $zero, _803bc9e4_alt_branch_target
 	swc1 f18, 0x4(a0)
 	mtc1 t1, f4
 	lui at, 0x4040
 	mtc1 at, f6
 	cvt.s.w f8, f4
-	div.s f10, f8, f6
-	b _803bca50
-	swc1 f10, 0x8(a0)
+	/*-*/div.s f10, f8, f6
+	/// div.s f18, f8, f6
+	/*-*/b _803bca50
+	/*-*/swc1 f10, 0x8(a0)
+/// _803bc9e4_alt_branch_target:
+	/// swc1 f18, 0x8(a0)
 
 _803bca48:
-/* 803bca48:	c4920004 */	lwc1 f18, 0x4(a0)
-/* 803bca4c:	e4920008 */	swc1 f18, 0x8(a0)
+    /*-*/lwc1 f18, 0x4(a0)
+    /*-*/swc1 f18, 0x8(a0)
+    /// nop
+    /// nop
 
 _803bca50:
 /* 803bca50:	3c013f80 */	lui at, 0x3f80
