@@ -341,7 +341,32 @@ _803bc9c4:
 
 
 /*
-? _803bc9e4(? *bubble, row, strlen, lines)
+? _803bc9e4(BubbleStruct *bubble, row, strlen, lines)
+{
+	// calculate bubble width as percentage of "unstretched image", which is different for each row
+	bubble->x4_widthpercent = (float)((strlen - 2) - sInventoryBubbleSettings[row].correction) / (float)sInventoryBubbleSettings[row].divisor;
+	
+	// calculate box height as percentage of 3 lines
+	if (lines != 0)
+		bubble->x8_heightpercent = (float)(lines - 2) / 3.0;
+	
+	...
+}
+
+new:  instead of worrying about strlen, use string width directly.
+new row properties table has x14 (correction) premultiplied by C
+and x18 (divisor) premultiplied by C and casted to float:
+? _803bc9e4_alt(BubbleStruct *bubble, row, strwidth, lines)
+{
+	// calculate bubble width as percentage of "unstretched image", which is different for each row
+	bubble->x4_widthpercent = (float)(strwidth - sInventoryBubbleSettings[row].correction) / sInventoryBubbleSettings[row].divisor;
+	
+	// calculate box height as percentage of 3 lines, optimized in the rewrite to not use so many instructions.
+	if (lines != 0)
+		bubble->x8_heightpercent = (float)(lines - 2) / 3.0;
+	
+	...
+}
 */
 
 // 803bc9e4
@@ -351,18 +376,18 @@ _803bc9e4:
 	/// sll a2, v0, 0x2 // a2 *= C to fake real length
 
 //_803bc9e4_alt: //(? *bubble, row, width, lines)
-	lui t7, (_803C62FC + correction) >> 16
-	addiu t7, t7, (_803C62FC + correction) & 0xFFFF
-	sll t6, a1, 0x6 // t6 = row*0x40 -> each entry in _803C62FC is 0x40??
+	lui t7, (sInventoryBubbleSettings + correction) >> 16
+	addiu t7, t7, (sInventoryBubbleSettings + correction) & 0xFFFF
+	sll t6, a1, 0x6 // t6 = row*0x40 -> each entry in sInventoryBubbleSettings is 0x40 long
 	addu v0, t6, t7
-	lw t8, 0x14(v0) // table +0x14 -> correction
+	lw t8, 0x14(v0) // table +0x14 -> correction // (is now premultiplied by 0xC)
 	/*-*/lw t0, 0x18(v0) // table +0x18 -> divisor
 	/*-*/addiu t1, a3, -2 // default size -> 2 entries
 	subu t9, a2, t8 // strlen.u - correction
 	mtc1 t9, f4
 	/*-*/mtc1 t0, f8
 	or a2, v0, $zero // a2 = table
-	/// lwc1 f10, 0x18(a2)
+	/// lwc1 f10, 0x18(a2) // divisor now premultiplied by 12 and floated in the table
 	/// addiu t1, a3, -2
 	cvt.s.w f6, f4 // f6 = (float)strlen.u - correction
 	or a1, a0, $zero // a1 = *bubble
@@ -374,8 +399,8 @@ _803bc9e4:
 	swc1 f18, 0x4(a0)
 	mtc1 t1, f4
 	lui at, 0x4040
-	mtc1 at, f6
-	cvt.s.w f8, f4
+	mtc1 at, f6 // f6 = 3.0
+	cvt.s.w f8, f4 // f8 = (float)(lines - 2)
 	/*-*/div.s f10, f8, f6
 	/// div.s f18, f8, f6
 	/*-*/b _803bca50
@@ -384,10 +409,10 @@ _803bc9e4:
 	/// swc1 f18, 0x8(a0)
 
 _803bca48:
-    /*-*/lwc1 f18, 0x4(a0)
-    /*-*/swc1 f18, 0x8(a0)
-    /// nop
-    /// nop
+	/*-*/lwc1 f18, 0x4(a0)
+	/*-*/swc1 f18, 0x8(a0)
+	/// nop
+	/// nop
 
 _803bca50:
 /* 803bca50:	3c013f80 */	lui at, 0x3f80
@@ -11083,7 +11108,7 @@ gString80888ac0:
 	.stringn "おみくじ"
 
 gStringHappyRoomAcademy:
-    .stringn "ハッピールーム "
+	.stringn "ハッピールーム "
 
 // the package string should be something like:
 /*
@@ -11104,7 +11129,7 @@ gSecondLineStringMail:
 
 // 803c5d58
 gFirstLineStringPackage:
-    .stringn "さんへの"
+	.stringn "さんへの"
 
 
 // 803c5d5c
@@ -11474,60 +11499,63 @@ gThirdLineStringPackage:
 
 
 
-_803C62FC:
-/* 803c62fc:	3eae8ba3 */	/*illegal*/ .word 0x3eae8ba3
-/* 803c6300:	3f500000 */	/*illegal*/ .word 0x3f500000
-/* 803c6304:	c2b00000 */	ll s0, 0x0(s5)
-/* 803c6308:	41800000 */	/*illegal*/ .word 0x41800000
-/* 803c630c:	3f900000 */	/*illegal*/ .word 0x3f900000
-/* 803c6310:	00000002 */	.word 2
-/* 803c6314:	00000008 */	.word 8 // originally 8, i think it kinda needs to stay that way
-/* 803c6318:	41900000 */	/*illegal*/ .word 0x41900000
-/* 803c631c:	c0a00000 */	ll $zero, 0x0(a1)
-/* 803c6320:	41200000 */	/*illegal*/ .word 0x41200000
-/* 803c6324:	c0400000 */	ll $zero, 0x0(v0)
-/* 803c6328:	c1600000 */	ll $zero, 0x0(t3)
-/* 803c632c:	40000000 */	mfc0 $zero, $0
-/* 803c6330:	00000000 */	nop
-/* 803c6334:	41100000 */	/*illegal*/ .word 0x41100000
-/* 803c6338:	41000000 */	/*illegal*/ .word 0x41000000
+sInventoryBubbleSettings:
+/* 803c62fc:	3eae8ba3 */ .word 0x3eae8ba3 // 0.34090909361839294
+/* 803c6300:	3f500000 */ .word 0x3f500000 // 0.8125
+/* 803c6304:	c2b00000 */	.word 0xc2b00000 // -88.0
+/* 803c6308:	41800000 */	.word 0x41800000 // 16.0
+/* 803c630c:	3f900000 */	.word 0x3f900000 // 1.125
+/* 803c6310:	00000002 */	.word 2 // 0x18 // 2*0xC
+/* 803c6314:	00000008 */	.word 8 // 0x42c00000 // (8.0*12.0)
+/* 803c6318:	41900000 */	.word 0x41900000 // 18.0
+/* 803c631c:	c0a00000 */	.word 0xc0a00000 // -5.0
+/* 803c6320:	41200000 */	.word 0x41200000 // 10.0
+/* 803c6324:	c0400000 */	.word 0xc0400000
+/* 803c6328:	c1600000 */	.word 0xc1600000
+/* 803c632c:	40000000 */	.word 0x40000000
+/* 803c6330:	00000000 */	.word 0x00000000
+/* 803c6334:	41100000 */	.word 0x41100000
+/* 803c6338:	41000000 */	.word 0x41000000
 
-/* 803c633c:	3ef258bf */	/*illegal*/ .word 0x3ef258bf
-/* 803c6340:	3f60f83e */	/*illegal*/ .word 0x3f60f83e
-/* 803c6344:	c2960000 */	ll s6, 0x0(s4)
-/* 803c6348:	42040000 */	/*illegal*/ .word 0x42040000
-/* 803c634c:	3f800000 */	/*illegal*/ .word 0x3f800000
-/* 803c6350:	00000004 */	.word 4 // originally 4
-/* 803c6354:	00000006 */	.word 6 // originally 6
-/* 803c6358:	41900000 */	/*illegal*/ .word 0x41900000
-/* 803c635c:	c1300000 */	ll s0, 0x0(t1)
-/* 803c6360:	41400000 */	/*illegal*/ .word 0x41400000
-/* 803c6364:	c0800000 */	ll $zero, 0x0(a0)
-/* 803c6368:	c1000000 */	ll $zero, 0x0(t0)
-/* 803c636c:	40800000 */	mtc0 $zero, $0
-/* 803c6370:	c0000000 */	ll $zero, 0x0($zero)
-/* 803c6374:	41c80000 */	/*illegal*/ .word 0x41c80000
-/* 803c6378:	41000000 */	/*illegal*/ .word 0x41000000
+/* 803c633c:	3ef258bf */	.word 0x3ef258bf // 0.47333332896232605
+/* 803c6340:	3f60f83e */	.word 0x3f60f83e // 0.8787878751754761
+/* 803c6344:	c2960000 */	.word 0xc2960000 // -75.0
+/* 803c6348:	42040000 */	.word 0x42040000 // 33.0
+/* 803c634c:	3f800000 */	.word 0x3f800000 // 1.0
+/* 803c6350:	00000004 */	.word 4 // 0x30 // 4*0xC
+/* 803c6354:	00000006 */	.word 6 // 0x42900000 // (6.0*12.0)
+/* 803c6358:	41900000 */ .word 0x41900000 // 18.0
+/* 803c635c:	c1300000 */	.word 0xc1300000 // -11.0
+/* 803c6360:	41400000 */	.word 0x41400000 // 12.0
+/* 803c6364:	c0800000 */	.word 0xc0800000
+/* 803c6368:	c1000000 */	.word 0xc1000000
+/* 803c636c:	40800000 */	.word 0x40800000
+/* 803c6370:	c0000000 */	.word 0xc0000000
+/* 803c6374:	41c80000 */	.word 0x41c80000
+/* 803c6378:	41000000 */	.word 0x41000000
 
-/* 803c637c:	3f169697 */	/*illegal*/ .word 0x3f169697
-/* 803c6380:	3f100000 */	/*illegal*/ .word 0x3f100000
-/* 803c6384:	c2880000 */	ll t0, 0x0(s4)
-/* 803c6388:	42800000 */	/*illegal*/ .word 0x42800000
-/* 803c638c:	3f555555 */	/*illegal*/ .word 0x3f555555
-/* 803c6390:	00000003 */	.word 3 // sra $zero, $zero, 0x0
-/* 803c6394:	00000004 */	.word 4 // sllv $zero, $zero, $zero
-/* 803c6398:	41d00000 */	/*illegal*/ .word 0x41d00000
-/* 803c639c:	c1a00000 */	ll $zero, 0x0(t5)
-/* 803c63a0:	40800000 */	mtc0 $zero, $0
-/* 803c63a4:	c0800000 */	ll $zero, 0x0(a0)
-/* 803c63a8:	3f800000 */	/*illegal*/ .word 0x3f800000
-/* 803c63ac:	41800000 */	/*illegal*/ .word 0x41800000
-/* 803c63b0:	40c00000 */	/*illegal*/ .word 0x40c00000
-/* 803c63b4:	41b00000 */	/*illegal*/ .word 0x41b00000
-/* 803c63b8:	41400000 */	/*illegal*/ .word 0x41400000
-/* 803c63bc:	e4bad6bd */	swc1 f26, 0xffffd6bd(a1)
-/* 803c63c0:	a4000000 */	sh $zero, 0x0($zero)
-/* 803c63c4:	19190000 */	/*illegal*/ .word 0x19190000
+/* 803c637c:	3f169697 */	.word 0x3f169697 // 0.5882353186607361
+/* 803c6380:	3f100000 */	.word 0x3f100000 // 0.5625
+/* 803c6384:	c2880000 */	.word 0xc2880000 // -68.0
+/* 803c6388:	42800000 */	.word 0x42800000 // 64.0
+/* 803c638c:	3f555555 */	.word 0x3f555555 // 0.8333333134651184
+/* 803c6390:	00000003 */	.word 3 // 0x24 // (3*0xC)
+/* 803c6394:	00000004 */	.word 4 // 0x42400000 // (4.0*12.0)
+/* 803c6398:	41d00000 */	.word 0x41d00000 // 26.0
+/* 803c639c:	c1a00000 */	.word 0xc1a00000 // -20.0
+/* 803c63a0:	40800000 */	.word 0x40800000 // 4.0
+/* 803c63a4:	c0800000 */	.word 0xc0800000
+/* 803c63a8:	3f800000 */	.word 0x3f800000
+/* 803c63ac:	41800000 */	.word 0x41800000
+/* 803c63b0:	40c00000 */	.word 0x40c00000
+/* 803c63b4:	41b00000 */	.word 0x41b00000
+/* 803c63b8:	41400000 */	.word 0x41400000
+
+
+
+/* 803c63bc:	e4bad6bd */	.word 0xe4bad6bd
+/* 803c63c0:	a4000000 */	.word 0xa4000000
+/* 803c63c4:	19190000 */	.word 0x19190000
 
 _803c63c8:
 /* 803c63c8:	05e92020 */	tgeiu t7, 8224
