@@ -3,6 +3,7 @@
 
 .include "src/include/constants.inc"
 .include "src/include/char_enums.inc"
+.include "src/include/ram_declarations.inc"
 .table "src/include/chartable.tbl"
 
 correction equ 0x4c2d80 // pointer correction
@@ -371,9 +372,9 @@ and x18 (divisor) premultiplied by C and casted to float:
 
 // 803bc9e4
 _803bc9e4:
-	/// sll v0, a2, 0x1
-	/// addu v0, v0, a2
-	/// sll a2, v0, 0x2 // a2 *= C to fake real length
+	/*+*/sll v0, a2, 0x1
+	/*+*/addu v0, v0, a2
+	/*+*/sll a2, v0, 0x2 // a2 *= C to fake real length
 
 //_803bc9e4_alt: //(? *bubble, row, width, lines)
 	lui t7, (sInventoryBubbleSettings + correction) >> 16
@@ -381,38 +382,36 @@ _803bc9e4:
 	sll t6, a1, 0x6 // t6 = row*0x40 -> each entry in sInventoryBubbleSettings is 0x40 long
 	addu v0, t6, t7
 	lw t8, 0x14(v0) // table +0x14 -> correction // (is now premultiplied by 0xC)
-	/*-*/lw t0, 0x18(v0) // table +0x18 -> divisor
-	/*-*/addiu t1, a3, -2 // default size -> 2 entries
+	/// lw t0, 0x18(v0) // table +0x18 -> divisor
+	/// addiu t1, a3, -2 // default size -> 2 entries
 	subu t9, a2, t8 // strlen.u - correction
 	mtc1 t9, f4
-	/*-*/mtc1 t0, f8
+	/// mtc1 t0, f8
 	or a2, v0, $zero // a2 = table
-	/// lwc1 f10, 0x18(a2) // divisor now premultiplied by 12 and floated in the table
-	/// addiu t1, a3, -2
+	/*+*/lwc1 f10, 0x18(v0) // divisor now premultiplied by 12 and floated in the table
+	/*+*/addiu t1, a3, -2
 	cvt.s.w f6, f4 // f6 = (float)strlen.u - correction
 	or a1, a0, $zero // a1 = *bubble
 	or v1, $zero, $zero
-	/*-*/cvt.s.w f10, f8 // f10 = (float)divisor
+	/// cvt.s.w f10, f8 // f10 = (float)divisor
 	div.s f18, f6, f10 // f18 = ((float)strlen.u - correction) / (float)divisor = width%
-	/*-*/beq a3, $zero, _803bca48
-	/// beq a3, $zero, _803bc9e4_alt_branch_target
+	/// beq a3, $zero, _803bca48
+	/*+*/beq a3, $zero, _803bc9e4_alt_branch_target
 	swc1 f18, 0x4(a0)
 	mtc1 t1, f4
 	lui at, 0x4040
 	mtc1 at, f6 // f6 = 3.0
 	cvt.s.w f8, f4 // f8 = (float)(lines - 2)
-	/*-*/div.s f10, f8, f6
-	/// div.s f18, f8, f6
-	/*-*/b _803bca50
-	/*-*/swc1 f10, 0x8(a0)
-/// _803bc9e4_alt_branch_target:
-	/// swc1 f18, 0x8(a0)
+	/// div.s f10, f8, f6
+	/*+*/div.s f18, f8, f6
+	/// b _803bca50
+	/// swc1 f10, 0x8(a0)
+/*+*/_803bc9e4_alt_branch_target:
+	/*+*/swc1 f18, 0x8(a0)
 
 _803bca48:
-	/*-*/lwc1 f18, 0x4(a0)
-	/*-*/swc1 f18, 0x8(a0)
-	/// nop
-	/// nop
+	/// lwc1 f18, 0x4(a0)
+	/// swc1 f18, 0x8(a0)
 
 _803bca50:
 /* 803bca50:	3c013f80 */	lui at, 0x3f80
@@ -499,6 +498,8 @@ _803bcb00:
 /* 803bcb84:	e4880028 */	swc1 f8, 0x28(a0)
 /* 803bcb88:	03e00008 */	jr ra
 /* 803bcb8c:	00000000 */	nop
+/*+*/nop
+/*+*/nop
 
 
 
@@ -838,14 +839,15 @@ _803bcfb4:
 /* 803bd004:	2605000c */	addiu a1, s0, 0xc
 /* 803bd008:	0c21bcd7 */	jal 0x8086f35c
 /* 803bd00c:	00403825 */	or a3, v0, $zero
-/* 803bd010:	26040044 */	addiu a0, s0, 0x44
-/* 803bd014:	afa4002c */	sw a0, 0x2c(sp)
-/* 803bd018:	2405000a */	addiu a1, $zero, 0xa
-/* 803bd01c:	0c02664b */	jal 0x8009992c
-/* 803bd020:	24060020 */	addiu a2, $zero, 0x20
-/* 803bd024:	2604004e */	addiu a0, s0, 0x4e
-/* 803bd028:	afa40028 */	sw a0, 0x28(sp)
-/* 803bd02c:	24050006 */	addiu a1, $zero, 0x6
+// new buffer apparently. 
+/* 803bd010:	26040044 */	/*lui a0, hi(gNewItemBubbleBufferRef + correction)   */addiu a0, s0, 0x44
+/* 803bd014:	afa4002c */	/*addiu a0, lo(gNewItemBubbleBufferRef + correction) */sw a0, 0x2c(sp)
+/* 803bd018:	2405000a */	/*sw a0, 0x2c(sp)                                    */addiu a1, $zero, 0xa
+/* 803bd01c:	0c02664b */	/*sw a0, 0x44(s0)                                    */jal 0x8009992c
+/* 803bd020:	24060020 */	/*addiu at, a0, 8                                    */addiu a2, $zero, 0x20
+/* 803bd024:	2604004e */	/*sw at, 0x4c(s0)                                    */addiu a0, s0, 0x4e
+/* 803bd028:	afa40028 */	/*sw at, 0x28(sp)                                    */sw a0, 0x28(sp)
+/* 803bd02c:	24050006 */	/*addiu a1, r0, 0x28                                 */addiu a1, $zero, 0x6
 /* 803bd030:	0c02664b */	jal 0x8009992c
 /* 803bd034:	24060020 */	addiu a2, $zero, 0x20
 /* 803bd038:	8e180034 */	lw t8, 0x34(s0)
@@ -854,7 +856,7 @@ _803bcfb4:
 /* 803bd044:	0018c080 */	sll t8, t8, 0x2
 /* 803bd048:	3c018088 */	lui at, 0x8088
 /* 803bd04c:	00380821 */	addu at, at, t8
-/* 803bd050:	8c3894f0 */	lw t8, 0xffff94f0(at)
+/* 803bd050:	8c3894f0 */	lw t8, 0x94f0(at)
 /* 803bd054:	03000008 */	jr t8
 /* 803bd058:	00000000 */	nop
 /* 803bd05c:	8fb9003c */	lw t9, 0x3c(sp)
@@ -11505,8 +11507,10 @@ sInventoryBubbleSettings:
 /* 803c6304:	c2b00000 */	.word 0xc2b00000 // -88.0
 /* 803c6308:	41800000 */	.word 0x41800000 // 16.0
 /* 803c630c:	3f900000 */	.word 0x3f900000 // 1.125
-/* 803c6310:	00000002 */	.word 2 // 0x18 // 2*0xC
-/* 803c6314:	00000008 */	.word 8 // 0x42c00000 // (8.0*12.0)
+/* 803c6310:	00000002 */	/// .word 2 
+                            /*+*/.word 0x18 // 2*0xC
+/* 803c6314:	00000008 */	/// .word 8
+                                 .word 0x42c00000 // (8.0*12.0)
 /* 803c6318:	41900000 */	.word 0x41900000 // 18.0
 /* 803c631c:	c0a00000 */	.word 0xc0a00000 // -5.0
 /* 803c6320:	41200000 */	.word 0x41200000 // 10.0
@@ -11522,8 +11526,10 @@ sInventoryBubbleSettings:
 /* 803c6344:	c2960000 */	.word 0xc2960000 // -75.0
 /* 803c6348:	42040000 */	.word 0x42040000 // 33.0
 /* 803c634c:	3f800000 */	.word 0x3f800000 // 1.0
-/* 803c6350:	00000004 */	.word 4 // 0x30 // 4*0xC
-/* 803c6354:	00000006 */	.word 6 // 0x42900000 // (6.0*12.0)
+/* 803c6350:	00000004 */	/// .word 4
+                            /*+*/.word 0x30 // 4*0xC
+/* 803c6354:	00000006 */	/// .word 6
+                            /*+*/.word 0x42900000 // (6.0*12.0)
 /* 803c6358:	41900000 */ .word 0x41900000 // 18.0
 /* 803c635c:	c1300000 */	.word 0xc1300000 // -11.0
 /* 803c6360:	41400000 */	.word 0x41400000 // 12.0
@@ -11539,8 +11545,10 @@ sInventoryBubbleSettings:
 /* 803c6384:	c2880000 */	.word 0xc2880000 // -68.0
 /* 803c6388:	42800000 */	.word 0x42800000 // 64.0
 /* 803c638c:	3f555555 */	.word 0x3f555555 // 0.8333333134651184
-/* 803c6390:	00000003 */	.word 3 // 0x24 // (3*0xC)
-/* 803c6394:	00000004 */	.word 4 // 0x42400000 // (4.0*12.0)
+/* 803c6390:	00000003 */	/// .word 3
+                            /*+*/.word 0x24 // (3*0xC)
+/* 803c6394:	00000004 */	/// .word 4
+                            /*+*/.word 0x42400000 // (4.0*12.0)
 /* 803c6398:	41d00000 */	.word 0x41d00000 // 26.0
 /* 803c639c:	c1a00000 */	.word 0xc1a00000 // -20.0
 /* 803c63a0:	40800000 */	.word 0x40800000 // 4.0

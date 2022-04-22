@@ -60,6 +60,6 @@ gItemBubbleData equ 0x801446A0
 /**/ oldItemBuffer equ 0x1D
 /**/ isResizing equ 0x27
 
-//gNewItemBubbleBuffer equ 0x80106B7C
+gNewItemBubbleBufferRef equ 0x80106B7C
 
 //gCurrentTextBankPos equ 0x801478f8

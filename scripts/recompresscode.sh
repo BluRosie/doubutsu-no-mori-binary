@@ -1,0 +1,1 @@
+./scripts/compress.sh; ./scripts/insert.sh
