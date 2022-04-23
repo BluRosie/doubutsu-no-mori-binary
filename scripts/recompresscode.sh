@@ -1,1 +1,1 @@
-./scripts/compress.sh; ./scripts/insert.sh
+rm -r build/yaz0/*; ./scripts/compress.sh; ./scripts/insert.sh

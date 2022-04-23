@@ -3,7 +3,6 @@
 
 .include "src/include/constants.inc"
 .include "src/include/char_enums.inc"
-.include "src/include/ram_declarations.inc"
 .table "src/include/chartable.tbl"
 
 correction equ 0x4c2d80 // pointer correction
@@ -370,48 +369,45 @@ and x18 (divisor) premultiplied by C and casted to float:
 }
 */
 
+.area 0x803bcb90 - 0x803bc9e4, 0
+
 // 803bc9e4
 _803bc9e4:
-	/*+*/sll v0, a2, 0x1
-	/*+*/addu v0, v0, a2
-	/*+*/sll a2, v0, 0x2 // a2 *= C to fake real length
+	/// ori v0, $zero, 0xc
+	/// multu a2, v0
 
-//_803bc9e4_alt: //(? *bubble, row, width, lines)
+//_803bc9e4_alt:
 	lui t7, (sInventoryBubbleSettings + correction) >> 16
 	addiu t7, t7, (sInventoryBubbleSettings + correction) & 0xFFFF
-	sll t6, a1, 0x6 // t6 = row*0x40 -> each entry in sInventoryBubbleSettings is 0x40 long
+	sll t6, a1, 0x6 // t6 = row*0x40 -> each entry in sInventoryBubbleSettings is 0x40??
 	addu v0, t6, t7
-	lw t8, 0x14(v0) // table +0x14 -> correction // (is now premultiplied by 0xC)
-	/// lw t0, 0x18(v0) // table +0x18 -> divisor
-	/// addiu t1, a3, -2 // default size -> 2 entries
+	lw t8, 0x14(v0) // table +0x14 -> correction
+	/*-*/lw t0, 0x18(v0) // table +0x18 -> divisor
+	/// lwc1 f10, 0x18(v0) // table +0x18 -> divisor
+	addiu t1, a3, -2 // default size -> 2 entries
 	subu t9, a2, t8 // strlen.u - correction
 	mtc1 t9, f4
-	/// mtc1 t0, f8
+	mtc1 t0, f8
 	or a2, v0, $zero // a2 = table
-	/*+*/lwc1 f10, 0x18(a2) // divisor now premultiplied by 12 and floated in the table
-	/*+*/addiu t1, a3, -2
-	cvt.s.w f6, f4 // f6 = (float)strlen.u - correction
+	/*-*/cvt.s.w f6, f4 // f6 = (float)strlen.u - correction
 	or a1, a0, $zero // a1 = *bubble
 	or v1, $zero, $zero
-	/// cvt.s.w f10, f8 // f10 = (float)divisor
+	/*-*/cvt.s.w f10, f8 // f10 = (float)divisor
 	div.s f18, f6, f10 // f18 = ((float)strlen.u - correction) / (float)divisor = width%
-	/// beq a3, $zero, _803bca48
-	/*+*/beq a3, $zero, _803bc9e4_alt_branch_target
+	beq a3, $zero, _803bca48
 	swc1 f18, 0x4(a0)
 	mtc1 t1, f4
 	lui at, 0x4040
-	mtc1 at, f6 // f6 = 3.0
-	cvt.s.w f8, f4 // f8 = (float)(lines - 2)
-	/// div.s f10, f8, f6
-	/*+*/div.s f18, f8, f6
-	/// b _803bca50
-	/// swc1 f10, 0x8(a0)
-/*+*/_803bc9e4_alt_branch_target:
-	/*+*/swc1 f18, 0x8(a0)
-
+	mtc1 at, f6
+	cvt.s.w f8, f4
+	div.s f18, f8, f6
+	b _803bca50
 _803bca48:
-	/// lwc1 f18, 0x4(a0)
-	/// swc1 f18, 0x8(a0)
+	swc1 f18, 0x8(a0)
+
+//_803bca48:
+/* 803bca48:	c4920004 */	//lwc1 f18, 0x4(a0)
+/* 803bca4c:	e4920008 */	//swc1 f18, 0x8(a0)
 
 _803bca50:
 /* 803bca50:	3c013f80 */	lui at, 0x3f80
@@ -498,11 +494,11 @@ _803bcb00:
 /* 803bcb84:	e4880028 */	swc1 f8, 0x28(a0)
 /* 803bcb88:	03e00008 */	jr ra
 /* 803bcb8c:	00000000 */	nop
-/*+*/nop
-/*+*/nop
+
+.endarea
 
 
-
+.org 0x803bcb90
 /* 803bcb90:	8c8e0034 */	lw t6, 0x34(a0)
 /* 803bcb94:	3c188088 */	lui t8, 0x8088
 /* 803bcb98:	8c99003c */	lw t9, 0x3c(a0)
@@ -839,15 +835,14 @@ _803bcfb4:
 /* 803bd004:	2605000c */	addiu a1, s0, 0xc
 /* 803bd008:	0c21bcd7 */	jal 0x8086f35c
 /* 803bd00c:	00403825 */	or a3, v0, $zero
-// new buffer apparently. 
-/* 803bd010:	26040044 */	/*lui a0, hi(gNewItemBubbleBufferRef + correction)   */addiu a0, s0, 0x44
-/* 803bd014:	afa4002c */	/*addiu a0, lo(gNewItemBubbleBufferRef + correction) */sw a0, 0x2c(sp)
-/* 803bd018:	2405000a */	/*sw a0, 0x2c(sp)                                    */addiu a1, $zero, 0xa
-/* 803bd01c:	0c02664b */	/*sw a0, 0x44(s0)                                    */jal 0x8009992c
-/* 803bd020:	24060020 */	/*addiu at, a0, 8                                    */addiu a2, $zero, 0x20
-/* 803bd024:	2604004e */	/*sw at, 0x4c(s0)                                    */addiu a0, s0, 0x4e
-/* 803bd028:	afa40028 */	/*sw at, 0x28(sp)                                    */sw a0, 0x28(sp)
-/* 803bd02c:	24050006 */	/*addiu a1, r0, 0x28                                 */addiu a1, $zero, 0x6
+/* 803bd010:	26040044 */	addiu a0, s0, 0x44
+/* 803bd014:	afa4002c */	sw a0, 0x2c(sp)
+/* 803bd018:	2405000a */	addiu a1, $zero, 0xa
+/* 803bd01c:	0c02664b */	jal 0x8009992c
+/* 803bd020:	24060020 */	addiu a2, $zero, 0x20
+/* 803bd024:	2604004e */	addiu a0, s0, 0x4e
+/* 803bd028:	afa40028 */	sw a0, 0x28(sp)
+/* 803bd02c:	24050006 */	addiu a1, $zero, 0x6
 /* 803bd030:	0c02664b */	jal 0x8009992c
 /* 803bd034:	24060020 */	addiu a2, $zero, 0x20
 /* 803bd038:	8e180034 */	lw t8, 0x34(s0)
@@ -856,7 +851,7 @@ _803bcfb4:
 /* 803bd044:	0018c080 */	sll t8, t8, 0x2
 /* 803bd048:	3c018088 */	lui at, 0x8088
 /* 803bd04c:	00380821 */	addu at, at, t8
-/* 803bd050:	8c3894f0 */	lw t8, 0x94f0(at)
+/* 803bd050:	8c3894f0 */	lw t8, 0xffff94f0(at)
 /* 803bd054:	03000008 */	jr t8
 /* 803bd058:	00000000 */	nop
 /* 803bd05c:	8fb9003c */	lw t9, 0x3c(sp)
@@ -1136,7 +1131,7 @@ _803bd3e4:
 /* 803bd3e4:	00003825 */	or a3, $zero, $zero
 
 _803bd3e8:
-/* 803bd3e8:	0c21bdd9 */	jal _803bc9e4 /*(BubbleStruct *bubble, row, strlen, lines)*/ + codecorrection
+/* 803bd3e8:	0c21bdd9 */	jal _803bc9e4 + codecorrection
 /* 803bd3ec:	afa60038 */	sw a2, 0x38(sp)
 /* 803bd3f0:	0c21bf3d */	jal 0x8086fcf4
 /* 803bd3f4:	02002025 */	or a0, s0, $zero
@@ -1184,7 +1179,7 @@ _803bd478:
 /* 803bd484:	02002025 */	or a0, s0, $zero
 /* 803bd488:	00002825 */	or a1, $zero, $zero
 /* 803bd48c:	00403025 */	or a2, v0, $zero
-/* 803bd490:	0c21bdd9 */	jal _803bc9e4 /*(BubbleStruct *bubble, row, strlen, lines)*/ + codecorrection
+/* 803bd490:	0c21bdd9 */	jal _803bc9e4 + codecorrection
 /* 803bd494:	00003825 */	or a3, $zero, $zero
 
 _803bd498:
@@ -1236,7 +1231,7 @@ _803bd4f0:
 /* 803bd534:	02002025 */	or a0, s0, $zero
 /* 803bd538:	00002825 */	or a1, $zero, $zero
 /* 803bd53c:	00403025 */	or a2, v0, $zero
-/* 803bd540:	0c21bdd9 */	jal _803bc9e4 /*(BubbleStruct *bubble, row, strlen, lines)*/ + codecorrection
+/* 803bd540:	0c21bdd9 */	jal _803bc9e4 + codecorrection
 /* 803bd544:	00003825 */	or a3, $zero, $zero
 /* 803bd548:	3c01bf80 */	lui at, 0xbf80
 /* 803bd54c:	44814000 */	mtc1 at, f8
@@ -1280,7 +1275,7 @@ _803bd5a0:
 /* 803bd5d4:	02002025 */	or a0, s0, $zero
 /* 803bd5d8:	24050002 */	addiu a1, $zero, 0x2
 /* 803bd5dc:	8fa60044 */	lw a2, 0x44(sp)
-/* 803bd5e0:	0c21bdd9 */	jal _803bc9e4 /*(BubbleStruct *bubble, row, strlen, lines)*/ + codecorrection
+/* 803bd5e0:	0c21bdd9 */	jal _803bc9e4 + codecorrection
 /* 803bd5e4:	8fa70040 */	lw a3, 0x40(sp)
 /* 803bd5e8:	0c21be8c */	jal 0x8086fa30
 /* 803bd5ec:	02002025 */	or a0, s0, $zero
@@ -1374,7 +1369,7 @@ _803bd6e8:
 /* 803bd72c:	02002025 */	or a0, s0, $zero
 /* 803bd730:	24050002 */	addiu a1, $zero, 0x2
 /* 803bd734:	8fa60030 */	lw a2, 0x30(sp)
-/* 803bd738:	0c21bdd9 */	jal _803bc9e4 /*(BubbleStruct *bubble, row, strlen, lines)*/ + codecorrection
+/* 803bd738:	0c21bdd9 */	jal _803bc9e4 + codecorrection
 /* 803bd73c:	8fa7002c */	lw a3, 0x2c(sp)
 /* 803bd740:	922e0002 */	lbu t6, 0x2(s1)
 /* 803bd744:	3c014330 */	lui at, 0x4330
@@ -1552,7 +1547,7 @@ _803bd994:
 /* 803bd9cc:	02002025 */	or a0, s0, $zero
 /* 803bd9d0:	24050002 */	addiu a1, $zero, 0x2
 /* 803bd9d4:	8fa6002c */	lw a2, 0x2c(sp)
-/* 803bd9d8:	0c21bdd9 */	jal _803bc9e4 /*(BubbleStruct *bubble, row, strlen, lines)*/ + codecorrection
+/* 803bd9d8:	0c21bdd9 */	jal _803bc9e4 + codecorrection
 /* 803bd9dc:	8fa70028 */	lw a3, 0x28(sp)
 /* 803bd9e0:	3c0140e0 */	lui at, 0x40e0
 /* 803bd9e4:	44812000 */	mtc1 at, f4
@@ -11110,7 +11105,7 @@ gString80888ac0:
 	.stringn "おみくじ"
 
 gStringHappyRoomAcademy:
-	.stringn "ハッピールーム "
+    .stringn "ハッピールーム "
 
 // the package string should be something like:
 /*
@@ -11131,7 +11126,7 @@ gSecondLineStringMail:
 
 // 803c5d58
 gFirstLineStringPackage:
-	.stringn "さんへの"
+    .stringn "さんへの"
 
 
 // 803c5d5c
@@ -11507,10 +11502,10 @@ sInventoryBubbleSettings:
 /* 803c6304:	c2b00000 */	.word 0xc2b00000 // -88.0
 /* 803c6308:	41800000 */	.word 0x41800000 // 16.0
 /* 803c630c:	3f900000 */	.word 0x3f900000 // 1.125
-/* 803c6310:	00000002 */	/// .word 2 
-                            /*+*/.word 0x18 // 2*0xC
-/* 803c6314:	00000008 */	/// .word 8
-                            /*+*/.word 0x42c00000 // (8.0*12.0)
+/* 803c6310:	00000002 */	/*-*/ .word 2 
+                            ///.word 0x18 // 2*0xC
+/* 803c6314:	00000008 */	/*-*/ .word 8
+                            /// .word 0x42c00000 // (8.0*12.0)
 /* 803c6318:	41900000 */	.word 0x41900000 // 18.0
 /* 803c631c:	c0a00000 */	.word 0xc0a00000 // -5.0
 /* 803c6320:	41200000 */	.word 0x41200000 // 10.0
@@ -11526,10 +11521,10 @@ sInventoryBubbleSettings:
 /* 803c6344:	c2960000 */	.word 0xc2960000 // -75.0
 /* 803c6348:	42040000 */	.word 0x42040000 // 33.0
 /* 803c634c:	3f800000 */	.word 0x3f800000 // 1.0
-/* 803c6350:	00000004 */	/// .word 4
-                            /*+*/.word 0x30 // 4*0xC
-/* 803c6354:	00000006 */	/// .word 6
-                            /*+*/.word 0x42900000 // (6.0*12.0)
+/* 803c6350:	00000004 */	/*-*/ .word 4
+                            /// .word 0x30 // 4*0xC
+/* 803c6354:	00000006 */	/*-*/ .word 6
+                            /// .word 0x42900000 // (6.0*12.0)
 /* 803c6358:	41900000 */ .word 0x41900000 // 18.0
 /* 803c635c:	c1300000 */	.word 0xc1300000 // -11.0
 /* 803c6360:	41400000 */	.word 0x41400000 // 12.0
@@ -11545,10 +11540,10 @@ sInventoryBubbleSettings:
 /* 803c6384:	c2880000 */	.word 0xc2880000 // -68.0
 /* 803c6388:	42800000 */	.word 0x42800000 // 64.0
 /* 803c638c:	3f555555 */	.word 0x3f555555 // 0.8333333134651184
-/* 803c6390:	00000003 */	/// .word 3
-                            /*+*/.word 0x24 // (3*0xC)
-/* 803c6394:	00000004 */	/// .word 4
-                            /*+*/.word 0x42400000 // (4.0*12.0)
+/* 803c6390:	00000003 */	/*-*/ .word 3
+                            /// .word 0x24 // (3*0xC)
+/* 803c6394:	00000004 */	/*-*/ .word 4
+                            /// .word 0x42400000 // (4.0*12.0)
 /* 803c6398:	41d00000 */	.word 0x41d00000 // 26.0
 /* 803c639c:	c1a00000 */	.word 0xc1a00000 // -20.0
 /* 803c63a0:	40800000 */	.word 0x40800000 // 4.0
@@ -11561,9 +11556,9 @@ sInventoryBubbleSettings:
 
 
 
-/* 803c63bc:	e4bad6bd */	.word 0xe4bad6bd
-/* 803c63c0:	a4000000 */	.word 0xa4000000
-/* 803c63c4:	19190000 */	.word 0x19190000
+/* 803c63bc:	e4bad6bd */	swc1 f26, 0xffffd6bd(a1)
+/* 803c63c0:	a4000000 */	sh $zero, 0x0($zero)
+/* 803c63c4:	19190000 */	/*illegal*/ .word 0x19190000
 
 _803c63c8:
 /* 803c63c8:	05e92020 */	tgeiu t7, 8224
