@@ -1,32 +1,32 @@
-﻿0000	フナ                  
-0001	ヘラブナ                
-0002	コイ                  
-0003	にしきゴイ               
-0004	ナマズ                 
-0005	ちいさいバス              
-0006	ふつうのバス              
-0007	おおきいバス              
-0008	ブルーギル               
-0009	おおナマズ               
-000A	ライギョ                
-000B	にごい                 
-000C	うぐい                 
-000D	おいかわ                
-000E	たなご                 
-000F	どじょう                
-0010	ワカサギ                
-0011	アユ                  
-0012	ヤマメ                 
-0013	おおイワナ               
-0014	ニジマス                
-0015	イトウ                 
-0016	サケ                  
-0017	きんぎょ                
-0018	ピラニア                
-0019	アロワナ                
-001A	うなぎ                 
-001B	ドンコ                 
-001C	エンゼルフィッシュ           
-001D	グッピー                
-001E	でめきん                
-001F	シーラカンス              
+﻿0000	Crucian Carp        
+0001	Brook Trout         
+0002	Carp                
+0003	Koi                 
+0004	Catfish             
+0005	Small Bass          
+0006	Bass                
+0007	Large Bass          
+0008	Bluegill            
+0009	Giant Catfish       
+000A	Giant Snakehead     
+000B	Barbel Steed        
+000C	Dace                
+000D	Pale Chub           
+000E	Bitterling          
+000F	Loach               
+0010	Pond Smelt          
+0011	Sweetfish           
+0012	Cherry Salmon       
+0013	Large Char          
+0014	Rainbow Trout       
+0015	Stringfish          
+0016	Salmon              
+0017	Goldfish            
+0018	Piranha             
+0019	Arowana             
+001A	Eel                 
+001B	Freshwater Goby     
+001C	Angelfish           
+001D	Guppy               
+001E	Popeyed Goldfish    
+001F	Coelacanth          

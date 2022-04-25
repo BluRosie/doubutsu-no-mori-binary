@@ -1,64 +1,64 @@
-﻿0000	あかいじゅうたん            
-0001	シックなじゅうたん           
-0002	あかくろタイルのゆか          
-0003	ふるいフローリング           
-0004	ハニカムタイルのゆか          
-0005	しらきのフローリング          
-0006	きょうしつのゆか            
-0007	ラブリーじゅうたん           
-0008	アジアなラグ              
-0009	こけにわのゆか             
-000A	18じょうじきだたみ          
-000B	8じょうじきだたみ           
-000C	フルーツじゅうたん           
-000D	ログハウスのゆか            
-000E	ひびわれたどうろ            
-000F	げつめんのゆか             
-0010	かれさんすいのゆか           
-0011	ハロウィンじゅうたん          
-0012	おふろばタイルのゆか          
-0013	みどりのじゅうたん           
-0014	あおいゆか               
-0015	ロイヤルなゆか             
-0016	カントリーなゆか            
-0017	モノクロタイルのゆか          
-0018	リゾートなゆか             
-0019	ゆきだるまじゅうたん          
-001A	ふるいいたまのゆか           
-001B	おんがくしつのゆか           
-001C	ヨーロピアンなゆか           
-001D	さわやかタイルのゆか          
-001E	くさばなのじゅうたん          
-001F	いたまつきのたたみ           
-0020	バンブーなゆか             
-0021	キッチンのゆか             
-0022	あらいタイルのゆか           
-0023	だいりせきのゆか            
-0024	おうちょうなゆか            
-0025	すすけたじゅうたん           
-0026	ランダムなしきいし           
-0027	きいろいピータイル           
-0028	ごうかなじゅうたん           
-0029	ぎゅうがわのしきもの          
-002A	てっぱんのゆか             
-002B	オフィスのゆか             
-002C	エジプトなゆか             
-002D	オリエンタルなラグ           
-002E	あきちのゆか              
-002F	クリスマスじゅうたん          
-0030	そうげんのゆか             
-0031	ほどうのゆか              
-0032	モザイクタイルのゆか          
-0033	よせぎざいくのゆか           
-0034	ちかしつのゆか             
-0035	しょうぶのゆか             
-0036	カラフルなゆか             
-0037	むしろ                 
-0038	コンクリートのゆか           
-0039	さばくなゆか              
-003A	しょさいのじゅうたん          
-003B	きゅうでんのゆか            
-003C	みなみのしまなゆか           
-003D	おもちゃなゆか             
-003E	キッチュなゆか             
-003F	みどりのピータイル           
+﻿0000	Plush Carpet        
+0001	Classic Carpet      
+0002	Checkered Tile      
+0003	Old Flooring        
+0004	Red Tile            
+0005	Birch Flooring      
+0006	Classroom Floor     
+0007	Lovely Carpet       
+0008	Exotic Rug          
+0009	Mossy Carpet        
+000A	18 Mat Tatami       
+000B	8 Mat Tatami        
+000C	Citrus Carpet       
+000D	Cabin Rug           
+000E	Closed Road         
+000F	Lunar Surface       
+0010	Sand Garden         
+0011	Spooky Carpet       
+0012	Western Desert      
+0013	Green Rug           
+0014	Blue Flooring       
+0015	Regal Carpet        
+0016	Ranch Flooring      
+0017	Modern Tile         
+0018	Cabana Flooring     
+0019	Snowman Carpet      
+001A	Backyard Lawn       
+001B	Music Room Floor    
+001C	Plaza Tile          
+001D	Kitchen Tile        
+001E	Ornate Rug          
+001F	Tatami Floor        
+0020	Bamboo Flooring     
+0021	Kitchen Flooring    
+0022	Charcoal Tile       
+0023	Stone Tile          
+0024	Imperial Tile       
+0025	Opulent Rug         
+0026	Slate Flooring      
+0027	Ceramic Tile        
+0028	Fancy Carpet        
+0029	Cowhide Rug         
+002A	Steel Flooring      
+002B	Office Flooring     
+002C	Ancient Tile        
+002D	Exquisite Rug       
+002E	Sandlot             
+002F	Jingle Carpet       
+0030	Daisy Meadow        
+0031	Sidewalk            
+0032	Mosaic Tile         
+0033	Parquet Floor       
+0034	Basement Floor      
+0035	Chessboard Rug      
+0036	Kiddie Carpet       
+0037	Shanty Mat          
+0038	Concrete Floor      
+0039	Saharah's Desert    
+003A	Tartan Rug          
+003B	Palace Tile         
+003C	Tropical Floor      
+003D	Playroom Rug        
+003E	Kitschy Tile        
+003F	Diner Tile          

@@ -1,64 +1,64 @@
-﻿0000	エアメールなびんせん          
-0001	キラキラなびんせん           
-0002	バンブーなびんせん           
-0003	キケンなびんせん            
-0004	げんこうようし             
-0005	パンダのびんせん            
-0006	カントリーなびんせん          
-0007	てっぱんのびんせん           
-0008	はなわくのびんせん           
-0009	つたのびんせん             
-000A	なつのくものびんせん          
-000B	さくらちるびんせん           
-000C	ゆきふるびんせん            
-000D	あめふるびんせん            
-000E	すいかのびんせん            
-000F	みなものびんせん            
-0010	ゆきあかりのびんせん          
-0011	セピアなびんせん            
-0012	あさがおのびんせん           
-0013	もみじのびんせん            
-0014	アジアのびんせん            
-0015	まきもののびんせん           
-0016	クリスマスのびんせん          
-0017	まちなみのびんせん           
-0018	ようひしのびんせん           
-0019	おみくじびんせん            
-001A	ステージのびんせん           
-001B	あつがみのびんせん           
-001C	おばけのびんせん            
-001D	ちゅうかなびんせん           
-001E	せいそなびんせん            
-001F	つくしのびんせん            
-0020	フェルトなびんせん           
-0021	エキゾチックびんせん          
-0022	ピンストなびんせん           
-0023	ゴージャスなびんせん          
-0024	レースなびんせん            
-0025	みずたまなびんせん           
-0026	デイジーなびんせん           
-0027	レインボーなびんせん          
-0028	ストロベリーびんせん          
-0029	ボンダイなびんせん           
-002A	アロハなびんせん            
-002B	リボンなびんせん            
-002C	ファンタジーびんせん          
-002D	きのこのびんせん            
-002E	いちょうのびんせん           
-002F	はなびのびんせん            
-0030	ふゆのもりのびんせん          
-0031	はにわのびんせん            
-0032	つるくさのびんせん           
-0033	アカデミーのびんせん          
-0034	ナイトのびんせん            
-0035	タイルなびんせん            
-0036	かすみのびんせん            
-0037	よくあるびんせん            
-0038	みつばちのびんせん           
-0039	ふしぎなびんせん            
-003A	サンセットなびんせん          
-003B	メカっぽいびんせん           
-003C	プチはなのびんせん           
-003D	てふてふのびんせん           
-003E	しょうがつなびんせん          
-003F	タコちゃんのびんせん          
+﻿0000	Airmail Paper       
+0001	Sparkly Paper       
+0002	Bamboo Paper        
+0003	Orange Paper        
+0004	Essay Paper         
+0005	Panda Paper         
+0006	Ranch Paper         
+0007	Steel Paper         
+0008	Blossom Paper       
+0009	Vine Paper          
+000A	Cloudy Paper        
+000B	Petal Paper         
+000C	Snowy Paper         
+000D	Rainy Day Paper     
+000E	Watermelon Paper    
+000F	Deep Sea Paper      
+0010	Starry Sky Paper    
+0011	Daisy Paper         
+0012	Bluebell Paper      
+0013	Maple Leaf Paper    
+0014	Woodcut Paper       
+0015	Octopus Paper       
+0016	Festive Paper       
+0017	Skyline Paper       
+0018	Museum Paper        
+0019	Fortune Paper       
+001A	Stageshow Paper     
+001B	Thick Paper         
+001C	Spooky Paper        
+001D	Noodle Paper        
+001E	Neat Paper          
+001F	Horsetail Paper     
+0020	Felt Paper          
+0021	Parchment           
+0022	Cool Paper          
+0023	Elegant Paper       
+0024	Lacy Paper          
+0025	Polka-Dot Paper     
+0026	Dizzy Paper         
+0027	Rainbow Paper       
+0028	Hot Neon Paper      
+0029	Cool Neon Paper     
+002A	Aloha Paper         
+002B	Ribbon Paper        
+002C	Fantasy Paper       
+002D	Woodland Paper      
+002E	Gingko Paper        
+002F	Fireworks Paper     
+0030	Winter Paper        
+0031	Gyroid Paper        
+0032	Ivy Paper           
+0033	Wing Paper          
+0034	Dragon Paper        
+0035	Tile Paper          
+0036	Misty Paper         
+0037	Simple Paper        
+0038	Honeybee Paper      
+0039	Mystic Paper        
+003A	Sunset Paper        
+003B	Lattice Paper       
+003C	Dainty Paper        
+003D	Butterfly Paper     
+003E	New Year's Card     
+003F	Inky Paper          

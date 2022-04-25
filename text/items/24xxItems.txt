@@ -1,255 +1,255 @@
-﻿0000	ファイアーなふく            
-0001	あしあとのふく             
-0002	あかレイヤーのふく           
-0003	フューチャーなふく           
-0004	めだつチェッカーふく          
-0005	ミントギンガムなふく          
-0006	はでなタータンのふく          
-0007	シンプルラインなふく          
-0008	ネイティブニット            
-0009	フラワーなふく             
-000A	セピアレイヤーなふく          
-000B	オプティカルなふく           
-000C	めだつボーダーのふく          
-000D	ベリーギンガムなふく          
-000E	きいろタータンのふく          
-000F	いちごボーダーなふく          
-0010	さぎょうぎ               
-0011	ボロいふく               
-0012	うめのきもの              
-0013	もんつきはかま             
-0014	あかいたいそうふく           
-0015	あおいたいそうふく           
-0016	あかいダウンベスト           
-0017	あおいダウンベスト           
-0018	かすりのゆかた             
-0019	たけやぶのゆかた            
-001A	パーティードレス            
-001B	タキシード               
-001C	くろマーブルなふく           
-001D	しろマーブルなふく           
-001E	ラブリーなふく             
-001F	なつみかんのふく            
-0020	キウイのふく              
-0021	すいかのふく              
-0022	いちごのふく              
-0023	ぶどうのふく              
-0024	メロンのふく              
-0025	クリスマスなコート           
-0026	ピンクはながらのふく          
-0027	すずしげなニット            
-0028	エンボスなふく             
-0029	ポリネシアンなふく           
-002A	リボンのふく              
-002B	あきのタータンのふく          
-002C	あかいネットのふく           
-002D	みどりのニット             
-002E	てんとうむしのふく           
-002F	アラベスクなふく            
-0030	アンジュのふく             
-0031	カーフェイのふく            
-0032	むらさきのゆかた            
-0033	みずいろこうしのふく          
-0034	あげはのふく              
-0035	シアンタータンのふく          
-0036	グレースのふく             
-0037	オレンジソーダなふく          
-0038	グレープソーダなふく          
-0039	メロンソーダなふく           
-003A	ブルーハワイなふく           
-003B	いちごソーダなふく           
-003C	1ばんだまのふく            
-003D	2ばんだまのふく            
-003E	3ばんだまのふく            
-003F	4ばんだまのふく            
-0040	5ばんだまのふく            
-0041	6ばんだまのふく            
-0042	7ばんだまのふく            
-0043	8ばんだまのふく            
-0044	9ばんだまのふく            
-0045	かんれいめいさいふく          
-0046	めいさいふく              
-0047	デザートめいさいふく          
-0048	ラリーなふく              
-0049	いかしたラインのふく          
-004A	ゼッケン6のふく            
-004B	トマトジュースのふく          
-004C	スパイダーなふく            
-004D	ジッパーのふく             
-004E	バブルなふく              
-004F	きいろいボレロ             
-0050	ネビュラなふく             
-0051	シンプルなニット            
-0052	かくちょうたかいふく          
-0053	みどりのカーディガン          
-0054	なんかよくみるふく           
-0055	じみにまとまったふく          
-0056	オレンジのコルセット          
-0057	カラータイルなふく           
-0058	ヒッピーなふく             
-0059	かわいくまとめたふく          
-005A	はでめにまとめたふく          
-005B	ウェイトレスなふく           
-005C	きばんのふく              
-005D	やじるしのふく             
-005E	ノルディックなドレス          
-005F	パルスなふく              
-0060	ステンドグラスなふく          
-0061	スターなふく              
-0062	かれくさのふく             
-0063	ラーメンなふく             
-0064	サイコロのふく             
-0065	ブロックのふく             
-0066	かえるのふく              
-0067	すごいらしいふく            
-0068	そらのふく               
-0069	みたことあるふく            
-006A	ドクロのふく              
-006B	あかしろのニット            
-006C	レインボーなニット           
-006D	ゆきぐになニット            
-006E	レクタングルなふく           
-006F	みどりチェックのふく          
-0070	ブルーチェックのふく          
-0071	あきいろこうしのふく          
-0072	フリッカーなふく            
-0073	しろいはなのふく            
-0074	バラのふく               
-0075	サンセットなふく            
-0076	プリズンなふく             
-0077	はながらのニット            
-0078	クマのふく               
-0079	MVPTシャツ             
-007A	はながらのゆうぜん           
-007B	ポップなはなのふく           
-007C	はでなはなのふく            
-007D	ピンクチャイナなふく          
-007E	ブルーチャイナなふく          
-007F	グランブルーなふく           
-0080	こおりイチゴのふく           
-0081	うじきんときのふく           
-0082	いげたもようのふく           
-0083	しぼりぞめなふく            
-0084	スペードのふく             
-0085	うめのふく               
-0086	ピーチなふく              
-0087	かすりなふく              
-0088	レインボーなふく            
-0089	サイケデリックなふく          
-008A	はでなボーダーのふく          
-008B	ゆめいろこうしのふく          
-008C	あかしろラガーシャツ          
-008D	マリンボーダーのふく          
-008E	つちいろのニット            
-008F	かわいいニット             
-0090	しかがらのニット            
-0091	あおチェックのふく           
-0092	あわいボーダーのふく          
-0093	しぶいたてじまのふく          
-0094	ダイヤのふく              
-0095	しぶいボーダーのふく          
-0096	おにいさんのふく            
-0097	みどりボーダーのふく          
-0098	きいろボーダーのふく          
-0099	さるがらのニット            
-009A	メルヘンなドレス            
-009B	パターンのニット            
-009C	さかながらのニット           
-009D	やがらのふく              
-009E	かすみのふく              
-009F	いずものふく              
-00A0	あかうろこのふく            
-00A1	あおうろこのふく            
-00A2	ハートのふく              
-00A3	じみなたてじまのふく          
-00A4	クラブのふく              
-00A5	おとうとさんのふく           
-00A6	トラッドなニット            
-00A7	げんしじんなふく            
-00A8	あかチェッカーのふく          
-00A9	こだいぶんめいなふく          
-00AA	エースのふく              
-00AB	チェッカーのふく            
-00AC	No.1のふく             
-00AD	No.2のふく             
-00AE	No.3のふく             
-00AF	No.4のふく             
-00B0	No.5のふく             
-00B1	No.23のふく            
-00B2	No.67のふく            
-00B3	BBのふく               
-00B4	くろあかラガーシャツ          
-00B5	カビたふく               
-00B6	Wのふく                
-00B7	いちばんぼしのふく           
-00B8	ヒルのふく               
-00B9	トゥインクルなふく           
-00BA	パープルドットのふく          
-00BB	シンメトリーなふく           
-00BC	ストレンジなふく            
-00BD	シャギーなふく             
-00BE	ボーダー&デニム            
-00BF	アイラブ64のふく           
-00C0	はるのみずたまのふく          
-00C1	バーバーなふく             
-00C2	ホテルマンなふく            
-00C3	さわやかなふく             
-00C4	あやひものふく             
-00C5	しののめなふく             
-00C6	いさましいふく             
-00C7	あかチェックのふく           
-00C8	いちごギンガムのふく          
-00C9	レモンチェックのふく          
-00CA	ドラゴンスーツ             
-00CB	Nキューブなふく            
-00CC	ブリキのふく              
-00CD	ピエロのふく              
-00CE	ピンクタータンのふく          
-00CF	しぶいタータンのふく          
-00D0	グレータータンのふく          
-00D1	こいのぼりなふく            
-00D2	せいがいはのふく            
-00D3	みどりのえんのふく           
-00D4	しろいえんのふく            
-00D5	ひしもようのふく            
-00D6	からくさもようのふく          
-00D7	なみもようのふく            
-00D8	ギャンブラーなふく           
-00D9	たんぼぎ                
-00DA	くみおびのふく             
-00DB	マーブルもようのふく          
-00DC	ボアつきのコート            
-00DD	ゼブラなふく              
-00DE	とらじまのふく             
-00DF	ホルスタインなふく           
-00E0	ひょうがらのふく            
-00E1	デンジャラスなふく           
-00E2	きいろみずたまのふく          
-00E3	パズルなふく              
-00E4	まんなかアジアなふく          
-00E5	ちどりこうしのふく           
-00E6	いかめしいニット            
-00E7	きいろツイードのふく          
-00E8	アジアなれいふく            
-00E9	アジアなはれぎ             
-00EA	こげちゃのニット            
-00EB	クラシックなドレス           
-00EC	はながらのワンピース          
-00ED	むらさきのコルセット          
-00EE	ピンクツイードのふく          
-00EF	きいろいワンピース           
-00F0	ヌーボーなふく             
-00F1	ゆめのはながらのふく          
-00F2	はながらのアロハ            
-00F3	あおむしのふく             
-00F4	ミルフィーユなふく           
-00F5	ともえのふく              
-00F6	かみなりもようのふく          
-00F7	キリンのふく              
-00F8	ブラウンタイルなふく          
-00F9	きのこもようのふく           
-00FA	くさのふく               
-00FB	カラーモザイクなふく          
-00FC	はなのししゅうのふく          
-00FD	ゆきのふく               
-00FE	わかばギンガムのふく          
+﻿0000	Flame Shirt         
+0001	Paw Shirt           
+0002	Wavy Pink Shirt     
+0003	Furture Shirt       
+0004	Bold Check Shirt    
+0005	Mint Gingham        
+0006	Bad Plaid Shirt     
+0007	Speedway Shirt      
+0008	Folk Shirt          
+0009	Daisy Shirt         
+000A	Wavy Tan Shirt      
+000B	Optical Shirt       
+000C	Rugby Shirt         
+000D	Sherbet Gingham     
+000E	Yellow Tartan       
+000F	Gelato Shirt        
+0010	Work Uniform        
+0011	Patched Shirt       
+0012	Plum Kimono         
+0013	Somber Robe         
+0014	Red Sweatsuit       
+0015	Blue Sweatsuit      
+0016	Red Puffy Vest      
+0017	Blue Puffy Vest     
+0018	Summer Robe         
+0019	Bamboo Robe         
+001A	Red Aloha Shirt     
+001B	Blue Aloha Shirt    
+001C	Dark Polka Shirt    
+001D	Lite Polka Shirt    
+001E	Lovely Shirt        
+001F	Citrus Shirt        
+0020	Kiwi Shirt          
+0021	Watermelon Shirt    
+0022	Strawberry Shirt    
+0023	Grape Shirt         
+0024	Melon Shirt         
+0025	Jingle Shirt        
+0026	Blossom Shirt       
+0027	Icy Shirt           
+0028	Crewel Shirt        
+0029	Tropical Shirt      
+002A	Ribbon Shirt        
+002B	Fall Plaid Shirt    
+002C	Fiendish Shirt      
+002D	Chevron Shirt       
+002E	Ladybug Shirt       
+002F	Botanical Shirt     
+0030	Anju's Shirt        
+0031	Kaffe's Shirt       
+0032	Lavender Robe       
+0033	Blue Grid Shirt     
+0034	Butterfly Shirt     
+0035	Blue Tartan         
+0036	Gracie's Top        
+0037	Orange Tie-Die      
+0038	Purple Tie-Die      
+0039	Green Tie-Die       
+003A	Blue Tie-Die        
+003B	Red Tie-Die         
+003C	One-Ball Shirt      
+003D	Two-Ball Shirt      
+003E	Three-Ball Shirt    
+003F	Four-Ball Shirt     
+0040	Five-Ball Shirt     
+0041	Six-Ball Shirt      
+0042	Seven-Ball Shirt    
+0043	Eight-Ball Shirt    
+0044	Nine-Ball Shirt     
+0045	Arctic Camo         
+0046	Jungle Camo         
+0047	Desert Camo         
+0048	Rally Shirt         
+0049	Racer Shirt         
+004A	Racer 6 Shirt       
+004B	Fish Bone Shirt     
+004C	Spiderweb Shirt     
+004D	Zipper Shirt        
+004E	Bubble Shirt        
+004F	Yellow Bolero       
+0050	Nebula Shirt        
+0051	Neo-Classic Knit    
+0052	Noble Shirt         
+0053	Turnip Top          
+0054	Oft-Seen Print      
+0055	Ski Sweater         
+0056	Circus Shirt        
+0057	Patchwork Top       
+0058	Mod Top             
+0059	Hippie Shirt        
+005A	Rickrack Shirt      
+005B	Diner Uniform       
+005C	Shirt Circuit       
+005D	U R Here Shirt      
+005E	Yodel Shirt         
+005F	Pulse Shirt         
+0060	Prism Shirt         
+0061	Star Shirt          
+0062	Straw Shirt         
+0063	Noodle Shirt        
+0064	Dice Shirt          
+0065	Kiddie Shirt        
+0066	Frog Shirt          
+0067	Moody Blue Shirt    
+0068	Cloudy Shirt        
+0069	Fortune Shirt       
+006A	Skull Shirt         
+006B	Desert Shirt        
+006C	Aurora Knit         
+006D	Winter Sweater      
+006E	Go-Go Shirt         
+006F	Jade Check Print    
+0070	Blue Check Print    
+0071	Red Grid Shirt      
+0072	Flicker Shirt       
+0073	Floral Knit         
+0074	Rose Shirt          
+0075	Sunset Top          
+0076	Chain-Gang Shirt    
+0077	Spring Shirt        
+0078	Bear Shirt          
+0079	MVP Shirt           
+007A	Silk Bloom Shirt    
+007B	Pop Bloom Shirt     
+007C	Loud Bloom Shirt    
+007D	Hot Spring Shirt    
+007E	New Spring Shirt    
+007F	Deep Blue Tee       
+0080	Snowcone Shirt      
+0081	Ugly Shirt          
+0082	Sharp Outfit        
+0083	Painter's Smock     
+0084	Spade Shirt         
+0085	Blossoming Shirt    
+0086	Peachy Shirt        
+0087	Static Shirt        
+0088	Rainbow Shirt       
+0089	Groovy Shirt        
+008A	Loud Line Shirt     
+008B	Dazed Shirt         
+008C	Red Bar Shirt       
+008D	Blue Stripe Knit    
+008E	Earthy Knit         
+008F	Spunky Knit         
+0090	Deer Shirt          
+0091	Blue Check Shirt    
+0092	Light Line Shirt    
+0093	Blue Pinestripe     
+0094	Diamond Shirt       
+0095	Lime Line Shirt     
+0096	Big Bro's Shirt     
+0097	Green Bar Shirt     
+0098	Yellow Bar Shirt    
+0099	Monkey Shirt        
+009A	Polar Fleece        
+009B	Ancient Knit        
+009C	Fish Knit           
+009D	Vertigo Shirt       
+009E	Misty Shirt         
+009F	Stormy Shirt        
+00A0	Red Scale Shirt     
+00A1	Blue Scale Shirt    
+00A2	Heart Shirt         
+00A3	Yellow Pinstripe    
+00A4	Club Shirt          
+00A5	Li'l Bro's Shirt    
+00A6	Argyle Knit         
+00A7	Caveman Tunic       
+00A8	Café Shirt          
+00A9	Tiki Shirt          
+00AA	A Shirt             
+00AB	Checkered Shirt     
+00AC	No. 1 Shirt         
+00AD	No. 2 Shirt         
+00AE	No. 3 Shirt         
+00AF	No. 4 Shirt         
+00B0	No. 5 Shirt         
+00B1	No. 23 Shirt        
+00B2	No. 67 Shirt        
+00B3	BB Shirt            
+00B4	Beatnik Shirt       
+00B5	Moldy Shirt         
+00B6	Houndstooth Tee     
+00B7	Big Star Shirt      
+00B8	Orange Pinstripe    
+00B9	Twinkle Shirt       
+00BA	Funky Dot Shirt     
+00BB	Crossing Shirt      
+00BC	Splendid Shirt      
+00BD	Jagged Shirt        
+00BE	Denim Shirt         
+00BF	Cherry Shirt        
+00C0	Gumdrop Shirt       
+00C1	Barber Shirt        
+00C2	Concierge Shirt     
+00C3	Fresh Shirt         
+00C4	Far-Out Shirt       
+00C5	Dawn Shirt          
+00C6	Striking Outfit     
+00C7	Red Check Shirt     
+00C8	Berry Gingham       
+00C9	Lemon Gingham       
+00CA	Dragon Suit         
+00CB	N64 Logo Shirt      
+00CC	Tin Shirt           
+00CD	Jester Shirt        
+00CE	Pink Tartan         
+00CF	Waffle Shirt        
+00D0	Gray Tartan         
+00D1	Windsock Shirt      
+00D2	Trendy Top          
+00D3	Green Ring Shirt    
+00D4	White Ring Shirt    
+00D5	Snappy Print        
+00D6	Chichi Print        
+00D7	Wave Print          
+00D8	Checkerboard Tee    
+00D9	Subdued Print       
+00DA	Airy Shirt          
+00DB	Coral Shirt         
+00DC	Leather Jerkin      
+00DD	Zebra Print         
+00DE	Tiger Print         
+00DF	Cow Print           
+00E0	Leopard Print       
+00E1	Danger Shirt        
+00E2	Big Dot Shirt       
+00E3	Puzzling Shirt      
+00E4	Exotic Shirt        
+00E5	Houndstooth Knit    
+00E6	Uncommon Shirt      
+00E7	Dapper Shirt        
+00E8	Gaudy Sweater       
+00E9	Cozy Sweater        
+00EA	Comfy Sweater       
+00EB	Classic Top         
+00EC	Vogue Top           
+00ED	Laced Shirt         
+00EE	Natty Shirt         
+00EF	Citrus Gingham      
+00F0	Cool Shirt          
+00F1	Dreamy Shirt        
+00F2	Flowery Shirt       
+00F3	Caterpillar Tee     
+00F4	Shortcake Shirt     
+00F5	Whirly Shirt        
+00F6	Thunder Shirt       
+00F7	Giraffe Print       
+00F8	Swell Shirt         
+00F9	Toad Print          
+00FA	Grass Shirt         
+00FB	Mosaic Shirt        
+00FC	Fetching Outfit     
+00FD	Snow Shirt          
+00FE	Melon Gingham       
