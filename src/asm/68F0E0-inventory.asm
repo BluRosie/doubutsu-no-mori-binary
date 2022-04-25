@@ -1,5 +1,5 @@
 .n64
-.create "build/obj/710680.bin", 0
+.create "build/obj/68F0E0.bin", 0
 
 .include "src/include/constants.inc"
 .include "src/include/char_enums.inc"
@@ -389,7 +389,7 @@ _8086f764:
 	/*+*/addu v0, a2, v0
 	/*+*/sll a2, v0, 0x2
 
-//_8086f764_alt:
+_8086f764_alt:
 	lui t7, (sInventoryBubbleSettings + correction) >> 16
 	addiu t7, t7, (sInventoryBubbleSettings + correction) & 0xFFFF
 	sll t6, a1, 0x6 // t6 = row*0x40 -> each entry in sInventoryBubbleSettings is 0x40
@@ -1205,13 +1205,13 @@ _808701ec:
 /* 808701f4:	8fa4002c */	lw a0, 0x2c(sp)
 
 _808701f8:
-/* 808701f8:	2405000a */	addiu a1, $zero, ITEM_NAME_LEN
-/* 808701fc:	0c027070 */	jal 0x8009c1c0
-/* 80870200:	24060020 */	addiu a2, $zero, CHAR_SPACE
+/* 808701f8:	2405000a */	/*addiu a1, $zero, ITEM_NAME_LEN */ addiu a1, $zero, ITEM_NAME_LEN
+/* 808701fc:	0c027070 */	/*jal 0x8009c1c0                 */ jal 0x800a2150
+/* 80870200:	24060020 */	/*addiu a2, $zero, CHAR_SPACE    */ nop//lw a0, 0x2c(sp)
 /* 80870204:	02002025 */	or a0, s0, $zero
 /* 80870208:	00002825 */	or a1, $zero, $zero
 /* 8087020c:	00403025 */	or a2, v0, $zero
-/* 80870210:	0c21bdd9 */	jal _8086f764 // (BubbleStruct *bubble, row, strlen, lines)
+/* 80870210:	0c21bdd9 */	jal _8086f764_alt // (BubbleStruct *bubble, row, strlen, lines)
 /* 80870214:	00003825 */	or a3, $zero, $zero
 
 _80870218:

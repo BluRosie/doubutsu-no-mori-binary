@@ -5,8 +5,10 @@
 .open "build.n64", 0x0
 
 /*
-	free space:	68F0E0 until 6ED6C0
+	free space:	68F0E0->6959E0 until 6ED6C0
 				after 1077FE0
+
+    search up tag-unused in any file to see a function/function bit that i believe is unused
 */
 
 /*
@@ -77,7 +79,7 @@
 .word 0x00774980, 0x007749C0, 0x0070E410, 0x0070E460 
 .word 0x007749C0, 0x007778B0, 0x0070E460, 0x00710470 
 .word 0x007778B0, 0x00777AE0, 0x00710470, 0x00710680 
-.word 0x00777AE0, 0x00781D60, 0x00710680, 0x00716EF0 
+.word 0x00777AE0, 0x00781D60, 0x0068F0E0, 0x00716EF0 // move inventory code from 710680 to 68F0E0
 .word 0x00781D60, 0x007829E0, 0x00716EF0, 0x00717990 
 .word 0x007829E0, 0x00784DE0, 0x00717990, 0x00719390 
 .word 0x00784DE0, 0x00784FC0, 0x00719390, 0x00719560 
