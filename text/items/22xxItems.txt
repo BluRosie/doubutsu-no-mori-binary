@@ -1,36 +1,36 @@
-﻿0000	あみ                  
-0001	オノ                  
-0002	スコップ                
-0003	つりざお                
-0004	トリコロールなかさ           
-0005	すいせんのかさ             
-0006	いちごもようのかさ           
-0007	みかんもようのかさ           
-0008	ポップなかさ              
-0009	マーガレットのかさ           
-000A	リボンのかさ              
-000B	ピンクチェックのかさ          
-000C	シアンチェックのかさ          
-000D	レースのかさ              
-000E	ゴージャスなかさ            
-000F	メルヘンなかさ             
-0010	シックなかさ              
-0011	にんてんどうのかさ           
-0012	ダンディーなかさ            
-0013	ひまわりのかさ             
-0014	こうもりがさ              
-0015	モダーンなかさ             
-0016	つうがくようのかさ           
-0017	はっぱのかさ              
-0018	はすのはなのかさ            
-0019	ばんがさ                
-001A	あかいみずたまのかさ          
-001B	いげたもようのかさ           
-001C	やがさ                 
-001D	ちゅうかなかさ             
-001E	カブキなかさ              
-001F	はながらのかさ             
-0020	アバンギャルドなかさ          
-0021	こおりのかさ              
-0022	むじのあおいかさ            
-0023	ファイアーなかさ            
+﻿0000	Net                 
+0001	Axe                 
+0002	Shovel              
+0003	Fishing Rod         
+0004	Gelato Umbrella     
+0005	Daffodil Parasol    
+0006	Berry Umbrella      
+0007	Orange Umbrella     
+0008	Mod Umbrella        
+0009	Petal Parasol       
+000A	Ribbon Parasol      
+000B	Gingham Parasol     
+000C	Plaid Parasol       
+000D	Lacy Parasol        
+000E	Elegant Umbrella    
+000F	Dainty Parasol      
+0010	Classic Umbrella    
+0011	Nintendo Parasol    
+0012	Bumbershoot         
+0013	Sunny Parasol       
+0014	Batbrella           
+0015	Checked Umbrella    
+0016	Yellow Umbrella     
+0017	Leaf Umbrella       
+0018	Lotus Parasol       
+0019	Paper Parasol       
+001A	Polka Parasol       
+001B	Sharp Umbrella      
+001C	Twig Parasol        
+001D	Noodle Parasol      
+001E	Hypno Parasol       
+001F	Pastel Parasol      
+0020	Retro Umbrella      
+0021	Icy Umbrella        
+0022	Blue Umbrella       
+0023	Flame Umbrella      

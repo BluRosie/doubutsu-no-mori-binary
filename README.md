@@ -9,13 +9,15 @@ zoinkity: the original distro on which this finds base
 
 \_demo_: author of zextract, the yaz0 binary spitter
 
-shevious: yaz0 extracter/decoder
+shevious: yaz0 decoder
 
-loadzero: base mipsdis
+loadzero: rough base of mipsdis
 
 kingcom: armips
 
 RaO: rn64crc
+
+thakis: matching yaz0 encoder/decoder from the oot repo
 
 ### so what can be found here?
 

@@ -1,10 +1,10 @@
-﻿0000	きのなえ                
-0001	しろいパンジー             
-0002	むらさきパンジー            
-0003	きいろいパンジー            
-0004	きいろいコスモス            
-0005	ピンクのコスモス            
-0006	みずいろコスモス            
-0007	あかいチューリップ           
-0008	しろいチューリップ           
-0009	きいろいチューリップ          
+﻿0000	Potted Sapling      
+0001	White Pansy Bag     
+0002	Purple Pansy Bag    
+0003	Yellow Pansy Bag    
+0004	White Cosmos Bag    
+0005	Pink Cosmos Bag     
+0006	Blue Cosmos Bag     
+0007	Red Tulip Bag       
+0008	White Tulip Bag     
+0009	Yellow Tulip Bag    

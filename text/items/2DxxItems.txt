@@ -1,32 +1,32 @@
-﻿0000	モンシロチョウ             
-0001	モンキチョウ              
-0002	アゲハチョウ              
-0003	オオムラサキ              
-0004	ミンミンゼミ              
-0005	ツクツクボウシ             
-0006	ヒグラシ                
-0007	アブラゼミ               
-0008	ハチ                  
-0009	シオカラトンボ             
-000A	アキアカネ               
-000B	ギンヤンマ               
-000C	オニヤンマ               
-000D	ショウリョウバッタ           
-000E	トノサマバッタ             
-000F	コオロギ                
-0010	キリギリス               
-0011	スズムシ                
-0012	マツムシ                
-0013	カナブン                
-0014	カブトムシ               
-0015	ヒラタクワガタ             
-0016	タマムシ                
-0017	ゴマダラカミキリ            
-0018	テントウムシ              
-0019	ナナホシテントウ            
-001A	カマキリ                
-001B	ゲンジボタル              
-001C	ゴキブリ                
-001D	ノコギリクワガタ            
-001E	ミヤマクワガタ             
-001F	オオクワガタ              
+﻿0000	Common Butterfly    
+0001	Yellow Butterfly    
+0002	Tiger Butterfly     
+0003	Purple Butterfly    
+0004	Robust Cicada       
+0005	Walker Cicada       
+0006	Evening Cicada      
+0007	Brown Cicada        
+0008	Bee                 
+0009	Common Dragonfly    
+000A	Red Dragonfly       
+000B	Darner Dragonfly    
+000C	Banded Dragonfly    
+000D	Long Locust         
+000E	Migratory Locust    
+000F	Cricket             
+0010	Grasshopper         
+0011	Bell Cricket        
+0012	Pine Cricket        
+0013	Drone Beetle        
+0014	Dynastid Beetle     
+0015	Flat Stag Beetle    
+0016	Jewel Beetle        
+0017	Longhorn Beetle     
+0018	Ladybug             
+0019	Spotted Ladybug     
+001A	Mantis              
+001B	Firefly             
+001C	Cockroach           
+001D	Saw Stag Beetle     
+001E	Mountain Beetle     
+001F	Giant Beetle        

@@ -1,55 +1,55 @@
-﻿0000	けけさんびか              
-0001	けけマーチ               
-0002	けけワルツ               
-0003	けけスウィング             
-0004	けけジャズ               
-0005	けけフュージョン            
-0006	けけのエチュード            
-0007	けけララバイ              
-0008	けけマリア               
-0009	けけサンバ               
-000A	けけボッサ               
-000B	けけカリプソ              
-000C	けけサルサ               
-000D	けけマンボ               
-000E	けけレゲエ               
-000F	けけスカ                
-0010	けけタンゴ               
-0011	ハイサイけけ              
-0012	アロハけけ               
-0013	アイリッシュそんぐ           
-0014	ペルーのうた              
-0015	コサックそんぐ             
-0016	けけチャイナ              
-0017	トルコそんぐ              
-0018	けけアフロ               
-0019	けけみんよう              
-001A	けけロック               
-001B	けけのロケンロール           
-001C	ラグタイム               
-001D	ニューオリンズそんぐ          
-001E	けけファンク              
-001F	けけブルース              
-0020	けけゴスペル              
-0021	けけソウル               
-0022	アーバンけけ              
-0023	けけラヴソング             
-0024	ドラムンベース             
-0025	テクノビート              
-0026	ユーロビート              
-0027	オンリーミー              
-0028	けけカントリー             
-0029	エレキそんぐ              
-002A	けけバラッド              
-002B	しょうわけけかよう           
-002C	けけえんか               
-002D	ゆけ!けけライダー           
-002E	こわいうた               
-002F	けけウェスタン             
-0030	けけせんせい              
-0031	けけパリ                
-0032	けけパレード              
-0033	セニョールけけ             
-0034	けけソング               
-0035	だいすき                
-0036	おととい                
+﻿0000	K.K. Chorale        
+0001	K.K. March          
+0002	K.K. Waltz          
+0003	K.K. Swing          
+0004	K.K. Jazz           
+0005	K.K. Fusion         
+0006	K.K. Etude          
+0007	K.K. Lullaby        
+0008	K.K. Aria           
+0009	K.K. Samba          
+000A	K.K. Bossa          
+000B	K.K. Calypso        
+000C	K.K. Salsa          
+000D	K.K. Mambo          
+000E	K.K. Reggae         
+000F	K.K. Ska            
+0010	K.K. Tango          
+0011	K.K. Faire          
+0012	Aloha K.K.          
+0013	Lucky K.K.          
+0014	K.K. Condor         
+0015	K.K. Steppe         
+0016	Imperial K.K.       
+0017	K.K. Casbah         
+0018	K.K. Safari         
+0019	K.K. Folk           
+001A	K.K. Rock           
+001B	Rockin' K.K.        
+001C	K.K. Ragtime        
+001D	K.K. Gumbo          
+001E	The K. Funk         
+001F	K.K. Blues          
+0020	Soulful K.K.        
+0021	K.K. Soul           
+0022	K.K. Cruisin'       
+0023	K.K. Love Song      
+0024	K.K. D & B          
+0025	K.K. Technopop      
+0026	DJ K.K.             
+0027	Only Me             
+0028	K.K. Country        
+0029	Surfin' K.K.        
+002A	K.K. Ballad         
+002B	Comrade K.K.        
+002C	K.K. Lament         
+002D	Go K.K. Rider!      
+002E	K.K. Dirge          
+002F	K.K. Western        
+0030	Mr. K.K.            
+0031	Café K.K.           
+0032	K.K. Parade         
+0033	Señor K.K.          
+0034	K.K. Song           
+0035	I Love You          
+0036	Two Days Ago        

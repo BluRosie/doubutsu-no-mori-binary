@@ -1,64 +1,64 @@
-﻿0000	クラシックなかべがみ          
-0001	シックなかべ              
-0002	はながらのかべがみ           
-0003	いしのかべ               
-0004	あおタイルのかべ            
-0005	きいろのつちかべ            
-0006	きょうしつのかべ            
-0007	ラブリーかべがみ            
-0008	アジアなすだれ             
-0009	しっくいのへい             
-000A	きんぱくのふすま            
-000B	ちゃしつなかべ             
-000C	フルーツかべがみ            
-000D	ログハウスのかべ            
-000E	ブルーシートかべ            
-000F	ほしぞらのかべ             
-0010	たけがきのかべ             
-0011	ハロウィンかべ             
-0012	せんとうのかべ             
-0013	みどりのかべがみ            
-0014	あおいかべ               
-0015	ロイヤルなかべがみ           
-0016	カントリーなかべがみ          
-0017	モノクロなかべがみ           
-0018	リゾートなかべ             
-0019	ゆきだるまのかべがみ          
-001A	ボロいつちかべ             
-001B	おんがくしつのかべ           
-001C	ヨーロピアンなかべ           
-001D	オリエンタルラティス          
-001E	くさばなのかべがみ           
-001F	モダンなしょうじ            
-0020	バンブーなかべ             
-0021	キッチンのかべ             
-0022	ふるいレンガのかべ           
-0023	ルネッサンスなかべ           
-0024	おうちょうのかべ            
-0025	まちやくばのかべ            
-0026	つたのかべ               
-0027	キャッチーなかべ            
-0028	バラのかべがみ             
-0029	ウッディーなかべ            
-002A	コンクリートのかべ           
-002B	オフィスのかべ             
-002C	エジプトなかべ             
-002D	チャイナなかべ             
-002E	あきちのかべ              
-002F	クリスマスなかべ            
-0030	こうげんなかべ             
-0031	がいろじゅのかべ            
-0032	モザイクタイルのかべ          
-0033	きれいなガラスのかべ          
-0034	ちかしつのかべ             
-0035	しょうぶのかべ             
-0036	カラフルなかべ             
-0037	トタンのかべ              
-0038	ファクトリーなかべ           
-0039	さばくなかべ              
-003A	ほんだなのかべ             
-003B	コロニアルなラティス          
-003C	みなみのうみなかべ           
-003D	おもちゃなかべがみ           
-003E	キッチュなかべがみ           
-003F	サイケなかべがみ            
+﻿0000	Chic Wall           
+0001	Classic Wall        
+0002	Parlor Wall         
+0003	Stone Wall          
+0004	Blue-Trim Wall      
+0005	Plaster Wall        
+0006	Classroom Wall      
+0007	Lovely Wall         
+0008	Exotic Wall         
+0009	Mortar Wall         
+000A	Gold Screen Wall    
+000B	Tea Room Wall       
+000C	Citrus Wall         
+000D	Cabin Wall          
+000E	Blue Tarp           
+000F	Lunar Horizon       
+0010	Garden Wall         
+0011	Spooky Wall         
+0012	Western Vista       
+0013	Green Wall          
+0014	Blue Wall           
+0015	Regal Wall          
+0016	Ranch Wall          
+0017	Modern Wall         
+0018	Cabana Wall         
+0019	Snowman Wall        
+001A	Backyard Fence      
+001B	Music Room Wall     
+001C	Plaza Wall          
+001D	Lattice Wall        
+001E	Ornate Wall         
+001F	Modern Screen       
+0020	Bamboo Wall         
+0021	Kitchen Wall        
+0022	Old Brick Wall      
+0023	Stately Wall        
+0024	Imperial Wall       
+0025	Manor Wall          
+0026	Ivy Wall            
+0027	Mod Wall            
+0028	Rose Wall           
+0029	Wood Paneling       
+002A	Concrete Wall       
+002B	Office Wall         
+002C	Ancient Wall        
+002D	Exquisite Wall      
+002E	Sandlot Wall        
+002F	Jingle Wall         
+0030	Meadow Vista        
+0031	Tree-Lined Wall     
+0032	Mosaic Wall         
+0033	Arched Window       
+0034	Basement Wall       
+0035	Backgammon Wall     
+0036	Kiddie Wall         
+0037	Shanty Wall         
+0038	Industrial Wall     
+0039	Desert Vista        
+003A	Library Wall        
+003B	Floral Wall         
+003C	Tropical Vista      
+003D	Playroom Wall       
+003E	Kitschy Wall        
+003F	Groovy Wall         
